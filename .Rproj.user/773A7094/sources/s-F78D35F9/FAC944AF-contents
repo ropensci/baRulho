@@ -264,7 +264,7 @@ pkgdown::build_site()
 
 #sent to github
 system("git add .")
-system('git commit -m  "first commit"')
+system('git commit -m  "package down"')
 system("git push origin master")
 
 ```

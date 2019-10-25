@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571510547884.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "215299538",
+    "id" : "A5BFCC2",
+    "lastKnownWriteTime" : 1571518685,
+    "last_content_update" : 1571518685084,
+    "path" : "~/Dropbox/baRulho/R/blurr_ratio.R",
+    "project_path" : "R/blurr_ratio.R",
+    "properties" : {
+        "cursorPosition" : "111,91",
+        "scrollLine" : "109",
+        "tempName" : "Untitled1"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

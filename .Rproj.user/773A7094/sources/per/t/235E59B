@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571510886339.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "235E59B",
+    "lastKnownWriteTime" : 94588450597392,
+    "last_content_update" : 1571510886339,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "context" : "package:seewave:::corenv"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_code_browser"
+}

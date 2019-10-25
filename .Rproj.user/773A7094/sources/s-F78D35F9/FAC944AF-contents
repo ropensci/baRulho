@@ -1,0 +1,480 @@
+---
+title: "testing-checking baRulho function oct-2019"
+author: "Marcelo Araya-Salas"
+date: "November 23, 2016"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+#uninstall baRulho 
+```{r reinstall baRulho from github, eval=T}
+
+remove.packages("baRulho")
+# 
+# #restart R
+.rs.restartR()
+
+```
+
+# install packages
+```{r packages, eval=T}
+
+rm(list = ls())
+# 
+# unload all non-based packages
+out <- sapply(paste('package:', names(sessionInfo()$otherPkgs), sep = ""), function(x) try(detach(x, unload = FALSE, character.only = TRUE), silent = T))
+
+x <- c("RColorBrewer", "devtools", "seewave", "warbleR", "monitoR", "pkgdown", "ape", "baRulho")
+
+aa <- lapply(x, function(y){
+  if(!y %in% installed.packages()[,"Package"])  {if(y != "baRulho") install.packages(y) else devtools::install_github("maRce10/baRulho")
+} 
+try(require(y, character.only = T), silent = T)
+  })
+
+
+```
+
+# functions
+```{r functions}
+
+#open function in rstudio
+open.fun <- function(fun) system(paste("rstudio", file.path("~/Dropbox/baRulho/R", paste0(fun, ".R"))))
+
+# run default arguments in a function
+run.def.args <- function(fun = NULL){
+
+  #list functions in package
+rfiles <- list.files(pattern = ".R", path = "/home/m/Dropbox/baRulho/R", full.names = T)
+
+# select target function file
+funfile <- rfiles[gsub(".R", "", basename(rfiles)) == fun]
+
+  x <- readLines(funfile, warn = F)
+  st <- grep('@usage', x, fixed = T)
+  en <- grep('@param', x, fixed = T)[1]
+  x <- paste(x[st:(en-1)], collapse = " ")  
+  x <- gsub("usage|\\@|\\#\\'", "", x)
+
+  b <- gregexpr(pattern ='\\(|\\)',x)[1][[1]]
+  x <- substr(x, start = b[1] + 1, stop = b[length(b)] - 1)
+  spltx <- strsplit(x, "\\,")[[1]]
+
+sl <- vector()
+  y = 1
+
+      while(y <= length(spltx))
+        {
+        w <- spltx[y]
+        z <- 1
+        if(grepl('\\(', spltx[y])) 
+          {z  <- 0
+          while(!grepl('\\)', w))
+          {
+              z <- z+ 1
+              w <- paste(w, ",", spltx[y + z], collapse = "")
+          }
+        z <- z + 1
+          }
+        
+       y = y + z
+       sl[length(sl) + 1] <- w
+            }
+
+  sl <- sl[sl != "X"]
+  return(sl)
+  }
+
+# run it like this: 
+# for(i in run.def.args("dfts")) try(eval(parse(text = i)), silent = T)
+
+# remove sound files and or image files
+rm.sf <- function() unlink(list.files(path = tempdir(), pattern = "\\.wav$", ignore.case = T, full.names = TRUE))
+
+rm.sf.img <- function(mp3 = TRUE) {if(mp3)
+  unlink(list.files(path = tempdir(), pattern = "\\.wav$|\\.mp3$|\\.tiff$|\\.jpeg$|\\.png$", ignore.case = T, full.names = TRUE)) else
+      unlink(list.files(path = tempdir(), pattern = "\\.wav$|\\.tiff$|\\.jpeg$|\\.png$", ignore.case = T, full.names = TRUE))}
+
+rm.img <- function() unlink(list.files(path = tempdir(), pattern = "\\.tiff$|\\.jpeg$|\\.png$|\\.pdf$", ignore.case = T, full.names = TRUE))
+
+#open latest image
+last.img <- function() system(paste("eog", list.files(path = tempdir(), pattern = "\\.tiff$|\\.jpeg$", ignore.case = T, full.names = TRUE)[which.max(file.mtime(list.files(path = tempdir(), pattern = "\\.tiff$|\\.jpeg$", ignore.case = T, full.names = TRUE)))]
+))
+
+#open pdf
+last.pdf <- function() system(paste("xdg-open", list.files(path = tempdir(), pattern = "\\.pdf$", ignore.case = T, full.names = TRUE)[which.max(file.mtime(list.files(path = tempdir(), pattern = "\\.pdf", ignore.case = T, full.names = TRUE)))]
+))
+
+#find text in functions
+find.text <- function(pattern, fun.only = FALSE, path = "/home/m/Dropbox/baRulho/R", ignore.case = T)
+  {
+rfiles <- list.files(pattern = "\\.R$|\\.Rmd$", path = path, full.names = T, all.files = T)
+  
+#check where a word is found in each function an return the name of function where it was found and the time
+res <- NULL
+w <- 1
+for(f in rfiles){
+  x <- readLines(f)
+  y <- grep(pattern, x, fixed = T, value = T, ignore.case = ignore.case)
+  if(length(y)>0 & !fun.only) {
+    print(gsub(pattern = "\\.R", "", (basename(f)))) 
+    for(i in y) print(i)
+  }
+  if(length(y)>0 & fun.only) res[w] <- gsub(pattern = "\\.R", "", (basename(f))) 
+# options(nwarnings = 0)
+  w = w + 1
+}
+if(fun.only)
+{res <- res[!is.na(res)]
+return(res)}
+}
+
+
+#replace text
+repl.text <- function(pattern, repl, path = "/home/m/Dropbox/baRulho/R", ignore.case = T){
+  rfiles <- list.files(pattern = "\\.R$|\\.Rmd", path = path, full.names = T, all.files = T)
+
+    for(f in rfiles){
+  
+    #find and replace
+      x <- readLines(f)
+      y <- gsub(pattern, repl, x, fixed = T, ignore.case = ignore.case)
+      cat(y, file=f, sep="\n")
+  
+  #reread
+      x <- readLines(f)
+      w <- grep(repl, x, fixed = T, value = T, ignore.case = T)
+      if(length(w)>0) {
+          print(f) 
+        for(i in w) print(i)
+          }
+    }
+}
+
+#find functions with specific arguments
+find.arg <- function(arg1, arg2 = NULL){
+  
+  rfiles <- list.files(pattern = "\\.R$", path = "/home/m/Dropbox/baRulho/R", full.names = T, all.files = T)
+  
+  funs <- gsub(pattern = "\\.R", "", (basename(rfiles)))
+  funs <-grep("zzz|data|package", funs, invert = T, value = T)
+  
+l1 <- unlist(lapply(funs, function(x)
+{  a <-  try(run.def.args(x), silent = T)
+  if(any(grep(arg1, a))) return(x)
+}      ))
+
+if(!is.null(arg2))
+{l2 <- unlist(lapply(funs, function(x)
+{  a <-  try(run.def.args(x), silent = T)
+  if(any(grep(arg2, a))) return(x)
+}      ))
+
+res <- intersect(l1, l2)
+
+} else res <- l1
+
+return(res)
+
+}
+
+# run default arguments
+run.def.args2 <-function(FUN)
+{
+  fm <- formals(FUN)
+
+  
+fm <- fm[sapply(fm, length) > 0 | sapply(fm, is.null)]
+
+fm <- lapply(1:length(fm), function(x) paste(names(fm)[x], "=", fm[x]))
+
+for(i in fm) try(eval(parse(text = i)), silent = T)
+
+}
+
+
+#find functions with specific arguments and text
+find.arg.text <- function(arg1, arg2 = NULL, pattern) {
+  
+  f1 <- find.text(pattern = pattern, fun.only = T)
+f2 <- find.arg(arg1 = arg1, arg2 = arg2)
+
+return(intersect(f1, f2))
+}
+  
+#bid data set
+big.seltab <- function(X, nrow = 100){
+Y <- X[rep(1:nrow(X), ceiling(nrow/nrow(X)))[1:nrow],]
+  Y$selec <- 1:nrow(Y)
+if(is_selection_table(Y) | is_extended_selection_table(Y))
+  
+  attr(Y, "check.results") <- attr(X, "check.results")[rep(1:nrow(attr(X, "check.results")), ceiling(nrow/nrow(attr(X, "check.results"))))[1:nrow],]
+  
+  attr(Y, "check.results")$selec <- 1:nrow(Y)
+  return(Y)
+}
+
+# run all fuctions
+run.all <- function() invisible(lapply(list.files(pattern = "\\.R", path = "/home/m/Dropbox/baRulho/R", full.names = T, all.files = T), function(x) try(source(x), silent = T)))
+
+run.all()
+
+```
+
+# test and build package
+```{r test and build package}
+
+#delete NAMESPACE file
+unlink("/home/m/Dropbox/baRulho/NAMESPACE")
+
+#run document twice
+devtools::document("/home/m/Dropbox/baRulho")
+devtools::document("/home/m/Dropbox/baRulho")
+
+#check with devtools
+devtools::check("/home/m/Dropbox/baRulho", document = TRUE, run_dont_test = FALSE)
+
+source('~/Dropbox/R package testing/warbleR/Beta functions/random_sound.R')
+random_sound(dur = 2, segment.dur.range = c(0.01, 0.9), frange = c(1, 2))
+
+# check as in cran
+system("R CMD check /home/m/Dropbox/baRulho --as-cran --resave-data=best")
+
+# build tar.gz package file
+setwd("~/Dropbox/R package testing/")
+system("R CMD build /home/m/Dropbox/baRulho --resave-data=best")
+
+unlink(list.files(pattern = "warbleR\\.pdf", path = "/home/m/Dropbox/baRulho/"))
+
+# only build manual 
+setwd("/home/m/Dropbox/baRulho")
+system("R CMD Rd2pdf /home/m/Dropbox/baRulho")
+
+setwd("~/Dropbox/baRulho")
+
+#built site
+pkgdown::build_site()
+
+# to set a new computer
+## 1. install git
+# 2. generate ssh key https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#adding-your-ssh-key-to-the-ssh-agent
+# 3. add key to github account https://help.github.com/en/articles/adding-a-new-ssh-key-to-your-github-account  
+
+
+#sent to github
+system("git add .")
+system('git commit -m  "first commit"')
+system("git push origin master")
+
+```
+
+# find and replace text
+```{r}
+# list.files
+
+path <- "~/Dropbox/baRulho/R"
+
+pattern <-  ' read_wave('
+
+find.text(pattern = pattern, fun.only = F, ignore.case = T, path = path)
+
+repl <- 'warbleR::read_wave('
+
+# repl.text(pattern = pattern, repl = repl, path = path)
+
+# find.arg.text(arg1 = "parallel", arg2 = "pb", pattern = "pbmcapply")
+
+```
+
+## troubleshoot baRulho functions ####
+```{r blur_ratio}
+
+FUN <- "blur_ratio"
+
+#run function
+source(file.path("~/Dropbox/baRulho/R", paste0(FUN, ".R")))
+
+#open in rstudio
+##open.fun(fun = FUN)
+
+# remove objects but no functions
+rm(list = setdiff(ls(), c(lsf.str(), "FUN")))
+
+load("./data/playback_est.rda")
+
+# to troubleshoot internally
+for(i in run.def.args(FUN)) try(eval(parse(text = i)), silent = T)
+rm(i)
+
+#tests 
+{
+  print("output est")
+  a <- blur_ratio(X = playback_est)
+
+  print("output data frame")
+  blur_ratio(X = playback_est, output = "data.frame")
+
+    print("using method 1 and msmooth")
+
+  b2 <- env_cor(X = playback_est, msmooth = c(700, 50))
+
+  # similarity between env_cor with different ssmooth
+  cor(b2$env.cor, a$env.cor, use = "pairwise.complete.obs")
+  
+  print("using method 2")
+  a <- env_cor(X = playback_est, method = 2)
+
+  print("using method 2 and ssmooth = 200")
+  b <- env_cor(X = playback_est, method = 2, ssmooth = 200)
+  
+  print("using method 2 and ssmooth = 200,  no pb")
+  env_cor(X = playback_est, method = 2, ssmooth = 200, pb = FALSE)
+  
+  print("all is good!")
+}
+
+
+```
+
+```{r env_cor}
+
+FUN <- "env_cor"
+
+#run function
+source(file.path("~/Dropbox/baRulho/R", paste0(FUN, ".R")))
+
+#open in rstudio
+##open.fun(fun = FUN)
+
+# remove objects but no functions
+rm(list = setdiff(ls(), c(lsf.str(), "FUN")))
+
+load("./data/playback_est.rda")
+
+# to troubleshoot internally
+for(i in run.def.args(FUN)) try(eval(parse(text = i)), silent = T)
+rm(i)
+
+#tests 
+{
+  print("using method 1")
+  a <- env_cor(X = playback_est)
+
+  print("using method 1 and ssmooth = 200")
+  b <- env_cor(X = playback_est, ssmooth = 700)
+  
+    print("using method 1 and msmooth")
+
+  b2 <- env_cor(X = playback_est, msmooth = c(700, 50))
+
+  # similarity between env_cor with different ssmooth
+  cor(b2$env.cor, a$env.cor, use = "pairwise.complete.obs")
+  
+  print("using method 2")
+  a <- env_cor(X = playback_est, method = 2)
+
+  print("using method 2 and ssmooth = 200")
+  b <- env_cor(X = playback_est, method = 2, ssmooth = 200)
+  
+  print("using method 2 and ssmooth = 200,  no pb")
+  env_cor(X = playback_est, method = 2, ssmooth = 200, pb = FALSE)
+  
+  print("all is good!")
+}
+
+
+```
+
+```{r excess_att}
+
+FUN <- "excess_att"
+
+#run function
+source(file.path("~/Dropbox/baRulho/R", paste0(FUN, ".R")))
+
+#open in rstudio
+##open.fun(fun = FUN)
+
+# remove objects but no functions
+rm(list = setdiff(ls(), c(lsf.str(), "FUN")))
+
+load("./data/playback_est.rda")
+
+e1 <- playback_est[1, , drop = FALSE]
+
+# to troubleshoot internally
+for(i in run.def.args(FUN)) try(eval(parse(text = i)), silent = T)
+rm(i)
+
+#tests 
+{
+  print("using margin for noise and method 1")
+  excess_att(X = playback_est, mar = 0.05)
+
+  print("using margin for noise and method 2")
+  excess_att(X = playback_est, mar = 0.05, method = 2)
+  
+  print("all is good!")
+}
+
+
+```
+
+```{r create data objects}
+# create data examples for baRulho
+
+
+# prepare data for baRulho examples
+
+# read data from REU playback project
+est <- readRDS("/home/m/Dropbox/Projects/LBH_songtype_degradation/Extended selection table re-recorded playbacks.RDS")
+
+est2 <- readRDS("/home/m/Dropbox/Projects/LBH_songtype_degradation/Extended selection table re-recorded playbacks 2nd batch.RDS")
+
+est <- rbind(est, est2)
+
+# read file with metadata
+b <- read.csv("/home/m/Dropbox/Projects/LBH_songtype_degradation/cross-correlation master vs re-recorded playbacks.csv", stringsAsFactors = FALSE)
+
+# create column with original sound file name
+est$plbk.file <- sapply(est$sound.files, function(x) strsplit(x, "_")[[1]][1], simplify = T, USE.NAMES = FALSE)
+
+# add metdata to est
+a <- merge(est, b[!duplicated(paste(b$plbk.file, b$Distance..Meters., b$Point.ID, b$Cardinal.point)), c("plbk.file", "Distance..Meters.", "Point.ID", "Cardinal.point","Vegetation.dens", "Lek", "Speaker")], by.x = "plbk.file", by.y = "plbk.file", all.x = TRUE)
+
+# filter to complete cases
+a <- a[a$Cardinal.point == c("East", "North", "South", "West") | a$type == "master", ]
+
+a <- a[a$Point.ID == 2 | a$type == "master", ]
+
+a$Distance..Meters.[is.na(a$Distance..Meters.)] <- 1
+
+a <- a[order(a$plbk.file, a$lek.song.type), ]
+
+a <- a[!duplicated(paste(a$Distance..Meters., a$lek.song.type)), ]
+
+tb <- table(a$lek.song.type)
+a <- a[a$lek.song.type %in% names(tb)[tb == 4],]
+
+set.seed(15)
+smp <- sample(unique(a$lek.song.type), 5)
+a <- a[a$lek.song.type %in% smp,]
+table(a$lek.song.type, a$Distance..Meters.)
+
+est.pb <- fix_extended_selection_table(X = a, Y = est)
+
+# remove columns
+est.pb$plbk.file <- est.pb$comments <- est.pb$life.span.class <- est.pb$SNR <- est.pb$orig.sound.fil <- est.pb$Lek <- est.pb$Point.ID <- est.pb$orig.sound.fil <- est.pb$type <- est.pb$Cardinal.point <- est.pb$Speaker  <- est.pb$Vegetation.dens <- NULL
+
+names(est.pb)[7:8] <- c("signal.id", "distance")
+
+format(object.size(est.pb), units = "auto")
+
+playback_est <- est.pb
+
+playback_est <- playback_est[order(playback_est$signal.id, playback_est$distance), ]
+
+save(playback_est, file="~/Dropbox/baRulho/data/playback_est.rda")
+
+```

@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1570797166281.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "D3F3154",
+    "lastKnownWriteTime" : 1570795407,
+    "last_content_update" : 1570795407,
+    "path" : "~/Dropbox/warbleR/R/sig2noise.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "234,35",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

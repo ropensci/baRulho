@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1571125504426.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "10|44|17|0|\n20|23|36|0|\n39|16|222|0|\n272|6|287|0|\n339|14|386|0|\n388|17|421|0|\n423|26|479|0|\n",
+    "hash" : "0",
+    "id" : "FAC944AF",
+    "lastKnownWriteTime" : 1571922302,
+    "last_content_update" : 1572032703371,
+    "path" : "~/Dropbox/R package testing/baRulho/testing-checking baRulho function oct-19.Rmd",
+    "project_path" : null,
+    "properties" : {
+        "chunk_output_type" : "console",
+        "cursorPosition" : "265,0",
+        "scrollLine" : "252"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

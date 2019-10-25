@@ -1,0 +1,62 @@
+dt <- readxl::read_excel("~/Dropbox/hubbub/FISPDATA_song ambient RMS by distance_EA.xlsx", range = "A3:J7")
+
+
+# method 1
+
+# term 1: decrease in signal amplitude (RMS) of reference (Ref) vs re-recorded (RR)
+term1 <- dt$sigRMS_REF- dt$sigRMS_RR 
+
+# lost due to spheric spreading
+term2 <- -20 * log10(1 / dt$Dist_RR)
+
+# distance traveled by sound
+term3 <- dt$Dist_RR - dt$Dist_REF
+
+# excess attenuation = (total attenuation - spheric spreading attenuation) / distance
+EA <- (term1 - term2) / term3
+
+dt$EA
+
+
+
+
+library(warbleR)
+
+sig2noise()
+
+setwd(tempdir())
+
+data(list = c("Phae.long1","lbh_selec_table"))
+writeWave(Phae.long1, "Phae.long1.wav") #save sound files 
+writeWave(Phae.long3, "Phae.long3.wav") #save sound files 
+
+# specifying the correct margin is important
+# use snrspecs to troubleshoot margins for sound files
+X <- lbh_selec_table[grep("Phae.long3|Phae.long1", lbh_selec_table$sound.files), ]
+X <- sig2noise(X, mar = 0.2, path = getwd())
+
+X$signal.id <- as.numeric(X$sound.files) 
+
+X$type <- "signal"
+
+X <- rbind(X, X[c(1,6), ])
+X$selec[7:8] <- 4
+X$type[7:8] <- "background"
+X$start[7:8] <- X$start[7:8]  - 0.1
+X$end[7:8] <- X$end[7:8]  - 0.1
+
+X$distance <- c(seq(1, 20, length.out = 3), seq( 20, 1, length.out = 3), 4, 4)
+
+excess_att(X[1:6, ], path = getwd(), eq.dur = T)
+
+
+excess_att(X[1:6, ], path = getwd(), mar = 0.1)
+
+
+excess_att(X[1:6, ], path = getwd(), mar = 0.1, method = 1)
+
+
+excess_att(X, path = getwd(), mar = 0.1, method = 2, noise.ref = "custom")
+excess_att(X, path = getwd(), mar = 0.1, method = 1, noise.ref = "custom")
+excess_att(X[1:6, ], path = getwd(), mar = 0.1, method = 2, noise.ref = "before")
+excess_att(X[1:6, ], path = getwd(), mar = 0.1, method = 1, noise.ref = "before")

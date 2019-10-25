@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1572030813635.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "18679D16",
+    "lastKnownWriteTime" : 1569698110,
+    "last_content_update" : 1569698110,
+    "path" : "~/Dropbox/warbleR/R/autodetec.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "19,0",
+        "scrollLine" : "15"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,6 +1,6 @@
 #' Measure amplitude envelope correlation
 #' 
-#' \code{env_cor} Measure amplitude envelope correlation in signals referenced in a extended selection table.
+#' \code{env_cor} Measures amplitude envelope correlation in signals referenced in a extended selection table.
 #' @usage env_cor(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
 #' ssmooth = NULL, msmooth = NULL, output = "est")
 #' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
@@ -22,7 +22,7 @@
 #' with the amplitude envelope correlation coefficients.
 #' @export
 #' @name env_cor
-#' @details The correlation of amplitude envelopes is intended to measure the distorcion of signals in the time domain. The goal of the function is to measure the envelope correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating excess attenuation are provided (see 'method' argument).
+#' @details The correlation of amplitude envelopes is intended to measure the distortion of signals in the time domain. The goal of the function is to measure the envelope correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating envelope correlation are provided (see 'method' argument).
 #' @examples
 #' {
 #' # First set temporary folder

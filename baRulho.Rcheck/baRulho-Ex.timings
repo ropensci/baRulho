@@ -1,0 +1,5 @@
+name	user	system	elapsed
+blur_ratio	0.284	0.020	0.304	
+env_cor	0.628	0.004	0.631	
+excess_att	0.157	0.000	0.157	
+xcorr_distortion	0.345	0.004	0.349	

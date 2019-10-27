@@ -81,7 +81,7 @@ xcorr_distortion <- function(X = NULL, parallel = 1, pb = TRUE,  method = 1, cor
   comp_mat <- do.call(rbind, comp_mats)
   
   # run xcorr 
-  xcorrs <- xcorr(X = X, wl = wl, ovlp = ovlp, wn = wn, cor.method = cor.method, parallel = parallel, pb = pb, compare.matrix = comp_mat)
+  xcorrs <- warbleR::xcorr(X = X, wl = wl, ovlp = ovlp, wn = wn, cor.method = cor.method, parallel = parallel, pb = pb, compare.matrix = comp_mat)
   
   # put results back into X
   X$cross.correlation <- NA

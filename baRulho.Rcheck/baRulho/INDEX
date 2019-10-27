@@ -1,0 +1,8 @@
+baRulho                 baRulho: quantifying sound degradation
+blur_ratio              Measure blur ratio
+env_cor                 Measure amplitude envelope correlation
+excess_att              Measure excess attenuation
+playback_est            Extended selection table with re-recorded
+                        playbacks
+xcorr_distortion        Measure spectrographic cross-correlation as a
+                        measure of signal distortion

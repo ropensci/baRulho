@@ -1,0 +1,21 @@
+Package: baRulho
+Type: Package
+Title: Quantifying sound degradation
+Version: 1.0.0
+Date: 2019-10-26
+Author: Marcelo Araya-Salas [aut, cre]
+Maintainer: Marcelo Araya-Salas <marceloa27@gmail.com>
+Description: Quantification of degradation of (animal) sounds.
+License: GPL (>= 2)
+Imports: pbapply, warbleR, utils, stats, seewave, tuneR
+Depends: R (>= 3.2.1)
+LazyData: TRUE
+URL: https://github.com/maRce10/baRulho
+BugReports: https://github.com/maRce10/baRulho/issues
+NeedsCompilation: no
+Suggests:
+RoxygenNote: 6.1.1
+Repository: CRAN
+Language: en-US
+Authors@R: person("Marcelo", "Araya-Salas", role = c("aut", "cre"), email = "marceloa27@gmail.com")
+Built: R 3.6.1; ; 2019-10-27 14:23:54 UTC; unix

@@ -1,0 +1,308 @@
+
+R version 3.6.1 (2019-07-05) -- "Action of the Toes"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "baRulho"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> base::assign(".ExTimings", "baRulho-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('baRulho')
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("blur_ratio")
+> ### * blur_ratio
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: blur_ratio
+> ### Title: Measure blur ratio
+> ### Aliases: blur_ratio
+> 
+> ### ** Examples
+> 
+> {
++ # First set temporary folder
++ # setwd(tempdir())
++ 
++ data("playback_est")
++ 
++ # using margin for noise and method 1
++ blur_ratio(X = playback_est)
++ 
++ # using margin for noise and method 2
++ blur_ratio(X = playback_est, method = 2)
++ }
+calculating amplitude envelopes (step 1 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~03s            |+++++                                             | 10% ~01s            |++++++++                                          | 15% ~01s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+calculating blur ratio (step 2 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+calculating amplitude envelopes (step 1 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+calculating blur ratio (step 2 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+object of class 'extended_selection_table' 
+ contains a selection table data frame with 20 rows and 9 columns: 
+                                     sound.files selec start       end
+22410 Playback_sound_file_LBH_degradation.wav_28     1   0.1 0.2443537
+12488             2W.5m.2019.7.1.10.10.wav_12488     1   0.1 0.2435374
+12052            2W.10m.2019.7.1.10.20.wav_12052     1   0.1 0.2443537
+12268            2W.15m.2019.7.1.10.30.wav_12268     1   0.1 0.2463039
+22393 Playback_sound_file_LBH_degradation.wav_11     1   0.1 0.2824490
+12392             2W.5m.2019.7.1.10.10.wav_12392     1   0.1 0.2860544
+      bottom.freq top.freq signal.id distance blur.ratio
+22410    2.007155 11.35765    BR1-D4        1         NA
+12488    1.891390 11.24189    BR1-D4        5 0.20124846
+12052    2.007155 11.35765    BR1-D4       10 0.05692738
+12268    1.833508 11.18401    BR1-D4       15 0.12901271
+22393    2.110482 11.46098    CCE-I2        1         NA
+12392    2.776771 12.12727    CCE-I2        5 0.12838369
+... and 14 more rows 
+20 wave objects (as attributes): 
+[1] "Playback_sound_file_LBH_degradation.wav_6" 
+[2] "Playback_sound_file_LBH_degradation.wav_11"
+[3] "Playback_sound_file_LBH_degradation.wav_28"
+[4] "Playback_sound_file_LBH_degradation.wav_48"
+[5] "Playback_sound_file_LBH_degradation.wav_54"
+[6] "2W.10m.2019.7.1.10.20.wav_12052"           
+... and 14 more 
+and a data frame (check.results) generated by checkres() (as attribute) 
+the selection table was created by element (see 'class_extended_selection_table')> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("blur_ratio", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("env_cor")
+> ### * env_cor
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: env_cor
+> ### Title: Measure amplitude envelope correlation
+> ### Aliases: env_cor
+> 
+> ### ** Examples
+> 
+> {
++ # First set temporary folder
++ # setwd(tempdir())
++ 
++ data("playback_est")
++ 
++ # method 1
++ env_cor(X = playback_est)
++ 
++ # method 2
++ env_cor(X = playback_est, method = 2)
++ }
+calculating amplitude envelopes (step 1 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+calculating envelope cross-correlations (step 2 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+calculating amplitude envelopes (step 1 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+calculating envelope cross-correlations (step 2 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+object of class 'extended_selection_table' 
+ contains a selection table data frame with 20 rows and 9 columns: 
+                                     sound.files selec start       end
+22410 Playback_sound_file_LBH_degradation.wav_28     1   0.1 0.2443537
+12488             2W.5m.2019.7.1.10.10.wav_12488     1   0.1 0.2435374
+12052            2W.10m.2019.7.1.10.20.wav_12052     1   0.1 0.2443537
+12268            2W.15m.2019.7.1.10.30.wav_12268     1   0.1 0.2463039
+22393 Playback_sound_file_LBH_degradation.wav_11     1   0.1 0.2824490
+12392             2W.5m.2019.7.1.10.10.wav_12392     1   0.1 0.2860544
+      bottom.freq top.freq signal.id distance   env.cor
+22410    2.007155 11.35765    BR1-D4        1        NA
+12488    1.891390 11.24189    BR1-D4        5 0.2862830
+12052    2.007155 11.35765    BR1-D4       10 0.3792296
+12268    1.833508 11.18401    BR1-D4       15 0.3084996
+22393    2.110482 11.46098    CCE-I2        1        NA
+12392    2.776771 12.12727    CCE-I2        5 0.4149716
+... and 14 more rows 
+20 wave objects (as attributes): 
+[1] "Playback_sound_file_LBH_degradation.wav_6" 
+[2] "Playback_sound_file_LBH_degradation.wav_11"
+[3] "Playback_sound_file_LBH_degradation.wav_28"
+[4] "Playback_sound_file_LBH_degradation.wav_48"
+[5] "Playback_sound_file_LBH_degradation.wav_54"
+[6] "2W.10m.2019.7.1.10.20.wav_12052"           
+... and 14 more 
+and a data frame (check.results) generated by checkres() (as attribute) 
+the selection table was created by element (see 'class_extended_selection_table')> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("env_cor", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("excess_att")
+> ### * excess_att
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: excess_att
+> ### Title: Measure excess attenuation
+> ### Aliases: excess_att
+> 
+> ### ** Examples
+> 
+> {
++ # First set temporary folder
++ # setwd(tempdir())
++ 
++ data("playback_est")
++ 
++ # using margin for noise and method 1
++ excess_att(X = playback_est, mar = 0.05)
++ 
++ # using margin for noise and method 2
++ excess_att(X = playback_est, mar = 0.05, method = 2)
++ }
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+object of class 'extended_selection_table' 
+ contains a selection table data frame with 20 rows and 9 columns: 
+                                     sound.files selec start       end
+22410 Playback_sound_file_LBH_degradation.wav_28     1   0.1 0.2443537
+12488             2W.5m.2019.7.1.10.10.wav_12488     1   0.1 0.2435374
+12052            2W.10m.2019.7.1.10.20.wav_12052     1   0.1 0.2443537
+12268            2W.15m.2019.7.1.10.30.wav_12268     1   0.1 0.2463039
+22393 Playback_sound_file_LBH_degradation.wav_11     1   0.1 0.2824490
+12392             2W.5m.2019.7.1.10.10.wav_12392     1   0.1 0.2860544
+      bottom.freq top.freq signal.id distance       EA
+22410    2.007155 11.35765    BR1-D4        1       NA
+12488    1.891390 11.24189    BR1-D4        5 7.027974
+12052    2.007155 11.35765    BR1-D4       10 4.756878
+12268    1.833508 11.18401    BR1-D4       15 6.222341
+22393    2.110482 11.46098    CCE-I2        1       NA
+12392    2.776771 12.12727    CCE-I2        5 5.820795
+... and 14 more rows 
+20 wave objects (as attributes): 
+[1] "Playback_sound_file_LBH_degradation.wav_6" 
+[2] "Playback_sound_file_LBH_degradation.wav_11"
+[3] "Playback_sound_file_LBH_degradation.wav_28"
+[4] "Playback_sound_file_LBH_degradation.wav_48"
+[5] "Playback_sound_file_LBH_degradation.wav_54"
+[6] "2W.10m.2019.7.1.10.20.wav_12052"           
+... and 14 more 
+and a data frame (check.results) generated by checkres() (as attribute) 
+the selection table was created by element (see 'class_extended_selection_table')> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("excess_att", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("xcorr_distortion")
+> ### * xcorr_distortion
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: xcorr_distortion
+> ### Title: Measure spectrographic cross-correlation as a measure of signal
+> ###   distortion
+> ### Aliases: xcorr_distortion
+> 
+> ### ** Examples
+> 
+> {
++ # First set temporary folder
++ # setwd(tempdir())
++ 
++ data("playback_est")
++ 
++ # method 1
++ xcorr_distortion(X = playback_est)
++ 
++ # method 2
++ xcorr_distortion(X = playback_est, method = 2)
++ }
+creating spectrogram matrices (step 1 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+running cross-correlation (step 2 of 2):
+  |                                                  | 0 % ~calculating    |++++                                              | 7 % ~00s            |+++++++                                           | 13% ~00s            |++++++++++                                        | 20% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++                                 | 33% ~00s            |++++++++++++++++++++                              | 40% ~00s            |++++++++++++++++++++++++                          | 47% ~00s            |+++++++++++++++++++++++++++                       | 53% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+creating spectrogram matrices (step 1 of 2):
+  |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+running cross-correlation (step 2 of 2):
+  |                                                  | 0 % ~calculating    |++++                                              | 7 % ~00s            |+++++++                                           | 13% ~00s            |++++++++++                                        | 20% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++                                 | 33% ~00s            |++++++++++++++++++++                              | 40% ~00s            |++++++++++++++++++++++++                          | 47% ~00s            |+++++++++++++++++++++++++++                       | 53% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+object of class 'extended_selection_table' 
+ contains a selection table data frame with 20 rows and 9 columns: 
+                                     sound.files selec start       end
+22410 Playback_sound_file_LBH_degradation.wav_28     1   0.1 0.2443537
+12488             2W.5m.2019.7.1.10.10.wav_12488     1   0.1 0.2435374
+12052            2W.10m.2019.7.1.10.20.wav_12052     1   0.1 0.2443537
+12268            2W.15m.2019.7.1.10.30.wav_12268     1   0.1 0.2463039
+22393 Playback_sound_file_LBH_degradation.wav_11     1   0.1 0.2824490
+12392             2W.5m.2019.7.1.10.10.wav_12392     1   0.1 0.2860544
+      bottom.freq top.freq signal.id distance cross.correlation
+22410    2.007155 11.35765    BR1-D4        1         0.7131319
+12488    1.891390 11.24189    BR1-D4        5         0.8432095
+12052    2.007155 11.35765    BR1-D4       10         0.8160827
+12268    1.833508 11.18401    BR1-D4       15                NA
+22393    2.110482 11.46098    CCE-I2        1         0.7597592
+12392    2.776771 12.12727    CCE-I2        5         0.8544140
+... and 14 more rows 
+20 wave objects (as attributes): 
+[1] "Playback_sound_file_LBH_degradation.wav_6" 
+[2] "Playback_sound_file_LBH_degradation.wav_11"
+[3] "Playback_sound_file_LBH_degradation.wav_28"
+[4] "Playback_sound_file_LBH_degradation.wav_48"
+[5] "Playback_sound_file_LBH_degradation.wav_54"
+[6] "2W.10m.2019.7.1.10.20.wav_12052"           
+... and 14 more 
+and a data frame (check.results) generated by checkres() (as attribute) 
+the selection table was created by element (see 'class_extended_selection_table')> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("xcorr_distortion", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  1.802 0.04 1.842 0 0 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

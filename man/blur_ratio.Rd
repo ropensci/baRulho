@@ -2,7 +2,7 @@
 % Please edit documentation in R/blur_ratio.R
 \name{blur_ratio}
 \alias{blur_ratio}
-\title{Measure excess attenuation}
+\title{Measure blur ratio}
 \usage{
 blur_ratio(X, parallel = 1, pb = TRUE, method = 1,  
  ssmooth = NULL, msmooth = NULL, output = "est")
@@ -20,7 +20,7 @@ set globally using the 'pb' option (see \code{\link{warbleR_options}}).}
 \item{method}{Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
 \itemize{
 \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
-\item \code{2}: compare all signals with their counterpart recorded at the distance inmediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
+\item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 }}
 
 \item{ssmooth}{Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).}
@@ -34,7 +34,7 @@ Data frame similar to input data, but also includes a new column
 with the excess attenuation values.
 }
 \description{
-\code{blur_ratio} Measure excess attenuation in signals referenced in a extended selection table.
+\code{blur_ratio} Measure blur ratio in signals referenced in a extended selection table.
 }
 \details{
 Excess attenuation is the attenuation of a sound in excess of that due to spherical spreading as described by Dabelsteen et al 1993. The goal of the function is to measure the excess attenuation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for calculating excess attenuation are provided

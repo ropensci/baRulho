@@ -41,9 +41,7 @@ Excess attenuation is the attenuation of a sound in excess of that due to spheri
 }
 \examples{
 {
-# First set temporary folder
-# setwd(tempdir())
-
+# load example data
 data("playback_est")
 
 # using margin for noise and method 1

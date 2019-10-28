@@ -29,9 +29,7 @@
 #' @details The spectrographic cross-correlation is intended to measure the distortion of signals in the frequency domain. The goal of the function is to measure the cross-correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{xcorr}} function.
 #' @examples
 #' {
-#' # First set temporary folder
-#' # setwd(tempdir())
-#' 
+#' # load example data
 #' data("playback_est")
 #' 
 #' # method 1
@@ -72,7 +70,7 @@ xcorr_distortion <- function(X = NULL, parallel = 1, pb = TRUE,  method = 1, cor
     # create matrix with 2 columns of the selections to be compare 
     if (method == 1) # comparing to closest distance to source
     cmp.mt <- cbind(Y$sf.selec[which.min(Y$distance)], Y$sf.selec[-which.min(Y$distance)]) else # comparing to previous distance
-      cmp.mt <- cbind(Y$sf.selec[-1], Y$sf.selec[-nrow(Y)])
+      cmp.mt <- cbind(Y$sf.selec[-nrow(Y)], Y$sf.selec[-1])
     
     return(cmp.mt)
   })

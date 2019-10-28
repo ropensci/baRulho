@@ -14,7 +14,7 @@ The main features of the package are:
   \item The use of loops to apply tasks through acoustic signals referenced in an extended selection table
   \item The comparison of signals playbacked and re-recorded at different distances 
   }
-Most functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency.
+All functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency.
 
 License: GPL (>= 2)
 }

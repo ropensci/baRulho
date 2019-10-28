@@ -25,9 +25,7 @@
 #' @details The correlation of amplitude envelopes is intended to measure the distortion of signals in the time domain. The goal of the function is to measure the envelope correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating envelope correlation are provided (see 'method' argument).
 #' @examples
 #' {
-#' # First set temporary folder
-#' # setwd(tempdir())
-#' 
+#' # load example data
 #' data("playback_est")
 #' 
 #' # method 1

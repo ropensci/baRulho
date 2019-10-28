@@ -31,9 +31,7 @@
 #' @details Excess attenuation is the attenuation of a sound in excess of that due to spherical spreading as described by Dabelsteen et al (1993). The goal of the function is to measure the excess attenuation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating excess attenuation are provided (see 'method' argument).   
 #' @examples
 #' {
-#' # First set temporary folder
-#' # setwd(tempdir())
-#' 
+#' # load example data
 #' data("playback_est")
 #' 
 #' # using margin for noise and method 1

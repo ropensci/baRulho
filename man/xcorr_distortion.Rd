@@ -48,9 +48,7 @@ The spectrographic cross-correlation is intended to measure the distortion of si
 }
 \examples{
 {
-# First set temporary folder
-# setwd(tempdir())
-
+# load example data
 data("playback_est")
 
 # method 1

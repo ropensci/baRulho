@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Measure blur ratio — blur_ratio • baRulho</title>
+<title>Measure attenuation as signal-to-noise ratio — snr_attenuation • baRulho</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Measure blur ratio — blur_ratio" />
-<meta property="og:description" content="blur_ratio measures blur ratio in signals referenced in a extended selection table." />
+<meta property="og:title" content="Measure attenuation as signal-to-noise ratio — snr_attenuation" />
+<meta property="og:description" content="snr_attenuation measures attenuation as signal-to-noise ratio of signals referenced in a extended selection table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -108,17 +108,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Measure blur ratio</h1>
-    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/blur_ratio.R'><code>R/blur_ratio.R</code></a></small>
-    <div class="hidden name"><code>blur_ratio.Rd</code></div>
+    <h1>Measure attenuation as signal-to-noise ratio</h1>
+    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/snr_attenuation.R'><code>R/snr_attenuation.R</code></a></small>
+    <div class="hidden name"><code>snr_attenuation.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>blur_ratio</code> measures blur ratio in signals referenced in a extended selection table.</p>
+    <p><code>snr_attenuation</code> measures attenuation as signal-to-noise ratio of signals referenced in a extended selection table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>blur_ratio</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>,
- <span class='kw'>ssmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>msmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"est"</span>)</pre>
+    <pre class="usage"><span class='fu'>snr_attenuation</span>(<span class='no'>X</span>, <span class='no'>mar</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>eq.dur</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+<span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>"adjacent"</span>, <span class='kw'>type</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>bp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"est"</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -126,6 +126,11 @@
     <tr>
       <th>X</th>
       <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package.</p></td>
+    </tr>
+    <tr>
+      <th>mar</th>
+      <td><p>numeric vector of length 1. Specifies the margins adjacent to
+the start and end points of selection over which to measure noise.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
@@ -139,54 +144,63 @@ If <code>NULL</code> (default) then the current working directory is used.</p></
 set globally using the 'pb' option (see <code>warbleR_options</code>).</p></td>
     </tr>
     <tr>
-      <th>method</th>
-      <td><p>Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:</p><ul>
-<li><p><code>1</code>: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.</p></li>
-<li><p><code>2</code>: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).</p></li>
+      <th>eq.dur</th>
+      <td><p>Logical. Controls whether the noise segment that is measured has the same duration 
+than the signal (if <code>TRUE</code>. Default is <code>FALSE</code>). If <code>TRUE</code> then 'mar' and 'noise.ref' arguments are ignored.</p></td>
+    </tr>
+    <tr>
+      <th>noise.ref</th>
+      <td><p>Character vector of length 1 to determined if a noise segment to be used for measuring ambient noise. Two options are available:</p><ul>
+<li><p><code>adjacent</code>: measure ambient noise right before the signal (using argument 'mar' to define duration of noise segments). If several 'noise' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.</p></li>
+<li><p><code>custom</code>: measure noise segments referenced in the selection table (labeled as 'noise' in the 'signal.id' column). Those segments will be used to apply the same noise reference to all signals in a sound file. Therefore, at least one 'noise' selection for each sound file must be provided.</p></li>
 </ul></td>
     </tr>
     <tr>
-      <th>ssmooth</th>
-      <td><p>Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>).</p></td>
+      <th>type</th>
+      <td><p>Numeric. Determine the formula to be used to calculate the signal-to-noise ratio (S = signal
+, N = background noise):</p><ul>
+<li><p><code>1</code>: ratio of S amplitude envelope quadratic mean to N amplitude envelope quadratic mean
+ (<code>rms(env(S))/rms(env(N))</code>)</p></li>
+<li><p><code>2</code>: ratio of the difference between S amplitude envelope quadratic mean and N amplitude envelope quadratic mean to N amplitude envelope quadratic mean (<code>(rms(env(S)) - rms(env(N)))/rms(env(N))</code>, as proposed by Dabelsteen et al (1993))</p></li>
+</ul></td>
     </tr>
     <tr>
-      <th>msmooth</th>
-      <td><p>Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>).</p></td>
+      <th>bp</th>
+      <td><p>Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is <code>NULL</code>.</p></td>
+    </tr>
+    <tr>
+      <th>wl</th>
+      <td><p>A numeric vector of length 1 specifying the window length of the spectrogram for applying bandpass. Default 
+ is 10. Ignored if <code>bp = NULL</code>.
+Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.</p></td>
     </tr>
     <tr>
       <th>output</th>
-      <td><p>Character vector of length 1 to determine if an extended selection table ('est') or a data frame ('data.frame') is returned.</p></td>
+      <td><p>Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Data frame similar to input data, but also includes a new column (blur.ratio)
-with the excess attenuation values.</p>
+    <p>Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column (snr.attenuation)
+with the signal-to-noise ratio values.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al 1993. The goal of the function is to measure the blur ratio on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for calculating excess attenuation are provided</p>
+    <p>Signal-to-noise ratio is the attenuation is the attenuation of a sound in excess of that due to spherical spreading as described by Dabelsteen et al (1993). The goal of the function is to measure the excess attenuation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating excess attenuation are provided (see 'method' argument).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>{
 <span class='co'># load example data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"playback_est"</span>)
 
-<span class='co'># remove noise selections</span>
+<span class='co'># using noise reference selections </span>
+<span class='fu'>snr_attenuation</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>'custom'</span>)
+
+<span class='co'>#' # remove noise selections</span>
 <span class='no'>playback_est</span> <span class='kw'>&lt;-</span> <span class='no'>playback_est</span>[<span class='no'>playback_est</span>$<span class='no'>signal.id</span> <span class='kw'>!=</span> <span class='st'>"noise"</span>, ]
-
-<span class='co'># using method 1</span>
-<span class='fu'>blur_ratio</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>)
-
-<span class='co'># using method 2</span>
-<span class='fu'>blur_ratio</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-}</div><div class='output co'>#&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~03s            |+++++                                             | 10% ~01s            |++++++++                                          | 15% ~01s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; calculating blur ratio (step 2 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; calculating blur ratio (step 2 of 2):
+<span class='co'># using margin for noise of 0.05 and adjacent noise reference</span>
+<span class='fu'>snr_attenuation</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>'adjacent'</span>)
+}</div><div class='output co'>#&gt;   |                                                  | 0 % ~calculating    |++                                                | 4 % ~00s            |++++                                              | 7 % ~00s            |++++++                                            | 11% ~00s            |++++++++                                          | 14% ~00s            |+++++++++                                         | 18% ~00s            |+++++++++++                                       | 21% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 29% ~00s            |+++++++++++++++++                                 | 32% ~00s            |++++++++++++++++++                                | 36% ~00s            |++++++++++++++++++++                              | 39% ~00s            |++++++++++++++++++++++                            | 43% ~00s            |++++++++++++++++++++++++                          | 46% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |+++++++++++++++++++++++++++                       | 54% ~00s            |+++++++++++++++++++++++++++++                     | 57% ~00s            |+++++++++++++++++++++++++++++++                   | 61% ~00s            |+++++++++++++++++++++++++++++++++                 | 64% ~00s            |++++++++++++++++++++++++++++++++++                | 68% ~00s            |++++++++++++++++++++++++++++++++++++              | 71% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 79% ~00s            |++++++++++++++++++++++++++++++++++++++++++        | 82% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 86% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 89% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++++ | 96% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; object of class 'extended_selection_table' 
 #&gt;  contains a selection table data frame with 20 rows and 9 columns: 
 #&gt;                                 sound.files selec start       end bottom.freq
@@ -196,13 +210,13 @@ with the excess attenuation values.</p>
 #&gt; 4               2W.15m.2019.7.1.10.30.wav_1     1  0.05 0.2072789    2.238685
 #&gt; 5 Playback_sound_file_LBH_degradation.wav_1     4  1.05 1.2444898    1.544095
 #&gt; 6                2W.5m.2019.7.1.10.10.wav_1     4  1.05 1.2444898    1.544095
-#&gt;   top.freq signal.id distance blur.ratio
-#&gt; 1 11.58918    CCE-F1        1         NA
-#&gt; 2 11.58918    CCE-F1        5 0.62432894
-#&gt; 3 11.58918    CCE-F1       10 0.07739608
-#&gt; 4 11.58918    CCE-F1       15 0.07976897
-#&gt; 5 10.89459    CCE-I2        1         NA
-#&gt; 6 10.89459    CCE-I2        5 0.70834157
+#&gt;   top.freq signal.id distance snr.attenuation
+#&gt; 1 11.58918    CCE-F1        1        43.98279
+#&gt; 2 11.58918    CCE-F1        5        12.28970
+#&gt; 3 11.58918    CCE-F1       10         9.99017
+#&gt; 4 11.58918    CCE-F1       15         5.26064
+#&gt; 5 10.89459    CCE-I2        1        42.78732
+#&gt; 6 10.89459    CCE-I2        5        20.99407
 #&gt; ... and 14 more rows 
 #&gt; 4 wave objects (as attributes): 
 #&gt; [1] "Playback_sound_file_LBH_degradation.wav_1"

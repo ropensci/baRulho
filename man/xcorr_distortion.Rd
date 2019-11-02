@@ -20,7 +20,7 @@ set globally using the 'pb' option (see \code{\link{warbleR_options}}).}
 \item{method}{Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
 \itemize{
 \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
-\item \code{2}: compare all signals with their counterpart recorded at the distance inmediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
+\item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 }}
 
 \item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
@@ -37,7 +37,7 @@ slow down the function but produce more accurate results.}
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.}
 }
 \value{
-Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column 
+Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column (env.correlation)
 with the amplitude envelope correlation coefficients.
 }
 \description{
@@ -51,8 +51,11 @@ The spectrographic cross-correlation is intended to measure the distortion of si
 # load example data
 data("playback_est")
 
+# remove noise selections
+playback_est <- playback_est[playback_est$signal.id != "noise", ]
+
 # method 1
-xcorr_distortion(X = playback_est)
+xcorr_distortion(X = playback_est, method = 1)
 
 # method 2
 xcorr_distortion(X = playback_est, method = 2)
@@ -61,4 +64,7 @@ xcorr_distortion(X = playback_est, method = 2)
 }
 \author{
 Marcelo Araya-Salas (\email{marceloa27@gmail.com})
+#' @references {
+Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+}
 }

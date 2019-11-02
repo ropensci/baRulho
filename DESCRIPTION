@@ -5,7 +5,7 @@ Version: 1.0.0
 Date: 2019-10-26
 Author: Marcelo Araya-Salas [aut, cre]
 Maintainer: Marcelo Araya-Salas <marceloa27@gmail.com>
-Description: Quantification of degradation of (animal) sounds.
+Description: Quantification of environmental degradation of (animal) sounds
 License: GPL (>= 2)
 Imports: pbapply, warbleR, utils, stats, seewave, tuneR
 Depends: R (>= 3.2.1)

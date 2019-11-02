@@ -5,7 +5,7 @@
 [![Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/baRulho)](http://www.r-pkg.org/badges/grand-total/baRulho)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-`baRulho` is a package intended to quantify habitat-induced degradation of (animal) acoustic signals. Most functions are based on the metrics described in Dabelsteen et al (1993).
+`baRulho` quantifies habitat-induced degradation of (animal) acoustic signals. Most functions are based on the metrics described in Dabelsteen et al (1993).
 
 Install/load the package from CRAN as follows:
 

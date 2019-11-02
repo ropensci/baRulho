@@ -30,24 +30,27 @@ set globally using the 'pb' option (see \code{\link{warbleR_options}}).}
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est') or a data frame ('data.frame') is returned.}
 }
 \value{
-Data frame similar to input data, but also includes a new column 
+Data frame similar to input data, but also includes a new column (blur.ratio)
 with the excess attenuation values.
 }
 \description{
-\code{blur_ratio} Measure blur ratio in signals referenced in a extended selection table.
+\code{blur_ratio} measures blur ratio in signals referenced in a extended selection table.
 }
 \details{
-Excess attenuation is the attenuation of a sound in excess of that due to spherical spreading as described by Dabelsteen et al 1993. The goal of the function is to measure the excess attenuation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for calculating excess attenuation are provided
+Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al 1993. The goal of the function is to measure the blur ratio on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for calculating excess attenuation are provided
 }
 \examples{
 {
 # load example data
 data("playback_est")
 
-# using margin for noise and method 1
+# remove noise selections
+playback_est <- playback_est[playback_est$signal.id != "noise", ]
+
+# using method 1
 blur_ratio(X = playback_est)
 
-# using margin for noise and method 2
+# using method 2
 blur_ratio(X = playback_est, method = 2)
 }
 
@@ -55,5 +58,7 @@ blur_ratio(X = playback_est, method = 2)
 \author{
 Marcelo Araya-Salas (\email{marceloa27@gmail.com}) #' @references {
 Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
+
+Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 }
 }

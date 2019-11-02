@@ -12,7 +12,7 @@
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
 #' \itemize{
 #' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
-#' \item \code{2}: compare all signals with their counterpart recorded at the distance inmediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
+#' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 #' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
@@ -22,7 +22,7 @@
 #' slow down the function but produce more accurate results.
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}. 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.
-#' @return Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column 
+#' @return Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column (env.correlation)
 #' with the amplitude envelope correlation coefficients.
 #' @export
 #' @name xcorr_distortion
@@ -32,15 +32,21 @@
 #' # load example data
 #' data("playback_est")
 #' 
+#' # remove noise selections
+#' playback_est <- playback_est[playback_est$signal.id != "noise", ]
+#' 
 #' # method 1
-#'xcorr_distortion(X = playback_est)
+#'xcorr_distortion(X = playback_est, method = 1)
 #' 
 #' # method 2
 #' xcorr_distortion(X = playback_est, method = 2)
 #' }
 #' 
-#' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) 
-#last modification on oct-22-2019 (MAS)
+#' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
+#' #' @references {
+#' Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' }
+#last modification on nov-01-2019 (MAS)
 
 xcorr_distortion <- function(X = NULL, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson", wl = 512, ovlp = 90, wn = 'hanning', output = "est"){
   
@@ -82,9 +88,9 @@ xcorr_distortion <- function(X = NULL, parallel = 1, pb = TRUE,  method = 1, cor
   xcorrs <- warbleR::xcorr(X = X, wl = wl, ovlp = ovlp, wn = wn, cor.method = cor.method, parallel = parallel, pb = pb, compare.matrix = comp_mat)
   
   # put results back into X
-  X$cross.correlation <- NA
+  X$env.correlation <- NA
   
-  X$cross.correlation[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- xcorrs$score
+  X$env.correlation[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- xcorrs$score
   
   # convert to data frame instead of extended selection table
   if (output == "data.frame") 

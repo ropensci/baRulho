@@ -1,7 +1,7 @@
 #' Measure amplitude envelope correlation
 #' 
-#' \code{env_cor} Measures amplitude envelope correlation in signals referenced in a extended selection table.
-#' @usage env_cor(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
+#' \code{envelope_correlation} measures amplitude envelope correlation in signals referenced in a extended selection table.
+#' @usage envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
 #' ssmooth = NULL, msmooth = NULL, output = "est")
 #' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param parallel Numeric. Controls whether parallel computing is applied.
@@ -21,24 +21,30 @@
 #' @return Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column 
 #' with the amplitude envelope correlation coefficients.
 #' @export
-#' @name env_cor
-#' @details The correlation of amplitude envelopes is intended to measure the distortion of signals in the time domain. The goal of the function is to measure the envelope correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating envelope correlation are provided (see 'method' argument).
+#' @name envelope_correlation
+#' @details The correlation of amplitude envelopes is intended to measure the distortion of signals in the time domain. The  function measures the envelope correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating envelope correlation are provided (see 'method' argument).
 #' @examples
 #' {
 #' # load example data
 #' data("playback_est")
 #' 
+#' # remove noise selections
+#' playback_est <- playback_est[playback_est$signal.id != "noise", ]
+#' 
 #' # method 1
-#'env_cor(X = playback_est)
+#'envelope_correlation(X = playback_est)
 #' 
 #' # method 2
-#' env_cor(X = playback_est, method = 2)
+#' envelope_correlation(X = playback_est, method = 2)
 #' }
 #' 
-#' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) 
-#last modification on oct-22-2019 (MAS)
+#' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
+#' @references {
+#' Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' }
+#last modification on nov-01-2019 (MAS)
 
-env_cor <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est"){
+envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est"){
   
   # set pb options 
   on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
@@ -66,7 +72,7 @@ env_cor <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.method = "pears
   if (pb) write(file = "", x = "calculating amplitude envelopes (step 1 of 2):")
   
   
-  # calculate all envelops apply function
+  # calculate all envelopes apply function
   envs <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y)   {
     clp <- warbleR::read_wave(X = X, index = y)
     env(wave = clp, f = clp@samp.rate, ssmooth = ssmooth, plot = FALSE, msmooth = msmooth)[, 1]
@@ -107,7 +113,7 @@ env_cor <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.method = "pears
     })
     
     # return maximum correlation
-    out <- max(cors)
+    out <- max(cors, na.rm = TRUE)
     }
   
     return(out)

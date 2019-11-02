@@ -6,6 +6,6 @@ citEntry(entry = "MISC",
         year = "2019",
 #        journal = "Methods in Ecology and Evolution",
 #        url = "http://dx.doi.org/10.1111/2041-210X.12624", 
-        textVersion = "Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0."
+        textVersion = "Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0"
 )
 

@@ -1,6 +1,6 @@
 #' Measure atmospheric attenuation and absorption of sound 
 #' 
-#' \code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption of signals referenced in a extended selection table.
+#' \code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption of signals referenced in an extended selection table.
 #' @usage atmospheric_attenuation(f, temp, RH, p = 101325, 
 #' formula = 1, spi = NULL, dist = NULL)
 #' @param f numeric vector of length 1 with frequency (in Hertz).
@@ -9,17 +9,16 @@
 #' @param p numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default).
 #' @param formula 1 = Bazley 1976 (used by Marc), 2 = Rossing 2007 (p. 116, see details). 
 #' @param spi numeric vector of length 1 with the initial sound pressure in Pa. Required for calculating atmospheric absorption. Default is \code{NULL}. 
-#' @param dist numeric vector of length 1 with the distance in m through which the sound propagates. Required for calculating atmospheric absorption. Default is \code{NULL}. 
-#' @return Returns the atmospheric absorption (in dB/m) of sound based on the supplied parameters. I 
+#' @param dist numeric vector of length 1 with distance (m) over which a sound propagates. Required for calculating atmospheric absorption. Default is \code{NULL}. 
+#' @return Returns atmospheric attenuation (in dB/m) of sound based on supplied parameters. If 'spi' and 'dist' are supplied the function also returns atmospheric absorption (in dB).  
 #' @export
 #' @name atmospheric_attenuation
-#' @details Calculate the atmospheric attenuation in dependence on temperature, relative humidity, pressure and frequency. The function can applied to formulae based on:
+#' @details Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency. The function can applied to formulae based on:
 #' \itemize{
-#' \item \code{1}: default. As used by Marc: Bazley (1976), Sound absorption in air at
-#   frequencies up to 100 kHz. NPL acoustics report Ac 74. (Book) 
+#' \item \code{1}: default. As used by Marc: Bazley (1976), Sound absorption in air at frequencies up to 100 kHz. NPL acoustics report Ac 74. 
 #' \item \code{2}: as used by Peter: Rossing (2007), Handbook of Acoustics, Springer.
 #' }
-#' If 'spi' is supplied the function also returns the atmospheric absorption (in dB).
+#' If 'spi' and 'dist' are supplied the function also returns the atmospheric absorption (in dB).
 #' @examples
 #' {
 #' # load example data
@@ -33,8 +32,8 @@
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) 
-#' #' @references {
-#' Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' @references {
+#' Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 #' }
 #last modification on nov-01-2019 (MAS)
 

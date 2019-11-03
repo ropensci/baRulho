@@ -10,12 +10,9 @@ blur_ratio(X, parallel = 1, pb = TRUE, method = 1,
 \arguments{
 \item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
 
-\item{parallel}{Numeric. Controls whether parallel computing is applied.
-It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-If \code{NULL} (default) then the current working directory is used.}
+\item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}. It can also be
-set globally using the 'pb' option (see \code{\link{warbleR_options}}).}
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
 \item{method}{Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
 \itemize{
@@ -31,13 +28,13 @@ set globally using the 'pb' option (see \code{\link{warbleR_options}}).}
 }
 \value{
 Data frame similar to input data, but also includes a new column (blur.ratio)
-with the excess attenuation values.
+with the blur ratio values.
 }
 \description{
-\code{blur_ratio} measures blur ratio in signals referenced in a extended selection table.
+\code{blur_ratio} measures blur ratio in signals referenced in an extended selection table.
 }
 \details{
-Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al 1993. The goal of the function is to measure the blur ratio on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for calculating excess attenuation are provided
+Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Blur ratio is measured as the ratio of the amplitude (amplitude envelope root mean square) of the reference signal to the re-recorded signal. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. The function compare each signal type to the corresponding reference signal. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for calculating blur-ratio are provided
 }
 \examples{
 {
@@ -59,6 +56,6 @@ blur_ratio(X = playback_est, method = 2)
 Marcelo Araya-Salas (\email{marceloa27@gmail.com}) #' @references {
 Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 
-Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 }
 }

@@ -36,7 +36,7 @@
 
 
 <meta property="og:title" content="Measure atmospheric attenuation and absorption of sound — atmospheric_attenuation" />
-<meta property="og:description" content="atmospheric_attenuation measures atmospheric attenuation and atmospheric absorption of signals referenced in a extended selection table." />
+<meta property="og:description" content="atmospheric_attenuation measures atmospheric attenuation and atmospheric absorption of signals referenced in an extended selection table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,7 +114,7 @@
     </div>
 
     <div class="ref-description">
-    <p><code>atmospheric_attenuation</code> measures atmospheric attenuation and atmospheric absorption of signals referenced in a extended selection table.</p>
+    <p><code>atmospheric_attenuation</code> measures atmospheric attenuation and atmospheric absorption of signals referenced in an extended selection table.</p>
     </div>
 
     <pre class="usage"><span class='fu'>atmospheric_attenuation</span>(<span class='no'>f</span>, <span class='no'>temp</span>, <span class='no'>RH</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>101325</span>,
@@ -149,19 +149,22 @@
     </tr>
     <tr>
       <th>dist</th>
-      <td><p>numeric vector of length 1 with the distance in m through which the sound propagates. Required for calculating atmospheric absorption. Default is <code>NULL</code>.</p></td>
+      <td><p>numeric vector of length 1 with distance (m) over which a sound propagates. Required for calculating atmospheric absorption. Default is <code>NULL</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns the atmospheric absorption (in dB/m) of sound based on the supplied parameters. I</p>
+    <p>Returns atmospheric attenuation (in dB/m) of sound based on supplied parameters. If 'spi' and 'dist' are supplied the function also returns atmospheric absorption (in dB).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Calculate the atmospheric attenuation in dependence on temperature, relative humidity, pressure and frequency. The function can applied to formulae based on:</p><ul>
-<li><p><code>1</code>: default. As used by Marc: Bazley (1976), Sound absorption in air at</p></li>
+    <p>Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency. The function can applied to formulae based on:</p><ul>
+<li><p><code>1</code>: default. As used by Marc: Bazley (1976), Sound absorption in air at frequencies up to 100 kHz. NPL acoustics report Ac 74.</p></li>
 <li><p><code>2</code>: as used by Peter: Rossing (2007), Handbook of Acoustics, Springer.</p></li>
-</ul><p>If 'spi' is supplied the function also returns the atmospheric absorption (in dB).</p>
+</ul><p>If 'spi' and 'dist' are supplied the function also returns the atmospheric absorption (in dB).</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>{
@@ -184,13 +187,12 @@
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#value">Value</a></li>
       <li><a href="#details">Details</a></li>
+      <li><a href="#references">References</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
 
     <h2>Author</h2>
-    <p>Marcelo Araya-Salas (<a href='mailto:marceloa27@gmail.com'>marceloa27@gmail.com</a>) 
-#' @references 
-Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0</p>
+    <p>Marcelo Araya-Salas (<a href='mailto:marceloa27@gmail.com'>marceloa27@gmail.com</a>)</p>
   </div>
 </div>
 

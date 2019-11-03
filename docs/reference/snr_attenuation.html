@@ -36,7 +36,7 @@
 
 
 <meta property="og:title" content="Measure attenuation as signal-to-noise ratio — snr_attenuation" />
-<meta property="og:description" content="snr_attenuation measures attenuation as signal-to-noise ratio of signals referenced in a extended selection table." />
+<meta property="og:description" content="snr_attenuation measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,7 +114,7 @@
     </div>
 
     <div class="ref-description">
-    <p><code>snr_attenuation</code> measures attenuation as signal-to-noise ratio of signals referenced in a extended selection table.</p>
+    <p><code>snr_attenuation</code> measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table.</p>
     </div>
 
     <pre class="usage"><span class='fu'>snr_attenuation</span>(<span class='no'>X</span>, <span class='no'>mar</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>eq.dur</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -134,19 +134,16 @@ the start and end points of selection over which to measure noise.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
-      <td><p>Numeric. Controls whether parallel computing is applied.
-It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-If <code>NULL</code> (default) then the current working directory is used.</p></td>
+      <td><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).</p></td>
     </tr>
     <tr>
       <th>pb</th>
-      <td><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>. It can also be
-set globally using the 'pb' option (see <code>warbleR_options</code>).</p></td>
+      <td><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>eq.dur</th>
       <td><p>Logical. Controls whether the noise segment that is measured has the same duration 
-than the signal (if <code>TRUE</code>. Default is <code>FALSE</code>). If <code>TRUE</code> then 'mar' and 'noise.ref' arguments are ignored.</p></td>
+to that of the signal (if <code>TRUE</code>. Default is <code>FALSE</code>). If <code>TRUE</code> then 'mar' and 'noise.ref' arguments are ignored.</p></td>
     </tr>
     <tr>
       <th>noise.ref</th>
@@ -157,11 +154,11 @@ than the signal (if <code>TRUE</code>. Default is <code>FALSE</code>). If <code>
     </tr>
     <tr>
       <th>type</th>
-      <td><p>Numeric. Determine the formula to be used to calculate the signal-to-noise ratio (S = signal
+      <td><p>Numeric vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
 , N = background noise):</p><ul>
-<li><p><code>1</code>: ratio of S amplitude envelope quadratic mean to N amplitude envelope quadratic mean
+<li><p><code>1</code>: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
  (<code>rms(env(S))/rms(env(N))</code>)</p></li>
-<li><p><code>2</code>: ratio of the difference between S amplitude envelope quadratic mean and N amplitude envelope quadratic mean to N amplitude envelope quadratic mean (<code>(rms(env(S)) - rms(env(N)))/rms(env(N))</code>, as proposed by Dabelsteen et al (1993))</p></li>
+<li><p><code>2</code>: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude enveloperoot mean square (<code>(rms(env(S)) - rms(env(N)))/rms(env(N))</code>, as proposed by Dabelsteen et al (1993))</p></li>
 </ul></td>
     </tr>
     <tr>
@@ -186,7 +183,7 @@ Note that lower values will increase time resolution, which is more important fo
 with the signal-to-noise ratio values.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Signal-to-noise ratio is the attenuation is the attenuation of a sound in excess of that due to spherical spreading as described by Dabelsteen et al (1993). The goal of the function is to measure the excess attenuation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating excess attenuation are provided (see 'method' argument).</p>
+    <p>Signal-to-noise ratio measures signal amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, the signal-to-noise ratio (SNR) will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. The 'signal.id' column must be used to indicate which signals belong to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating signal-to-noise ratio are provided (see 'type' argument).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>{
@@ -238,7 +235,7 @@ with the signal-to-noise ratio values.</p>
 
     <h2>Author</h2>
     <p>Marcelo Araya-Salas (<a href='mailto:marceloa27@gmail.com'>marceloa27@gmail.com</a>) #' @references 
-Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0</p>
+Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0</p>
   </div>
 </div>
 

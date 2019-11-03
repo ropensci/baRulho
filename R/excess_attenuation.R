@@ -1,14 +1,11 @@
 #' Measure excess attenuation
 #' 
-#' \code{excess_attenuation} measures excess attenuation in signals referenced in a extended selection table.
+#' \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
 #' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, 
 #' bp = NULL, wl = 10, output = "est")
 #' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
-#' @param parallel Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' If \code{NULL} (default) then the current working directory is used.
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}. It can also be
-#' set globally using the 'pb' option (see \code{\link{warbleR_options}}).
+#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring excess attenuation. Two methods are available:
 #' \itemize{
 #' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
@@ -23,7 +20,10 @@
 #' with the excess attenuation values.
 #' @export
 #' @name excess_attenuation
-#' @details Excess attenuation is the attenuation of a sound in excess of that due to spherical spreading as described by Dabelsteen et al (1993). The goal of the function is to measure the excess attenuation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating excess attenuation are provided (see 'method' argument).   
+#' @details Excess attenuation is the amplitude loss of a sound in excess of that due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading due to atmospheric conditions or habitat (Wiley & Richards, 1978).
+
+#' 
+#' The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.id' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating excess attenuation are provided (see 'method' argument).   
 #' @examples
 #' {
 #' # load example data
@@ -40,9 +40,11 @@
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) #' @references {
-#' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
+#' Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 #' 
-#' Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' Marten, K., & Marler, P. (1977). Sound transmission and its significance for animal vocalization. Behavioral ecology and sociobiology, 2(3), 271-290.
+#' 
+#' Morton, E. S. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.
 #' }
 #last modification on nov-01-2019 (MAS)
 

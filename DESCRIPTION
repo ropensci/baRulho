@@ -1,11 +1,11 @@
 Package: baRulho
 Type: Package
-Title: Quantifying sound degradation  
+Title: Quantifying habitat-induced acoustic signal degradation  
 Version: 1.0.0
 Date: 2019-10-26
 Author: Marcelo Araya-Salas [aut, cre]
 Maintainer: Marcelo Araya-Salas <marceloa27@gmail.com>
-Description: Quantification of environmental degradation of (animal) sounds
+Description: Quantifying habitat-induced degradation of (animal) acoustic signals.
 License: GPL (>= 2)
 Imports: pbapply, warbleR, utils, stats, seewave, tuneR
 Depends: R (>= 3.2.1)

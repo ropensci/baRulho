@@ -1,14 +1,11 @@
 #' Measure spectrographic cross-correlation as a measure of signal distortion
 #' 
-#' \code{xcorr_distortion} Measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in a extended selection table.
+#' \code{xcorr_distortion} Measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table.
 #' @usage xcorr_distortion(X = NULL, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson",
 #' wl = 512, ovlp = 90, wn = 'hanning', output = "est")
 #' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
-#' @param parallel Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' If \code{NULL} (default) then the current working directory is used.
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}. It can also be
-#' set globally using the 'pb' option (see \code{\link{warbleR_options}}).
+#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
 #' \itemize{
 #' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
@@ -22,11 +19,11 @@
 #' slow down the function but produce more accurate results.
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}. 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.
-#' @return Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column (env.correlation)
-#' with the amplitude envelope correlation coefficients.
+#' @return Data frame or extended selection table (depending on 'output' argument) similar to input data, but includes a new column (cross.correlation)
+#' with the spectrogram cross-correlation coefficients.
 #' @export
 #' @name xcorr_distortion
-#' @details The spectrographic cross-correlation is intended to measure the distortion of signals in the frequency domain. The goal of the function is to measure the cross-correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{xcorr}} function.
+#' @details The spectrographic cross-correlation measures  frequency distortion of signals as a similarity metric where values range from 1 (completely equal, no distortion) and decays towards 0 (highly distorted). Cross-correlation is measured of signals in which a reference playback has been re-recorded at increasing distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{xcorr}} function.
 #' @examples
 #' {
 #' # load example data
@@ -43,10 +40,12 @@
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
-#' #' @references {
-#' Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' @references {
+#' Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' 
+#' Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115. 
 #' }
-#last modification on nov-01-2019 (MAS)
+# last modification on nov-01-2019 (MAS)
 
 xcorr_distortion <- function(X = NULL, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson", wl = 512, ovlp = 90, wn = 'hanning', output = "est"){
   
@@ -88,9 +87,9 @@ xcorr_distortion <- function(X = NULL, parallel = 1, pb = TRUE,  method = 1, cor
   xcorrs <- warbleR::xcorr(X = X, wl = wl, ovlp = ovlp, wn = wn, cor.method = cor.method, parallel = parallel, pb = pb, compare.matrix = comp_mat)
   
   # put results back into X
-  X$env.correlation <- NA
+  X$cross.correlation <- NA
   
-  X$env.correlation[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- xcorrs$score
+  X$cross.correlation[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- xcorrs$score
   
   # convert to data frame instead of extended selection table
   if (output == "data.frame") 

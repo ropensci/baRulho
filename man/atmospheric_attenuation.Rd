@@ -20,21 +20,21 @@ formula = 1, spi = NULL, dist = NULL)
 
 \item{spi}{numeric vector of length 1 with the initial sound pressure in Pa. Required for calculating atmospheric absorption. Default is \code{NULL}.}
 
-\item{dist}{numeric vector of length 1 with the distance in m through which the sound propagates. Required for calculating atmospheric absorption. Default is \code{NULL}.}
+\item{dist}{numeric vector of length 1 with distance (m) over which a sound propagates. Required for calculating atmospheric absorption. Default is \code{NULL}.}
 }
 \value{
-Returns the atmospheric absorption (in dB/m) of sound based on the supplied parameters. I
+Returns atmospheric attenuation (in dB/m) of sound based on supplied parameters. If 'spi' and 'dist' are supplied the function also returns atmospheric absorption (in dB).
 }
 \description{
-\code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption of signals referenced in a extended selection table.
+\code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption of signals referenced in an extended selection table.
 }
 \details{
-Calculate the atmospheric attenuation in dependence on temperature, relative humidity, pressure and frequency. The function can applied to formulae based on:
+Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency. The function can applied to formulae based on:
 \itemize{
-\item \code{1}: default. As used by Marc: Bazley (1976), Sound absorption in air at
+\item \code{1}: default. As used by Marc: Bazley (1976), Sound absorption in air at frequencies up to 100 kHz. NPL acoustics report Ac 74. 
 \item \code{2}: as used by Peter: Rossing (2007), Handbook of Acoustics, Springer.
 }
-If 'spi' is supplied the function also returns the atmospheric absorption (in dB).
+If 'spi' and 'dist' are supplied the function also returns the atmospheric absorption (in dB).
 }
 \examples{
 {
@@ -49,9 +49,11 @@ atmospheric_attenuation(f = 20000, temp = 20, RH = 90, p = 88000, formula = 1)
 }
 
 }
-\author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com}) 
-#' @references {
-Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+\references{
+{
+Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 }
+}
+\author{
+Marcelo Araya-Salas (\email{marceloa27@gmail.com})
 }

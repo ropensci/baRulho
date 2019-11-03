@@ -36,7 +36,7 @@
 
 
 <meta property="og:title" content="Measure amplitude envelope correlation — envelope_correlation" />
-<meta property="og:description" content="envelope_correlation measures amplitude envelope correlation in signals referenced in a extended selection table." />
+<meta property="og:description" content="envelope_correlation measures amplitude envelope correlation of signals referenced in an extended selection table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -114,7 +114,7 @@
     </div>
 
     <div class="ref-description">
-    <p><code>envelope_correlation</code> measures amplitude envelope correlation in signals referenced in a extended selection table.</p>
+    <p><code>envelope_correlation</code> measures amplitude envelope correlation of signals referenced in an extended selection table.</p>
     </div>
 
     <pre class="usage"><span class='fu'>envelope_correlation</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cor.method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
@@ -129,18 +129,16 @@
     </tr>
     <tr>
       <th>parallel</th>
-      <td><p>Numeric. Controls whether parallel computing is applied.
-It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
+      <td><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 If <code>NULL</code> (default) then the current working directory is used.</p></td>
     </tr>
     <tr>
       <th>pb</th>
-      <td><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>. It can also be
-set globally using the 'pb' option (see <code>warbleR_options</code>).</p></td>
+      <td><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:</p><ul>
+      <td><p>Numeric vector of length 1 to indicate the 'experimental design' to measure amplitude envelope correlation. Two methods are available:</p><ul>
 <li><p><code>1</code>: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.</p></li>
 <li><p><code>2</code>: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).</p></li>
 </ul></td>
@@ -151,7 +149,7 @@ set globally using the 'pb' option (see <code>warbleR_options</code>).</p></td>
     </tr>
     <tr>
       <th>ssmooth</th>
-      <td><p>Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>).</p></td>
+      <td><p>Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>).</p></td>
     </tr>
     <tr>
       <th>msmooth</th>
@@ -166,13 +164,13 @@ set globally using the 'pb' option (see <code>warbleR_options</code>).</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column 
-with the amplitude envelope correlation coefficients.</p>
+with the calculated amplitude envelope correlation coefficients.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The correlation of amplitude envelopes is intended to measure the distortion of signals in the time domain. The  function measures the envelope correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating envelope correlation are provided (see 'method' argument).</p>
+    <p>Amplitude envelope correlation measures the similarity of 2 signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical amplitude envelope, i.e. no degradation) to 0. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating envelope correlation are provided (see 'method' argument).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0</p>
+    <p>Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0Apol, C.A., Sturdy, C.B. &amp; Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>{

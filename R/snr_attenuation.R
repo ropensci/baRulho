@@ -1,29 +1,26 @@
 #' Measure attenuation as signal-to-noise ratio 
 #' 
-#' \code{snr_attenuation} measures attenuation as signal-to-noise ratio of signals referenced in a extended selection table.
+#' \code{snr_attenuation} measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table.
 #' @usage snr_attenuation(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
 #' noise.ref = "adjacent", type = 1, bp = NULL, wl = 10, output = "est")
 #' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure noise.
-#' @param parallel Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' If \code{NULL} (default) then the current working directory is used.
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}. It can also be
-#' set globally using the 'pb' option (see \code{\link{warbleR_options}}).
+#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param eq.dur Logical. Controls whether the noise segment that is measured has the same duration 
-#' than the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.
+#' to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.
 #' @param noise.ref Character vector of length 1 to determined if a noise segment to be used for measuring ambient noise. Two options are available: 
 #' \itemize{
 #' \item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of noise segments). If several 'noise' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
 #' \item \code{custom}: measure noise segments referenced in the selection table (labeled as 'noise' in the 'signal.id' column). Those segments will be used to apply the same noise reference to all signals in a sound file. Therefore, at least one 'noise' selection for each sound file must be provided.
 #' }
-#' @param type Numeric. Determine the formula to be used to calculate the signal-to-noise ratio (S = signal
+#' @param type  Numeric vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
 #' , N = background noise): 
 #' \itemize{
-#' \item \code{1}: ratio of S amplitude envelope quadratic mean to N amplitude envelope quadratic mean
+#' \item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
 #'  (\code{rms(env(S))/rms(env(N))})
-#' \item \code{2}: ratio of the difference between S amplitude envelope quadratic mean and N amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as proposed by Dabelsteen et al (1993))
+#' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude enveloperoot mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as proposed by Dabelsteen et al (1993))
 #' }
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram for applying bandpass. Default 
@@ -34,7 +31,7 @@
 #' with the signal-to-noise ratio values.
 #' @export
 #' @name snr_attenuation
-#' @details Signal-to-noise ratio is the attenuation is the attenuation of a sound in excess of that due to spherical spreading as described by Dabelsteen et al (1993). The goal of the function is to measure the excess attenuation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating excess attenuation are provided (see 'method' argument).   
+#' @details Signal-to-noise ratio measures signal amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, the signal-to-noise ratio (SNR) will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. The 'signal.id' column must be used to indicate which signals belong to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating signal-to-noise ratio are provided (see 'type' argument).   
 #' @examples
 #' {
 #' # load example data
@@ -52,7 +49,7 @@
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) #' @references {
 #' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 #' 
-#' Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 #' }
 #last modification on nov-01-2019 (MAS)
 

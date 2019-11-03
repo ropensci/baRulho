@@ -1,28 +1,26 @@
 #' Measure amplitude envelope correlation
 #' 
-#' \code{envelope_correlation} measures amplitude envelope correlation in signals referenced in a extended selection table.
+#' \code{envelope_correlation} measures amplitude envelope correlation of signals referenced in an extended selection table.
 #' @usage envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
 #' ssmooth = NULL, msmooth = NULL, output = "est")
 #' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
-#' @param parallel Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' If \code{NULL} (default) then the current working directory is used.
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}. It can also be
-#' set globally using the 'pb' option (see \code{\link{warbleR_options}}).
-#' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
+#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
+#' @param method Numeric vector of length 1 to indicate the 'experimental design' to measure amplitude envelope correlation. Two methods are available:
 #' \itemize{
 #' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
 #' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 #' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
-#' @param ssmooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).
+#' @param ssmooth Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).
 #' @param msmooth Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}). 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.
 #' @return Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column 
-#' with the amplitude envelope correlation coefficients.
+#' with the calculated amplitude envelope correlation coefficients.
 #' @export
 #' @name envelope_correlation
-#' @details The correlation of amplitude envelopes is intended to measure the distortion of signals in the time domain. The  function measures the envelope correlation on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compared each signal type to its reference. Two methods for calculating envelope correlation are provided (see 'method' argument).
+#' @details Amplitude envelope correlation measures the similarity of 2 signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical amplitude envelope, i.e. no degradation) to 0. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating envelope correlation are provided (see 'method' argument).
 #' @examples
 #' {
 #' # load example data
@@ -40,7 +38,9 @@
 #' 
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @references {
-#' Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' 
+#' Apol, C.A., Sturdy, C.B. & Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.
 #' }
 #last modification on nov-01-2019 (MAS)
 

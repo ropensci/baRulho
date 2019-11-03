@@ -1,14 +1,11 @@
 #' Measure blur ratio 
 #' 
-#' \code{blur_ratio} measures blur ratio in signals referenced in a extended selection table.
+#' \code{blur_ratio} measures blur ratio in signals referenced in an extended selection table.
 #' @usage blur_ratio(X, parallel = 1, pb = TRUE, method = 1,  
 #'  ssmooth = NULL, msmooth = NULL, output = "est")
 #' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
-#' @param parallel Numeric. Controls whether parallel computing is applied.
-#' It specifies the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' If \code{NULL} (default) then the current working directory is used.
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}. It can also be
-#' set globally using the 'pb' option (see \code{\link{warbleR_options}}).
+#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
 #' \itemize{
 #' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
@@ -18,10 +15,10 @@
 #' @param msmooth Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}). 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est') or a data frame ('data.frame') is returned.
 #' @return Data frame similar to input data, but also includes a new column (blur.ratio)
-#' with the excess attenuation values.
+#' with the blur ratio values.
 #' @export
 #' @name blur_ratio
-#' @details Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al 1993. The goal of the function is to measure the blur ratio on signals in which a master playback has been re-recorded at different distances. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for calculating excess attenuation are provided   
+#' @details Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Blur ratio is measured as the ratio of the amplitude (amplitude envelope root mean square) of the reference signal to the re-recorded signal. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. The function compare each signal type to the corresponding reference signal. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for calculating blur-ratio are provided   
 #' @examples
 #' {
 #' # load example data
@@ -40,7 +37,7 @@
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) #' @references {
 #' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 #' 
-#' Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 #' }
 #last modification on nov-01-2019 (MAS)
 

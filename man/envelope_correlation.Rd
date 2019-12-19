@@ -30,14 +30,14 @@ If \code{NULL} (default) then the current working directory is used.}
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.}
 }
 \value{
-Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column 
+Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column ('envelope.correlation')
 with the calculated amplitude envelope correlation coefficients.
 }
 \description{
 \code{envelope_correlation} measures amplitude envelope correlation of signals referenced in an extended selection table.
 }
 \details{
-Amplitude envelope correlation measures the similarity of 2 signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical amplitude envelope, i.e. no degradation) to 0. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating envelope correlation are provided (see 'method' argument).
+Amplitude envelope correlation measures the similarity of 2 signals in the time domain. The function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical amplitude envelope, i.e. no degradation) to 0. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. If signals differ in duration the shortest signal is slided over the longest and the highest correlation is returned. Two methods for calculating envelope correlation are provided (see 'method' argument).
 }
 \examples{
 {

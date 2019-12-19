@@ -20,7 +20,7 @@
 #' \itemize{
 #' \item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
 #'  (\code{rms(env(S))/rms(env(N))})
-#' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude enveloperoot mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as proposed by Dabelsteen et al (1993))
+#' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as proposed by Dabelsteen et al (1993))
 #' }
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram for applying bandpass. Default 

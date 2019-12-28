@@ -16,11 +16,11 @@
 #' @param ssmooth Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).
 #' @param msmooth Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}). 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.
-#' @return Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column ('envelope.correlation')
+#' @return Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column 
 #' with the calculated amplitude envelope correlation coefficients.
 #' @export
 #' @name envelope_correlation
-#' @details Amplitude envelope correlation measures the similarity of 2 signals in the time domain. The function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical amplitude envelope, i.e. no degradation) to 0. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. If signals differ in duration the shortest signal is slided over the longest and the highest correlation is returned. Two methods for calculating envelope correlation are provided (see 'method' argument).
+#' @details Amplitude envelope correlation measures the similarity of 2 signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical amplitude envelope, i.e. no degradation) to 0. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating envelope correlation are provided (see 'method' argument).
 #' @examples
 #' {
 #' # load example data
@@ -71,11 +71,12 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   
   if (pb) write(file = "", x = "calculating amplitude envelopes (step 1 of 2):")
   
-  
   # calculate all envelopes apply function
   envs <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y)   {
     clp <- warbleR::read_wave(X = X, index = y)
     env(wave = clp, f = clp@samp.rate, ssmooth = ssmooth, plot = FALSE, msmooth = msmooth)[, 1]
+    
+    meanspec(wave = clp, f = clp@samp.rate, ssmooth = ssmooth, plot = FALSE, msmooth = msmooth)[, 1]
     }) 
 
   # add sound file selec column and names to envelopes (weird column name so it does not overwrite user columns)
@@ -138,7 +139,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   if (pb) write(file = "", x = "calculating envelope cross-correlations (step 2 of 2):")
   
   # calculate all envelops apply function
-  X$envelope.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {
+  X$env.cor <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {
     env_cor_FUN(y = X$TEMP....y[x], z = X$TEMP....z[x])
   }) 
   

@@ -35,7 +35,7 @@ library(baRulho)
 
 Please cite [baRulho](https://cran.r-project.org/package=baRulho) as follows:
 
-Araya-Salas, M. (2019), *baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals*. R package version 1.0.0.
+Araya-Salas, M. (2019), *baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R*. R package version 1.0.0.
 
 # References
 

@@ -50,6 +50,7 @@ The [baRulho](https://cran.r-project.org/package=baRulho) package is intended to
 
 &nbsp;
 
+The package currently assumes that all recordings have been made with the same equipment and recording volume.
 
 ### Inputting acoustic data and annotations
 

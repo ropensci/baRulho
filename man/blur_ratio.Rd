@@ -5,11 +5,11 @@
 \title{Measure blur ratio in the time domain}
 \usage{
 blur_ratio(X, parallel = 1, pb = TRUE, method = 1, ssmooth = 200, 
-msmooth = NULL, output = "est", img = FALSE, res = 150, wl = 512, ovlp = 70, 
-pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), dest.path = NULL)
+msmooth = NULL, output = "est", img = FALSE, res = 150, hop.size = 11.6, wl = NULL, 
+ovlp = 70, pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), dest.path = NULL)
 }
 \arguments{
-\item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
+\item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.}
 
 \item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
@@ -25,17 +25,19 @@ pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), dest.path = NULL)
 
 \item{msmooth}{Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est') or a data frame ('data.frame') is returned.}
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting.}
 
 \item{img}{Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding envelopes are produced. Default is no images ( \code{FALSE}).}
 
 \item{res}{Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.}
 
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for 44.1 kHz sampling rate.}
+
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
-is 512.}
+is NULL. If supplied, 'hop.size' is ignored.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
+consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files.}
 
 \item{pal}{A color palette function to be used to assign colors in the 
 plot, as in \code{\link[seewave]{spectro}}. Default is reverse.gray.colors.2.}
@@ -43,26 +45,24 @@ plot, as in \code{\link[seewave]{spectro}}. Default is reverse.gray.colors.2.}
 \item{collevels}{Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-60, 0, 5)}.}
 
 \item{dest.path}{Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.}
-
-\item{...}{Additional arguments to be passed to a modified version of \code{\link[seewave]{spectro}}.}
 }
 \value{
 Data frame similar to input data, but also includes a new column (blur.ratio)
-with the blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)).
+with the blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would a list including the data frame just described and a data frame with envelopes (amplitude values) for all signals.
 }
 \description{
 \code{blur_ratio} measures blur ratio in signals referenced in an extended selection table.
 }
 \details{
-Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compare each signal type to the corresponding reference signal. The 'signal.id' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
+Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
 }
 \examples{
 {
 # load example data
 data("playback_est")
 
-# remove noise selections
-playback_est <- playback_est[playback_est$signal.id != "noise", ]
+# remove ambient selections
+playback_est <- playback_est[playback_est$signal.type != "ambient", ]
 
 # using method 1
 blur_ratio(X = playback_est)
@@ -72,10 +72,16 @@ blur_ratio(X = playback_est, method = 2)
 }
 
 }
-\author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com}) #' @references {
+\references{
+{
 Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 
 Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 }
+}
+\seealso{
+\code{\link{envelope_correlation}}, \code{\link{spectral_blur_ratio}}
+}
+\author{
+Marcelo Araya-Salas (\email{marceloa27@gmail.com})
 }

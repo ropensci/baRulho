@@ -5,10 +5,10 @@
 \title{Measure excess attenuation}
 \usage{
 excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, 
-bp = NULL, wl = 10, output = "est")
+bp = NULL, hop.size = 1, wl = NULL, ovlp = 70)
 }
 \arguments{
-\item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
+\item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.}
 
 \item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
@@ -22,31 +22,30 @@ bp = NULL, wl = 10, output = "est")
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram for applying bandpass. Default 
- is 10. Ignored if \code{bp = NULL}.
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for 44.1 kHz sampling rate.}
+
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.}
+\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
+consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Only used for bandpass filtering.}
 }
 \value{
-Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column (excess.attenuation)
+Extended selection table similar to input data, but also includes a new column (excess.attenuation)
 with the excess attenuation values.
 }
 \description{
 \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
 }
 \details{
-Excess attenuation is the amplitude loss of a sound in excess of that due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading due to atmospheric conditions or habitat (Wiley & Richards, 1978).
-
-The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.id' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating excess attenuation are provided (see 'method' argument).
+Excess attenuation is the amplitude loss of a sound in excess of that due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading due to atmospheric conditions or habitat (Wiley & Richards, 1978). Low values indicate litle signal attenuation. 
+The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating excess attenuation are provided (see 'method' argument).
 }
 \examples{
 {
 # load example data
 data("playback_est")
-
-# remove noise selections
-playback_est <- playback_est[playback_est$signal.id != "noise", ]
 
 # using method 1
 excess_attenuation(X = playback_est)
@@ -56,12 +55,18 @@ excess_attenuation(X = playback_est, method = 2)
 }
 
 }
-\author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com}) #' @references {
+\references{
+{
 Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 
-Marten, K., & Marler, P. (1977). Sound transmission and its significance for animal vocalization. Behavioral ecology and sociobiology, 2(3), 271-290.
+Marten, K., & Marler, P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.
 
 Morton, E. S. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.
 }
+}
+\seealso{
+\code{\link{spcc_distortion}}
+}
+\author{
+Marcelo Araya-Salas (\email{marceloa27@gmail.com})
 }

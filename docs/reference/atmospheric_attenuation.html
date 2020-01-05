@@ -84,6 +84,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/Intro_to_baRulho.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;Introduction to baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -141,7 +153,7 @@
     </tr>
     <tr>
       <th>formula</th>
-      <td><p>1 = Bazley 1976 (used by Marc), 2 = Rossing 2007 (p. 116, see details).</p></td>
+      <td><p>1 = Bazley 1976, 2 = Rossing 2007 (p. 116, see details).</p></td>
     </tr>
     <tr>
       <th>spi</th>
@@ -159,8 +171,8 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency. The function can applied to formulae based on:</p><ul>
-<li><p><code>1</code>: default. As used by Marc: Bazley (1976), Sound absorption in air at frequencies up to 100 kHz. NPL acoustics report Ac 74.</p></li>
-<li><p><code>2</code>: as used by Peter: Rossing (2007), Handbook of Acoustics, Springer.</p></li>
+<li><p><code>1</code>: default. As used by Bazley (1976), Sound absorption in air at frequencies up to 100 kHz. NPL acoustics report Ac 74.</p></li>
+<li><p><code>2</code>: as used by Rossing (2007), Handbook of Acoustics, Springer.</p></li>
 </ul><p>If 'spi' and 'dist' are supplied the function also returns the atmospheric absorption (in dB).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
@@ -171,8 +183,8 @@
 <span class='co'># load example data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"playback_est"</span>)
 
-<span class='co'>#' # remove noise selections</span>
-<span class='no'>playback_est</span> <span class='kw'>&lt;-</span> <span class='no'>playback_est</span>[<span class='no'>playback_est</span>$<span class='no'>signal.id</span> <span class='kw'>!=</span> <span class='st'>"noise"</span>, ]
+<span class='co'>#' # remove ambient selections</span>
+<span class='no'>playback_est</span> <span class='kw'>&lt;-</span> <span class='no'>playback_est</span>[<span class='no'>playback_est</span>$<span class='no'>signal.type</span> <span class='kw'>!=</span> <span class='st'>"ambient"</span>, ]
 
 <span class='co'># measure atmospheric attenuation formula 1</span>
 <span class='fu'>atmospheric_attenuation</span>(<span class='kw'>f</span> <span class='kw'>=</span> <span class='fl'>20000</span>, <span class='kw'>temp</span> <span class='kw'>=</span> <span class='fl'>20</span>, <span class='kw'>RH</span> <span class='kw'>=</span> <span class='fl'>90</span>, <span class='kw'>p</span> <span class='kw'>=</span> <span class='fl'>88000</span>, <span class='kw'>formula</span> <span class='kw'>=</span> <span class='fl'>1</span>)

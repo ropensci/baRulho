@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Measure blur ratio in the time domain — blur_ratio • baRulho</title>
+<title>Measure blur ratio in the frequency domain — spectral_blur_ratio • baRulho</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Measure blur ratio in the time domain — blur_ratio" />
-<meta property="og:description" content="blur_ratio measures blur ratio in signals referenced in an extended selection table." />
+<meta property="og:title" content="Measure blur ratio in the frequency domain — spectral_blur_ratio" />
+<meta property="og:description" content="spectral_blur_ratio measures blur ratio of frequency spectra from signals referenced in an extended selection table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,17 +120,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Measure blur ratio in the time domain</h1>
-    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/blur_ratio.R'><code>R/blur_ratio.R</code></a></small>
-    <div class="hidden name"><code>blur_ratio.Rd</code></div>
+    <h1>Measure blur ratio in the frequency domain</h1>
+    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/spectral_blur_ratio.R'><code>R/spectral_blur_ratio.R</code></a></small>
+    <div class="hidden name"><code>spectral_blur_ratio.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>blur_ratio</code> measures blur ratio in signals referenced in an extended selection table.</p>
+    <p><code>spectral_blur_ratio</code> measures blur ratio of frequency spectra from signals referenced in an extended selection table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>blur_ratio</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ssmooth</span> <span class='kw'>=</span> <span class='fl'>200</span>,
-<span class='kw'>msmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"est"</span>, <span class='kw'>img</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>res</span> <span class='kw'>=</span> <span class='fl'>150</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>spectral_blur_ratio</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>ssmooth</span> <span class='kw'>=</span> <span class='fl'>50</span>,
+<span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"est"</span>, <span class='kw'>img</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>res</span> <span class='kw'>=</span> <span class='fl'>150</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
 <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>70</span>, <span class='kw'>pal</span> <span class='kw'>=</span> <span class='no'>reverse.gray.colors.2</span>, <span class='kw'>collevels</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(-<span class='fl'>60</span>, <span class='fl'>0</span>, <span class='fl'>5</span>), <span class='kw'>dest.path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -138,7 +138,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.</p></td>
+      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
@@ -150,26 +150,22 @@
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:</p><ul>
+      <td><p>Numeric vector of length 1 to indicate the 'experimental design' for measuring spectrum correlation. Two methods are available:</p><ul>
 <li><p><code>1</code>: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.</p></li>
 <li><p><code>2</code>: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).</p></li>
 </ul></td>
     </tr>
     <tr>
       <th>ssmooth</th>
-      <td><p>Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>). Default is 200.</p></td>
-    </tr>
-    <tr>
-      <th>msmooth</th>
-      <td><p>Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>).</p></td>
+      <td><p>Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 100.</p></td>
     </tr>
     <tr>
       <th>output</th>
-      <td><p>Character vector of length 1 to determine if an extended selection table ('est', default) or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting.</p></td>
+      <td><p>Character vector of length 1 to determine if an extended selection table ('est') or a list ('list') containing 1) extended selection table and 2) amplitude values is returned.</p></td>
     </tr>
     <tr>
       <th>img</th>
-      <td><p>Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding envelopes are produced. Default is no images ( <code>FALSE</code>).</p></td>
+      <td><p>Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding spectra are produced. Default is no images ( <code>FALSE</code>).</p></td>
     </tr>
     <tr>
       <th>res</th>
@@ -182,12 +178,12 @@
     <tr>
       <th>wl</th>
       <td><p>A numeric vector of length 1 specifying the window length of the spectrogram, default 
-is NULL. If supplied, 'hop.size' is ignored.</p></td>
+is NULL. If supplied, 'hop.size' is ignored. Applied to both spectra and spectrograms on image files.</p></td>
     </tr>
     <tr>
       <th>ovlp</th>
       <td><p>Numeric vector of length 1 specifying the percent overlap between two 
-consecutive windows, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro</a></code>. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files.</p></td>
+consecutive windows, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro</a></code>. Default is 70. Applied to both spectra and spectrograms on image files.</p></td>
     </tr>
     <tr>
       <th>pal</th>
@@ -206,17 +202,17 @@ plot, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Data frame similar to input data, but also includes a new column (blur.ratio)
-with the blur ratio values. If <code>img = TRUE</code> it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If <code>output = 'list'</code> the output would a list including the data frame just described and a data frame with envelopes (amplitude values) for all signals.</p>
+    <p>Data frame similar to input data, but also includes a new column (blur.ratio.spectrum)
+with the blur ratio values. If <code>img = TRUE</code> it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid power spectrum (as probability mass functions (PMF)).  Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If <code>output = 'list'</code> the output would a list including the data frame just described and a data frame with spectra (amplitude values) for all signals.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.</p>
+    <p>Spectral blur ratio measures the degradation of sound as a function of the change in signal energy in the frequency domain, analogous to the blur ratio proposed by Dabelsteen et al (1993) for the time domain (and implemented in <code><a href='blur_ratio.html'>blur_ratio</a></code>). Low values indicate low degradation of signals. The function measures the blur ratio of spectra from signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compare each signal type to the corresponding reference signal. The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of spectra is comparable.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='envelope_correlation.html'>envelope_correlation</a></code>, <code><a href='spectral_blur_ratio.html'>spectral_blur_ratio</a></code></p></div>
+    <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>{
@@ -227,17 +223,17 @@ with the blur ratio values. If <code>img = TRUE</code> it also returns 1 image f
 <span class='no'>playback_est</span> <span class='kw'>&lt;-</span> <span class='no'>playback_est</span>[<span class='no'>playback_est</span>$<span class='no'>signal.type</span> <span class='kw'>!=</span> <span class='st'>"ambient"</span>, ]
 
 <span class='co'># using method 1</span>
-<span class='fu'>blur_ratio</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>)
+<span class='fu'>spectral_blur_ratio</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>)
 
 <span class='co'># using method 2</span>
-<span class='fu'>blur_ratio</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-}</div><div class='output co'>#&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~03s            |+++++                                             | 10% ~05s            |++++++++                                          | 15% ~03s            |++++++++++                                        | 20% ~03s            |+++++++++++++                                     | 25% ~02s            |+++++++++++++++                                   | 30% ~02s            |++++++++++++++++++                                | 35% ~02s            |++++++++++++++++++++                              | 40% ~02s            |+++++++++++++++++++++++                           | 45% ~01s            |+++++++++++++++++++++++++                         | 50% ~01s            |++++++++++++++++++++++++++++                      | 55% ~01s            |++++++++++++++++++++++++++++++                    | 60% ~01s            |+++++++++++++++++++++++++++++++++                 | 65% ~01s            |+++++++++++++++++++++++++++++++++++               | 70% ~01s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=02s  
-#&gt; calculating blur ratio (step 2 of 2):
+<span class='fu'>spectral_blur_ratio</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+}</div><div class='output co'>#&gt; calculating power spectra (step 1 of 2):
+#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~01s            |++++++++                                          | 15% ~01s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~01s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#&gt; calculating spectrum blur ratio (step 2 of 2):
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~02s            |+++++                                             | 10% ~02s            |++++++++                                          | 15% ~01s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~01s            |+++++++++++++++                                   | 30% ~01s            |++++++++++++++++++                                | 35% ~01s            |++++++++++++++++++++                              | 40% ~01s            |+++++++++++++++++++++++                           | 45% ~01s            |+++++++++++++++++++++++++                         | 50% ~01s            |++++++++++++++++++++++++++++                      | 55% ~01s            |++++++++++++++++++++++++++++++                    | 60% ~01s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
-#&gt; calculating blur ratio (step 2 of 2):
+#&gt; calculating power spectra (step 1 of 2):
+#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#&gt; calculating spectrum blur ratio (step 2 of 2):
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; object of class 'extended_selection_table' 
 #&gt;  contains a selection table data frame with 20 rows and 10 columns: 
 #&gt;                                 sound.files selec      start       end
@@ -254,13 +250,13 @@ with the blur ratio values. If <code>img = TRUE</code> it also returns 1 image f
 #&gt; 4    2.238685 11.58918      CCE-F1       15
 #&gt; 5    1.544095 10.89459      CCE-I2        1
 #&gt; 6    1.544095 10.89459      CCE-I2        5
-#&gt;                                     reference blur.ratio
-#&gt; 1 Playback_sound_file_LBH_degradation.wav_1-1         NA
-#&gt; 2 Playback_sound_file_LBH_degradation.wav_1-1 0.16975979
-#&gt; 3                2W.5m.2019.7.1.10.10.wav_1-1 0.06614177
-#&gt; 4               2W.10m.2019.7.1.10.20.wav_1-1 0.07650168
-#&gt; 5 Playback_sound_file_LBH_degradation.wav_1-4         NA
-#&gt; 6 Playback_sound_file_LBH_degradation.wav_1-4 0.16360866
+#&gt;                                     reference blur.ratio.spectrum
+#&gt; 1 Playback_sound_file_LBH_degradation.wav_1-1                  NA
+#&gt; 2 Playback_sound_file_LBH_degradation.wav_1-1           0.2363415
+#&gt; 3                2W.5m.2019.7.1.10.10.wav_1-1           0.0767805
+#&gt; 4               2W.10m.2019.7.1.10.20.wav_1-1           0.1022553
+#&gt; 5 Playback_sound_file_LBH_degradation.wav_1-4                  NA
+#&gt; 6 Playback_sound_file_LBH_degradation.wav_1-4           0.2018129
 #&gt; ... and 14 more rows 
 #&gt; 4 wave objects (as attributes): 
 #&gt; [1] "Playback_sound_file_LBH_degradation.wav_1"

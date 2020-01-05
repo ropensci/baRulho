@@ -13,7 +13,8 @@ LazyData: TRUE
 URL: https://github.com/maRce10/baRulho
 BugReports: https://github.com/maRce10/baRulho/issues
 NeedsCompilation: no
-Suggests: 
+Suggests: ggplot2, knitr
+VignetteBuilder: knitr
 RoxygenNote: 7.0.2
 Repository: CRAN
 Language: en-US

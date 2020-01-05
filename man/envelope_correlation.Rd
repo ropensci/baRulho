@@ -5,7 +5,7 @@
 \title{Measure amplitude envelope correlation}
 \usage{
 envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
-ssmooth = NULL, msmooth = NULL, output = "est")
+ssmooth = NULL, msmooth = NULL, hop.size = 11.6, wl = NULL, ovlp = 70)
 }
 \arguments{
 \item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
@@ -27,25 +27,31 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{msmooth}{Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.}
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for 44.1 kHz sampling rate.}
+
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+is NULL. If supplied, 'hop.size' is ignored.}
+
+\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
 }
 \value{
-Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column 
+Extended selection table similar to input data, but also includes a new column 
 with the calculated amplitude envelope correlation coefficients.
 }
 \description{
 \code{envelope_correlation} measures amplitude envelope correlation of signals referenced in an extended selection table.
 }
 \details{
-Amplitude envelope correlation measures the similarity of 2 signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical amplitude envelope, i.e. no degradation) to 0. The 'signal.id' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating envelope correlation are provided (see 'method' argument).
+Amplitude envelope correlation measures the similarity of two signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means signals have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step.. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types).The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to extract envelopes.
 }
 \examples{
 {
 # load example data
 data("playback_est")
 
-# remove noise selections
-playback_est <- playback_est[playback_est$signal.id != "noise", ]
+# remove ambient selections
+playback_est <- playback_est[playback_est$signal.type != "ambient", ]
 
 # method 1
 envelope_correlation(X = playback_est)
@@ -61,6 +67,9 @@ Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degrada
 
 Apol, C.A., Sturdy, C.B. & Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.
 }
+}
+\seealso{
+\code{\link{blur_ratio}}, \code{\link{spectral_blur_ratio}}
 }
 \author{
 Marcelo Araya-Salas (\email{marceloa27@gmail.com})

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Changelog • baRulho</title>
+<title>Extended selection table with re-recorded playbacks before alignment — playback_est_unaligned • baRulho</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,9 @@
 
 
 
-<meta property="og:title" content="Changelog" />
+<meta property="og:title" content="Extended selection table with re-recorded playbacks before alignment — playback_est_unaligned" />
+<meta property="og:description" content="The data contains almost the same information than the example data 'playback_est' but some selections are not aligned in time with the corresponding reference signals (see spcc_align for more details on aligning signals). This data set is intended mostly for using as an example in spcc_align. The data contains recordings of Phaethornis longirostris (Long-billed Hermit) songs from different song types (column 'signal.type') that were broadcast and re-recorded at 4 distances (1m, 5m, 10m, 15m, column 'distance'). The data includes ambient (background) noise selections for each distances. The data was created by the function selection_table from the warbleR package." />
+<meta name="twitter:card" content="summary" />
 
 
 
@@ -54,7 +56,7 @@
   </head>
 
   <body>
-    <div class="container template-news">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -118,29 +120,34 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/maRce10/baRulho/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+    <h1>Extended selection table with re-recorded playbacks before alignment</h1>
+    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/playback_est_unaligned-data.R'><code>R/playback_est_unaligned-data.R</code></a></small>
+    <div class="hidden name"><code>playback_est_unaligned.Rd</code></div>
     </div>
 
-    <div id="barulho-1-0-0" class="section level1">
-<h1 class="page-header">
-<a href="#barulho-1-0-0" class="anchor"></a><em>baRulho 1.0.0</em>
-</h1>
-<ul>
-<li>First release</li>
-</ul>
-</div>
-  </div>
+    <div class="ref-description">
+    <p>The data contains almost the same information than the example data 'playback_est' but some selections are not aligned in time with the corresponding reference signals (see <code><a href='spcc_align.html'>spcc_align</a></code> for more details on aligning signals). This data set is intended mostly for using as an example in <code><a href='spcc_align.html'>spcc_align</a></code>. The data contains recordings of <em>Phaethornis longirostris</em> (Long-billed Hermit) songs from different song types (column 'signal.type') that were broadcast and re-recorded at 4 distances (1m, 5m, 10m, 15m, column 'distance'). The data includes ambient (background) noise selections for each distances. The data was created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the <code>warbleR</code> package.</p>
+    </div>
 
+    <pre class="usage"><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>playback_est_unaligned</span>)</pre>
+
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>Extended selection table object in the <code>warbleR</code> format, which contains annotations and acoustic data</p>
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>Marcelo Araya-Salas</p>
+
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#barulho-1-0-0">1.0.0</a></li>
-      </ul>
-    </div>
-  </div>
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#format">Format</a></li>
+      <li><a href="#source">Source</a></li>
+    </ul>
 
+  </div>
 </div>
 
 

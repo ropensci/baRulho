@@ -5,25 +5,25 @@
 \title{Measure attenuation as signal-to-noise ratio}
 \usage{
 snr_attenuation(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
-noise.ref = "adjacent", type = 1, bp = NULL, wl = 10, output = "est")
+noise.ref = "adjacent", type = 1, bp = NULL, hop.size = 1, wl = NULL)
 }
 \arguments{
 \item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
-the start and end points of selection over which to measure noise.}
+the start and end points of selection over which to measure ambient noise.}
 
 \item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{eq.dur}{Logical. Controls whether the noise segment that is measured has the same duration 
+\item{eq.dur}{Logical. Controls whether the ambient noise segment that is measured has the same duration 
 to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.}
 
-\item{noise.ref}{Character vector of length 1 to determined if a noise segment to be used for measuring ambient noise. Two options are available: 
+\item{noise.ref}{Character vector of length 1 to determined if a measure ambient noise segment to be used for measuring ambient noise. Two options are available: 
 \itemize{
-\item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of noise segments). If several 'noise' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
-\item \code{custom}: measure noise segments referenced in the selection table (labeled as 'noise' in the 'signal.id' column). Those segments will be used to apply the same noise reference to all signals in a sound file. Therefore, at least one 'noise' selection for each sound file must be provided.
+\item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments). If several 'ambient' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
+\item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'signal.type' column). Those segments will be used to apply the same ambient noise reference to all signals in a sound file. Therefore, at least one 'ambient' selection for each sound file must be provided.
 }}
 
 \item{type}{Numeric vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
@@ -36,41 +36,47 @@ to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} 
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram for applying bandpass. Default 
- is 10. Ignored if \code{bp = NULL}.
-Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for 44.1 kHz sampling rate.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.}
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
+Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
 }
 \value{
-Data frame or extended selection table (depending on 'output' argument) similar to input data, but also includes a new column (snr.attenuation)
+Extended selection table similar to input data, but also includes a new column (snr.attenuation)
 with the signal-to-noise ratio values.
 }
 \description{
 \code{snr_attenuation} measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table.
 }
 \details{
-Signal-to-noise ratio measures signal amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, the signal-to-noise ratio (SNR) will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. The 'signal.id' column must be used to indicate which signals belong to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating signal-to-noise ratio are provided (see 'type' argument).
+Signal-to-noise ratio measures signal amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, the signal-to-noise ratio (SNR) will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. The 'signal.type' column must be used to indicate which signals belong to the same category (e.g. song-types). The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating signal-to-noise ratio are provided (see 'type' argument).
 }
 \examples{
 {
 # load example data
 data("playback_est")
 
-# using noise reference selections 
+# using measure ambient noise reference selections 
 snr_attenuation(X = playback_est, mar = 0.05, noise.ref = 'custom')
 
-#' # remove noise selections
-playback_est <- playback_est[playback_est$signal.id != "noise", ]
-# using margin for noise of 0.05 and adjacent noise reference
+#' # remove ambient selections
+playback_est <- playback_est[playback_est$signal.type != "ambient", ]
+# using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
 snr_attenuation(X = playback_est, mar = 0.05, noise.ref = 'adjacent')
 }
 
 }
-\author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com}) #' @references {
+\references{
+{
 Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 
 Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
 }
+}
+\seealso{
+\code{\link{excess_attenuation}}
+}
+\author{
+Marcelo Araya-Salas (\email{marceloa27@gmail.com})
 }

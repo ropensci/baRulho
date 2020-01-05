@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Measure amplitude envelope correlation — envelope_correlation • baRulho</title>
+<title>Measure spectrographic cross-correlation as a measure of signal distortion — spcc_distortion • baRulho</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Measure amplitude envelope correlation — envelope_correlation" />
-<meta property="og:description" content="envelope_correlation measures amplitude envelope correlation of signals referenced in an extended selection table." />
+<meta property="og:title" content="Measure spectrographic cross-correlation as a measure of signal distortion — spcc_distortion" />
+<meta property="og:description" content="spcc_distortion measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,29 +120,28 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Measure amplitude envelope correlation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/envelope_correlation.R'><code>R/envelope_correlation.R</code></a></small>
-    <div class="hidden name"><code>envelope_correlation.Rd</code></div>
+    <h1>Measure spectrographic cross-correlation as a measure of signal distortion</h1>
+    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/spcc_distortion.R'><code>R/spcc_distortion.R</code></a></small>
+    <div class="hidden name"><code>spcc_distortion.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>envelope_correlation</code> measures amplitude envelope correlation of signals referenced in an extended selection table.</p>
+    <p><code>spcc_distortion</code> measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>envelope_correlation</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cor.method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
-<span class='kw'>ssmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>msmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>70</span>)</pre>
+    <pre class="usage"><span class='fu'>spcc_distortion</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+<span class='kw'>cor.method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>90</span>, <span class='kw'>wn</span> <span class='kw'>=</span> <span class='st'>'hanning'</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package.</p></td>
+      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
-      <td><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-If <code>NULL</code> (default) then the current working directory is used.</p></td>
+      <td><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).</p></td>
     </tr>
     <tr>
       <th>pb</th>
@@ -150,7 +149,7 @@ If <code>NULL</code> (default) then the current working directory is used.</p></
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Numeric vector of length 1 to indicate the 'experimental design' to measure amplitude envelope correlation. Two methods are available:</p><ul>
+      <td><p>Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:</p><ul>
 <li><p><code>1</code>: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.</p></li>
 <li><p><code>2</code>: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).</p></li>
 </ul></td>
@@ -158,14 +157,6 @@ If <code>NULL</code> (default) then the current working directory is used.</p></
     <tr>
       <th>cor.method</th>
       <td><p>Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see <code><a href='https://rdrr.io/r/stats/cor.html'>cor</a></code>).</p></td>
-    </tr>
-    <tr>
-      <th>ssmooth</th>
-      <td><p>Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>).</p></td>
-    </tr>
-    <tr>
-      <th>msmooth</th>
-      <td><p>Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>).</p></td>
     </tr>
     <tr>
       <th>hop.size</th>
@@ -178,47 +169,49 @@ is NULL. If supplied, 'hop.size' is ignored.</p></td>
     </tr>
     <tr>
       <th>ovlp</th>
-      <td><p>Numeric vector of length 1 specifying the percent overlap between two 
-consecutive windows, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro</a></code>. Default is 70.</p></td>
+      <td><p>Numeric vector of length 1 specifying % of overlap between two 
+consecutive windows, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro</a></code>. Default is 90. High values of ovlp 
+slow down the function but produce more accurate results.</p></td>
+    </tr>
+    <tr>
+      <th>wn</th>
+      <td><p>A character vector of length 1 specifying the window name as in <code><a href='https://rdrr.io/pkg/seewave/man/ftwindow.html'>ftwindow</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Extended selection table similar to input data, but also includes a new column 
-with the calculated amplitude envelope correlation coefficients.</p>
+    <p>Extended selection table similar to input data, but includes a new column (cross.correlation)
+with the spectrogram cross-correlation coefficients.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Amplitude envelope correlation measures the similarity of two signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means signals have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step.. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types).The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use <code><a href='blur_ratio.html'>blur_ratio</a></code> to extract envelopes.</p>
+    <p>The spectrographic cross-correlation measures frequency distortion of signals as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little signal distortion has occurred). Cross-correlation is measured of signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code> function.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0Apol, C.A., Sturdy, C.B. &amp; Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.</p>
+    <p>Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code>, <code><a href='spectral_blur_ratio.html'>spectral_blur_ratio</a></code></p></div>
+    <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code>, <code><a href='spcc_align.html'>spcc_align</a></code>, <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>{
 <span class='co'># load example data</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"playback_est"</span>)
 
-<span class='co'># remove ambient selections</span>
-<span class='no'>playback_est</span> <span class='kw'>&lt;-</span> <span class='no'>playback_est</span>[<span class='no'>playback_est</span>$<span class='no'>signal.type</span> <span class='kw'>!=</span> <span class='st'>"ambient"</span>, ]
-
 <span class='co'># method 1</span>
-<span class='fu'>envelope_correlation</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>)
+<span class='fu'>spcc_distortion</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>)
 
 <span class='co'># method 2</span>
-<span class='fu'>envelope_correlation</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>2</span>)
-}</div><div class='output co'>#&gt; calculating amplitude envelopes (step 1 of 2):
+<span class='fu'>spcc_distortion</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+}</div><div class='output co'>#&gt; creating spectrogram matrices (step 1 of 3):
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; calculating envelope cross-correlations (step 2 of 2):
+#&gt; running cross-correlation (step 2 of 3):
+#&gt;   |                                                  | 0 % ~calculating    |++++                                              | 7 % ~00s            |+++++++                                           | 13% ~00s            |++++++++++                                        | 20% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++                                 | 33% ~00s            |++++++++++++++++++++                              | 40% ~00s            |++++++++++++++++++++++++                          | 47% ~00s            |+++++++++++++++++++++++++++                       | 53% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#&gt; creating spectrogram matrices (step 1 of 3):
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; calculating envelope cross-correlations (step 2 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; object of class 'extended_selection_table' 
-#&gt;  contains a selection table data frame with 20 rows and 10 columns: 
+#&gt; running cross-correlation (step 2 of 3):
+#&gt;   |                                                  | 0 % ~calculating    |++++                                              | 7 % ~00s            |+++++++                                           | 13% ~00s            |++++++++++                                        | 20% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++                                 | 33% ~00s            |++++++++++++++++++++                              | 40% ~00s            |++++++++++++++++++++++++                          | 47% ~00s            |+++++++++++++++++++++++++++                       | 53% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; object of class 'extended_selection_table' 
+#&gt;  contains a selection table data frame with 28 rows and 9 columns: 
 #&gt;                                 sound.files selec      start       end
 #&gt; 1 Playback_sound_file_LBH_degradation.wav_1     1 0.05000000 0.2072789
 #&gt; 2                2W.5m.2019.7.1.10.10.wav_1     1 0.04440598 0.2016849
@@ -226,21 +219,14 @@ with the calculated amplitude envelope correlation coefficients.</p>
 #&gt; 4               2W.15m.2019.7.1.10.30.wav_1     1 0.04206882 0.1993477
 #&gt; 5 Playback_sound_file_LBH_degradation.wav_1     4 1.05000000 1.2444898
 #&gt; 6                2W.5m.2019.7.1.10.10.wav_1     4 1.04650916 1.2409990
-#&gt;   bottom.freq top.freq signal.type distance
-#&gt; 1    2.238685 11.58918      CCE-F1        1
-#&gt; 2    2.238685 11.58918      CCE-F1        5
-#&gt; 3    2.238685 11.58918      CCE-F1       10
-#&gt; 4    2.238685 11.58918      CCE-F1       15
-#&gt; 5    1.544095 10.89459      CCE-I2        1
-#&gt; 6    1.544095 10.89459      CCE-I2        5
-#&gt;                                     reference   env.cor
-#&gt; 1 Playback_sound_file_LBH_degradation.wav_1-1        NA
-#&gt; 2 Playback_sound_file_LBH_degradation.wav_1-1 0.5179751
-#&gt; 3                2W.5m.2019.7.1.10.10.wav_1-1 0.6766644
-#&gt; 4               2W.10m.2019.7.1.10.20.wav_1-1 0.5959775
-#&gt; 5 Playback_sound_file_LBH_degradation.wav_1-4        NA
-#&gt; 6 Playback_sound_file_LBH_degradation.wav_1-4 0.4667293
-#&gt; ... and 14 more rows 
+#&gt;   bottom.freq top.freq signal.type distance cross.correlation
+#&gt; 1    2.238685 11.58918      CCE-F1        1                NA
+#&gt; 2    2.238685 11.58918      CCE-F1        5         0.7898445
+#&gt; 3    2.238685 11.58918      CCE-F1       10         0.8721359
+#&gt; 4    2.238685 11.58918      CCE-F1       15         0.8202388
+#&gt; 5    1.544095 10.89459      CCE-I2        1                NA
+#&gt; 6    1.544095 10.89459      CCE-I2        5         0.7177534
+#&gt; ... and 22 more rows 
 #&gt; 4 wave objects (as attributes): 
 #&gt; [1] "Playback_sound_file_LBH_degradation.wav_1"
 #&gt; [2] "2W.5m.2019.7.1.10.10.wav_1"               

@@ -22,7 +22,7 @@
 #' with the calculated frequency spectrum correlation coefficients.
 #' @export
 #' @name spectral_correlation
-#' @details frequency spectrum correlation measures the similarity of two signals in the time domain. The function measures the spectrum correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectrum correlation are provided (see 'method' argument). Use \code{\link{spectral_blur_ratio}} to get spectra for plotting. 
+#' @details spectrum correlation measures the similarity of two signals in the frequency domain. The function measures the spectrum correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectrum correlation are provided (see 'method' argument). Use \code{\link{spectral_blur_ratio}} to get spectra for plotting. 
 #' @examples
 #' {
 #' # load example data

@@ -102,10 +102,12 @@ spcc_distortion <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method 
   
   # put results back into X
   X$cross.correlation <- NA
+  X$reference <- NA
   
-  # only for calculated correlations
+  # add correlation and reference only for calculated correlations
+  X$reference[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- as.character(xcorrs$X1)
+  
   X$cross.correlation[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- xcorrs$score
-  
   
   return(X)
 }

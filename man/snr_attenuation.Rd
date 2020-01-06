@@ -36,7 +36,7 @@ to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} 
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for 44.1 kHz sampling rate.}
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
@@ -71,7 +71,7 @@ snr_attenuation(X = playback_est, mar = 0.05, noise.ref = 'adjacent')
 {
 Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 
-Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 }
 }
 \seealso{

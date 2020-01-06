@@ -7,8 +7,8 @@ Author: Marcelo Araya-Salas [aut, cre]
 Maintainer: Marcelo Araya-Salas <marceloa27@gmail.com>
 Description: Quantifying habitat-induced degradation of (animal) acoustic signals.
 License: GPL (>= 2)
-Imports: pbapply, warbleR, utils, stats, seewave, tuneR
-Depends: R (>= 3.2.1)
+Imports: pbapply, utils, stats, seewave, tuneR, kableExtra
+Depends: R (>= 3.2.1), warbleR
 LazyData: TRUE
 URL: https://github.com/maRce10/baRulho
 BugReports: https://github.com/maRce10/baRulho/issues

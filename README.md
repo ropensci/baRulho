@@ -5,7 +5,7 @@
 [![Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/baRulho)](http://www.r-pkg.org/badges/grand-total/baRulho)
 [![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 
-`baRulho` quantifies habitat-induced degradation of (animal) acoustic signals.
+`baRulho` allows to quantify habitat-induced degradation of (animal) acoustic signals.
 
 Install/load the package from CRAN as follows:
 
@@ -22,8 +22,6 @@ library(baRulho)
 To install the latest developmental version from [github](http://github.com/) you will need the R package [devtools](https://cran.r-project.org/package=devtools):
 
 ```r
-# From CRAN would be
-#install.packages("baRulho")
 
 # From github
 devtools::install_github("maRce10/baRulho")
@@ -35,7 +33,7 @@ library(baRulho)
 
 Please cite [baRulho](https://cran.r-project.org/package=baRulho) as follows:
 
-Araya-Salas, M. (2019), *baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R*. R package version 1.0.0.
+Araya-Salas, M. (2020), *baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R*. R package version 1.0.0.
 
 # References
 

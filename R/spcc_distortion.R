@@ -12,7 +12,7 @@
 #' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 #' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for 44.1 kHz sampling rate.
+#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. If supplied, 'hop.size' is ignored.
 #' @param ovlp Numeric vector of length 1 specifying \% of overlap between two 
@@ -39,11 +39,11 @@
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @seealso \code{\link{blur_ratio}}, \code{\link{spcc_align}}, \code{\link[warbleR]{xcorr}}
 #' @references {
-#' Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 #' 
 #' Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115. 
 #' }
-# last modification on nov-01-2019 (MAS)
+# last modification on jan-06-2020 (MAS)
 
 spcc_distortion <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
   

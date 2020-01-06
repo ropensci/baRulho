@@ -17,7 +17,7 @@
 #' @param output Character vector of length 1 to determine if an extended selection table ('est') or a list ('list') containing 1) extended selection table and 2) amplitude values is returned. 
 #' @param img Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding envelopes are produced. Default is no images ( \code{FALSE}).
 #' @param res Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for 44.1 kHz sampling rate.
+#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. If supplied, 'hop.size' is ignored.
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
@@ -52,7 +52,7 @@
 #' @references {
 #' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 #' 
-#' Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+#' Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 #' }
 #last modification on dec-26-2019 (MAS)
 
@@ -228,24 +228,30 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
         # index of reference
         rf.indx <- which(paste(X$sound.files, X$selec, sep = "-") == rfrnc)
 
-        # calculate margin for spectrogram, before and after
-        mar.rf.af <- mar.rf.bf <- attr(X, "check.results")$duration[rf.indx] / 4
-        
-        # make margin before equal to smallest margin if smaller than mar.rf.bf
-        if (any(attr(X, "check.results")$mar.before[c(rf.indx, x)] >  mar.rf.bf)) 
-  mar.rf.bf <-  min(attr(X, "check.results")$mar.before[c(rf.indx, x)]) 
-        
-        # make margin after equal to smallest margin if smaller than mar.rf.af
-        if (any(attr(X, "check.results")$mar.rf.af[c(rf.indx, x)] >  mar.rf.af)) 
-          mar.rf.af <-  min(attr(X, "check.results")$mar.before[c(rf.indx, x)]) 
-        
         # freq limit of reference
         flim <- c(X$bottom.freq[rf.indx], X$top.freq[rf.indx])
         
-        # extract clip reference and signal
-        clp.sgnl <- warbleR::read_wave(X = X, index = x, from = X$start[x] - mar.rf.bf, X$end[x] + mar.rf.af)
-        clp.rfnc <- warbleR::read_wave(X = X, index = rf.indx, from = X$start[rf.indx] - mar.rf.bf, X$end[rf.indx] + mar.rf.af)
+        # calculate margin for spectrogram, before and after
+        mar.rf.af <- mar.rf.bf <- attr(X, "check.results")$duration[rf.indx] / 4
         
+        # start for signal and reference
+        strt.sgnl <- X$start[x] - mar.rf.bf
+        if (strt.sgnl < 0) strt.sgnl <- 0
+        strt.rf <- X$start[rf.indx] - mar.rf.bf
+        if (strt.rf < 0) strt.rf <- 0
+        
+        # end for signal and reference
+        rf.info <- warbleR::read_wave(X = X, index = rf.indx, header = TRUE)
+        rf.dur <- rf.info$samples / rf.info$sample.rate 
+        
+        end.sgnl <- X$end[x] + mar.rf.af
+        if (end.sgnl > rf.dur) end.sgnl <- rf.dur
+        end.rf <- X$end[rf.indx] + mar.rf.af
+        if (end.rf > rf.dur) end.rf <- rf.dur
+        
+        # extract clip reference and signal
+        clp.sgnl <- warbleR::read_wave(X = X, index = x, from = strt.sgnl, to = end.sgnl)
+        clp.rfnc <- warbleR::read_wave(X = X, index = rf.indx, from = strt.rf, to = end.rf)
         
         ## plot spectros
         # signal at bottom left
@@ -291,8 +297,8 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     
   # get blur ratio
   # calculate all envelops apply function
-  X$blur.ratio <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x, rs = res, wle = wl, colvs = collevels, pl = pal, ovp = ovlp, ...)   {
-    blur_FUN(x, res = rs, ovlp = ovp, wl = wle, collevels = colvs, pal = pl, ...)
+  X$blur.ratio <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x, rs = res, wle = wl, colvs = collevels, pl = pal, ovp = ovlp)   {
+    blur_FUN(x, res = rs, ovlp = ovp, wl = wle, collevels = colvs, pal = pl)
   }) 
   
   # remove temporal column

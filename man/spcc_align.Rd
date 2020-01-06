@@ -14,7 +14,7 @@ hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for 44.1 kHz sampling rate.}
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
 is NULL. If supplied, 'hop.size' is ignored.}
@@ -32,21 +32,21 @@ Extended selection table similar to input data in which time parameters (columns
 \code{spcc_align} aligns start and end of signal in an extended selection table using spectrographic cross-correlation
 }
 \details{
-The frequency uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. In this case the signal with closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls calls warbleR's \code{\link[warbleR]{xcorr}} and  \code{\link[warbleR]{find_peaks}} internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.
+This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's \code{\link[warbleR]{xcorr}} and \code{\link[warbleR]{find_peaks}} internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.
 }
 \examples{
 {
 # load example data
-data("playback_est")
+data("playback_est_unaligned")
 
 # method 1
-spcc_align(X = playback_est)
+spcc_align(X = playback_est_unaligned)
 }
 
 }
 \references{
 {
-Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0
+Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 
 Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115. 
 }

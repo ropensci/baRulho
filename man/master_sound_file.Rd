@@ -15,9 +15,9 @@ master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE,
 \item{dest.path}{Character string containing the directory path where the sound file will be saved.
 If \code{NULL} (default) then the current working directory will be used instead.}
 
-\item{overwrite}{Logical argument to determine if the funciton will overwrite any existing sound file with the same file name. Default is \code{FALSE}.}
+\item{overwrite}{Logical argument to determine if the function will overwrite any existing sound file with the same file name. Default is \code{FALSE}.}
 
-\item{delay}{Numeric vector of length 1 to control the duration (in s) of a silence gap at the beggining of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.}
+\item{delay}{Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.}
 
 \item{gap.duration}{Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between signals. Default is 1 s.}
 }
@@ -29,7 +29,7 @@ with the spectrogram cross-correlation coefficients.
 \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
 }
 \details{
-The function is intended to simplify the creation of master sound files for playback experiments in signal degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals to facilitte the streamlining of degradation quantification.
+The function is intended to simplify the creation of master sound files for playback experiments in signal degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals to facilitate the streamlining of degradation quantification.
 }
 \examples{
 {

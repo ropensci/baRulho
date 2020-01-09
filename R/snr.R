@@ -1,7 +1,7 @@
 #' Measure attenuation as signal-to-noise ratio 
 #' 
-#' \code{snr_attenuation} measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table.
-#' @usage snr_attenuation(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
+#' \code{snr} measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table.
+#' @usage snr(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
 #' noise.ref = "adjacent", type = 1, bp = NULL, hop.size = 1, wl = NULL)
 #' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
@@ -30,7 +30,7 @@
 #' @return Extended selection table similar to input data, but also includes a new column (snr.attenuation)
 #' with the signal-to-noise ratio values.
 #' @export
-#' @name snr_attenuation
+#' @name snr
 #' @details Signal-to-noise ratio (SNR) measures signal amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. The 'signal.type' column must be used to indicate which signals belong to the same category (e.g. song-types). The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating signal-to-noise ratio are provided (see 'type' argument).   
 #' @examples
 #' {
@@ -38,12 +38,12 @@
 #' data("playback_est")
 #' 
 #' # using measure ambient noise reference selections 
-#' snr_attenuation(X = playback_est, mar = 0.05, noise.ref = 'custom')
+#' snr(X = playback_est, mar = 0.05, noise.ref = 'custom')
 #' 
 #' #' # remove ambient selections
 #' playback_est <- playback_est[playback_est$signal.type != "ambient", ]
 #' # using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
-#'snr_attenuation(X = playback_est, mar = 0.05, noise.ref = 'adjacent')
+#'snr(X = playback_est, mar = 0.05, noise.ref = 'adjacent')
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
@@ -55,7 +55,7 @@
 #' }
 #last modification on nov-01-2019 (MAS)
 
-snr_attenuation <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
+snr <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
                        noise.ref = "adjacent", type = 1, bp = NULL, hop.size = 1, 
                        wl = NULL){
   

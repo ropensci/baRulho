@@ -39,8 +39,8 @@ with the excess attenuation values.
 \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
 }
 \details{
-Excess attenuation is the amplitude loss of a sound in excess of that due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading due to atmospheric conditions or habitat (Wiley & Richards, 1978). Low values indicate litle signal attenuation. 
-The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating excess attenuation are provided (see 'method' argument).
+Excess attenuation is the amplitude loss of a sound in excess of that due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading due to atmospheric conditions or habitat (Wiley & Richards, 1978). Low values indicate little signal attenuation. 
+The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating excess attenuation are provided (see 'method' argument).
 }
 \examples{
 {
@@ -65,7 +65,7 @@ Morton, E. S. (1975). Ecological sources of selection on avian sounds. The Ameri
 }
 }
 \seealso{
-\code{\link{spcc_distortion}}
+\code{\link{spcc}}
 }
 \author{
 Marcelo Araya-Salas (\email{marceloa27@gmail.com})

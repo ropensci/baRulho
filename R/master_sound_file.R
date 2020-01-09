@@ -7,14 +7,14 @@
 #' @param file.name Character string indicating the name of the sound file.
 #' @param dest.path Character string containing the directory path where the sound file will be saved.
 #' If \code{NULL} (default) then the current working directory will be used instead.
-#' @param overwrite Logical argument to determine if the funciton will overwrite any existing sound file with the same file name. Default is \code{FALSE}.
-#' @param delay Numeric vector of length 1 to control the duration (in s) of a silence gap at the beggining of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.
+#' @param overwrite Logical argument to determine if the function will overwrite any existing sound file with the same file name. Default is \code{FALSE}.
+#' @param delay Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.
 #' @param gap.duration Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between signals. Default is 1 s.
 #' @return Extended selection table similar to input data, but includes a new column (cross.correlation)
 #' with the spectrogram cross-correlation coefficients.
 #' @export
 #' @name master_sound_file
-#' @details The function is intended to simplify the creation of master sound files for playback experiments in signal degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals to facilitte the streamlining of degradation quantification.
+#' @details The function is intended to simplify the creation of master sound files for playback experiments in signal degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals to facilitate the streamlining of degradation quantification.
 #' @examples
 #' {
 #' # load example data from warbleR
@@ -96,6 +96,9 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   strt_mrkr <- warbleR::image_to_wave(file = file.path(tempdir(), "strt_mrkr-img.png"), plot = FALSE, flim = flim, samp.rate = attr(X, "check.results")$sample.rate[1])
   
   end_mrkr <- warbleR::image_to_wave(file = file.path(tempdir(), "end_mrkr-img.png"), plot = FALSE, flim = flim, samp.rate = attr(X, "check.results")$sample.rate[1])
+  
+  # remove plots 
+  nll <- try(dev.off(), silent = TRUE)
   
   # output wave object
   strt_mrkr <- tuneR::normalize(strt_mrkr)
@@ -184,8 +187,6 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
     top.freq = c(flim[2] - mar.f, X$top.freq, flim[2] - mar.f), 
     orig.sound.file = c("start_marker", X$sound.files, "end_marker"))
 
-  
- 
   
   # save master playback
   tuneR::writeWave(plbck, file.path(dest.path, file.name), extensible = FALSE)

@@ -1,6 +1,6 @@
 ---
 title: <center><font size="7"><b>baRulho</b></font></center>
-subtitle: <center><font size="5">quantifying degradation of (animal) sounds</font></center>
+subtitle: <center><font size="5">Quantifying (animal) acoustic signal transmission and degradation</font></center>
 pagetitle: baRulho quantifying sound degradation
 author: 
 - <center><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></center>
@@ -36,8 +36,7 @@ editor_options:
 &nbsp; 
 
 
-The [baRulho](https://cran.r-project.org/package=baRulho) package is intended to facilitate the acoustic analysis of (animal) sound transmission experiments. In such experiments animal sounds are broadcast and re-recorded at increasing distance. These type of studies typically aim to quantify changes in signal structure when transmitted in a given habitat. We will call these changes 'degradation' for the sake of simplicity. The package offers a workflow with functions for preparing the data set for analysis as well as calculating and visualizing several degradation metrics. [baRulho](https://cran.r-project.org/package=baRulho) builds upon functions and data formats from the [warbleR](https://cran.r-project.org/package=warbleR) and [seewave](https://cran.r-project.org/package=seewave) packages, so some experience with these packages is adviced.
-
+The [baRulho](https://cran.r-project.org/package=baRulho) package is intended to facilitate acoustic analysis of (animal) sound transmission experiments. Such studies typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. We will refer to these changes in signal structure 'degradation' for the sake of simplicity. The package offers a workflow with functions to prepare the data set for analysis as well as calculate and visualize several degradation metrics. [baRulho](https://cran.r-project.org/package=baRulho) builds upon functions and data formats from the [warbleR](https://cran.r-project.org/package=warbleR) and [seewave](https://cran.r-project.org/package=seewave) packages, so some experience with these packages is advised.
 
 The main features of the package are:
 
@@ -102,15 +101,15 @@ The package requires the data to be input as extended selection tables. An exten
 
 <font size="5">Glossary</font> 
 
-- **Model signal**: recording of a specific signal type to be used to represent that signal type.
-
 - **Reference signal**: signal to use as a pattern to compare against. Usually created by re-recording a model signal broadcast at 1 m from the source (speaker).
 
 - **Signal type**: signal category. For instance song types (e.g. A, B, C), call types (alert, foraging, etc).
 
-- **Ambient noise**: background sound in the recording excluding signals of interest.  
+- **Ambient noise**: energy from background sounds in the recording, excluding signals of interest.  
 
-- **Degradation**: Generic term for any changes in signal structure when transmitted in a given habitat.
+- **Test signal**: signals re-recorded far from the source to test for transmission/degradation (also refer to as 're-recorded' signals).
+
+- **Degradation**: term use to describe any changes in the structure of a signal when transmitted in a given habitat.
 
 </div>
 
@@ -132,7 +131,7 @@ A common sequence of steps to experimentally test hypotheses related to signal t
 
 # Create master sound file for playback
 
-The function `master_sound_file()` creates a master sound file (as you probably guessed) for use in playback experiments. The function takes wave objects from an extended selection table containing the model signals and concatenate them in a single sound file (with some silence in between signals). `master_sound_file()` also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals, which allows to streamline quantification of acoustic degradation. 
+The function `master_sound_file()` creates a master sound file (as you probably guessed) for playback experiments. The function takes wave objects from an extended selection table containing the model signals and concatenates them in a single sound file (with some silence in between signals which length can be modified). `master_sound_file()` adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals, which streamlines quantification of acoustic degradation. 
 
 The following example shows how to create a master sound file using the example data and recordings from the package [warbleR](https://cran.r-project.org/package=warbleR):
 
@@ -153,7 +152,7 @@ est <- selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = 
 path = td)
 
 # create master sound file
-master.sel.tab <- master_sound_file(X = est, file.name = "example_master", 
+master.st <- master_sound_file(X = est, file.name = "example_master", 
 dest.path = td, gap.duration = 0.3)
 
 ```
@@ -192,7 +191,7 @@ Take a look at the [Rraven vignette](https://cran.r-project.org/web/packages/Rra
 
 # Time sync re-recorded sounds
 
-Once we went to the field (or lab?) and re-recorded the master sound files at different distances, we are ready to start with data analysis. The first step for getting the data ready to analysis involves finding the position of the re-recorded signals in those new sound files. To do this we just need to align the start marker between the master playback and the re-recorded sound files, as the time difference between the marker and the signals should be the same in both cases. To find the location of the start marker we can use the [warbleR](https://cran.r-project.org/package=warbleR) functions `xcorr()` to run a cross-correlation of the marker across the re-recorded sound file and `find_peaks()` to determine the exact time in which the marker is found. We can do this as follows (check [warbleR](https://cran.r-project.org/package=warbleR) documentation for more information on how this functions work): 
+Once we went to the field (or lab) and re-recorded the master sound files at different distances, we are ready to start with data analysis. The first step for getting the data ready for analysis involves finding signals within the re-recorded sound files. First, need align the start marker between the master playback and the re-recorded sound files, as the time difference between the marker and the signals should be the same in both cases. To find the location of the start marker we can use the [warbleR](https://cran.r-project.org/package=warbleR) functions `xcorr()` to run a cross-correlation of the marker across the re-recorded sound file and `find_peaks()` to determine the exact time in which the marker is found. See an example of how this works below (check [warbleR](https://cran.r-project.org/package=warbleR) documentation for more information on how this functions work): 
 
 ```{r, eval = FALSE}
 
@@ -244,7 +243,7 @@ kbl
 </tbody>
 </table>
 
-The output of `find_peaks()` indicate that the start marker is found starting at ~1 s (0.9999883 s), which was expected as `master_sound_file()` incerts a 1 second silence at the beggining of the master sound file. With this information we can infer the position of all other selections in the new recordings. The start of all signals in the re-recorded file can be calculated as the time difference between the start marker and each signal in the master sound file plus the start of the marker in the new file. Something like this:
+The output of `find_peaks()` indicate that the start marker is found starting at ~1 s (0.9999883 s), which was expected as `master_sound_file()` inserts a 1 second silence at the beginning of the master sound file. With this information we can infer the position of all other selections in the new recordings. The start of all signals in the re-recorded file can be calculated as the time difference between the start marker and each signal in the master sound file plus the start of the marker in the new file. Something like this:
 
 ```{r, eval = FALSE}
 
@@ -261,11 +260,11 @@ new.start <- c(2.298655, 2.771722, 3.234833, 3.709811, 4.142433, 4.568611, 4.999
 new.start 
 ```
 
-The end of the signals would be their duration plus the start we just calulated:
+The end of the signals would be their duration plus the start we just calculated:
 
 ```{r, eval = FALSE}
 
-# get durations
+# get duration
 durs  <- master.st$end[!master.st$orig.sound.file %in% c("start_marker", "end_marker")] - master.st$start[!master.st$orig.sound.file %in% c("start_marker", "end_marker")]
 
 new.end <- new.start + durs
@@ -441,11 +440,11 @@ kbl
 
 &nbsp;
 
-Note that we also added a distance column that would be useful for downsteam analysis (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an `extended_selection_table`, which is the data format that pretty much all [baRulho](https://cran.r-project.org/package=baRulho) functions can take. 
+Note that we also added column for "distance" that will be useful for downsteam analysis (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an `extended_selection_table`, which is the data format that pretty much all [baRulho](https://cran.r-project.org/package=baRulho) functions can take. 
 
-This is somehow a silly example as we are finding the star marker on the original master sound file. However, it's good enough to demonstrate how this can be done on any re-recorded sound file.
+This is somewhat a silly example as we are finding the star marker on the original master sound file. However, it demonstrates how this can be done on any re-recorded sound file.
 
-When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the infered and the actual start time of re-recorded signals. This could be problematic for quantifying degradation in [baRulho](https://cran.r-project.org/package=baRulho) as precise alignment is crucial for the accuracy of downstream measures of signal degradation. 
+When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded signals. This is problematic for quantifying degradation in [baRulho](https://cran.r-project.org/package=baRulho) (and other sound analysis software) as precise alignment of signal is crucial for the accuracy of downstream measures of signal degradation. 
 
 Misalignment can be fixed with the funciton `spcc_align()`. This function uses spectrographic cross-correlation to sync the position in time of signals with regard to a reference signal. `spcc_align()` takes the signal recorded at the closest distance to the source as the reference signal. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `xcorr()` and `find_peaks()` (just as we did above) internally to align signals using cross-correlation. 
 
@@ -463,6 +462,25 @@ The output extended selection table contains the new start and end values after 
 
 This is how the signals look before and after being aligned:
 
+```{r, eval = FALSE}
+
+# rename sound files so aligned and unaligned signals are intercalated
+unalg <- rename_waves_est(playback_est_unaligned, playback_est_unaligned$sound.files, new.selec = seq(1, 200, by = 2)[1:nrow(W)])
+alg <- rename_waves_est(playback_est_aligned, playback_est_aligned$sound.files, new.selec = seq(2, 200, by = 2)[1:nrow(xa)])
+
+# add label 
+unalg$type <- "Before aligning"
+alg$type <- "After aligning"
+
+# put together in a single ext sel tab
+unalg.alg <- rbind(unalg, alg)
+
+# create spectrograms
+spectrograms(unalg.alg[unalg.alg$signal.type != "ambient", ], dest.path = tempdir(), res = 100, wl = 300, title.labels = "type", sel.labels = NULL)
+
+```
+
+
 <center><img src="spcc_align_results.gif" alt="time sync with spcc_align"></center>
 
 &nbsp;
@@ -473,18 +491,18 @@ In case this doesn't work as expected there is a plan B. The function `seltailor
 
 # Quantifying signal degradation
 
-Most [baRulho](https://cran.r-project.org/package=baRulho) functions are design to quantify acoustic signal degradation. There are a few important things to keep in mind about functions for quanitfying degradation:
+Most [baRulho](https://cran.r-project.org/package=baRulho) functions are design to quantify acoustic signal degradation. There are a few important things to keep in mind about functions for quantifying degradation:
 
-- The package currently assumes that all recordings have been made with the same equipment and recording volume. This would be modified in future versions to allow amplitude calibration of recordings.
+- The package currently assumes that all recordings have been made with the same equipment and recording volume. This will be modified in future versions to allow for amplitude calibration of recordings.
 - Wave envelope and frequency spectrum calculations are made after applying a bandpass filter within the frequency range of the reference signal ('bottom.freq' and 'top.freq' columns)
-- The package offers two methods for comparing signals against their reference: 
+- The package offers two methods to compare signals to the reference: 
     1. Compare all signals with the counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
   2. Compare all signals with the counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the one recorded at 5m, then signal recorded at 15m compared with the one recorded at 10m and so on).
 
 
 ## Required data structure
 
-As mentioned above the data must be input in the `extended_selection_table` format. The data should also contained some additional information. [baRulho](https://cran.r-project.org/package=baRulho) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
+As mentioned above the data must be inputted in the `extended_selection_table` format. The data should also contain some additional information. [baRulho](https://cran.r-project.org/package=baRulho) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
 
 ```{r,eval=FALSE}
 
@@ -511,9 +529,9 @@ kbl
 ```
 &nbsp;
  
- Note that besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also contains a **'signal.type' column, which refers to the signal type from which each signal belongs to**, and a **'distance' column that refers to the distance from source at which each selection was recorded**. These two pieces of information are crucial in order to only compare signals from the same signal type and compare them to their counterpart at a closest distance to source. Also note that some selections are labeled as "ambient" in the 'signal.type'. These selections refer to ambient (background) noise. Ambient noise can be used by some functions to correct for amplitude differences due to non-target sounds.
+ Note that besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also contains a **'signal.type' column, which refers to the signal type from which each signal belongs to**, and a **'distance' column that refers to the distance from the source at which each signal was recorded**. Signal type and distance are required for the comparison of signals. Also note that some selections are labeled as "ambient" in the 'signal.type'. These selections refer to ambient (background) noise. Ambient noise can be used by some functions to correct for amplitude differences due to non-target sounds.
  
-In this example data their are 4 recordings at increasing distances: 1m, 5m, 10m and 15m:
+In this example data there are 4 recordings at increasing distances: 1m, 5m, 10m and 15m:
 
 ```{r,eval=TRUE}
 
@@ -547,8 +565,7 @@ kbl
 
 ### Blur ratio
  
-Blur ratio quantifies the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function `blur_ratio()` measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
-
+Blur ratio quantifies the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. Low values indicate low degradation of signals.  The function `blur_ratio()` measures the blur ratio of signals in which a reference playback has been re-recorded at different distances. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal (‘bottom.freq’ and ‘top.freq’ columns in ‘X’). The ‘signal.type’ column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
 Blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}
@@ -592,7 +609,7 @@ kbl
 ```
 &nbsp;
 
-The output data frame is similar to input data, but includes two new columns ('reference' and 'blur.ratio') with the reference signal and blur ratio values. Note that `NAs` are returned for signals used as reference and 'ambient' noise selections.
+The output data frame is similar to input data, except that it includes two new columns ('reference' and 'blur.ratio') with the reference signal and blur ratio values. Note that `NAs` are returned for signals used as reference and 'ambient' noise selections.
 
 If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). 
 
@@ -609,9 +626,9 @@ Output image files (in the working directory) look like these ones:
 
 &nbsp;
 
-The image show the spectrogram for the reference and re-recorded signal, as well as the envelopes of both signals overlaid in a single graph. Color are use to indicate to which signal spectrograms and envelopes belong to. The blur ratio value is also inlcuded.
+The image shows the spectrogram for the reference and re-recorded signal, as well as the envelopes of both signals overlaid in a single graph. Colors indicate to which signal spectrograms and envelopes belong to. The blur ratio value is also displayed.
 
-The function can also return the amplitude spectrum contours when the argument `output = "list"`. This contours can be direclty input into a ggplot for looking at amplitude envelopes, their variation with distance and across signal types (and ambient noise if included):
+The function can also return the amplitude spectrum contours when the argument `output = "list"`. The contours can be directly inputted into ggplot to visualize amplitude envelopes, and how they vary with distance and across signal types (and ambient noise if included):
 
 ```{r}
 
@@ -648,7 +665,7 @@ ggplot(envs, aes(x= time, y = amp, col = distance)) +
 
 ### Spectral blur ratio
  
-Spectral blur ratio (measured by `spectral_blur_ratio()`) qunatifies the degradation of sound as a function of the change in signal energy in across the frequency domain, analogous to the blur ratio described above for the time domain (and implemented in `blur_ratio()`). Low values also indicate low degradation of signals. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference signal and the re-recorded signal. It works in the same way than `blur_ratio()`, comparing each signal type to the corresponding reference signal, and the ouput and images are alike as well.
+Spectral blur ratio (measured by `spectral_blur_ratio()`) quantifies the degradation of sound as a function of the change in signal energy in across the frequency domain, analogous to the blur ratio described above for the time domain (and implemented in `blur_ratio()`). Low values also indicate low degradation of signals. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference signal and the re-recorded signal. It works in the same way than `blur_ratio()`, comparing each signal type to the corresponding reference signal, and the output and images are alike as well.
 
 Spectral blur ratio can be calculated as follows:
 
@@ -697,7 +714,7 @@ kbl
 
 &nbsp;
 
-As in `blur_ratio()`, `spectral_blur_ratio()` can also return the amplitude spectrum contours when the argument `output = "list"`:
+As in `blur_ratio()`, `spectral_blur_ratio()` can also return the amplitude spectrum contours with the argument `output = "list"`:
 
 ```{r}
 
@@ -719,7 +736,7 @@ theme_classic()
 
 ### Envelope correlation
 
-Amplitude envelope correlation measures the similarity of two signals in the time domain. The `envelope_correlation()` function measures the envelope correlation coefficients between reference playback and re-recorded signals. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means signals have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step. As in the functions detailed above, 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category.
+Amplitude envelope correlation measures the similarity of two signals in the time domain. The `envelope_correlation()` function measures the envelope correlation coefficients between reference playback and re-recorded signals. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (that is when signals have different lengths) cross-correlation is applied and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step. As in the functions detailed above, 'signal.type' column must be used to instruct the function to only compare signals that belong to the same category.
 
 `envelope_correlation()` can be run as follows:
 
@@ -761,7 +778,7 @@ Note that this function doesn't provide a graphical output. However, the graphs 
 
 ### Spectral correlation
 
-Spectrum correlation measures the similarity of two signals in the frequency domain. Is similar to `spectral_correlation()` but no cross-correlation is applied as both signals are compared within the frequency range of the reference signal (so both spectra have the same length). Again, values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. 
+Spectrum correlation measures the similarity of two signals in the frequency domain. This is similar to `spectral_correlation()`, but no cross-correlation is applied as both signals are compared within the frequency range of the reference signal (so both spectra have the same length). Again, values near 1 indicate identical frequency spectrum  (i.e. no degradation). 
 
 ```{r, eval = TRUE}
 
@@ -800,12 +817,12 @@ As in `envelope_correlation()`, `spectral_correlation()` doesn't provide a graph
 
 ### Signal-to-noise ratio
 
-Signal-to-noise ratio (SNR) quantifies signal amplitude level in relation to ambient noise as a metric of overall signal attenuation as described by Dabelsteen et al (1993). This method is implemente in the function `snr_attenuation()`. The function requires a measurement of ambient noise, which could either be the noise right before each signal (`noise.ref = adjacent`) or one or more ambient noise measurements per recording (`noise.ref = custom`). For the later, selections on signal parameters in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. SNR can be measured as follows:
+Signal-to-noise ratio (SNR) quantifies signal amplitude level in relation to ambient noise as a metric of overall signal attenuation. Therefore, attenuation refers to the loss of energy as described by Dabelsteen et al (1993). This method is implemented in the function `snr()`. The function requires a measurement of ambient noise, which could either be the noise right before each signal (`noise.ref = adjacent`) or one or more ambient noise measurements per recording (`noise.ref = custom`). For the later, selections on signal parameters in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. SNR can be measured as follows:
 
 ```{r, eval = TRUE}
 
 # run blur ratio
-sa <- snr_attenuation(playback_est,  pb = FALSE, noise.ref = "custom")
+sa <- snr(playback_est,  pb = FALSE, noise.ref = "custom")
 
 # check output class
 is_extended_selection_table(sa)
@@ -838,14 +855,14 @@ kbl
 Note that this function does not compare signals to references, so no reference column is added.
 
 
-### Spectrographic distortion
+### Spectrogram distortion
 
-Finallty, the function `spcc_distortion()` measures spectrographic cross-correlation as a metric of signal distortion of signals. Values close to 1 means very similar spectrograms (i.e. little signal distortion). The function is a wrapper on [warbleR](https://cran.r-project.org/package=warbleR)'s `xcorr()`. It can be run as follows:
+Finally, the function `spcc()` measures spectrographic cross-correlation as a metric of signal distortion of signals. Values close to 1 means very similar spectrograms (i.e. little signal distortion). The function is a wrapper on [warbleR](https://cran.r-project.org/package=warbleR)'s `xcorr()`. It can be run as follows:
 
 ```{r, eval = TRUE}
 
 # run spcc distortion
-spd <- spcc_distortion(X = playback_est, method = 1, pb = FALSE)
+spd <- spcc(X = playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(spd)

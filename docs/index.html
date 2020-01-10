@@ -54,7 +54,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/Intro_to_baRulho.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;Introduction to baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
+      <a href="articles/baRulho_quantifying_sound_degradation.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
     </li>
   </ul>
 </li>
@@ -86,32 +86,35 @@
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#barulho" class="anchor"></a>baRulho</h1></div>
 
-<p><code>baRulho</code> quantifies habitat-induced degradation of (animal) acoustic signals.</p>
+<p><code>baRulho</code> allows to quantify habitat-induced degradation of (animal) acoustic signals.</p>
 <p>Install/load the package from CRAN as follows:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># From CRAN would be</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#install.packages("baRulho")</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#load package</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(baRulho)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co"># From CRAN would be</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co">#install.packages("baRulho")</span></a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co">#load package</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(baRulho)</a></code></pre></div>
 <p>To install the latest developmental version from <a href="http://github.com/">github</a> you will need the R package <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># From CRAN would be</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#install.packages("baRulho")</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co"># From github</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"maRce10/baRulho"</span>)</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#load package</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(baRulho)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="co"># From github</span></a>
+<a class="sourceLine" id="cb2-3" title="3">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/install_github.html">install_github</a></span>(<span class="st">"maRce10/baRulho"</span>)</a>
+<a class="sourceLine" id="cb2-4" title="4"></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">#load package</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(baRulho)</a></code></pre></div>
 <p>Please cite <a href="https://cran.r-project.org/package=baRulho">baRulho</a> as follows:</p>
-<p>Araya-Salas, M. (2019), <em>baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R</em>. R package version 1.0.0.</p>
+<p>Araya-Salas, M. (2020), <em>baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R</em>. R package version 1.0.0.</p>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
-<p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.</p>
-<p>Marten, K., &amp; Marler, P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.</p>
-<p>Morton, E. S. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.</p>
+<ol>
+<li><p>Araya-Salas, M. (2017), <em>Rraven: connecting R and Raven bioacoustic software</em>. R package version 1.0.0.</p></li>
+<li><p>Araya-Salas M, Smith-Vidaurre G (2017) warbleR: An R package to streamline analysis of animal acoustic signals. Methods Ecol Evol 8:184–191.</p></li>
+<li><p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.</p></li>
+<li><p>Marten, K., &amp; Marler, P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.</p></li>
+<li><p>Morton, E. S. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.</p></li>
+<li><p>Tobias, J. A., Aben, J., Brumfield, R. T., Derryberry, E. P., Halfwerk, W., Slabbekoorn, H., &amp; Seddon, N. (2010). Song divergence by sensory drive in Amazonian birds. Evolution: International Journal of Organic Evolution, 64(10), 2820-2839.</p></li>
+</ol>
 </div>
 
   </div>

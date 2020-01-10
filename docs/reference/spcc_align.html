@@ -92,7 +92,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Intro_to_baRulho.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;Introduction to baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
+      <a href="../articles/baRulho_quantifying_sound_degradation.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
     </li>
   </ul>
 </li>
@@ -149,7 +149,7 @@
     </tr>
     <tr>
       <th>hop.size</th>
-      <td><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for 44.1 kHz sampling rate.</p></td>
+      <td><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.</p></td>
     </tr>
     <tr>
       <th>wl</th>
@@ -173,10 +173,10 @@ slow down the function but produce more accurate results.</p></td>
     <p>Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference signal.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The frequency uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. In this case the signal with closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls calls warbleR's <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code> and  <code><a href='https://rdrr.io/pkg/warbleR/man/find_peaks.html'>find_peaks</a></code> internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.</p>
+    <p>This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code> and <code><a href='https://rdrr.io/pkg/warbleR/man/find_peaks.html'>find_peaks</a></code> internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
+    <p>Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code>, <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code></p></div>
@@ -184,37 +184,34 @@ slow down the function but produce more accurate results.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>{
 <span class='co'># load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"playback_est"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"playback_est_unaligned"</span>)
 
 <span class='co'># method 1</span>
-<span class='fu'>spcc_align</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>)
+<span class='fu'>spcc_align</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est_unaligned</span>)
 }</div><div class='output co'>#&gt; creating spectrogram matrices (step 1 of 3):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~02s            |++++++++                                          | 15% ~02s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~01s            |+++++++++++++++                                   | 30% ~01s            |++++++++++++++++++                                | 35% ~01s            |++++++++++++++++++++                              | 40% ~01s            |+++++++++++++++++++++++                           | 45% ~01s            |+++++++++++++++++++++++++                         | 50% ~01s            |++++++++++++++++++++++++++++                      | 55% ~01s            |++++++++++++++++++++++++++++++                    | 60% ~01s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
+#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~01s            |+++++                                             | 10% ~02s            |++++++++                                          | 15% ~02s            |++++++++++                                        | 20% ~02s            |+++++++++++++                                     | 25% ~01s            |+++++++++++++++                                   | 30% ~01s            |++++++++++++++++++                                | 35% ~01s            |++++++++++++++++++++                              | 40% ~02s            |+++++++++++++++++++++++                           | 45% ~01s            |+++++++++++++++++++++++++                         | 50% ~01s            |++++++++++++++++++++++++++++                      | 55% ~01s            |++++++++++++++++++++++++++++++                    | 60% ~01s            |+++++++++++++++++++++++++++++++++                 | 65% ~01s            |+++++++++++++++++++++++++++++++++++               | 70% ~01s            |++++++++++++++++++++++++++++++++++++++            | 75% ~01s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=02s  
 #&gt; running cross-correlation (step 2 of 3):
-#&gt;   |                                                  | 0 % ~calculating    |++++                                              | 7 % ~01s            |+++++++                                           | 13% ~02s            |++++++++++                                        | 20% ~01s            |++++++++++++++                                    | 27% ~01s            |+++++++++++++++++                                 | 33% ~01s            |++++++++++++++++++++                              | 40% ~01s            |++++++++++++++++++++++++                          | 47% ~01s            |+++++++++++++++++++++++++++                       | 53% ~01s            |++++++++++++++++++++++++++++++                    | 60% ~01s            |++++++++++++++++++++++++++++++++++                | 67% ~01s            |+++++++++++++++++++++++++++++++++++++             | 73% ~01s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=02s  
+#&gt;   |                                                  | 0 % ~calculating    |++++                                              | 7 % ~04s            |+++++++                                           | 13% ~05s            |++++++++++                                        | 20% ~04s            |++++++++++++++                                    | 27% ~03s            |+++++++++++++++++                                 | 33% ~03s            |++++++++++++++++++++                              | 40% ~03s            |++++++++++++++++++++++++                          | 47% ~03s            |+++++++++++++++++++++++++++                       | 53% ~02s            |++++++++++++++++++++++++++++++                    | 60% ~02s            |++++++++++++++++++++++++++++++++++                | 67% ~02s            |+++++++++++++++++++++++++++++++++++++             | 73% ~01s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~01s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~01s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=04s  
 #&gt; finding peaks and aligning (step 3 of 3)
-#&gt;   |                                                  | 0 % ~calculating    |++++                                              | 7 % ~00s            |+++++++                                           | 13% ~00s            |++++++++++                                        | 20% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++                                 | 33% ~00s            |++++++++++++++++++++                              | 40% ~00s            |++++++++++++++++++++++++                          | 47% ~00s            |+++++++++++++++++++++++++++                       | 53% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; object of class 'extended_selection_table' 
+#&gt;   |                                                  | 0 % ~calculating    |++++                                              | 7 % ~00s            |+++++++                                           | 13% ~00s            |++++++++++                                        | 20% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++                                 | 33% ~00s            |++++++++++++++++++++                              | 40% ~00s            |++++++++++++++++++++++++                          | 47% ~00s            |+++++++++++++++++++++++++++                       | 53% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; <span class='warning'>Warning: longer object length is not a multiple of shorter object length</span></div><div class='output co'>#&gt; <span class='warning'>Warning: longer object length is not a multiple of shorter object length</span></div><div class='output co'>#&gt; object of class 'extended_selection_table' 
 #&gt;  contains a selection table data frame with 28 rows and 8 columns: 
-#&gt;                                 sound.files selec      start       end
-#&gt; 1 Playback_sound_file_LBH_degradation.wav_1     1 0.05000000 0.2072789
-#&gt; 2                2W.5m.2019.7.1.10.10.wav_1     1 0.04447762 0.2017565
-#&gt; 3               2W.10m.2019.7.1.10.20.wav_1     1 0.04213774 0.1994167
-#&gt; 4               2W.15m.2019.7.1.10.30.wav_1     1 0.04213774 0.1994167
-#&gt; 5 Playback_sound_file_LBH_degradation.wav_1     4 1.05000000 1.2444898
-#&gt; 6                2W.5m.2019.7.1.10.10.wav_1     4 1.04650916 1.2409990
-#&gt;   bottom.freq top.freq signal.type distance
-#&gt; 1    2.238685 11.58918      CCE-F1        1
-#&gt; 2    2.238685 11.58918      CCE-F1        5
-#&gt; 3    2.238685 11.58918      CCE-F1       10
-#&gt; 4    2.238685 11.58918      CCE-F1       15
-#&gt; 5    1.544095 10.89459      CCE-I2        1
-#&gt; 6    1.544095 10.89459      CCE-I2        5
+#&gt;      sound.files selec      start       end bottom.freq top.freq signal.type
+#&gt; 1 01m_re-rec.wav     1 0.05000000 0.2072789    2.238685 11.58918      CCE-F1
+#&gt; 2 05m_re-rec.wav     1 0.04440598 0.2016849    2.238685 11.58918      CCE-F1
+#&gt; 3 10m_re-rec.wav     1 0.04206882 0.1993477    2.238685 11.58918      CCE-F1
+#&gt; 4 15m_re-rec.wav     1 0.04206882 0.1993477    2.238685 11.58918      CCE-F1
+#&gt; 5 01m_re-rec.wav     4 1.05000000 1.2444898    1.544095 10.89459      CCE-I2
+#&gt; 6 05m_re-rec.wav     4 1.04650916 1.2409990    1.544095 10.89459      CCE-I2
+#&gt;   distance
+#&gt; 1        1
+#&gt; 2        5
+#&gt; 3       10
+#&gt; 4       15
+#&gt; 5        1
+#&gt; 6        5
 #&gt; ... and 22 more rows 
 #&gt; 4 wave objects (as attributes): 
-#&gt; [1] "Playback_sound_file_LBH_degradation.wav_1"
-#&gt; [2] "2W.5m.2019.7.1.10.10.wav_1"               
-#&gt; [3] "2W.10m.2019.7.1.10.20.wav_1"              
-#&gt; [4] "2W.15m.2019.7.1.10.30.wav_1"              
+#&gt; [1] "01m_re-rec.wav" "05m_re-rec.wav" "10m_re-rec.wav" "15m_re-rec.wav"
 #&gt; and a data frame (check.results) generated by checkres() (as attribute) 
 #&gt; the selection table was created by song (see 'class_extended_selection_table')</div><div class='input'>
 </div></pre>

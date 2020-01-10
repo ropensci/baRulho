@@ -92,7 +92,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Intro_to_baRulho.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;Introduction to baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
+      <a href="../articles/baRulho_quantifying_sound_degradation.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
     </li>
   </ul>
 </li>
@@ -169,7 +169,7 @@ If <code>NULL</code> (default) then the current working directory is used.</p></
     </tr>
     <tr>
       <th>hop.size</th>
-      <td><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for 44.1 kHz sampling rate.</p></td>
+      <td><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.</p></td>
     </tr>
     <tr>
       <th>wl</th>
@@ -185,14 +185,14 @@ consecutive windows, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectr
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Extended selection table similar to input data, but also includes a new column 
-with the calculated amplitude envelope correlation coefficients.</p>
+    <p>Extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')
+with the reference signal and the amplitude envelope correlation coefficients.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Amplitude envelope correlation measures the similarity of two signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means signals have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step.. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types).The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use <code><a href='blur_ratio.html'>blur_ratio</a></code> to extract envelopes.</p>
+    <p>Amplitude envelope correlation measures the similarity of two signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means signals have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types).The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use <code><a href='blur_ratio.html'>blur_ratio</a></code> to extract envelopes.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0Apol, C.A., Sturdy, C.B. &amp; Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.</p>
+    <p>Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0Apol, C.A., Sturdy, C.B. &amp; Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code>, <code><a href='spectral_blur_ratio.html'>spectral_blur_ratio</a></code></p></div>
@@ -211,41 +211,31 @@ with the calculated amplitude envelope correlation coefficients.</p>
 <span class='co'># method 2</span>
 <span class='fu'>envelope_correlation</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 }</div><div class='output co'>#&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~01s            |+++++                                             | 10% ~01s            |++++++++                                          | 15% ~01s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~01s            |+++++++++++++++                                   | 30% ~01s            |++++++++++++++++++                                | 35% ~01s            |++++++++++++++++++++                              | 40% ~01s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
 #&gt; calculating envelope cross-correlations (step 2 of 2):
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
 #&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
+#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~01s            |+++++                                             | 10% ~01s            |++++++++                                          | 15% ~01s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~01s            |+++++++++++++++                                   | 30% ~01s            |++++++++++++++++++                                | 35% ~01s            |++++++++++++++++++++                              | 40% ~01s            |+++++++++++++++++++++++                           | 45% ~01s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
 #&gt; calculating envelope cross-correlations (step 2 of 2):
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; object of class 'extended_selection_table' 
 #&gt;  contains a selection table data frame with 20 rows and 10 columns: 
-#&gt;                                 sound.files selec      start       end
-#&gt; 1 Playback_sound_file_LBH_degradation.wav_1     1 0.05000000 0.2072789
-#&gt; 2                2W.5m.2019.7.1.10.10.wav_1     1 0.04440598 0.2016849
-#&gt; 3               2W.10m.2019.7.1.10.20.wav_1     1 0.04206882 0.1993477
-#&gt; 4               2W.15m.2019.7.1.10.30.wav_1     1 0.04206882 0.1993477
-#&gt; 5 Playback_sound_file_LBH_degradation.wav_1     4 1.05000000 1.2444898
-#&gt; 6                2W.5m.2019.7.1.10.10.wav_1     4 1.04650916 1.2409990
-#&gt;   bottom.freq top.freq signal.type distance
-#&gt; 1    2.238685 11.58918      CCE-F1        1
-#&gt; 2    2.238685 11.58918      CCE-F1        5
-#&gt; 3    2.238685 11.58918      CCE-F1       10
-#&gt; 4    2.238685 11.58918      CCE-F1       15
-#&gt; 5    1.544095 10.89459      CCE-I2        1
-#&gt; 6    1.544095 10.89459      CCE-I2        5
-#&gt;                                     reference   env.cor
-#&gt; 1 Playback_sound_file_LBH_degradation.wav_1-1        NA
-#&gt; 2 Playback_sound_file_LBH_degradation.wav_1-1 0.5179751
-#&gt; 3                2W.5m.2019.7.1.10.10.wav_1-1 0.6766644
-#&gt; 4               2W.10m.2019.7.1.10.20.wav_1-1 0.5959775
-#&gt; 5 Playback_sound_file_LBH_degradation.wav_1-4        NA
-#&gt; 6 Playback_sound_file_LBH_degradation.wav_1-4 0.4667293
+#&gt;      sound.files selec      start       end bottom.freq top.freq signal.type
+#&gt; 1 01m_re-rec.wav     1 0.05000000 0.2072789    2.238685 11.58918      CCE-F1
+#&gt; 2 05m_re-rec.wav     1 0.04440598 0.2016849    2.238685 11.58918      CCE-F1
+#&gt; 3 10m_re-rec.wav     1 0.04206882 0.1993477    2.238685 11.58918      CCE-F1
+#&gt; 4 15m_re-rec.wav     1 0.04206882 0.1993477    2.238685 11.58918      CCE-F1
+#&gt; 5 01m_re-rec.wav     4 1.05000000 1.2444898    1.544095 10.89459      CCE-I2
+#&gt; 6 05m_re-rec.wav     4 1.04650916 1.2409990    1.544095 10.89459      CCE-I2
+#&gt;   distance        reference   env.cor
+#&gt; 1        1 01m_re-rec.wav-1        NA
+#&gt; 2        5 01m_re-rec.wav-1 0.5179751
+#&gt; 3       10 05m_re-rec.wav-1 0.6766644
+#&gt; 4       15 10m_re-rec.wav-1 0.5959775
+#&gt; 5        1 01m_re-rec.wav-4        NA
+#&gt; 6        5 01m_re-rec.wav-4 0.4667293
 #&gt; ... and 14 more rows 
 #&gt; 4 wave objects (as attributes): 
-#&gt; [1] "Playback_sound_file_LBH_degradation.wav_1"
-#&gt; [2] "2W.5m.2019.7.1.10.10.wav_1"               
-#&gt; [3] "2W.10m.2019.7.1.10.20.wav_1"              
-#&gt; [4] "2W.15m.2019.7.1.10.30.wav_1"              
+#&gt; [1] "01m_re-rec.wav" "05m_re-rec.wav" "10m_re-rec.wav" "15m_re-rec.wav"
 #&gt; and a data frame (check.results) generated by checkres() (as attribute) 
 #&gt; the selection table was created by song (see 'class_extended_selection_table')</div><div class='input'>
 </div></pre>

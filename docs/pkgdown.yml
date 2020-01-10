@@ -1,6 +1,6 @@
-pandoc: 2.3.1
+pandoc: 2.2.1
 pkgdown: 1.4.1
 pkgdown_sha: ~
 articles:
-  Intro_to_baRulho: Intro_to_baRulho.html
+  baRulho_quantifying_sound_degradation: baRulho_quantifying_sound_degradation.html
 

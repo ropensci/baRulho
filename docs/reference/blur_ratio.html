@@ -92,7 +92,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/Intro_to_baRulho.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;Introduction to baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
+      <a href="../articles/baRulho_quantifying_sound_degradation.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
     </li>
   </ul>
 </li>
@@ -177,7 +177,7 @@
     </tr>
     <tr>
       <th>hop.size</th>
-      <td><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for 44.1 kHz sampling rate.</p></td>
+      <td><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.</p></td>
     </tr>
     <tr>
       <th>wl</th>
@@ -206,14 +206,14 @@ plot, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Data frame similar to input data, but also includes a new column (blur.ratio)
-with the blur ratio values. If <code>img = TRUE</code> it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If <code>output = 'list'</code> the output would a list including the data frame just described and a data frame with envelopes (amplitude values) for all signals.</p>
+    <p>Data frame similar to input data, but also includes two new columns ('reference' and 'blur.ratio')
+with the reference signal and blur ratio values. If <code>img = TRUE</code> it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If <code>output = 'list'</code> the output would a list including the data frame just described and a data frame with envelopes (amplitude values) for all signals.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Araya-Salas, M. (2019), baRulho: a R package to quantify habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0</p>
+    <p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='envelope_correlation.html'>envelope_correlation</a></code>, <code><a href='spectral_blur_ratio.html'>spectral_blur_ratio</a></code></p></div>
@@ -232,41 +232,31 @@ with the blur ratio values. If <code>img = TRUE</code> it also returns 1 image f
 <span class='co'># using method 2</span>
 <span class='fu'>blur_ratio</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>2</span>)
 }</div><div class='output co'>#&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~03s            |+++++                                             | 10% ~04s            |++++++++                                          | 15% ~03s            |++++++++++                                        | 20% ~02s            |+++++++++++++                                     | 25% ~02s            |+++++++++++++++                                   | 30% ~02s            |++++++++++++++++++                                | 35% ~02s            |++++++++++++++++++++                              | 40% ~01s            |+++++++++++++++++++++++                           | 45% ~01s            |+++++++++++++++++++++++++                         | 50% ~01s            |++++++++++++++++++++++++++++                      | 55% ~01s            |++++++++++++++++++++++++++++++                    | 60% ~01s            |+++++++++++++++++++++++++++++++++                 | 65% ~01s            |+++++++++++++++++++++++++++++++++++               | 70% ~01s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
+#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~04s            |+++++                                             | 10% ~04s            |++++++++                                          | 15% ~03s            |++++++++++                                        | 20% ~03s            |+++++++++++++                                     | 25% ~03s            |+++++++++++++++                                   | 30% ~03s            |++++++++++++++++++                                | 35% ~02s            |++++++++++++++++++++                              | 40% ~02s            |+++++++++++++++++++++++                           | 45% ~02s            |+++++++++++++++++++++++++                         | 50% ~02s            |++++++++++++++++++++++++++++                      | 55% ~02s            |++++++++++++++++++++++++++++++                    | 60% ~01s            |+++++++++++++++++++++++++++++++++                 | 65% ~01s            |+++++++++++++++++++++++++++++++++++               | 70% ~01s            |++++++++++++++++++++++++++++++++++++++            | 75% ~01s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~01s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~01s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=03s  
 #&gt; calculating blur ratio (step 2 of 2):
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
 #&gt; calculating amplitude envelopes (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~02s            |+++++                                             | 10% ~01s            |++++++++                                          | 15% ~01s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~01s            |+++++++++++++++                                   | 30% ~01s            |++++++++++++++++++                                | 35% ~01s            |++++++++++++++++++++                              | 40% ~01s            |+++++++++++++++++++++++                           | 45% ~01s            |+++++++++++++++++++++++++                         | 50% ~01s            |++++++++++++++++++++++++++++                      | 55% ~01s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
+#&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~03s            |+++++                                             | 10% ~03s            |++++++++                                          | 15% ~03s            |++++++++++                                        | 20% ~03s            |+++++++++++++                                     | 25% ~03s            |+++++++++++++++                                   | 30% ~02s            |++++++++++++++++++                                | 35% ~02s            |++++++++++++++++++++                              | 40% ~02s            |+++++++++++++++++++++++                           | 45% ~02s            |+++++++++++++++++++++++++                         | 50% ~02s            |++++++++++++++++++++++++++++                      | 55% ~02s            |++++++++++++++++++++++++++++++                    | 60% ~01s            |+++++++++++++++++++++++++++++++++                 | 65% ~01s            |+++++++++++++++++++++++++++++++++++               | 70% ~01s            |++++++++++++++++++++++++++++++++++++++            | 75% ~01s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~01s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=03s  
 #&gt; calculating blur ratio (step 2 of 2):
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~00s            |+++++                                             | 10% ~00s            |++++++++                                          | 15% ~00s            |++++++++++                                        | 20% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 30% ~00s            |++++++++++++++++++                                | 35% ~00s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; object of class 'extended_selection_table' 
 #&gt;  contains a selection table data frame with 20 rows and 10 columns: 
-#&gt;                                 sound.files selec      start       end
-#&gt; 1 Playback_sound_file_LBH_degradation.wav_1     1 0.05000000 0.2072789
-#&gt; 2                2W.5m.2019.7.1.10.10.wav_1     1 0.04440598 0.2016849
-#&gt; 3               2W.10m.2019.7.1.10.20.wav_1     1 0.04206882 0.1993477
-#&gt; 4               2W.15m.2019.7.1.10.30.wav_1     1 0.04206882 0.1993477
-#&gt; 5 Playback_sound_file_LBH_degradation.wav_1     4 1.05000000 1.2444898
-#&gt; 6                2W.5m.2019.7.1.10.10.wav_1     4 1.04650916 1.2409990
-#&gt;   bottom.freq top.freq signal.type distance
-#&gt; 1    2.238685 11.58918      CCE-F1        1
-#&gt; 2    2.238685 11.58918      CCE-F1        5
-#&gt; 3    2.238685 11.58918      CCE-F1       10
-#&gt; 4    2.238685 11.58918      CCE-F1       15
-#&gt; 5    1.544095 10.89459      CCE-I2        1
-#&gt; 6    1.544095 10.89459      CCE-I2        5
-#&gt;                                     reference blur.ratio
-#&gt; 1 Playback_sound_file_LBH_degradation.wav_1-1         NA
-#&gt; 2 Playback_sound_file_LBH_degradation.wav_1-1 0.16975979
-#&gt; 3                2W.5m.2019.7.1.10.10.wav_1-1 0.06614177
-#&gt; 4               2W.10m.2019.7.1.10.20.wav_1-1 0.07650168
-#&gt; 5 Playback_sound_file_LBH_degradation.wav_1-4         NA
-#&gt; 6 Playback_sound_file_LBH_degradation.wav_1-4 0.16360866
+#&gt;      sound.files selec      start       end bottom.freq top.freq signal.type
+#&gt; 1 01m_re-rec.wav     1 0.05000000 0.2072789    2.238685 11.58918      CCE-F1
+#&gt; 2 05m_re-rec.wav     1 0.04440598 0.2016849    2.238685 11.58918      CCE-F1
+#&gt; 3 10m_re-rec.wav     1 0.04206882 0.1993477    2.238685 11.58918      CCE-F1
+#&gt; 4 15m_re-rec.wav     1 0.04206882 0.1993477    2.238685 11.58918      CCE-F1
+#&gt; 5 01m_re-rec.wav     4 1.05000000 1.2444898    1.544095 10.89459      CCE-I2
+#&gt; 6 05m_re-rec.wav     4 1.04650916 1.2409990    1.544095 10.89459      CCE-I2
+#&gt;   distance        reference blur.ratio
+#&gt; 1        1 01m_re-rec.wav-1         NA
+#&gt; 2        5 01m_re-rec.wav-1 0.16975979
+#&gt; 3       10 05m_re-rec.wav-1 0.06614177
+#&gt; 4       15 10m_re-rec.wav-1 0.07650168
+#&gt; 5        1 01m_re-rec.wav-4         NA
+#&gt; 6        5 01m_re-rec.wav-4 0.16360866
 #&gt; ... and 14 more rows 
 #&gt; 4 wave objects (as attributes): 
-#&gt; [1] "Playback_sound_file_LBH_degradation.wav_1"
-#&gt; [2] "2W.5m.2019.7.1.10.10.wav_1"               
-#&gt; [3] "2W.10m.2019.7.1.10.20.wav_1"              
-#&gt; [4] "2W.15m.2019.7.1.10.30.wav_1"              
+#&gt; [1] "01m_re-rec.wav" "05m_re-rec.wav" "10m_re-rec.wav" "15m_re-rec.wav"
 #&gt; and a data frame (check.results) generated by checkres() (as attribute) 
 #&gt; the selection table was created by song (see 'class_extended_selection_table')</div><div class='input'>
 </div></pre>

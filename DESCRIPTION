@@ -2,7 +2,7 @@ Package: baRulho
 Type: Package
 Title: Quantifying habitat-induced acoustic signal degradation  
 Version: 1.0.0
-Date: 2019-10-26
+Date: 2020-01-10
 Author: Marcelo Araya-Salas [aut, cre]
 Maintainer: Marcelo Araya-Salas <marceloa27@gmail.com>
 Description: Quantifying habitat-induced degradation of (animal) acoustic signals.

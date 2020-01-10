@@ -195,7 +195,7 @@ Note that lower values will increase time resolution, which is more important fo
 with the signal-to-noise ratio values.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Signal-to-noise ratio (SNR) measures signal amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. The 'signal.type' column must be used to indicate which signals belong to the same category (e.g. song-types). The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('botom.freq' and 'top.freq' columns in 'X'). Two methods for calculating signal-to-noise ratio are provided (see 'type' argument).</p>
+    <p>Signal-to-noise ratio (SNR) measures signal amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. The 'signal.type' column must be used to indicate which signals belong to the same category (e.g. song-types). The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating signal-to-noise ratio are provided (see 'type' argument).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0</p>
@@ -226,12 +226,12 @@ with the signal-to-noise ratio values.</p>
 #&gt; 5 01m_re-rec.wav     4 1.05000000 1.2444898    1.544095 10.89459      CCE-I2
 #&gt; 6 05m_re-rec.wav     4 1.04650916 1.2409990    1.544095 10.89459      CCE-I2
 #&gt;   distance snr.attenuation
-#&gt; 1        1        43.98279
-#&gt; 2        5        27.11119
-#&gt; 3       10        18.96301
-#&gt; 4       15        10.78359
-#&gt; 5        1        42.78732
-#&gt; 6        5        22.25534
+#&gt; 1        1      0.34612066
+#&gt; 2        5      0.17080389
+#&gt; 3       10      0.13911068
+#&gt; 4       15      0.22752721
+#&gt; 5        1      0.26614006
+#&gt; 6        5      0.06330133
 #&gt; ... and 14 more rows 
 #&gt; 4 wave objects (as attributes): 
 #&gt; [1] "01m_re-rec.wav" "05m_re-rec.wav" "10m_re-rec.wav" "15m_re-rec.wav"

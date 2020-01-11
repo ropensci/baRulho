@@ -3,7 +3,7 @@
 #' \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
 #' @usage master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE,
 #'  delay = 1, gap.duration = 1)
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.
+#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.
 #' @param file.name Character string indicating the name of the sound file.
 #' @param dest.path Character string containing the directory path where the sound file will be saved.
 #' If \code{NULL} (default) then the current working directory will be used instead.
@@ -42,7 +42,7 @@
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @seealso \code{\link[Rraven]{exp_raven}}
 #' @references {
-#' Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+#' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 #' }
 # last modification on jan-06-2020 (MAS)
 

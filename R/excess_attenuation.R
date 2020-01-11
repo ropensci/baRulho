@@ -3,7 +3,7 @@
 #' \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
 #' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, 
 #' bp = NULL, hop.size = 1, wl = NULL, ovlp = 70)
-#' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.
+#' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring excess attenuation. Two methods are available:
@@ -22,7 +22,7 @@
 #' with the excess attenuation values.
 #' @export
 #' @name excess_attenuation
-#' @details Excess attenuation is the amplitude loss of a sound in excess of that due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading due to atmospheric conditions or habitat (Wiley & Richards, 1978). Low values indicate little signal attenuation. 
+#' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading, due to atmospheric conditions or habitat (Wiley & Richards, 1978). Low values indicate little signal attenuation. 
 #' The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating excess attenuation are provided (see 'method' argument). 
 #' @examples
 #' {
@@ -39,7 +39,7 @@
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @seealso \code{\link{spcc}}
 #' @references {
-#' Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+#' Araya-Salas, M. (2020),=. baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 #' 
 #' Marten, K., & Marler, P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.
 #' 

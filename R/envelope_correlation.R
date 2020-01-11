@@ -3,7 +3,7 @@
 #' \code{envelope_correlation} measures amplitude envelope correlation of signals referenced in an extended selection table.
 #' @usage envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
 #' ssmooth = NULL, msmooth = NULL, hop.size = 11.6, wl = NULL, ovlp = 70)
-#' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
+#' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' If \code{NULL} (default) then the current working directory is used.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -43,7 +43,7 @@
 #' 
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @references {
-#' Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+#' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 #' 
 #' Apol, C.A., Sturdy, C.B. & Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.
 #' }

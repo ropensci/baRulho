@@ -341,7 +341,7 @@ Note that the output could also be exported to [Raven sound analysis software](h
 
 ```{r, eval = FALSE}
  
- Rraven::exp_raven(master.sel.tab, path = td, file.name = "example_master_selection_table")
+Rraven::exp_raven(master.sf, path = td, file.name = "example_master_selection_table")
 
 ```
 

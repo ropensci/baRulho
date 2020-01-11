@@ -2,7 +2,7 @@
 #' 
 #' \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
 #' @usage master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE,
-#'  delay = 1, gap.duration = 1)
+#'  delay = 1, gap.duration = 1, amp.marker = 2)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.
 #' @param file.name Character string indicating the name of the sound file.
 #' @param dest.path Character string containing the directory path where the sound file will be saved.
@@ -10,6 +10,7 @@
 #' @param overwrite Logical argument to determine if the function will overwrite any existing sound file with the same file name. Default is \code{FALSE}.
 #' @param delay Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.
 #' @param gap.duration Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between signals. Default is 1 s.
+#' @param amp.marker Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of signals, so it is picked up at further distances. Default is 2.
 #' @return Extended selection table similar to input data, but includes a new column (cross.correlation)
 #' with the spectrogram cross-correlation coefficients.
 #' @export
@@ -46,7 +47,7 @@
 #' }
 # last modification on jan-06-2020 (MAS)
 
-master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1, gap.duration = 1){
+master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1, gap.duration = 1, amp.marker = 2){
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -97,12 +98,17 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   
   end_mrkr <- warbleR::image_to_wave(file = file.path(tempdir(), "end_mrkr-img.png"), plot = FALSE, flim = flim, samp.rate = attr(X, "check.results")$sample.rate[1])
   
+ 
   # remove plots 
   nll <- try(dev.off(), silent = TRUE)
   
   # output wave object
   strt_mrkr <- tuneR::normalize(strt_mrkr)
   end_mrkr <- tuneR::normalize(end_mrkr)
+  
+  # amplify markers
+  strt_mrkr@left <- strt_mrkr@left * amp.marker
+  end_mrkr@left <- end_mrkr@left * amp.marker
   
   # save duration of markers for creating selection table
   dur_strt_mrkr <- seewave::duration(strt_mrkr)

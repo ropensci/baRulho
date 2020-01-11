@@ -5,7 +5,7 @@
 \title{Create a master sound file}
 \usage{
 master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE,
- delay = 1, gap.duration = 1)
+ delay = 1, gap.duration = 1, amp.marker = 2)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.}
@@ -20,6 +20,8 @@ If \code{NULL} (default) then the current working directory will be used instead
 \item{delay}{Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.}
 
 \item{gap.duration}{Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between signals. Default is 1 s.}
+
+\item{amp.marker}{Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of signals, so it is picked up at further distances. Default is 2.}
 }
 \value{
 Extended selection table similar to input data, but includes a new column (cross.correlation)

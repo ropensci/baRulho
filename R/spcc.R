@@ -3,7 +3,7 @@
 #' \code{spcc} measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table.
 #' @usage spcc(X, parallel = 1, pb = TRUE,  method = 1, 
 #' cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
-#' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
+#' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
@@ -23,7 +23,7 @@
 #' with the spectrogram cross-correlation coefficients.
 #' @export
 #' @name spcc
-#' @details The spectrographic cross-correlation measures frequency distortion of signals as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little signal distortion has occurred). Cross-correlation is measured of signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{xcorr}} function.
+#' @details Spectrographic cross-correlation measures frequency distortion of signals as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little signal distortion has occurred). Cross-correlation is measured of signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{xcorr}} function.
 #' @examples
 #' {
 #' # load example data
@@ -39,7 +39,7 @@
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @seealso \code{\link{blur_ratio}}, \code{\link{spcc_align}}, \code{\link[warbleR]{xcorr}}
 #' @references {
-#' Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+#' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 #' 
 #' Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115. 
 #' }

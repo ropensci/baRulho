@@ -41,7 +41,7 @@ The [baRulho](https://cran.r-project.org/package=baRulho) package is intended to
 The main features of the package are:
 
  - The use of loops to apply tasks through acoustic signals referenced in a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR))
- - The production of image files with graphic representations of sound in time and/or frequency that let users verify acoustic analyzes 
+ - The production of image files with graphic representations of sound in time and/or frequency that let users verify acoustic analyses 
  - The use extended selection tables (sensu [warbleR](https://cran.r-project.org/package=warbleR)) as the object format to input acoustic data and annotations (except for `atmospheric_attenuation()`) and to output results 
  - The use of parallelization to distribute tasks among several cores to improve computational efficiency
 
@@ -98,7 +98,7 @@ library(viridis)
 
 ### Inputting acoustic data and annotations
 
-The package requires the data to be input as extended selection tables. An extended selection table is an object class in R that contains both the annotations (locations of signals in time and frequency) and the corresponding acoustic data as wave objects. Therefore, these are **self-contained objects** since the original sound files are no longer needed to perform acoustic analyses. These objects are created by the `selection_table()` function from [warbleR](https://cran.r-project.org/package=warbleR). Take a look at the [intro to warbleR vignette](https://cran.r-project.org/package=warbleR/vignettes/Intro_to_warbleR.html) for more details.
+The package requires the data to be input as extended selection tables. An extended selection table is an object class in R that contains both the annotations (locations of signals in time and frequency) and the corresponding acoustic data as wave objects. Therefore, these are **self-contained objects** since the original sound files are no longer needed to perform acoustic analyses. These objects are created by the `selection_table()` function from [warbleR](https://cran.r-project.org/package=warbleR), or can be generated from Raven and Syrinx selection tables using the `imp_raven()` or `imp_syrinx()` functions from [Rraven](https://cran.r-project.org/web/packages/Rraven/index.html). Take a look at the [intro to warbleR vignette](https://cran.r-project.org/web/packages/Rraven/vignettes/Rraven.html), and the [Rraven vignette](https://cran.r-project.org/web/packages/Rraven/vignettes/Rraven.html) for more details.
 
 <div class="alert alert-info">
 
@@ -106,15 +106,15 @@ The package requires the data to be input as extended selection tables. An exten
 
 -**Model signal**: signal in which transmission properties will be studied, usually found in the original field recordings or synthetic sound files.
 
-- **Reference signal**: signal to use as a pattern to compare against. Usually created by re-recording a model signal broadcast at 1 m from the source (speaker).
+-**Reference signal**: signal to use as a pattern to compare against. Usually created by re-recording a model signal broadcast at 1 m from the source (speaker).
 
-- **Signal type**: signal category. For instance song types (e.g. A, B, C), call types (alert, foraging, etc).
+-**Signal type**: signal category. For instance song types (e.g. A, B, C), call types (alert, foraging, etc).
 
-- **Ambient noise**: energy from background sounds in the recording, excluding signals of interest.  
+-**Ambient noise**: energy from background sounds in the recording, excluding signals of interest.  
 
-- **Test signal**: signals re-recorded far from the source to test for transmission/degradation (also refer to as 're-recorded' signals).
+-**Test signal**: signals re-recorded far from the source to test for transmission/degradation (also refer to as 're-recorded' signals).
 
-- **Degradation**: term use to describe any changes in the structure of a signal when transmitted in a given habitat (note that there is no agreement on this terminology in the scientific community).
+-**Degradation**: term use to describe any changes in the structure of a signal when transmitted in a given habitat (note that there is no agreement on this terminology in the scientific community).
 
 </div>
 
@@ -142,7 +142,7 @@ For instance, Tobias et al (2010) studied whether acoustic adaptation (a special
 
 > "Tones were synthesized at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz) to encompass the range of maximum avian auditory sensitivity (Dooling 1982). At each frequency, we generated two sequences of two 100-msec tones. One sequence had  a  relatively  short  interval  of  150  msec,  close  to  the  mean internote interval in our sample (152± 4 msec). The other sequence had a longer interval of 250 msec, close to the mean maximum internote interval in our sample (283± 74 msec). The first sequence reflects a fast-paced song and the second a slower paced song  (sensu  Slabbekoorn  et  al.  2007).  The  master  file  (44100 Hz/16 bit WAV) thereby consisted of a series of 12 pairs of artificial 100-ms constant-frequency tones at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz)." 
 
-We can synthesize the same pure tones using the function `sim_songs()` from the package [warbleR](https://cran.r-project.org/package=warbleR). The function requires 1) the number of tones to synthesize (argument `n`), 2) the duration of the tones (`durs`, in s), 3) the duration of the intervals (`gaps`, in s) and 3) the frequencies for each tone to be synthesized (`freqs`, in kHz). In addition, the argument `diff.fun` should be set to "pure.tone" and the argument `harm` to 1 to remove harmonics. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR)) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument `selec.table = TRUE`. This can be done as follows:
+We can synthesize the same pure tones using the function `sim_songs()` from the package [warbleR](https://cran.r-project.org/package=warbleR). The function requires 1) the number of tones to synthesize (argument `n`, 2) the duration of the tones (`durs`, in seconds, 3) the duration of the intervals (`gaps`, in seconds and 3) the frequencies for each tone to be synthesized (`freqs`, in kHz). In addition, the argument `diff.fun` should be set to "pure.tone" and the argument `harm` to 1 to remove harmonics. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR)) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument `selec.table = TRUE`. This can be done as follows:
 
 
 ```{r, eval = TRUE}
@@ -341,7 +341,7 @@ Note that the output could also be exported to [Raven sound analysis software](h
 
 ```{r, eval = FALSE}
  
- Rraven::exp_raven(master.sel.tab, path = td, file.name = "example_master_selection_table")
+Rraven::exp_raven(master.sf, path = td, file.name = "example_master_selection_table")
 
 ```
 
@@ -456,7 +456,7 @@ This is all the data we need to create a new selection table that will allow us 
 
 ```{r, eval = FALSE}
 
-# get subset exclufing markers
+# get subset excluding markers
 new.st  <- master.sf[!master.sf$orig.sound.file %in% c("start_marker", "end_marker"), ]
 
 # fix time columns
@@ -615,7 +615,7 @@ kbl
 
 Note that we also added a column for "distance" that will be useful for downsteam analyses (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an `extended_selection_table`, which is the data format that pretty much all [baRulho](https://cran.r-project.org/package=baRulho) functions take. 
 
-This is somewhat a silly example as we are finding the star marker on the original master sound file. However, it demonstrates how this can be done on any re-recorded sound file.
+This is somewhat a silly example as we are finding the start marker in the original master sound file. However, it demonstrates how this can be done on any re-recorded sound file.
 
 When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded signals. This is problematic for quantifying degradation in [baRulho](https://cran.r-project.org/package=baRulho) (and other sound analysis software) as precise alignment of signal is crucial for the accuracy of downstream measures of signal degradation. 
 
@@ -675,7 +675,7 @@ Most [baRulho](https://cran.r-project.org/package=baRulho) functions are design 
 
 ## Required data structure
 
-As mentioned above the data must be inputted in the `extended_selection_table` format. The data should also contain some additional information. [baRulho](https://cran.r-project.org/package=baRulho) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
+As mentioned above the data must be in `extended_selection_table` format. The data should also contain some additional information. [baRulho](https://cran.r-project.org/package=baRulho) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
 
 ```{r,eval=FALSE}
 
@@ -801,7 +801,7 @@ Output image files (in the working directory) look like these ones:
 
 The image shows the spectrogram for the reference and re-recorded signal, as well as the envelopes of both signals overlaid in a single graph. Colors indicate to which signal spectrograms and envelopes belong to. The blur ratio value is also displayed.
 
-The function can also return the amplitude spectrum contours when the argument `output = "list"`. The contours can be directly inputted into ggplot to visualize amplitude envelopes, and how they vary with distance and across signal types (and ambient noise if included):
+The function can also return the amplitude spectrum contours when the argument `output = "list"`. The contours can be directly input into ggplot to visualize amplitude envelopes, and how they vary with distance and across signal types (and ambient noise if included):
 
 ```{r}
 
@@ -965,7 +965,7 @@ kbl
 
 &nbsp;
 
-Note that this function doesn't provide a graphical output. However, the graphs generated by `blur_ratio()` can be used to inspect the envelop shapes and the alignment of signals.
+Note that this function doesn't provide a graphical output. However, the graphs generated by `blur_ratio()` can be used to inspect the envelope shapes and the alignment of signals.
 
 ### Spectral correlation
 
@@ -1095,7 +1095,7 @@ Araya-Salas, M. (2020), *baRulho: quantifying habitat-induced degradation of (an
 
 # References
 
-1. Araya-Salas, M. (2017), *Rraven: connecting R and Raven bioacoustic software*. R package version 1.0.0.
+1. Araya-Salas, M. (2017). *Rraven: connecting R and Raven bioacoustic software*. R package version 1.0.0.
 
 1. Araya-Salas M, Smith-Vidaurre G (2017) *warbleR: An R package to streamline analysis of animal acoustic signals*. Methods Ecol Evol 8:184–191.
 

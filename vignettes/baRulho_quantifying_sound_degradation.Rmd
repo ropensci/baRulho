@@ -353,7 +353,7 @@ Both sound files and annotations can be visualized in Raven:
 
 &nbsp;
 
-Take a look at the [Rraven vignette](https://cran.r-project.org/web/packages/Rraven/vignettes/Rraven.html) for more details. 
+Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details. 
 
 # Time sync re-recorded sounds
 

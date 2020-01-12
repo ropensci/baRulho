@@ -137,7 +137,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.</p></td>
+      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package, or can be generated from Raven and Syrinx selection tables using the <code><a href='https://rdrr.io/pkg/Rraven/man/imp_raven.html'>imp_raven</a></code> or <code><a href='https://rdrr.io/pkg/Rraven/man/imp_syrinx.html'>imp_syrinx</a></code> functions from the Rraven package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
@@ -176,7 +176,7 @@ slow down the function but produce more accurate results.</p></td>
     <p>This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code> and <code><a href='https://rdrr.io/pkg/warbleR/man/find_peaks.html'>find_peaks</a></code> internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
+    <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code>, <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code></p></div>

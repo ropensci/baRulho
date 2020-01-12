@@ -18,7 +18,7 @@
 #' @import grDevices
 #' @import utils
 #' @import parallel
-#' @import warbleR ( >= 1.1.20)
+#' @import warbleR
 #' @importFrom stats cor
 #' 
 #' @author Marcelo Araya-Salas

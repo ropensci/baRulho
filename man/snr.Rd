@@ -8,7 +8,7 @@ snr(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
 noise.ref = "adjacent", type = 1, bp = NULL, hop.size = 1, wl = NULL)
 }
 \arguments{
-\item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
+\item{X}{object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package.}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
 the start and end points of selection over which to measure ambient noise.}
@@ -60,7 +60,7 @@ data("playback_est")
 # using measure ambient noise reference selections 
 snr(X = playback_est, mar = 0.05, noise.ref = 'custom')
 
-#' # remove ambient selections
+# remove ambient selections
 playback_est <- playback_est[playback_est$signal.type != "ambient", ]
 # using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
 snr(X = playback_est, mar = 0.05, noise.ref = 'adjacent')
@@ -71,7 +71,7 @@ snr(X = playback_est, mar = 0.05, noise.ref = 'adjacent')
 {
 Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 
-Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 }
 }
 \seealso{

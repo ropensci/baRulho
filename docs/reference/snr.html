@@ -137,7 +137,7 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package.</p></td>
+      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package, or can be generated from Raven and Syrinx selection tables using the <code><a href='https://rdrr.io/pkg/Rraven/man/imp_raven.html'>imp_raven</a></code> or <code><a href='https://rdrr.io/pkg/Rraven/man/imp_syrinx.html'>imp_syrinx</a></code> functions from the Rraven package.</p></td>
     </tr>
     <tr>
       <th>mar</th>
@@ -198,7 +198,7 @@ with the signal-to-noise ratio values.</p>
     <p>Signal-to-noise ratio (SNR) measures signal amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. The 'signal.type' column must be used to indicate which signals belong to the same category (e.g. song-types). The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating signal-to-noise ratio are provided (see 'type' argument).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Araya-Salas, M. (2020), baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0</p>
+    <p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='excess_attenuation.html'>excess_attenuation</a></code></p></div>
@@ -211,7 +211,7 @@ with the signal-to-noise ratio values.</p>
 <span class='co'># using measure ambient noise reference selections </span>
 <span class='fu'>snr</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>'custom'</span>)
 
-<span class='co'>#' # remove ambient selections</span>
+<span class='co'># remove ambient selections</span>
 <span class='no'>playback_est</span> <span class='kw'>&lt;-</span> <span class='no'>playback_est</span>[<span class='no'>playback_est</span>$<span class='no'>signal.type</span> <span class='kw'>!=</span> <span class='st'>"ambient"</span>, ]
 <span class='co'># using margin for ambient noise of 0.05 and adjacent measure ambient noise reference</span>
 <span class='fu'>snr</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>0.05</span>, <span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>'adjacent'</span>)

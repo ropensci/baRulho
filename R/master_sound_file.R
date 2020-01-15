@@ -3,7 +3,7 @@
 #' \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
 #' @usage master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1, 
 #' gap.duration = 1, amp.marker = 2)
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.
+#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.
 #' @param file.name Character string indicating the name of the sound file.
 #' @param dest.path Character string containing the directory path where the sound file will be saved.
 #' If \code{NULL} (default) then the current working directory will be used instead.
@@ -188,11 +188,17 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
     sound.files = file.name, 
     selec =  1:(nrow(X) + 2), 
     start = c(delay, X$pb.start, X$pb.end[nrow(X)] + gap.duration), 
-    end = c(delay + dur_strt_mrkr, X$pb.end, X$pb.end[nrow(X)] + gap.duration + dur_end_mrkr), 
-    bottom.freq = c(flim[1] + mar.f, X$bottom.freq, flim[1] + mar.f), 
-    top.freq = c(flim[2] - mar.f, X$top.freq, flim[2] - mar.f), 
-    orig.sound.file = c("start_marker", X$sound.files, "end_marker"))
+    end = c(delay + dur_strt_mrkr, X$pb.end, X$pb.end[nrow(X)] + gap.duration + dur_end_mrkr)
+    )
 
+  if (!is.null(X$bottom.freq))
+  sel.tab$bottom.freq <- c(flim[1] + mar.f, X$bottom.freq, flim[1] + mar.f) 
+  
+  if (!is.null(X$top.freq))
+  sel.tab$top.freq <- c(flim[2] - mar.f, X$top.freq, flim[2] - mar.f)
+  
+  
+  sel.tab$orig.sound.file <- c("start_marker", X$sound.files, "end_marker")
   
   # save master playback
   tuneR::writeWave(plbck, file.path(dest.path, file.name), extensible = FALSE)

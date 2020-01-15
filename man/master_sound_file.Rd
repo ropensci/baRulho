@@ -8,7 +8,7 @@ master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1,
 gap.duration = 1, amp.marker = 2)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.}
+\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.}
 
 \item{file.name}{Character string indicating the name of the sound file.}
 

@@ -3,7 +3,7 @@
 #' \code{snr} measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table.
 #' @usage snr(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
 #' noise.ref = "adjacent", type = 1, bp = NULL, hop.size = 1, wl = NULL)
-#' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package.
+#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure ambient noise.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).

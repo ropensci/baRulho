@@ -1,6 +1,6 @@
 #' Measure atmospheric attenuation and absorption of sound 
 #' 
-#' \code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption of signals referenced in an extended selection table.
+#' \code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption.
 #' @usage atmospheric_attenuation(f, temp, RH, p = 101325, 
 #' formula = 1, spi = NULL, dist = NULL)
 #' @param f numeric vector of length 1 with frequency (in Hertz).

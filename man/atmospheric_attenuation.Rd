@@ -26,7 +26,7 @@ formula = 1, spi = NULL, dist = NULL)
 Returns atmospheric attenuation (in dB/m) of sound based on supplied parameters. If 'spi' and 'dist' are supplied the function also returns atmospheric absorption (in dB).
 }
 \description{
-\code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption of signals referenced in an extended selection table.
+\code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption.
 }
 \details{
 Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency. The function can applied to formulae based on:

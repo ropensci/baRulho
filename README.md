@@ -1,5 +1,6 @@
 # baRulho
 
+
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/baRulho)](http://www.r-pkg.org/pkg/baRulho)
 [![Total Downloads](http://cranlogs.r-pkg.org/badges/grand-total/baRulho)](http://www.r-pkg.org/badges/grand-total/baRulho)
@@ -31,7 +32,7 @@ library(baRulho)
 
 ```
 
-Please cite [baRulho](https://cran.r-project.org/package=baRulho) as follows:
+Please cite [baRulho](https://marce10.github.io/baRulho/) as follows:
 
 Araya-Salas, M. (2020), *baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R*. R package version 1.0.0.
 

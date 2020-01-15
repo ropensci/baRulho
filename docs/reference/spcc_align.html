@@ -129,15 +129,15 @@
     <p><code>spcc_align</code> aligns start and end of signal in an extended selection table using spectrographic cross-correlation</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spcc_align</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-<span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>90</span>, <span class='kw'>wn</span> <span class='kw'>=</span> <span class='st'>'hanning'</span>)</pre>
+    <pre class="usage"><span class='fu'>spcc_align</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>90</span>,
+<span class='kw'>wn</span> <span class='kw'>=</span> <span class='st'>'hanning'</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>object of class 'selection_table', 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package, or can be generated from Raven and Syrinx selection tables using the <code><a href='https://rdrr.io/pkg/Rraven/man/imp_raven.html'>imp_raven</a></code> or <code><a href='https://rdrr.io/pkg/Rraven/man/imp_syrinx.html'>imp_syrinx</a></code> functions from the Rraven package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.</p></td>
+      <td><p>object of class 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.</p></td>
     </tr>
     <tr>
       <th>parallel</th>

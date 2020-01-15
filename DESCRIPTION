@@ -13,7 +13,7 @@ LazyData: TRUE
 URL: https://github.com/maRce10/baRulho
 BugReports: https://github.com/maRce10/baRulho/issues
 NeedsCompilation: no
-Suggests: ggplot2, knitr, kableExtra, viridis
+Suggests: ggplot2, knitr, kableExtra, viridis, png
 VignetteBuilder: knitr
 RoxygenNote: 7.0.2
 Repository: CRAN

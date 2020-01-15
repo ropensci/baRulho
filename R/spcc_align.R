@@ -1,9 +1,9 @@
 #' Align start and end of signal using spectrographic cross-correlation  
 #' 
 #' \code{spcc_align} aligns start and end of signal in an extended selection table using spectrographic cross-correlation  
-#' @usage spcc_align(X = NULL, parallel = 1, pb = TRUE, 
-#' hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
-#' @param X object of class 'selection_table', 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package, or can be generated from Raven and Syrinx selection tables using the \code{\link[Rraven]{imp_raven}} or \code{\link[Rraven]{imp_syrinx}} functions from the Rraven package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
+#' @usage spcc_align(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, 
+#' wn = 'hanning')
+#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
@@ -35,7 +35,7 @@
 #' }
 # last modification on nov-01-2019 (MAS)
 
-spcc_align <- function(X = NULL, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
+spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
   
   # set number of processes for printing message 
   if (pb){
@@ -96,7 +96,7 @@ spcc_align <- function(X = NULL, parallel = 1, pb = TRUE, hop.size = 11.6, wl = 
   indx.algn <- which(paste(Y$sound.files, Y$selec, sep = "-") %in% comp_mat[, 1])
   
   # fix end to include half the duration of the selection at both sides
-  attr(Y, "check.results")$end[indx.algn] <- Y$end[indx.algn] <- 
+  attr(Y, "check.results")$end[indx.algn] <- Y$end[indx.algn] <-
     sapply(indx.algn, function(x)
     {
       wv.info <- warbleR::read_wave(X, index = x, header = TRUE)
@@ -108,6 +108,8 @@ spcc_align <- function(X = NULL, parallel = 1, pb = TRUE, hop.size = 11.6, wl = 
 
   # fix start in the same way
   attr(Y, "check.results")$start[indx.algn] <- Y$start[indx.algn] <- X$start[indx.algn] - (X$end[indx.algn] -  X$start[indx.algn]) * 0.7
+  
+  # make 0 any negatives
   attr(Y, "check.results")$start[Y$start < 0] <- Y$start[Y$start < 0] <- 0
 
   # run spcc 
@@ -128,7 +130,10 @@ spcc_align <- function(X = NULL, parallel = 1, pb = TRUE, hop.size = 11.6, wl = 
   # end
   attr(X, "check.results")$end[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <- 
   X$end[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <- 
-    peaks$end + Y$start[paste(Y$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]]
+    X$start[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] + 
+    peaks$end - peaks$start
+    # Y$end[paste(Y$sound.files, X$selec, sep = "-") %in% comp_mat[, 2]]  - 
+    # Y$start[paste(Y$sound.files, X$selec, sep = "-") %in% comp_mat[, 2]]
 
   attr(X, "check.results")$duration <- attr(X, "check.results")$end - attr(X, "check.results")$start
   

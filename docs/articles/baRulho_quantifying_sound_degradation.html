@@ -94,7 +94,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2020-01-12”
+“2020-01-15”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -113,7 +113,7 @@
 <!-- &nbsp;  -->
 <!-- <center>![warbleR logo](logo.png)</center> -->
 <p> </p>
-<p>The <a href="https://cran.r-project.org/package=baRulho">baRulho</a> package is intended to facilitate acoustic analysis of (animal) sound transmission experiments. Such studies typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. We will refer to these changes in signal structure ‘degradation’ for the sake of simplicity. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics. <a href="https://cran.r-project.org/package=baRulho">baRulho</a> builds upon functions and data formats from the <a href="https://cran.r-project.org/package=warbleR">warbleR</a> and <a href="https://cran.r-project.org/package=seewave">seewave</a> packages, so some experience with these packages is advised.</p>
+<p>The <a href="https://marce10.github.io/baRulho/">baRulho</a> package is intended to facilitate acoustic analysis of (animal) sound transmission experiments. Such studies typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. We will refer to these changes in signal structure ‘degradation’ for the sake of simplicity. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics. <a href="https://marce10.github.io/baRulho/">baRulho</a> builds upon functions and data formats from the <a href="https://cran.r-project.org/package=warbleR">warbleR</a> and <a href="https://cran.r-project.org/package=seewave">seewave</a> packages, so some experience with these packages is advised.</p>
 <p>The main features of the package are:</p>
 <ul>
 <li>The use of loops to apply tasks through acoustic signals referenced in a selection table (sensu <a href="https://cran.r-project.org/package=warbleR">warbleR</a>)</li>
@@ -144,7 +144,7 @@ td &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/bas
 <div id="inputting-acoustic-data-and-annotations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#inputting-acoustic-data-and-annotations" class="anchor"></a>Inputting acoustic data and annotations</h3>
-<p>The package requires the data to be input as extended selection tables. An extended selection table is an object class in R that contains both the annotations (locations of signals in time and frequency) and the corresponding acoustic data as wave objects. Therefore, these are <strong>self-contained objects</strong> since the original sound files are no longer needed to perform acoustic analyses. These objects are created by the <code><a href="https://rdrr.io/pkg/warbleR/man/selection_table.html">selection_table()</a></code> function from <a href="https://cran.r-project.org/package=warbleR">warbleR</a>, or can be generated from Raven and Syrinx selection tables using the <code>imp_raven()</code> or <code>imp_syrinx()</code> functions from <a href="https://cran.r-project.org/package=Rraven">Rraven</a>. Take a look at the <a href="https://cran.r-project.org/package=warbleR/vignettes/Intro_to_warbleR.html">intro to warbleR vignette</a>, and the <a href="https://cran.r-project.org/package=Rraven/vignettes/Rraven.html">Rraven vignette</a> for more details.</p>
+<p>The package requires the data to be input as extended selection tables. An extended selection table is an object class in R that contains both the annotations (locations of signals in time and frequency) and the corresponding acoustic data as wave objects. Therefore, these are <strong>self-contained objects</strong> since the original sound files are no longer needed to perform acoustic analyses. These objects are created by the <code><a href="https://rdrr.io/pkg/warbleR/man/selection_table.html">selection_table()</a></code> function from <a href="https://cran.r-project.org/package=warbleR">warbleR</a>. Take a look at the <a href="https://cran.r-project.org/package=warbleR/vignettes/Intro_to_warbleR.html">intro to warbleR vignette</a> for more details.</p>
 <div class="alert alert-info">
 <p><font size="5">Glossary</font></p>
 <p>-<strong>Model signal</strong>: signal in which transmission properties will be studied, usually found in the original field recordings or synthetic sound files.</p>
@@ -165,7 +165,7 @@ td &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/bas
 <img src="../../../../R%20package%20testing/baRulho/baRulho/vignettes/analysis_workflow.jpg" alt="analysis workflow" width="620">
 </center>
 <p> </p>
-<p><a href="https://cran.r-project.org/package=baRulho">baRulho</a> offers functions for critical steps in this workflow (those in black, including ‘checks’) that required acoustic data manipulation and analysis. Additional functions from <a href="https://cran.r-project.org/package=warbleR">warbleR</a> can be used (and are used in this vignette) to complement functions in <a href="https://cran.r-project.org/package=baRulho">baRulho</a>. All these tools will be presented following the above workflow.</p>
+<p><a href="https://marce10.github.io/baRulho/">baRulho</a> offers functions for critical steps in this workflow (those in black, including ‘checks’) that required acoustic data manipulation and analysis. Additional functions from <a href="https://cran.r-project.org/package=warbleR">warbleR</a> can be used (and are used in this vignette) to complement functions in <a href="https://marce10.github.io/baRulho/">baRulho</a>. All these tools will be presented following the above workflow.</p>
 <p> </p>
 </div>
 <div id="synthesize-sounds" class="section level1">
@@ -181,8 +181,9 @@ synth.l &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/
                      <span class="dt">diff.fun =</span> <span class="st">"pure.tone"</span>, <span class="dt">selec.table =</span> <span class="ot">TRUE</span>, <span class="dt">path =</span> td)
 
 <span class="co"># plot spectro</span>
-<span class="kw">spectro</span>(synth.l<span class="op">$</span>wave, <span class="dt">scale =</span> <span class="ot">FALSE</span>, <span class="dt">palette =</span> reverse.topo.colors, <span class="dt">grid =</span> <span class="ot">FALSE</span>, <span class="dt">flim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">6</span>), <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">0</span>, <span class="dv">1</span>))</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-5-1.png" width="560"></p>
+<span class="kw">spectro</span>(synth.l<span class="op">$</span>wave, <span class="dt">scale =</span> <span class="ot">FALSE</span>, <span class="dt">palette =</span> reverse.topo.colors, 
+        <span class="dt">grid =</span> <span class="ot">FALSE</span>, <span class="dt">flim =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>,<span class="dv">6</span>), <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">20</span>, <span class="dv">0</span>, <span class="dv">1</span>))</code></pre></div>
+<p><img src="../../../../R%20package%20testing/baRulho/baRulho/vignettes/spectro_synth_song.png" alt="spectrogram syntehtic sounds" width="550"></p>
 <p> </p>
 <p>The function returns a list in which the first element is the selection table and the second one the wave object:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/class.html">class</a></span>(synth.l) </code></pre></div>
@@ -337,7 +338,8 @@ top.freq
 <p> </p>
 <p>The function also saves the associated ‘.wav’ file in the working directory (in this example <code><a href="https://rdrr.io/r/base/tempfile.html">tempdir()</a></code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/list.files.html">list.files</a></span>(<span class="dt">path =</span> td, <span class="dt">pattern =</span> <span class="st">"</span><span class="ch">\\</span><span class="st">.wav$"</span>)</code></pre></div>
-<pre><code>## [1] "2020-01-12_08:50:37.wav"</code></pre>
+<pre><code>## character(0)</code></pre>
+<pre><code>## [1] "2020-01-09_17:00:50.wav"</code></pre>
 <p> </p>
 </div>
 <div id="create-master-sound-file-for-playback" class="section level1">
@@ -811,11 +813,11 @@ Phae.long4.wav_3
 </table>
 </div>
 <p> </p>
-<p>Note that we also added a column for “distance” that will be useful for downsteam analyses (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an <code>extended_selection_table</code>, which is the data format that pretty much all <a href="https://cran.r-project.org/package=baRulho">baRulho</a> functions take.</p>
+<p>Note that we also added a column for “distance” that will be useful for downsteam analyses (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an <code>extended_selection_table</code>, which is the data format that pretty much all <a href="https://marce10.github.io/baRulho/">baRulho</a> functions take.</p>
 <p>This is somewhat a silly example as we are finding the start marker in the original master sound file. However, it demonstrates how this can be done on any re-recorded sound file.</p>
-<p>When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded signals. This is problematic for quantifying degradation in <a href="https://cran.r-project.org/package=baRulho">baRulho</a> (and other sound analysis software) as precise alignment of signal is crucial for the accuracy of downstream measures of signal degradation.</p>
+<p>When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded signals. This is problematic for quantifying degradation in <a href="https://marce10.github.io/baRulho/">baRulho</a> (and other sound analysis software) as precise alignment of signal is crucial for the accuracy of downstream measures of signal degradation.</p>
 <p>Misalignment can be fixed with the funciton <code><a href="../reference/spcc_align.html">spcc_align()</a></code>. This function uses spectrographic cross-correlation to sync the position in time of signals with regard to a reference signal. <code><a href="../reference/spcc_align.html">spcc_align()</a></code> takes the signal recorded at the closest distance to the source as the reference signal. The function calls <a href="https://cran.r-project.org/package=warbleR">warbleR</a>’s <code><a href="https://rdrr.io/pkg/warbleR/man/xcorr.html">xcorr()</a></code> and <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> (just as we did above) internally to align signals using cross-correlation.</p>
-<p><a href="https://cran.r-project.org/package=baRulho">baRulho</a> comes with an example data set called <code>playback_est_unaligned</code>, which contains signals in which the time position of signals is slightly unaligned. We can use this data to show how the function <code><a href="../reference/spcc_align.html">spcc_align()</a></code>:</p>
+<p><a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an example data set called <code>playback_est_unaligned</code>, which contains signals in which the time position of signals is slightly unaligned. We can use this data to show how the function <code><a href="../reference/spcc_align.html">spcc_align()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"playback_est_unaligned"</span>)
  
  <span class="co"># method 1</span>
@@ -823,8 +825,8 @@ playback_est_aligned &lt;-<span class="st"> </span><span class="kw"><a href="../
 <p>The output extended selection table contains the new start and end values after alignment.</p>
 <p>This is how the signals look before and after being aligned:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># rename sound files so aligned and unaligned signals are intercalated</span>
-unalg &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/rename_waves_est.html">rename_waves_est</a></span>(playback_est_unaligned, playback_est_unaligned<span class="op">$</span>sound.files, <span class="dt">new.selec =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="dt">by =</span> <span class="dv">2</span>)[<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(W)])
-alg &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/rename_waves_est.html">rename_waves_est</a></span>(playback_est_aligned, playback_est_aligned<span class="op">$</span>sound.files, <span class="dt">new.selec =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">2</span>, <span class="dv">200</span>, <span class="dt">by =</span> <span class="dv">2</span>)[<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(xa)])
+unalg &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/rename_waves_est.html">rename_waves_est</a></span>(playback_est_unaligned, playback_est_unaligned<span class="op">$</span>sound.files, <span class="dt">new.selec =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">1</span>, <span class="dv">200</span>, <span class="dt">by =</span> <span class="dv">2</span>)[<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(playback_est_unaligned)])
+alg &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/rename_waves_est.html">rename_waves_est</a></span>(playback_est_aligned, playback_est_aligned<span class="op">$</span>sound.files, <span class="dt">new.selec =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="dv">2</span>, <span class="dv">200</span>, <span class="dt">by =</span> <span class="dv">2</span>)[<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(playback_est_aligned)])
 
 <span class="co"># add label </span>
 unalg<span class="op">$</span>type &lt;-<span class="st"> "Before aligning"</span>
@@ -845,7 +847,7 @@ unalg.alg &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.i
 <div id="quantifying-signal-degradation" class="section level1">
 <h1 class="hasAnchor">
 <a href="#quantifying-signal-degradation" class="anchor"></a>Quantifying signal degradation</h1>
-<p>Most <a href="https://cran.r-project.org/package=baRulho">baRulho</a> functions are design to quantify acoustic signal degradation. There are a few important things to keep in mind about functions for quantifying degradation:</p>
+<p>Most <a href="https://marce10.github.io/baRulho/">baRulho</a> functions are design to quantify acoustic signal degradation. There are a few important things to keep in mind about functions for quantifying degradation:</p>
 <ul>
 <li>The package currently assumes that all recordings have been made with the same equipment and recording volume. This will be modified in future versions to allow for amplitude calibration of recordings.</li>
 <li>Wave envelope and frequency spectrum calculations are made after applying a bandpass filter within the frequency range of the reference signal (‘bottom.freq’ and ‘top.freq’ columns)</li>
@@ -859,7 +861,7 @@ unalg.alg &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.i
 <div id="required-data-structure" class="section level2">
 <h2 class="hasAnchor">
 <a href="#required-data-structure" class="anchor"></a>Required data structure</h2>
-<p>As mentioned above the data must be in <code>extended_selection_table</code> format. The data should also contain some additional information. <a href="https://cran.r-project.org/package=baRulho">baRulho</a> comes with an example <code>extended_selection_table</code> data set that can be used to understand the required data structure:</p>
+<p>As mentioned above the data must be in <code>extended_selection_table</code> format. The data should also contain some additional information. <a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an example <code>extended_selection_table</code> data set that can be used to understand the required data structure:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"playback_est"</span>)
 
 playback_est</code></pre></div>
@@ -2719,25 +2721,25 @@ br &lt;-<span class="st"> </span><span class="kw"><a href="../reference/blur_rat
 
 envs<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(envs<span class="op">$</span>distance)
 
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_classic</a></span>()</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-35-1.png" width="560"></p>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-39-1.png" width="560"></p>
 <p>Note than the <code>smooth</code> argument could change envelope shapes and related measurements. The following code sets <code>smooth = 800</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">envs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/blur_ratio.html">blur_ratio</a></span>(<span class="dt">X =</span> playback_est, <span class="dt">output =</span> <span class="st">"list"</span>, <span class="dt">ssmooth =</span> <span class="dv">1000</span>, <span class="dt">pb =</span> <span class="ot">FALSE</span>)<span class="op">$</span>envelopes
 
 envs<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(envs<span class="op">$</span>distance)
 
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_classic</a></span>()</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-36-1.png" width="560"></p>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-40-1.png" width="560"></p>
 <p> </p>
 </div>
 <div id="spectral-blur-ratio" class="section level3">
@@ -3699,26 +3701,26 @@ spctr &lt;-<span class="st"> </span>sbr<span class="op">$</span>spectra
 
 spctr<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(spctr<span class="op">$</span>distance)
 
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_classic</a></span>()</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-41-1.png" width="560"></p>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-45-1.png" width="560"></p>
 <p>We can also zoom in to the frequency range of the signals by subsetting the spectrum data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the frequencies higher than lowest bottom but lower than highest top freq</span>
 spctr &lt;-<span class="st"> </span>spctr[spctr<span class="op">$</span>freq <span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(playback_est<span class="op">$</span>bottom.freq) <span class="op">&amp;</span><span class="st"> </span>spctr<span class="op">$</span>freq <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(playback_est<span class="op">$</span>top.freq), ]
 
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_classic</a></span>()</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-42-1.png" width="560">  </p>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-46-1.png" width="560">  </p>
 </div>
 <div id="envelope-correlation" class="section level3">
 <h3 class="hasAnchor">
@@ -7434,7 +7436,7 @@ SUR-K1
 <p> </p>
 <hr>
 <p>Please report any bugs <a href="https://github.com/maRce10/baRulho/issues">here</a>.</p>
-<p>The package <a href="https://cran.r-project.org/package=baRulho">baRulho</a> should be cited as follows:</p>
+<p>The package <a href="https://marce10.github.io/baRulho/">baRulho</a> should be cited as follows:</p>
 <p>Araya-Salas, M. (2020), <em>baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R</em>. R package version 1.0.0.</p>
 <hr>
 </div>
@@ -7458,8 +7460,8 @@ SUR-K1
 ## Running under: Ubuntu 18.04.3 LTS
 ## 
 ## Matrix products: default
-## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
-## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## BLAS:   /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3
+## LAPACK: /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3
 ## 
 ## locale:
 ##  [1] LC_CTYPE=es_ES.UTF-8       LC_NUMERIC=C              

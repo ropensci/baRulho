@@ -94,7 +94,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2020-01-15”
+“2020-01-16”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -813,10 +813,10 @@ Phae.long4.wav_3
 </table>
 </div>
 <p> </p>
-<p>Note that we also added a column for “distance” that will be useful for downsteam analyses (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an <code>extended_selection_table</code>, which is the data format that pretty much all <a href="https://marce10.github.io/baRulho/">baRulho</a> functions take.</p>
+<p>Note that we also added a column for “distance” that will be useful for downstream analyses (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an <code>extended_selection_table</code>, which is the data format that pretty much all <a href="https://marce10.github.io/baRulho/">baRulho</a> functions take.</p>
 <p>This is somewhat a silly example as we are finding the start marker in the original master sound file. However, it demonstrates how this can be done on any re-recorded sound file.</p>
 <p>When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded signals. This is problematic for quantifying degradation in <a href="https://marce10.github.io/baRulho/">baRulho</a> (and other sound analysis software) as precise alignment of signal is crucial for the accuracy of downstream measures of signal degradation.</p>
-<p>Misalignment can be fixed with the funciton <code><a href="../reference/spcc_align.html">spcc_align()</a></code>. This function uses spectrographic cross-correlation to sync the position in time of signals with regard to a reference signal. <code><a href="../reference/spcc_align.html">spcc_align()</a></code> takes the signal recorded at the closest distance to the source as the reference signal. The function calls <a href="https://cran.r-project.org/package=warbleR">warbleR</a>’s <code><a href="https://rdrr.io/pkg/warbleR/man/xcorr.html">xcorr()</a></code> and <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> (just as we did above) internally to align signals using cross-correlation.</p>
+<p>Misalignment can be fixed with the function <code><a href="../reference/spcc_align.html">spcc_align()</a></code>. This function uses spectrogram cross-correlation to sync the position in time of signals with regard to a reference signal. <code><a href="../reference/spcc_align.html">spcc_align()</a></code> takes the signal recorded at the closest distance to the source as the reference signal. The function calls <a href="https://cran.r-project.org/package=warbleR">warbleR</a>’s <code><a href="https://rdrr.io/pkg/warbleR/man/xcorr.html">xcorr()</a></code> and <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> (just as we did above) internally to align signals using cross-correlation.</p>
 <p><a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an example data set called <code>playback_est_unaligned</code>, which contains signals in which the time position of signals is slightly unaligned. We can use this data to show how the function <code><a href="../reference/spcc_align.html">spcc_align()</a></code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"> <span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"playback_est_unaligned"</span>)
  
@@ -1631,7 +1631,7 @@ SUR-K1
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># count selection per recordings</span>
 <span class="kw"><a href="https://rdrr.io/r/base/unique.html">unique</a></span>(playback_est<span class="op">$</span>sound.files)</code></pre></div>
 <pre><code>## [1] "01m_re-rec.wav" "05m_re-rec.wav" "10m_re-rec.wav" "15m_re-rec.wav"</code></pre>
-<p>The data contains selections for 5 signal types as wel as 2 ambient noise selections at each distance/recording:</p>
+<p>The data contains selections for 5 signal types as well as 2 ambient noise selections at each distance/recording:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/table.html">table</a></span>(playback_est<span class="op">$</span>signal.type, playback_est<span class="op">$</span>distance)</code></pre></div>
 <table class="table table table-striped">
 <thead><tr>

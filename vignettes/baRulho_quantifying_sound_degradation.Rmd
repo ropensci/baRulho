@@ -641,13 +641,13 @@ kbl
 
 &nbsp;
 
-Note that we also added a column for "distance" that will be useful for downsteam analyses (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an `extended_selection_table`, which is the data format that pretty much all [baRulho](https://marce10.github.io/baRulho/) functions take. 
+Note that we also added a column for "distance" that will be useful for downstream analyses (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an `extended_selection_table`, which is the data format that pretty much all [baRulho](https://marce10.github.io/baRulho/) functions take. 
 
 This is somewhat a silly example as we are finding the start marker in the original master sound file. However, it demonstrates how this can be done on any re-recorded sound file.
 
 When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded signals. This is problematic for quantifying degradation in [baRulho](https://marce10.github.io/baRulho/) (and other sound analysis software) as precise alignment of signal is crucial for the accuracy of downstream measures of signal degradation. 
 
-Misalignment can be fixed with the funciton `spcc_align()`. This function uses spectrographic cross-correlation to sync the position in time of signals with regard to a reference signal. `spcc_align()` takes the signal recorded at the closest distance to the source as the reference signal. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `xcorr()` and `find_peaks()` (just as we did above) internally to align signals using cross-correlation. 
+Misalignment can be fixed with the function `spcc_align()`. This function uses spectrogram cross-correlation to sync the position in time of signals with regard to a reference signal. `spcc_align()` takes the signal recorded at the closest distance to the source as the reference signal. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `xcorr()` and `find_peaks()` (just as we did above) internally to align signals using cross-correlation. 
 
 [baRulho](https://marce10.github.io/baRulho/) comes with an example data set called  `playback_est_unaligned`, which contains signals in which the time position of signals is slightly unaligned. We can use this data to show how the function `spcc_align()`: 
 
@@ -741,7 +741,7 @@ unique(playback_est$sound.files)
 
 ```
 
-The data contains selections for 5 signal types as wel as 2 ambient noise selections at each distance/recording:
+The data contains selections for 5 signal types as well as 2 ambient noise selections at each distance/recording:
 
 ```{r, eval = FALSE}
 

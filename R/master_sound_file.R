@@ -188,7 +188,7 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
     sound.files = file.name, 
     selec =  1:(nrow(X) + 2), 
     start = c(delay, X$pb.start, X$pb.end[nrow(X)] + gap.duration), 
-    end = c(delay + dur_strt_mrkr, X$pb.end, X$pb.end[nrow(X)] + gap.duration + dur_end_mrkr)
+    end = c(delay + dur_strt_mrkr, X$pb.end, length(plbck@left) / plbck@samp.rate)
     )
 
   if (!is.null(X$bottom.freq))

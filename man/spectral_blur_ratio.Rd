@@ -45,7 +45,7 @@ plot, as in \code{\link[seewave]{spectro}}. Default is reverse.gray.colors.2.}
 \item{dest.path}{Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.}
 }
 \value{
-Data frame similar to input data, but also includes a new column (blur.ratio.spectrum)
+Data frame similar to input data, but also includes a new column (spectral.blur.ratio)
 with the blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid power spectrum (as probability mass functions (PMF)).  Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would a list including the data frame just described and a data frame with spectra (amplitude values) for all signals.
 }
 \description{

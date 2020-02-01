@@ -1,11 +1,11 @@
 citHeader("Please cite 'warbleR' as follows:")
 
 citEntry(entry = "MISC",
-        title = "baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals",
+        title = "baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R",
         author = personList(as.person("M. Araya-Salas")),
         year = "2019",
 #        journal = "Methods in Ecology and Evolution",
 #        url = "http://dx.doi.org/10.1111/2041-210X.12624", 
-        textVersion = "Araya-Salas, M. (2019), baRulho: a R package to evaluate habitat-induced degradation of (animal) acoustic signals. R package version 1.0.0."
+        textVersion = "Araya-Salas, M. (2019), baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0"
 )
 

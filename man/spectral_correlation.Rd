@@ -2,7 +2,7 @@
 % Please edit documentation in R/spectral_correlation.R
 \name{spectral_correlation}
 \alias{spectral_correlation}
-\title{Measure frequency spectrum correlation}
+\title{Measure frequency spectral correlation}
 \usage{
 spectral_correlation(X, parallel = 1, pb = TRUE, method = 1, 
 cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 70)
@@ -39,7 +39,7 @@ with the calculated frequency spectrum correlation coefficients.
 \code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
 }
 \details{
-spectrum correlation measures the similarity of two signals in the frequency domain. The function measures the spectrum correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectrum correlation are provided (see 'method' argument). Use \code{\link{spectral_blur_ratio}} to get spectra for plotting.
+spectral correlation measures the similarity of two signals in the frequency domain. The function measures the spectral correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectral correlation are provided (see 'method' argument). Use \code{\link{spectral_blur_ratio}} to get spectra for plotting.
 }
 \examples{
 {

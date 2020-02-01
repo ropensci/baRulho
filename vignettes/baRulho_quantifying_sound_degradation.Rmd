@@ -364,7 +364,7 @@ spectrograms(master.sf, path = td, by.song = "sound.files",
 
  <img src="example_master.wav.jpeg" alt="spectrogram of master file">
 
-Note that the output could also be exported to [Raven sound analysis software](http://www.birds.cornell.edu/brp/raven/RavenOverview.html) ([Cornell Lab of Ornithology](http://www.birds.cornell.edu)) for visualization or further manipulation using the function `exp_raven()` from the [Rraven](https://cran.r-project.org/package=Rraven) package. `exp_raven()` exports selections in the R environment to a '.txt' file that can be read in Raven:
+Note that the output could also be exported to [Raven sound analysis software](http://ravensoundsoftware.com/software/raven-pro) ([Cornell Lab of Ornithology](http://www.birds.cornell.edu)) for visualization or further manipulation using the function `exp_raven()` from the [Rraven](https://cran.r-project.org/package=Rraven) package. `exp_raven()` exports selections in the R environment to a '.txt' file that can be read in Raven:
  
 
 ```{r, eval = FALSE}
@@ -911,7 +911,7 @@ kbl
 ```
 &nbsp;
 
-<center><img src="spectral_blur_ratio_example.gif" alt="time sync with spcc_align"></center>
+<center><img src="spectral_blur_ratio_example.gif" alt="spectral blur-ratio"></center>
 
 &nbsp;
 
@@ -1080,7 +1080,7 @@ Finally, the function `spcc()` measures spectrogram cross-correlation as a metri
 
 ```{r, eval = TRUE}
 
-# run spcc distortion
+# run spcc
 spd <- spcc(X = playback_est, method = 1, pb = FALSE)
 
 # check output class

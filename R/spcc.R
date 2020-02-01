@@ -101,8 +101,8 @@ spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson"
   xcorrs <- warbleR::xcorr(X = X, wl = wl, ovlp = ovlp, wn = wn, cor.method = "pearson", parallel = parallel, pb = pb, compare.matrix = comp_mat)
   
   # put results back into X
-  X$cross.correlation <- NA
   X$reference <- NA
+  X$cross.correlation <- NA
   
   # add correlation and reference only for calculated correlations
   X$reference[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- as.character(xcorrs$X1)

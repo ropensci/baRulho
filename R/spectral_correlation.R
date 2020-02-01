@@ -1,4 +1,4 @@
-#' Measure frequency spectrum correlation
+#' Measure frequency spectral correlation
 #' 
 #' \code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
 #' @usage spectral_correlation(X, parallel = 1, pb = TRUE, method = 1, 
@@ -22,7 +22,7 @@
 #' with the calculated frequency spectrum correlation coefficients.
 #' @export
 #' @name spectral_correlation
-#' @details spectrum correlation measures the similarity of two signals in the frequency domain. The function measures the spectrum correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectrum correlation are provided (see 'method' argument). Use \code{\link{spectral_blur_ratio}} to get spectra for plotting. 
+#' @details spectral correlation measures the similarity of two signals in the frequency domain. The function measures the spectral correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectral correlation are provided (see 'method' argument). Use \code{\link{spectral_blur_ratio}} to get spectra for plotting. 
 #' @examples
 #' {
 #' # load example data
@@ -145,7 +145,7 @@ spectral_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   if (pb) write(file = "", x = "calculating envelope cross-correlations (step 2 of 2):")
   
   # calculate all envelops apply function
-  X$spectrum.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {
+  X$spectral.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {
     spctr_cor_FUN(y = X$TEMP....sgnl[x], z = X$reference[x])
   }) 
   

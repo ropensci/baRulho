@@ -1,7 +1,13 @@
-baRulho-package	baRulho
+atmospheric_attenuation	atmospheric_attenuation
 baRulho	baRulho
 blur_ratio	blur_ratio
-env_cor	env_cor
-excess_att	excess_att
+envelope_correlation	envelope_correlation
+excess_attenuation	excess_attenuation
+master_sound_file	master_sound_file
 playback_est	playback_est
-xcorr_distortion	xcorr_distortion
+playback_est_unaligned	playback_est_unaligned
+snr	snr
+spcc	spcc
+spcc_align	spcc_align
+spectral_blur_ratio	spectral_blur_ratio
+spectral_correlation	spectral_correlation

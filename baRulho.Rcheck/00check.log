@@ -1,4 +1,4 @@
-* using log directory ‘/home/m/Dropbox/baRulho/baRulho.Rcheck’
+* using log directory ‘/home/m/Dropbox/R_package_testing/baRulho/baRulho/baRulho.Rcheck’
 * using R version 3.6.1 (2019-07-05)
 * using platform: x86_64-pc-linux-gnu (64-bit)
 * using session charset: UTF-8
@@ -11,6 +11,8 @@ Maintainer: ‘Marcelo Araya-Salas <marceloa27@gmail.com>’
 
 New submission
 
+Package has a VignetteBuilder field but no prebuilt vignette index.
+
 The build time stamp is missing.
 * checking package namespace information ... OK
 * checking package dependencies ... OK
@@ -19,6 +21,7 @@ The build time stamp is missing.
 * checking for executable files ... OK
 * checking for hidden files and directories ... NOTE
 Found the following hidden files and directories:
+  .RData
   .Rhistory
   .gitignore
   .Rproj.user
@@ -27,54 +30,20 @@ These were most likely included in error. See section ‘Package
 structure’ in the ‘Writing R Extensions’ manual.
 
 CRAN-pack does not know about
+  .RData
   .git
 * checking for portable file names ... NOTE
 Found the following non-portable file paths:
-  baRulho/.Rproj.user/shared/notebooks/82F16E59-testing-checking warbleR function nov-16/1/773A70947598DB37/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A709439331759/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A70943A0DE29A/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A709447F49319/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A709449923393/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A70945708B3B2/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A709475396448/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A70947A3D8167/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A70949346FBDF/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094AADF5C67/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094AD673C51/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094B5EB03E5/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094BC241D3F/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094C5BF8C73/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094F78D35F9/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094FEA36F9D/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/s/chunks.json
-  baRulho/.Rproj.user/shared/notebooks/82F16E59-testing-checking warbleR function nov-16/1/773A70947598DB37
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A709439331759
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A70943A0DE29A
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A709447F49319
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A709449923393
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A70945708B3B2
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A709475396448
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A70947A3D8167
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A70949346FBDF
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094AADF5C67
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094AD673C51
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094B5EB03E5
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094BC241D3F
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094C5BF8C73
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094F78D35F9
-  baRulho/.Rproj.user/shared/notebooks/988A10FB-testing-checking baRulho function oct-19/1/773A7094FEA36F9D
+  baRulho/.Rproj.user/shared/notebooks/84416F4-testing-checking baRulho function oct-19/1/8E659706823F1118/chunks.json
+  baRulho/.Rproj.user/shared/notebooks/84416F4-testing-checking baRulho function oct-19/1/s/chunks.json
+  baRulho/.Rproj.user/shared/notebooks/84416F4-testing-checking baRulho function oct-19/1/8E659706823F1118
 
 Tarballs are only required to store paths of up to 100 bytes and cannot
 store those of more than 256 bytes, with restrictions including to 100
 bytes for the final component.
 See section ‘Package structure’ in the ‘Writing R Extensions’ manual.
 * checking for sufficient/correct file permissions ... OK
-* checking serialization versions ... WARNING
-Found file(s) with version 3 serialization:
-  ‘data/playback_est.rda’
-Such files are only readable in R >= 3.5.0.
-Recreate them with R < 3.5.0 or save(version = 2) or saveRDS(version =
-2) as appropriate
+* checking serialization versions ... OK
 * checking whether package ‘baRulho’ can be installed ... OK
 * checking installed package size ... OK
 * checking package directory ... OK
@@ -126,9 +95,29 @@ Most likely ‘inst/CITATION’ should be used instead.
   
   Note: significantly better compression could be obtained
         by using R CMD build --resave-data
-                   old_size new_size compress
-  playback_est.rda    1.1Mb    871Kb       xz
+                             old_size new_size compress
+  playback_est.rda              374Kb    199Kb    bzip2
+  playback_est_unaligned.rda    198Kb    114Kb    bzip2
+* checking files in ‘vignettes’ ... WARNING
+Files in the 'vignettes' directory but no files in 'inst/doc':
+  ‘align-crop-optimize.gif’, ‘analysis_workflow.jpg’,
+    ‘baRulho_quantifying_sound_degradation.Rmd’,
+    ‘blur_ratio_example.gif’, ‘example_master.wav.jpeg’,
+    ‘example_master_table.jpg’, ‘spcc_align_results.gif’,
+    ‘spectral_blur_ratio_example.gif’, ‘spectro_synth_song.png’,
+    ‘synthetic_master.wav.jpeg’
 * checking examples ... OK
-* checking PDF version of manual ... OK
+* checking for unstated dependencies in vignettes ... OK
+* checking package vignettes in ‘inst/doc’ ... WARNING
+dir.exists(dir) is not TRUE
+Package vignette without corresponding single PDF/HTML:
+   ‘baRulho_quantifying_sound_degradation.Rmd’
+
+* checking re-building of vignette outputs ... OK
+* checking PDF version of manual ... WARNING
+LaTeX errors when creating PDF version.
+This typically indicates Rd problems.
+* checking PDF version of manual without hyperrefs or index ... ERROR
+Re-running with no redirection of stdout/stderr.
 * DONE
-Status: 3 WARNINGs, 5 NOTEs
+Status: 1 ERROR, 5 WARNINGs, 5 NOTEs

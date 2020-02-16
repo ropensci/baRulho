@@ -383,6 +383,8 @@ Both sound files and annotations can be visualized in Raven:
 
 Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details. 
 
+The relative amplitude of markers can be adjusted with the `amp.marker` argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than signals, which increases the chances of being "detected" at further distances regardless of the amplitude of signals. 
+
 # Time sync re-recorded sounds
 
 Once we went to the field (or lab) and re-recorded the master sound files at different distances, we are ready to start with data analysis. The first step for getting the data ready for analysis involves finding signals within the re-recorded sound files. We only need to align the start marker between the master playback and the re-recorded sound files, based on the fact that the time difference between the marker and the signals should be the same in both cases:
@@ -704,7 +706,7 @@ Most [baRulho](https://marce10.github.io/baRulho/) functions are design to quant
 ## Required data structure
 
 As mentioned above the data must be in `extended_selection_table` format. The data should also contain some additional information. [baRulho](https://marce10.github.io/baRulho/) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
-
+s
 ```{r,eval=FALSE}
 
 data("playback_est")

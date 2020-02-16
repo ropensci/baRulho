@@ -72,6 +72,10 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   if (nrow(X) < 2) 
     stop("'X' must have at least 2 rows (selections)")
   
+  # save par settings
+  oldpar <- par(no.readonly = TRUE)   
+  on.exit(par(oldpar))
+    
   # remove margins in graphic device
   par(mar = rep(0, 4))
   

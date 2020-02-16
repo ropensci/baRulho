@@ -187,13 +187,19 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
             0.2, 1, 0, 1),  # right pannel envelopes
           nrow = 3, byrow = TRUE)
         
+        # save par settings
+        oldpar <- par(no.readonly = TRUE)   
+        on.exit(par(oldpar)) 
+        
         # close if open any screen
         invisible(close.screen(all.screens = TRUE))
+        
         
         split.screen(ly.mat)
         
         # plot envelopes
         screen(3)
+        
         
         # set image margins
         par(mar = rep(4, 0, 4, 4))

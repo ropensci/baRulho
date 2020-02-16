@@ -94,7 +94,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2020-02-01”
+“2020-02-16”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -396,6 +396,7 @@ master.sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/m
 <p><img src="example_master_table.jpg" alt="Raven view"></p>
 <p> </p>
 <p>Take a look at the <a href="https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html">Rraven vignette</a> for more details.</p>
+<p>The relative amplitude of markers can be adjusted with the <code>amp.marker</code> argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than signals, which increases the chances of being “detected” at further distances regardless of the amplitude of signals.</p>
 </div>
 <div id="time-sync-re-recorded-sounds" class="section level1">
 <h1 class="hasAnchor">
@@ -861,7 +862,7 @@ unalg.alg &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.i
 <div id="required-data-structure" class="section level2">
 <h2 class="hasAnchor">
 <a href="#required-data-structure" class="anchor"></a>Required data structure</h2>
-<p>As mentioned above the data must be in <code>extended_selection_table</code> format. The data should also contain some additional information. <a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an example <code>extended_selection_table</code> data set that can be used to understand the required data structure:</p>
+<p>As mentioned above the data must be in <code>extended_selection_table</code> format. The data should also contain some additional information. <a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an example <code>extended_selection_table</code> data set that can be used to understand the required data structure: s</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"playback_est"</span>)
 
 playback_est</code></pre></div>
@@ -7475,9 +7476,9 @@ SUR-K1
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] viridis_0.5.1      viridisLite_0.3.0  ggplot2_3.2.1      kableExtra_1.1.0  
-## [5] baRulho_1.0.0      warbleR_1.1.21     NatureSounds_1.0.1 seewave_2.1.4     
-## [9] tuneR_1.3.3       
+##  [1] viridis_0.5.1      viridisLite_0.3.0  ggplot2_3.2.1      kableExtra_1.1.0  
+##  [5] baRulho_1.0.0      warbleR_1.1.21     NatureSounds_1.0.2 knitr_1.26        
+##  [9] seewave_2.1.4      tuneR_1.3.3       
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.3       fftw_1.0-5       assertthat_0.2.1 zeallot_0.1.0   
@@ -7495,7 +7496,7 @@ SUR-K1
 ## [49] xml2_1.2.2       vctrs_0.2.0      rjson_0.2.20     tools_3.6.1     
 ## [53] glue_1.3.1       purrr_0.3.3      maps_3.3.0       hms_0.5.2       
 ## [57] parallel_3.6.1   yaml_2.2.0       colorspace_1.4-1 rvest_0.3.5     
-## [61] memoise_1.1.0    knitr_1.26</code></pre>
+## [61] memoise_1.1.0</code></pre>
 </div>
   </div>
 

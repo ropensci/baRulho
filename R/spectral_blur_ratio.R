@@ -184,6 +184,10 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
             0.2, 1, 0, 1),  # right pannel spectra
           nrow = 3, byrow = TRUE)
         
+        # save par settings
+        oldpar <- par(no.readonly = TRUE)   
+        on.exit(par(oldpar))
+        
         # close if open any screen
         invisible(close.screen(all.screens = TRUE))
         

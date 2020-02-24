@@ -42,7 +42,7 @@ The main features of the package are:
 
  - The use of loops to apply tasks through acoustic signals referenced in a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR))
  - The production of image files with graphic representations of sound in time and/or frequency that let users verify acoustic analyses 
- - The use extended selection tables (sensu [warbleR](https://cran.r-project.org/package=warbleR)) as the object format to input acoustic data and annotations (except for `atmospheric_attenuation()`) and to output results 
+ - The use of extended selection tables (sensu [warbleR](https://cran.r-project.org/package=warbleR)) as the object format to input acoustic data and annotations (except for `atmospheric_attenuation()`) and to output results 
  - The use of parallelization to distribute tasks among several cores to improve computational efficiency
 
 The package can be install/load from CRAN as follows:
@@ -87,7 +87,7 @@ td <- tempdir()
 
 For this vignette we will also need a few more packages:
 
-```{r}
+```{r load packages, eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
 
 library(warbleR)
 library(ggplot2)
@@ -114,7 +114,7 @@ The package requires the data to be input as extended selection tables. An exten
 
 -**Test signal**: signals re-recorded far from the source to test for transmission/degradation (also refer to as 're-recorded' signals).
 
--**Degradation**: term use to describe any changes in the structure of a signal when transmitted in a given habitat (note that there is no agreement on this terminology in the scientific community).
+-**Degradation**: term used to describe any changes in the structure of a signal when transmitted in a given habitat (note that there is no agreement on this terminology in the scientific community).
 
 </div>
 
@@ -142,7 +142,7 @@ For instance, Tobias et al (2010) studied whether acoustic adaptation (a special
 
 > "Tones were synthesized at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz) to encompass the range of maximum avian auditory sensitivity (Dooling 1982). At each frequency, we generated two sequences of two 100-msec tones. One sequence had  a  relatively  short  interval  of  150  msec,  close  to  the  mean internote interval in our sample (152± 4 msec). The other sequence had a longer interval of 250 msec, close to the mean maximum internote interval in our sample (283± 74 msec). The first sequence reflects a fast-paced song and the second a slower paced song  (sensu  Slabbekoorn  et  al.  2007).  The  master  file  (44100 Hz/16 bit WAV) thereby consisted of a series of 12 pairs of artificial 100-ms constant-frequency tones at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz)." 
 
-We can synthesize the same pure tones using the function `sim_songs()` from the package [warbleR](https://cran.r-project.org/package=warbleR). The function requires 1) the number of tones to synthesize (argument `n`, 2) the duration of the tones (`durs`, in seconds, 3) the duration of the intervals (`gaps`, in seconds and 3) the frequencies for each tone to be synthesized (`freqs`, in kHz). In addition, the argument `diff.fun` should be set to "pure.tone" and the argument `harm` to 1 to remove harmonics. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR)) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument `selec.table = TRUE`. This can be done as follows:
+We can synthesize the same pure tones using the function `sim_songs()` from the package [warbleR](https://cran.r-project.org/package=warbleR). The function requires 1) the number of tones to synthesize (argument `n`), 2) the duration of the tones (`durs`, in seconds), 3) the duration of the intervals (`gaps`, in seconds) and 4) the frequencies for each tone to be synthesized (`freqs`, in kHz). In addition, the argument `diff.fun` should be set to "pure.tone" and the argument `harm` to 1 to remove harmonics. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR)) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument `selec.table = TRUE`. This can be done as follows:
 
 
 ```{r, eval = FALSE}

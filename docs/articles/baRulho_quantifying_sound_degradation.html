@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2020-02-16”
+“2020-02-24”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -118,7 +118,7 @@
 <ul>
 <li>The use of loops to apply tasks through acoustic signals referenced in a selection table (sensu <a href="https://cran.r-project.org/package=warbleR">warbleR</a>)</li>
 <li>The production of image files with graphic representations of sound in time and/or frequency that let users verify acoustic analyses</li>
-<li>The use extended selection tables (sensu <a href="https://cran.r-project.org/package=warbleR">warbleR</a>) as the object format to input acoustic data and annotations (except for <code><a href="../reference/atmospheric_attenuation.html">atmospheric_attenuation()</a></code>) and to output results</li>
+<li>The use of extended selection tables (sensu <a href="https://cran.r-project.org/package=warbleR">warbleR</a>) as the object format to input acoustic data and annotations (except for <code><a href="../reference/atmospheric_attenuation.html">atmospheric_attenuation()</a></code>) and to output results</li>
 <li>The use of parallelization to distribute tasks among several cores to improve computational efficiency</li>
 </ul>
 <p>The package can be install/load from CRAN as follows:</p>
@@ -140,7 +140,6 @@ td &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/bas
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(warbleR)
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(viridis)</code></pre></div>
-<pre><code>## Carregando pacotes exigidos: viridisLite</code></pre>
 <div id="inputting-acoustic-data-and-annotations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#inputting-acoustic-data-and-annotations" class="anchor"></a>Inputting acoustic data and annotations</h3>
@@ -152,7 +151,7 @@ td &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/bas
 <p>-<strong>Signal type</strong>: signal category. For instance song types (e.g. A, B, C), call types (alert, foraging, etc).</p>
 <p>-<strong>Ambient noise</strong>: energy from background sounds in the recording, excluding signals of interest.</p>
 <p>-<strong>Test signal</strong>: signals re-recorded far from the source to test for transmission/degradation (also refer to as ‘re-recorded’ signals).</p>
-<p>-<strong>Degradation</strong>: term use to describe any changes in the structure of a signal when transmitted in a given habitat (note that there is no agreement on this terminology in the scientific community).</p>
+<p>-<strong>Degradation</strong>: term used to describe any changes in the structure of a signal when transmitted in a given habitat (note that there is no agreement on this terminology in the scientific community).</p>
 </div>
 <p> </p>
 <hr>
@@ -175,7 +174,7 @@ td &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/bas
 <blockquote>
 <p>“Tones were synthesized at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz) to encompass the range of maximum avian auditory sensitivity (Dooling 1982). At each frequency, we generated two sequences of two 100-msec tones. One sequence had a relatively short interval of 150 msec, close to the mean internote interval in our sample (152± 4 msec). The other sequence had a longer interval of 250 msec, close to the mean maximum internote interval in our sample (283± 74 msec). The first sequence reflects a fast-paced song and the second a slower paced song (sensu Slabbekoorn et al. 2007). The master file (44100 Hz/16 bit WAV) thereby consisted of a series of 12 pairs of artificial 100-ms constant-frequency tones at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz).”</p>
 </blockquote>
-<p>We can synthesize the same pure tones using the function <code><a href="https://rdrr.io/pkg/warbleR/man/sim_songs.html">sim_songs()</a></code> from the package <a href="https://cran.r-project.org/package=warbleR">warbleR</a>. The function requires 1) the number of tones to synthesize (argument <code>n</code>, 2) the duration of the tones (<code>durs</code>, in seconds, 3) the duration of the intervals (<code>gaps</code>, in seconds and 3) the frequencies for each tone to be synthesized (<code>freqs</code>, in kHz). In addition, the argument <code>diff.fun</code> should be set to “pure.tone” and the argument <code>harm</code> to 1 to remove harmonics. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu <a href="https://cran.r-project.org/package=warbleR">warbleR</a>) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument <code>selec.table = TRUE</code>. This can be done as follows:</p>
+<p>We can synthesize the same pure tones using the function <code><a href="https://rdrr.io/pkg/warbleR/man/sim_songs.html">sim_songs()</a></code> from the package <a href="https://cran.r-project.org/package=warbleR">warbleR</a>. The function requires 1) the number of tones to synthesize (argument <code>n</code>), 2) the duration of the tones (<code>durs</code>, in seconds), 3) the duration of the intervals (<code>gaps</code>, in seconds) and 4) the frequencies for each tone to be synthesized (<code>freqs</code>, in kHz). In addition, the argument <code>diff.fun</code> should be set to “pure.tone” and the argument <code>harm</code> to 1 to remove harmonics. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu <a href="https://cran.r-project.org/package=warbleR">warbleR</a>) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument <code>selec.table = TRUE</code>. This can be done as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># synthesize</span>
 synth.l &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/sim_songs.html">sim_songs</a></span>(<span class="dt">n =</span> <span class="dv">6</span>, <span class="dt">durs =</span> <span class="fl">0.1</span>, <span class="dt">freqs =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.5</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>), <span class="dt">harms =</span> <span class="dv">1</span>, <span class="dt">gaps =</span> <span class="fl">0.15</span>, 
                      <span class="dt">diff.fun =</span> <span class="st">"pure.tone"</span>, <span class="dt">selec.table =</span> <span class="ot">TRUE</span>, <span class="dt">path =</span> td)
@@ -2728,7 +2727,7 @@ envs<span class="op">$</span>distance &lt;-<span class="st"> </span><span class=
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-39-1.png" width="560"></p>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-38-1.png" width="560"></p>
 <p>Note than the <code>smooth</code> argument could change envelope shapes and related measurements. The following code sets <code>smooth = 800</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">envs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/blur_ratio.html">blur_ratio</a></span>(<span class="dt">X =</span> playback_est, <span class="dt">output =</span> <span class="st">"list"</span>, <span class="dt">ssmooth =</span> <span class="dv">1000</span>, <span class="dt">pb =</span> <span class="ot">FALSE</span>)<span class="op">$</span>envelopes
 
@@ -2740,7 +2739,7 @@ envs<span class="op">$</span>distance &lt;-<span class="st"> </span><span class=
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-40-1.png" width="560"></p>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-39-1.png" width="560"></p>
 <p> </p>
 </div>
 <div id="spectral-blur-ratio" class="section level3">
@@ -3709,7 +3708,7 @@ spctr<span class="op">$</span>distance &lt;-<span class="st"> </span><span class
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-45-1.png" width="560"></p>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-44-1.png" width="560"></p>
 <p>We can also zoom in to the frequency range of the signals by subsetting the spectrum data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the frequencies higher than lowest bottom but lower than highest top freq</span>
 spctr &lt;-<span class="st"> </span>spctr[spctr<span class="op">$</span>freq <span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(playback_est<span class="op">$</span>bottom.freq) <span class="op">&amp;</span><span class="st"> </span>spctr<span class="op">$</span>freq <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(playback_est<span class="op">$</span>top.freq), ]
@@ -3721,7 +3720,7 @@ spctr &lt;-<span class="st"> </span>spctr[spctr<span class="op">$</span>freq <sp
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
-<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-46-1.png" width="560">  </p>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-45-1.png" width="560">  </p>
 </div>
 <div id="envelope-correlation" class="section level3">
 <h3 class="hasAnchor">
@@ -7477,7 +7476,7 @@ SUR-K1
 ## 
 ## other attached packages:
 ##  [1] viridis_0.5.1      viridisLite_0.3.0  ggplot2_3.2.1      kableExtra_1.1.0  
-##  [5] baRulho_1.0.0      warbleR_1.1.21     NatureSounds_1.0.2 knitr_1.26        
+##  [5] baRulho_1.0.1      warbleR_1.1.21     NatureSounds_1.0.2 knitr_1.26        
 ##  [9] seewave_2.1.4      tuneR_1.3.3       
 ## 
 ## loaded via a namespace (and not attached):

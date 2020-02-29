@@ -199,7 +199,7 @@ synth.l$selec.table
 
 kbl <- kable(synth.l$selec_table, align = "c", row.names = F,  format = "html", escape = F)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 
@@ -325,7 +325,6 @@ spectrograms(synth.master.sf, path = td, by.song = "sound.files",
 
  <img src="synthetic_master.wav.jpeg" alt="spectrogram of master file">
 
-
 The function can also create a master sound file from sounds from different sounds files, as is likely the case with recordings collected in the field. The following example shows how to create a master sound file using several sound files. The code uses the example data and recordings from the package [warbleR](https://cran.r-project.org/package=warbleR):
 
 ```{r, eval = FALSE, echo = TRUE}
@@ -383,7 +382,7 @@ Both sound files and annotations can be visualized in Raven:
 
 Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details. 
 
-The relative amplitude of markers can be adjusted with the `amp.marker` argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than signals, which increases the chances of being "detected" at further distances regardless of the amplitude of signals. 
+Note that the start and end markers are placed at relatively low amplitudes so they are less affected by degradation. The frequency range of markers can be set with argument `flim`. The relative amplitude of markers can also be adjusted with the `amp.marker` argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than signals. These two features should increases the chances of being "detected" at further distances regardless of the amplitude of signals. 
 
 # Time sync re-recorded sounds
 

@@ -130,7 +130,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>master_sound_file</span>(<span class='no'>X</span>, <span class='no'>file.name</span>, <span class='kw'>dest.path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>delay</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-<span class='kw'>gap.duration</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>amp.marker</span> <span class='kw'>=</span> <span class='fl'>2</span>)</pre>
+<span class='kw'>gap.duration</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>amp.marker</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>flim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>4</span>))</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,6 +163,10 @@ If <code>NULL</code> (default) then the current working directory will be used i
     <tr>
       <th>amp.marker</th>
       <td><p>Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of signals, so it is picked up at further distances. Default is 2.</p></td>
+    </tr>
+    <tr>
+      <th>flim</th>
+      <td><p>Numeric vector of length 2 to control the frequency range in which the markers would be found. If <code>NULL</code> markers would be display across the whole frequency range. Default is c(0, 4).</p></td>
     </tr>
     </table>
 

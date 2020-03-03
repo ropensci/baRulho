@@ -94,7 +94,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2020-02-29”
+“2020-03-02”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -363,7 +363,7 @@ synth.master.sf &lt;-<span class="st"> </span><span class="kw"><a href="../refer
 <p>The function saves the master sound file as a wave file and returns a selection table in the R environment with the time and frequency ‘coordinates’ of the signals in that file. We can look at the spectrogram of the output file using the <a href="https://cran.r-project.org/package=warbleR">warbleR</a> function <code><a href="https://rdrr.io/pkg/warbleR/man/spectrograms.html">spectrograms()</a></code> as follows:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot spectro (saved in working directory)</span>
 <span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/spectrograms.html">spectrograms</a></span>(synth.master.sf, <span class="dt">path =</span> td, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>, 
-           <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>))</code></pre></div>
+           <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">osci =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="synthetic_master.wav.jpeg" alt="spectrogram of master file"></p>
 <p>The function can also create a master sound file from sounds from different sounds files, as is likely the case with recordings collected in the field. The following example shows how to create a master sound file using several sound files. The code uses the example data and recordings from the package <a href="https://cran.r-project.org/package=warbleR">warbleR</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># load example data from warbleR</span>
@@ -405,9 +405,34 @@ master.sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/m
 <img src="align-crop-optimize.gif" alt="Align recordings diagram" width="550">
 </center>
 <p> </p>
-<p>To find the location of the start marker we can use the <a href="https://cran.r-project.org/package=warbleR">warbleR</a> functions <code><a href="https://rdrr.io/pkg/warbleR/man/xcorr.html">xcorr()</a></code> to run a cross-correlation of the marker across the re-recorded sound file and <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> to determine the exact time in which the marker is found. See an example of how this works below (check <a href="https://cran.r-project.org/package=warbleR">warbleR</a> documentation for more information on how these functions work):</p>
+<p>To simulate re-recorded sound files we will make two copies of the master sound file, add some silence at the beggining (1 and 2 seconds) and add noise:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read master</span>
+exmp.master &lt;-<span class="st"> </span><span class="kw">readWave</span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(td, <span class="st">"example_master.wav"</span>))
+
+<span class="co"># add 1 s silence and create first copy</span>
+exmp.test1 &lt;-<span class="st"> </span><span class="kw">addsilw</span>(<span class="dt">wave =</span> exmp.master, <span class="dt">at =</span> <span class="st">"start"</span>, <span class="dt">d =</span> <span class="dv">1</span>, <span class="dt">output =</span> <span class="st">"Wave"</span>, <span class="dt">f =</span> exmp.master<span class="op">@</span>samp.rate)
+
+<span class="co"># add 2 s silence and create second copy</span>
+exmp.test2 &lt;-<span class="st"> </span><span class="kw">addsilw</span>(<span class="dt">wave =</span> exmp.master, <span class="dt">at =</span> <span class="st">"start"</span>, <span class="dt">d =</span> <span class="dv">2</span>, <span class="dt">output =</span> <span class="st">"Wave"</span>, <span class="dt">f =</span> exmp.master<span class="op">@</span>samp.rate)
+
+<span class="co"># make noise</span>
+ns &lt;-<span class="st"> </span><span class="kw">noisew</span>(<span class="dt">f =</span> exmp.master<span class="op">@</span>samp.rate, <span class="dt">d =</span> <span class="kw">duration</span>(exmp.test2) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">output =</span> <span class="st">"Wave"</span>)
+
+<span class="co"># make noise exactly the same length and add noise to 2 examples</span>
+exmp.test1<span class="op">@</span>left &lt;-<span class="st"> </span>exmp.test1<span class="op">@</span>left <span class="op">+</span><span class="st"> </span>(ns<span class="op">@</span>left[<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(exmp.test1<span class="op">@</span>left)] <span class="op">*</span><span class="st"> </span><span class="dv">150</span>)
+exmp.test2<span class="op">@</span>left &lt;-<span class="st"> </span>exmp.test2<span class="op">@</span>left <span class="op">+</span><span class="st"> </span>(ns<span class="op">@</span>left[<span class="dv">1</span><span class="op">:</span><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(exmp.test2<span class="op">@</span>left)] <span class="op">*</span><span class="st"> </span><span class="dv">150</span>)
+
+<span class="co"># normalize both  before saving</span>
+exmp.test1 &lt;-<span class="st"> </span><span class="kw">normalize</span>(exmp.test1, <span class="dt">unit =</span> <span class="st">"16"</span>)
+exmp.test2 &lt;-<span class="st"> </span><span class="kw">normalize</span>(exmp.test2, <span class="dt">unit =</span> <span class="st">"16"</span>)
+
+<span class="co"># save simulated re-recorded sound files</span>
+<span class="kw">writeWave</span>(<span class="dt">object =</span> exmp.test1, <span class="dt">filename =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(td, <span class="st">"example_test1.wav"</span>), <span class="dt">extensible =</span> <span class="ot">FALSE</span>)
+
+<span class="kw">writeWave</span>(<span class="dt">object =</span> exmp.test2, <span class="dt">filename =</span> <span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(td, <span class="st">"example_test2.wav"</span>), <span class="dt">extensible =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>To find the location of the start marker on these (simulated) re-recorded sound files we can use the <a href="https://cran.r-project.org/package=warbleR">warbleR</a> functions <code><a href="https://rdrr.io/pkg/warbleR/man/xcorr.html">xcorr()</a></code> to run a cross-correlation of the marker across the sound files and <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> to determine the exact time in which the marker are found. See an example of how this works below (check <a href="https://cran.r-project.org/package=warbleR">warbleR</a> documentation for more information on how these functions work):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a matrix that contains the selection/files to be cross-correlated</span>
-comp_mat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(master.sf<span class="op">$</span>sound.files[<span class="dv">1</span>], master.sf<span class="op">$</span>selec[<span class="dv">1</span>], <span class="dt">sep =</span> <span class="st">"-"</span>), <span class="st">"example_master.wav"</span>),<span class="dt">nrow =</span> <span class="dv">1</span>)
+comp_mat &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(master.sf<span class="op">$</span>sound.files[<span class="dv">1</span>], master.sf<span class="op">$</span>selec[<span class="dv">1</span>], <span class="dt">sep =</span> <span class="st">"-"</span>), <span class="dv">2</span>), <span class="st">"example_test1.wav"</span>, <span class="st">"example_test2.wav"</span>), <span class="dt">nrow =</span> <span class="dv">2</span>)
 
 <span class="co"># run cross correlation</span>
 xc &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/xcorr.html">xcorr</a></span>(master.sf, <span class="dt">compare.matrix =</span> comp_mat, <span class="dt">wl =</span> <span class="dv">300</span>, <span class="dt">ovlp =</span> <span class="dv">30</span>, <span class="dt">path =</span> td, <span class="dt">output =</span> <span class="st">"list"</span>)
@@ -439,62 +464,59 @@ time
 score
 </th>
 </tr></thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav
 </td>
 <td style="text-align:center;">
 1
 </td>
 <td style="text-align:center;">
-0.9999883
+2.00062
 </td>
 <td style="text-align:center;">
-1.998655
+2.99928
 </td>
 <td style="text-align:center;">
 example_master.wav-1
 </td>
 <td style="text-align:center;">
-1.499322
+2.49995
 </td>
 <td style="text-align:center;">
-0.9452399
+0.882420
 </td>
-</tr></tbody>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+3.00084
+</td>
+<td style="text-align:center;">
+3.99950
+</td>
+<td style="text-align:center;">
+example_master.wav-1
+</td>
+<td style="text-align:center;">
+3.50017
+</td>
+<td style="text-align:center;">
+0.879969
+</td>
+</tr>
+</tbody>
 </table>
-<p>The output of <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> indicate that the start marker is found starting at ~1 s (0.9999883 s), which was expected as <code><a href="../reference/master_sound_file.html">master_sound_file()</a></code> inserts a 1 second silence at the beginning of the master sound file. With this information we can infer the position of all other selections in the new recordings. The start of all signals in the re-recorded file can be calculated as the time difference between the start marker and each signal in the master sound file plus the start of the marker in the new file. Something like this:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># start on new recording</span>
-new.start  &lt;-<span class="st"> </span>master.sf<span class="op">$</span>start[<span class="op">!</span>master.sf<span class="op">$</span>orig.sound.file <span class="op">%in%</span><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"start_marker"</span>, <span class="st">"end_marker"</span>)] <span class="op">-</span><span class="st"> </span>master.sf<span class="op">$</span>start[<span class="dv">1</span>] <span class="op">+</span><span class="st"> </span>pks<span class="op">$</span>start[<span class="dv">1</span>]
-
-new.start </code></pre></div>
-<pre><code>##  [1] 2.298655 2.771722 3.234833 3.709811 4.142433 4.568611 4.999855 5.430077
-##  [9] 5.861322 6.306788 6.751011</code></pre>
-<p>The end of the signals would be their duration plus the start we just calculated:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get duration</span>
-durs  &lt;-<span class="st"> </span>master.sf<span class="op">$</span>end[<span class="op">!</span>master.sf<span class="op">$</span>orig.sound.file <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"start_marker"</span>, <span class="st">"end_marker"</span>)] <span class="op">-</span><span class="st"> </span>master.sf<span class="op">$</span>start[<span class="op">!</span>master.sf<span class="op">$</span>orig.sound.file <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"start_marker"</span>, <span class="st">"end_marker"</span>)]
-
-new.end &lt;-<span class="st"> </span>new.start <span class="op">+</span><span class="st"> </span>durs
-  
-new.end</code></pre></div>
-<pre><code>##  [1] 2.471722 2.934833 3.409811 3.842433 4.268611 4.699855 5.130077 5.561321
-##  [9] 6.006789 6.451010 6.896167</code></pre>
-<p>This is all the data we need to create a new selection table that will allow us to measure acoustic parameters on re-recorded signals. The new selection table can be put together as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get subset excluding markers</span>
-new.st  &lt;-<span class="st"> </span>master.sf[<span class="op">!</span>master.sf<span class="op">$</span>orig.sound.file <span class="op">%in%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"start_marker"</span>, <span class="st">"end_marker"</span>), ]
-
-<span class="co"># fix time columns</span>
-new.st<span class="op">$</span>start &lt;-<span class="st"> </span>new.start
-new.st<span class="op">$</span>end &lt;-<span class="st"> </span>new.end
-
-<span class="co"># add distance column</span>
-new.st<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="dv">5</span>
-
-<span class="co"># make it an extended selection table</span>
-new.est &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/selection_table.html">selection_table</a></span>(new.st, <span class="dt">extended =</span> <span class="ot">TRUE</span>, <span class="dt">confirm.extended =</span> <span class="ot">FALSE</span>, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>, <span class="dt">path =</span> td)
-
-new.est</code></pre></div>
-<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; ">
+<p>The output of <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> indicates that the start markers are found starting at ~2 s and ~3 s (2.00062 s and 3.00084 s), which was expected as <code><a href="../reference/master_sound_file.html">master_sound_file()</a></code> inserts a 1 second silence at the beginning of the master sound files and we added 1 s and 2 s to each simulated file respectively. With this information we can infer the position of all other selections in the new recordings. A selection table from re-recorded files can be generated using the function <code><a href="../reference/align_test_files.html">align_test_files()</a></code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alg.tests &lt;-<span class="st"> </span><span class="kw"><a href="../reference/align_test_files.html">align_test_files</a></span>(<span class="dt">X =</span>  master.sf, <span class="dt">Y =</span> pks, <span class="dt">path =</span> td, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>)</code></pre></div>
+<p>By default the function returns a extended selection table created ‘by song’:</p>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:800px; ">
 <table class="table table table-striped">
 <thead><tr>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
@@ -516,305 +538,625 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-orig.sound.file
-</th>
-<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+template
 </th>
 </tr></thead>
 <tbody>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.10000
+</td>
+<td style="text-align:center;">
+1.09867
+</td>
+<td style="text-align:center;">
+1.33333
+</td>
+<td style="text-align:center;">
+2.66667
+</td>
+<td style="text-align:center;">
+start_marker
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 2
 </td>
 <td style="text-align:center;">
-2.298667
+1.39867
 </td>
 <td style="text-align:center;">
-2.471733
+1.57173
 </td>
 <td style="text-align:center;">
-2.220105
+2.22011
 </td>
 <td style="text-align:center;">
-8.604378
+8.60438
 </td>
 <td style="text-align:center;">
 Phae.long1.wav_1
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 3
 </td>
 <td style="text-align:center;">
-2.771733
+1.87173
 </td>
 <td style="text-align:center;">
-2.934844
+2.03484
 </td>
 <td style="text-align:center;">
-2.169437
+2.16944
 </td>
 <td style="text-align:center;">
-8.807053
+8.80705
 </td>
 <td style="text-align:center;">
 Phae.long1.wav_2
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 4
 </td>
 <td style="text-align:center;">
-3.234844
+2.33484
 </td>
 <td style="text-align:center;">
-3.409822
+2.50982
 </td>
 <td style="text-align:center;">
-2.218294
+2.21829
 </td>
 <td style="text-align:center;">
-8.756604
+8.75660
 </td>
 <td style="text-align:center;">
 Phae.long1.wav_3
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 5
 </td>
 <td style="text-align:center;">
-3.709822
+2.80982
 </td>
 <td style="text-align:center;">
-3.842444
+2.94244
 </td>
 <td style="text-align:center;">
-2.316862
+2.31686
 </td>
 <td style="text-align:center;">
-8.822316
+8.82232
 </td>
 <td style="text-align:center;">
 Phae.long2.wav_1
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 6
 </td>
 <td style="text-align:center;">
-4.142444
+3.24244
 </td>
 <td style="text-align:center;">
-4.268622
+3.36862
 </td>
 <td style="text-align:center;">
-2.284006
+2.28401
 </td>
 <td style="text-align:center;">
-8.888027
+8.88803
 </td>
 <td style="text-align:center;">
 Phae.long2.wav_2
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 7
 </td>
 <td style="text-align:center;">
-4.568622
+3.66862
 </td>
 <td style="text-align:center;">
-4.699867
+3.79987
 </td>
 <td style="text-align:center;">
-3.006834
+3.00683
 </td>
 <td style="text-align:center;">
-8.822316
+8.82232
 </td>
 <td style="text-align:center;">
 Phae.long3.wav_1
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 8
 </td>
 <td style="text-align:center;">
-4.999867
+4.09987
 </td>
 <td style="text-align:center;">
-5.130089
+4.23009
 </td>
 <td style="text-align:center;">
-2.776843
+2.77684
 </td>
 <td style="text-align:center;">
-8.888027
+8.88803
 </td>
 <td style="text-align:center;">
 Phae.long3.wav_2
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 9
 </td>
 <td style="text-align:center;">
-5.430089
+4.53009
 </td>
 <td style="text-align:center;">
-5.561333
+4.66133
 </td>
 <td style="text-align:center;">
-2.316862
+2.31686
 </td>
 <td style="text-align:center;">
-9.315153
+9.31515
 </td>
 <td style="text-align:center;">
 Phae.long3.wav_3
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 10
 </td>
 <td style="text-align:center;">
-5.861333
+4.96133
 </td>
 <td style="text-align:center;">
-6.006800
+5.10680
 </td>
 <td style="text-align:center;">
-2.513997
+2.51400
 </td>
 <td style="text-align:center;">
-9.216586
+9.21659
 </td>
 <td style="text-align:center;">
 Phae.long4.wav_1
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 11
 </td>
 <td style="text-align:center;">
-6.306800
+5.40680
 </td>
 <td style="text-align:center;">
-6.451022
+5.55102
 </td>
 <td style="text-align:center;">
-2.579708
+2.57971
 </td>
 <td style="text-align:center;">
-10.235116
+10.23512
 </td>
 <td style="text-align:center;">
 Phae.long4.wav_2
 </td>
-<td style="text-align:center;">
-5
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
-example_master.wav
+example_test1.wav-song_example_test1.wav
 </td>
 <td style="text-align:center;">
 12
 </td>
 <td style="text-align:center;">
-6.751022
+5.85102
 </td>
 <td style="text-align:center;">
-6.896178
+5.99618
 </td>
 <td style="text-align:center;">
-2.579708
+2.57971
 </td>
 <td style="text-align:center;">
-9.742279
+9.74228
 </td>
 <td style="text-align:center;">
 Phae.long4.wav_3
 </td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test1.wav-song_example_test1.wav
+</td>
+<td style="text-align:center;">
+13
+</td>
+<td style="text-align:center;">
+6.29618
+</td>
+<td style="text-align:center;">
+7.29484
+</td>
+<td style="text-align:center;">
+1.33333
+</td>
+<td style="text-align:center;">
+2.66667
+</td>
+<td style="text-align:center;">
+end_marker
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.10000
+</td>
+<td style="text-align:center;">
+1.09867
+</td>
+<td style="text-align:center;">
+1.33333
+</td>
+<td style="text-align:center;">
+2.66667
+</td>
+<td style="text-align:center;">
+start_marker
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+1.39867
+</td>
+<td style="text-align:center;">
+1.57173
+</td>
+<td style="text-align:center;">
+2.22011
+</td>
+<td style="text-align:center;">
+8.60438
+</td>
+<td style="text-align:center;">
+Phae.long1.wav_1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+1.87173
+</td>
+<td style="text-align:center;">
+2.03484
+</td>
+<td style="text-align:center;">
+2.16944
+</td>
+<td style="text-align:center;">
+8.80705
+</td>
+<td style="text-align:center;">
+Phae.long1.wav_2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+2.33484
+</td>
+<td style="text-align:center;">
+2.50982
+</td>
+<td style="text-align:center;">
+2.21829
+</td>
+<td style="text-align:center;">
+8.75660
+</td>
+<td style="text-align:center;">
+Phae.long1.wav_3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
 <td style="text-align:center;">
 5
+</td>
+<td style="text-align:center;">
+2.80982
+</td>
+<td style="text-align:center;">
+2.94244
+</td>
+<td style="text-align:center;">
+2.31686
+</td>
+<td style="text-align:center;">
+8.82232
+</td>
+<td style="text-align:center;">
+Phae.long2.wav_1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+6
+</td>
+<td style="text-align:center;">
+3.24244
+</td>
+<td style="text-align:center;">
+3.36862
+</td>
+<td style="text-align:center;">
+2.28401
+</td>
+<td style="text-align:center;">
+8.88803
+</td>
+<td style="text-align:center;">
+Phae.long2.wav_2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+7
+</td>
+<td style="text-align:center;">
+3.66862
+</td>
+<td style="text-align:center;">
+3.79987
+</td>
+<td style="text-align:center;">
+3.00683
+</td>
+<td style="text-align:center;">
+8.82232
+</td>
+<td style="text-align:center;">
+Phae.long3.wav_1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+8
+</td>
+<td style="text-align:center;">
+4.09987
+</td>
+<td style="text-align:center;">
+4.23009
+</td>
+<td style="text-align:center;">
+2.77684
+</td>
+<td style="text-align:center;">
+8.88803
+</td>
+<td style="text-align:center;">
+Phae.long3.wav_2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+9
+</td>
+<td style="text-align:center;">
+4.53009
+</td>
+<td style="text-align:center;">
+4.66133
+</td>
+<td style="text-align:center;">
+2.31686
+</td>
+<td style="text-align:center;">
+9.31515
+</td>
+<td style="text-align:center;">
+Phae.long3.wav_3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;">
+4.96133
+</td>
+<td style="text-align:center;">
+5.10680
+</td>
+<td style="text-align:center;">
+2.51400
+</td>
+<td style="text-align:center;">
+9.21659
+</td>
+<td style="text-align:center;">
+Phae.long4.wav_1
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+11
+</td>
+<td style="text-align:center;">
+5.40680
+</td>
+<td style="text-align:center;">
+5.55102
+</td>
+<td style="text-align:center;">
+2.57971
+</td>
+<td style="text-align:center;">
+10.23512
+</td>
+<td style="text-align:center;">
+Phae.long4.wav_2
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+12
+</td>
+<td style="text-align:center;">
+5.85102
+</td>
+<td style="text-align:center;">
+5.99618
+</td>
+<td style="text-align:center;">
+2.57971
+</td>
+<td style="text-align:center;">
+9.74228
+</td>
+<td style="text-align:center;">
+Phae.long4.wav_3
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+example_test2.wav-song_example_test2.wav
+</td>
+<td style="text-align:center;">
+13
+</td>
+<td style="text-align:center;">
+6.29618
+</td>
+<td style="text-align:center;">
+7.29484
+</td>
+<td style="text-align:center;">
+1.33333
+</td>
+<td style="text-align:center;">
+2.66667
+</td>
+<td style="text-align:center;">
+end_marker
 </td>
 </tr>
 </tbody>
 </table>
 </div>
 <p> </p>
-<p>Note that we also added a column for “distance” that will be useful for downstream analyses (and to keep track of the distance in which the signals were re-recorded!). In addition, the data was converted into an <code>extended_selection_table</code>, which is the data format that pretty much all <a href="https://marce10.github.io/baRulho/">baRulho</a> functions take.</p>
-<p>This is somewhat a silly example as we are finding the start marker in the original master sound file. However, it demonstrates how this can be done on any re-recorded sound file.</p>
+<p>We can check the precision of the alignment by looking at the spectrograms:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/specreator.html">specreator</a></span>(alg.est, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>, <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">dest.path =</span> td)</code></pre></div>
+<p><img src="example_test1.wav.jpeg" alt="test 1"></p>
+<p> </p>
+<p><img src="example_test2.wav.jpeg" alt="test 2"></p>
+<p> </p>
+<p>Note that data was converted into an <code>extended_selection_table</code>, which is the data format that pretty much all <a href="https://marce10.github.io/baRulho/">baRulho</a> functions take.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/is_extended_selection_table.html">is_extended_selection_table</a></span>(alg.est)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<hr>
+<div id="further-aligning" class="section level3">
+<h3 class="hasAnchor">
+<a href="#further-aligning" class="anchor"></a>Further aligning</h3>
 <p>When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded signals. This is problematic for quantifying degradation in <a href="https://marce10.github.io/baRulho/">baRulho</a> (and other sound analysis software) as precise alignment of signal is crucial for the accuracy of downstream measures of signal degradation.</p>
 <p>Misalignment can be fixed with the function <code><a href="../reference/spcc_align.html">spcc_align()</a></code>. This function uses spectrogram cross-correlation to sync the position in time of signals with regard to a reference signal. <code><a href="../reference/spcc_align.html">spcc_align()</a></code> takes the signal recorded at the closest distance to the source as the reference signal. The function calls <a href="https://cran.r-project.org/package=warbleR">warbleR</a>’s <code><a href="https://rdrr.io/pkg/warbleR/man/xcorr.html">xcorr()</a></code> and <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> (just as we did above) internally to align signals using cross-correlation.</p>
 <p><a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an example data set called <code>playback_est_unaligned</code>, which contains signals in which the time position of signals is slightly unaligned. We can use this data to show how the function <code><a href="../reference/spcc_align.html">spcc_align()</a></code>:</p>
@@ -843,6 +1185,7 @@ unalg.alg &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.i
 <p> </p>
 <p>In case this doesn’t work as expected there is a plan B. The function <code><a href="https://rdrr.io/pkg/warbleR/man/seltailor.html">seltailor()</a></code> from <a href="https://cran.r-project.org/package=warbleR">warbleR</a> allows user to manually adjust the start and end of signals in a extended selection table.</p>
 <p> </p>
+</div>
 </div>
 <div id="quantifying-signal-degradation" class="section level1">
 <h1 class="hasAnchor">

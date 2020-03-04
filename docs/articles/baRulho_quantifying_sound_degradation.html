@@ -94,7 +94,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2020-03-02”
+“2020-03-03”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -386,7 +386,7 @@ master.sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/m
 <p> </p>
 <p>Again, we can look at the spectrogram of the output file:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/spectrograms.html">spectrograms</a></span>(master.sf, <span class="dt">path =</span> td, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>, 
-           <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>))</code></pre></div>
+           <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">osci =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="example_master.wav.jpeg" alt="spectrogram of master file"></p>
 <p>Note that the output could also be exported to <a href="http://ravensoundsoftware.com/software/raven-pro">Raven sound analysis software</a> (<a href="http://www.birds.cornell.edu">Cornell Lab of Ornithology</a>) for visualization or further manipulation using the function <code>exp_raven()</code> from the <a href="https://cran.r-project.org/package=Rraven">Rraven</a> package. <code>exp_raven()</code> exports selections in the R environment to a ‘.txt’ file that can be read in Raven:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Rraven<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/Rraven/man/exp_raven.html">exp_raven</a></span>(master.sf, <span class="dt">path =</span> td, <span class="dt">file.name =</span> <span class="st">"example_master_selection_table"</span>)</code></pre></div>
@@ -1145,7 +1145,7 @@ end_marker
 </div>
 <p> </p>
 <p>We can check the precision of the alignment by looking at the spectrograms:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/specreator.html">specreator</a></span>(alg.est, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>, <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">dest.path =</span> td)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/spectrograms.html">spectrograms</a></span>(alg.est, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>, <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">dest.path =</span> td, <span class="dt">osci =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="example_test1.wav.jpeg" alt="test 1"></p>
 <p> </p>
 <p><img src="example_test2.wav.jpeg" alt="test 2"></p>
@@ -3064,24 +3064,24 @@ br &lt;-<span class="st"> </span><span class="kw"><a href="../reference/blur_rat
 
 envs<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(envs<span class="op">$</span>distance)
 
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_classic</a></span>()</code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-38-1.png" width="560"></p>
 <p>Note than the <code>smooth</code> argument could change envelope shapes and related measurements. The following code sets <code>smooth = 800</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">envs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/blur_ratio.html">blur_ratio</a></span>(<span class="dt">X =</span> playback_est, <span class="dt">output =</span> <span class="st">"list"</span>, <span class="dt">ssmooth =</span> <span class="dv">1000</span>, <span class="dt">pb =</span> <span class="ot">FALSE</span>)<span class="op">$</span>envelopes
 
 envs<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(envs<span class="op">$</span>distance)
 
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_classic</a></span>()</code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-39-1.png" width="560"></p>
 <p> </p>
 </div>
@@ -4044,25 +4044,25 @@ spctr &lt;-<span class="st"> </span>sbr<span class="op">$</span>spectra
 
 spctr<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(spctr<span class="op">$</span>distance)
 
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_classic</a></span>()</code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-44-1.png" width="560"></p>
 <p>We can also zoom in to the frequency range of the signals by subsetting the spectrum data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the frequencies higher than lowest bottom but lower than highest top freq</span>
 spctr &lt;-<span class="st"> </span>spctr[spctr<span class="op">$</span>freq <span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(playback_est<span class="op">$</span>bottom.freq) <span class="op">&amp;</span><span class="st"> </span>spctr<span class="op">$</span>freq <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(playback_est<span class="op">$</span>top.freq), ]
 
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="kw"><a href="https://rdrr.io/pkg/ggplot2/man/ggtheme.html">theme_classic</a></span>()</code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-45-1.png" width="560">  </p>
 </div>
 <div id="envelope-correlation" class="section level3">

@@ -356,7 +356,7 @@ Again, we can look at the spectrogram of the output file:
 ```{r, eval=FALSE, echo=TRUE}
 
 spectrograms(master.sf, path = td, by.song = "sound.files", 
-           xl = 3, collevels = seq(-60, 0, 5))
+           xl = 3, collevels = seq(-60, 0, 5), osci = TRUE)
 
 ```
 
@@ -763,7 +763,7 @@ We can check the precision of the alignment by looking at the spectrograms:
 
 ```{r, eval = FALSE}
 
-specreator(alg.est, by.song = "sound.files", xl = 3, collevels = seq(-60, 0, 5), dest.path = td)
+spectrograms(alg.est, by.song = "sound.files", xl = 3, collevels = seq(-60, 0, 5), dest.path = td, osci = TRUE)
 
 ```
 

@@ -59,13 +59,15 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
     stop("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
   
+  #check path to working directory
+  if (is.null(dest.path)) dest.path <- getwd() else 
+    if (!dir.exists(dest.path)) stop("'dest.path' provided does not exist")  else
+      dest.path <- normalizePath(dest.path)
+    
   # make overwrite FALSE if file doesn't exist
   if (!overwrite & file.exists(file.path(dest.path, file.name))) 
     stop("output .wav file already exists and overwrite is 'FALSE'")
-    
-  #check path to working directory
-  if (is.null(dest.path)) dest.path <- getwd() else 
-    if (!dir.exists(dest.path)) stop("'dest.path' provided does not exist") 
+  
   
   # set frequency range for markers
   if (is.null(flim))  

@@ -115,10 +115,10 @@ align_test_files <- function(X, Y, output = "est", marker = "start_marker", path
   sync.sls <- do.call(rbind, out)
   
   # check if any selection exceeds length of recordings
-  wi <- wav_info(path = path, pb = FALSE)
+  wvdr <- wav_dur(path = path)
   
   # add duration to data frame
-  sync.sls <- merge(sync.sls, wi[, c("sound.files", "duration")])
+  sync.sls <- merge(sync.sls, wvdr)
   
   if (any(sync.sls$end > sync.sls$duration)) {
     write(file = "", x = paste(sum(sync.sls$end > sync.sls$duration), "selection(s) exceeded sound file length and were removed"))

@@ -68,7 +68,13 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   if (!overwrite & file.exists(file.path(dest.path, file.name))) 
     stop("output .wav file already exists and overwrite is 'FALSE'")
   
-  
+    # check if ghost script is installed
+    gsexe <- tools::find_gs_cmd()
+   
+    # warning if ghostscript not found
+     if (!nzchar(gsexe)) 
+      warning("GhostScript was not found. It produces clearer start and end marker. You can download it from 'https://ghostscript.com/'. using 'png()' instead.")
+    
   # set frequency range for markers
   if (is.null(flim))  
     flim <- c(0, attr(X, "check.results")$sample.rate[1] / 2)
@@ -79,8 +85,12 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   
   # save par settings
   oldpar <- par(no.readonly = TRUE)   
-  on.exit(par(oldpar))
+  on.exit(suppressWarnings(par(oldpar)))
     
+  # save image of start marker in temporary directory
+  if (!nzchar(gsexe)) 
+  png(filename = file.path(tempdir(), "strt_mrkr-img.png"), pointsize = 10)
+  
   # remove margins in graphic device
   par(mar = rep(0, 4))
   
@@ -88,28 +98,46 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   plot(0, type='n',axes = FALSE, ann = FALSE, xlim = c(0, 1), ylim = c(0, 1))
   
   # add text
-  text(x = 0.5, y = 0.5, labels = "*start+", cex = cex, font = 1)
+  text(x = 0.5, y = 0.5, labels = "*start+", cex = cex, font = 2)
   
   # save image of start marker in temporary directory
+  if (nzchar(gsexe)) 
   dev2bitmap(file.path(tempdir(), "strt_mrkr-img.png"), type = "pngmono", res = 30)
   
+  # close graph
   dev.off()
+  
+  # make image of start marker
+  strt_mrkr <- warbleR::image_to_wave(file = file.path(tempdir(), "strt_mrkr-img.png"), plot = FALSE, flim = flim, samp.rate = attr(X, "check.results")$sample.rate[1])
+  
+  # remove image file
+  unlink(file.path(tempdir(), "strt_mrkr-img.png"))
+  
+  # save image of end marker in temporary directory
+  if (!nzchar(gsexe)) 
+  png(filename = file.path(tempdir(), "end_mrkr-img.png"), pointsize = 10)
+  
+  # remove margins in graphic device
+  par(mar = rep(0, 4))
   
   # empty plot
   plot(0, type='n',axes = FALSE, ann = FALSE, xlim = c(0, 1), ylim = c(0, 1))
   
   # add text
-  text(x = 0.5, y = 0.5, labels = "+end*-", cex = cex, font = 1)
+  text(x = 0.5, y = 0.5, labels = "+end*-", cex = cex, font = 2)
   
   # save image of end marker in temporary directory
-  dev2bitmap(file.path(tempdir(), "end_mrkr-img.png"), type = "pngmono", res = 30)
+  if (nzchar(gsexe)) 
+    dev2bitmap(file.path(tempdir(), "end_mrkr-img.png"), type = "pngmono", res = 30)
   
+  # close graph
   dev.off()
   
   # conver to wave both
-  strt_mrkr <- warbleR::image_to_wave(file = file.path(tempdir(), "strt_mrkr-img.png"), plot = FALSE, flim = flim, samp.rate = attr(X, "check.results")$sample.rate[1])
-  
   end_mrkr <- warbleR::image_to_wave(file = file.path(tempdir(), "end_mrkr-img.png"), plot = FALSE, flim = flim, samp.rate = attr(X, "check.results")$sample.rate[1])
+  
+  # remove image file
+  unlink(file.path(tempdir(), "end_mrkr-img.png"))
   
   # remove plots 
   nll <- try(dev.off(), silent = TRUE)
@@ -199,16 +227,17 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
     start = c(delay, X$pb.start, X$pb.end[nrow(X)] + gap.duration), 
     end = c(delay + dur_strt_mrkr, X$pb.end, length(plbck@left) / plbck@samp.rate)
     )
-
+    
+  # add bottom freq info
   if (!is.null(X$bottom.freq))
   sel.tab$bottom.freq <- c(flim[1] + mar.f, X$bottom.freq, flim[1] + mar.f) 
   
+  # add top freq info
   if (!is.null(X$top.freq))
   sel.tab$top.freq <- c(flim[2] - mar.f, X$top.freq, flim[2] - mar.f)
   
-  
+  # add start & end markers
   sel.tab$orig.sound.file <- c("start_marker", X$sound.files, "end_marker")
-  
   
   # add delay at the end
   if (delay > 0)

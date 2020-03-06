@@ -5,7 +5,8 @@
 \title{Measure frequency spectral correlation}
 \usage{
 spectral_correlation(X, parallel = 1, pb = TRUE, method = 1, 
-cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 70)
+cor.method = "pearson", output = "est", 
+hop.size = 11.6, wl = NULL, ovlp = 70)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
@@ -23,6 +24,8 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
 
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
+
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
@@ -36,6 +39,7 @@ Extended selection table similar to input data, but also includes a new column (
 with the calculated frequency spectrum correlation coefficients.
 }
 \description{
+\code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
 \code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
 }
 \details{

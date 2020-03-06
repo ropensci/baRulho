@@ -2,7 +2,8 @@
 #' 
 #' \code{spcc} measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table.
 #' @usage spcc(X, parallel = 1, pb = TRUE,  method = 1, 
-#' cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
+#' cor.method = "pearson", output = "est", 
+#' hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -12,6 +13,7 @@
 #' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 #' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. If supplied, 'hop.size' is ignored.
@@ -45,7 +47,7 @@
 #' }
 # last modification on jan-06-2020 (MAS)
 
-spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
+spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -59,6 +61,9 @@ spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson"
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
     stop("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
 
+  #check output
+  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
+  
   # hopsize  
   if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
   
@@ -108,6 +113,8 @@ spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson"
   X$reference[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- as.character(xcorrs$X1)
   
   X$cross.correlation[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- xcorrs$score
+  
+  if (output == "data.frame") X <- as.data.frame(X)
   
   return(X)
 }

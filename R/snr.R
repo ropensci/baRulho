@@ -2,7 +2,7 @@
 #' 
 #' \code{snr} measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table.
 #' @usage snr(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
-#' noise.ref = "adjacent", type = 1, bp = NULL, hop.size = 1, wl = NULL)
+#' noise.ref = "adjacent", type = 1, bp = NULL, output = "est", hop.size = 1, wl = NULL)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure ambient noise.
@@ -23,6 +23,7 @@
 #' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as proposed by Dabelsteen et al (1993))
 #' }
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
@@ -56,7 +57,7 @@
 #last modification on nov-01-2019 (MAS)
 
 snr <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
-                       noise.ref = "adjacent", type = 1, bp = NULL, hop.size = 1, 
+                       noise.ref = "adjacent", type = 1, bp = NULL, output = "est", hop.size = 1, 
                        wl = NULL){
   
   # set pb options 
@@ -69,6 +70,9 @@ snr <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
   if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  
+  #check output
+  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
   if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
@@ -198,6 +202,8 @@ snr <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
   
   # remove temporary column
   X$TEMP....y <- NULL  
+  
+  if (output == "data.frame") X <- as.data.frame(X)
   
   return(X)
   }

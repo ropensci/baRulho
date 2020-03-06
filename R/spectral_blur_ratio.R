@@ -13,7 +13,7 @@
 #' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 #' }
 #' @param ssmooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 100.
-#' @param output Character vector of length 1 to determine if an extended selection table ('est') or a list ('list') containing 1) extended selection table and 2) amplitude values is returned.
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default), a data frame ('data.frame') or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting.
 #' @param img Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding spectra are produced. Default is no images ( \code{FALSE}).
 #' @param res Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
@@ -26,7 +26,7 @@
 #' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-60, 0, 5)}. 
 #' @param dest.path Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.
 #' @return Data frame similar to input data, but also includes a new column (spectral.blur.ratio)
-#' with the blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid power spectrum (as probability mass functions (PMF)).  Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would a list including the data frame just described and a data frame with spectra (amplitude values) for all signals. 
+#' with the blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid power spectrum (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would a list including the data frame just described and a data frame with spectra (amplitude values) for all signals. 
 #' @export
 #' @name spectral_blur_ratio
 #' @details Spectral blur ratio measures the degradation of sound as a function of the change in signal energy in the frequency domain, analogous to the blur ratio proposed by Dabelsteen et al (1993) for the time domain (and implemented in \code{\link{blur_ratio}}). Low values indicate low degradation of signals. The function measures the blur ratio of spectra from signals in which a reference playback has been re-recorded at different distances. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal. The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of spectra is comparable.   
@@ -92,7 +92,7 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
   
   #check output
-  if (!any(output %in% c("est", "list"))) stop("'output' must be either 'est' or 'list'")  
+  if (!any(output %in% c("est", "data.frame", "list"))) stop("'output' must be 'est', 'data.frame' or 'list'")  
   
   # must have the same sampling rate
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
@@ -337,6 +337,8 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     X <- list(est = X, spectra = spec.df)
   }
   
+  # return data frame
+  if (output == "data.frame") X <- as.data.frame(X)
   
   return(X)
 }

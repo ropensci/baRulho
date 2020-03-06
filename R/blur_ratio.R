@@ -14,7 +14,7 @@
 #' }
 #' @param ssmooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200.
 #' @param msmooth Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}). 
-#' @param output Character vector of length 1 to determine if an extended selection table ('est') or a list ('list') containing 1) extended selection table and 2) amplitude values is returned. 
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default), a data frame ('data.frame') or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting.
 #' @param img Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding envelopes are produced. Default is no images ( \code{FALSE}).
 #' @param res Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
@@ -26,7 +26,6 @@
 #'   plot, as in \code{\link[seewave]{spectro}}. Default is reverse.gray.colors.2. 
 #' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-60, 0, 5)}. 
 #' @param dest.path Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting.
 #' @return Data frame similar to input data, but also includes two new columns ('reference' and 'blur.ratio')
 #' with the reference signal and blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would be a list including the data frame just described and a data frame with envelopes (amplitude values) for all signals.
 #' @export
@@ -92,7 +91,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
   
   #check output
-  if (!any(output %in% c("est", "list"))) stop("'output' must be either 'est' or 'list'")  
+  if (!any(output %in% c("est", "data.frame", "list"))) stop("'output' must be 'est', 'data.frame' or 'list'")  
   
   # must have the same sampling rate
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
@@ -314,7 +313,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (output == "list") 
   {
     
-    env.dfs <- lapply(1:length(envs), function(y){
+    env.dfs <- pbapply::pblapply(1:length(envs), cl = cl, function(y){
       
       # extract 1 envelope
       x <- envs[[y]]
@@ -334,6 +333,9 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     # put est and envelopes in a list
     X <- list(est = X, envelopes = env.df)
     }
+  
+  # return data frame
+  if (output == "data.frame") X <- as.data.frame(X)
   
   return(X)
 }

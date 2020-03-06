@@ -1,8 +1,13 @@
 #' Measure frequency spectral correlation
 #' 
 #' \code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
+#' \code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
 #' @usage spectral_correlation(X, parallel = 1, pb = TRUE, method = 1, 
-#' cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 70)
+#' cor.method = "pearson", output = "est", 
+#' hop.size = 11.6, wl = NULL, ovlp = 70)
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').ion(X, parallel = 1, pb = TRUE, method = 1, 
+#' cor.method = "pearson", output = "est", 
+#' hop.size = 11.6, wl = NULL, ovlp = 70)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' If \code{NULL} (default) then the current working directory is used.
@@ -13,6 +18,7 @@
 #' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 #' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. If supplied, 'hop.size' is ignored.
@@ -47,7 +53,7 @@
 #' }
 #last modification on nov-01-2019 (MAS)
 
-spectral_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 70){
+spectral_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 70){
   
   # set pb options 
   on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
@@ -59,6 +65,9 @@ spectral_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
   if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  
+  #check output
+  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'") 
   
   # hopsize  
   if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
@@ -151,6 +160,9 @@ spectral_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   
   # remove temporal columns
   X$TEMP....sgnl <-NULL
+  
+  # return data frame
+  if (output == "data.frame") X <- as.data.frame(X)
   
   return(X)
 }

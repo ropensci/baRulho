@@ -5,7 +5,8 @@
 \title{Measure spectrographic cross-correlation as a measure of signal distortion}
 \usage{
 spcc(X, parallel = 1, pb = TRUE,  method = 1, 
-cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
+cor.method = "pearson", output = "est", 
+hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.}
@@ -21,6 +22,8 @@ cor.method = "pearson", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
 }}
 
 \item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
+
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 

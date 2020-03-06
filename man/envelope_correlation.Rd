@@ -5,7 +5,7 @@
 \title{Measure amplitude envelope correlation}
 \usage{
 envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
-ssmooth = NULL, msmooth = NULL, hop.size = 11.6, wl = NULL, ovlp = 70)
+ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, wl = NULL, ovlp = 70)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
@@ -26,6 +26,8 @@ If \code{NULL} (default) then the current working directory is used.}
 \item{ssmooth}{Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).}
 
 \item{msmooth}{Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).}
+
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 

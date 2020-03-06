@@ -23,7 +23,7 @@ ovlp = 70, pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), dest.path = 
 
 \item{ssmooth}{Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 100.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est') or a list ('list') containing 1) extended selection table and 2) amplitude values is returned.}
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default), a data frame ('data.frame') or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting.}
 
 \item{img}{Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding spectra are produced. Default is no images ( \code{FALSE}).}
 
@@ -46,7 +46,7 @@ plot, as in \code{\link[seewave]{spectro}}. Default is reverse.gray.colors.2.}
 }
 \value{
 Data frame similar to input data, but also includes a new column (spectral.blur.ratio)
-with the blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid power spectrum (as probability mass functions (PMF)).  Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would a list including the data frame just described and a data frame with spectra (amplitude values) for all signals.
+with the blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid power spectrum (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would a list including the data frame just described and a data frame with spectra (amplitude values) for all signals.
 }
 \description{
 \code{spectral_blur_ratio} measures blur ratio of frequency spectra from signals referenced in an extended selection table.

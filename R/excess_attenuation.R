@@ -2,7 +2,7 @@
 #' 
 #' \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
 #' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, 
-#' bp = NULL, hop.size = 1, wl = NULL, ovlp = 70)
+#' bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -12,6 +12,7 @@
 #' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
 #' }
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
@@ -48,7 +49,7 @@
 #last modification on nov-01-2019 (MAS)
 
 excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, 
-                               bp = NULL, hop.size = 1, wl = NULL, ovlp = 70){
+                               bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70){
   
   # set pb options 
   on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
@@ -60,6 +61,9 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1,
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
   if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  
+  #check output
+  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
   if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
@@ -186,6 +190,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1,
   X2$sigRMS <- X2$TEMP....sgnl <- NULL
   
   # fix est
+  if (output == "est")
   X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
   
   return(X2)

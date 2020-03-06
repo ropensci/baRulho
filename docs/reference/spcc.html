@@ -130,7 +130,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>spcc</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>,
-<span class='kw'>cor.method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>90</span>, <span class='kw'>wn</span> <span class='kw'>=</span> <span class='st'>'hanning'</span>)</pre>
+<span class='kw'>cor.method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"est"</span>,
+<span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>90</span>, <span class='kw'>wn</span> <span class='kw'>=</span> <span class='st'>'hanning'</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -157,6 +158,10 @@
     <tr>
       <th>cor.method</th>
       <td><p>Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see <code><a href='https://rdrr.io/r/stats/cor.html'>cor</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>output</th>
+      <td><p>Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').</p></td>
     </tr>
     <tr>
       <th>hop.size</th>

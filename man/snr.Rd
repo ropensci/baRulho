@@ -5,7 +5,7 @@
 \title{Measure attenuation as signal-to-noise ratio}
 \usage{
 snr(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
-noise.ref = "adjacent", type = 1, bp = NULL, hop.size = 1, wl = NULL)
+noise.ref = "adjacent", type = 1, bp = NULL, output = "est", hop.size = 1, wl = NULL)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
@@ -35,6 +35,8 @@ to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} 
 }}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
+
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 

@@ -130,7 +130,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>envelope_correlation</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>cor.method</span> <span class='kw'>=</span> <span class='st'>"pearson"</span>,
-<span class='kw'>ssmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>msmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>70</span>)</pre>
+<span class='kw'>ssmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>msmooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"est"</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>70</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,6 +166,10 @@ If <code>NULL</code> (default) then the current working directory is used.</p></
     <tr>
       <th>msmooth</th>
       <td><p>Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by <code><a href='https://rdrr.io/pkg/seewave/man/env.html'>env</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>output</th>
+      <td><p>Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').</p></td>
     </tr>
     <tr>
       <th>hop.size</th>

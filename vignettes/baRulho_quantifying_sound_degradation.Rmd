@@ -792,7 +792,7 @@ print(TRUE)
 
 ```
 
-Below are some examples from actual test signals that were re-recorded at 1, 30, 65, and 100 m, respectively:
+Below are some examples from actual test signals that were re-recorded at 1, 30, 65, and 100 m respectively, and were later aligned using the start marker:
 
  <img src="tlalpan_playback.jpeg" alt="Re-recorded at Tlalpan">
 

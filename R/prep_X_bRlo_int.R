@@ -2,13 +2,20 @@
 # @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 # last modification on jan-3-2020 (MAS)
 
-prep_X_bRlo_int <- function(X, method = 1) {
+prep_X_bRlo_int <- function(X, method = 1, parallel = 1, pb = TRUE) {
   
   # add sound file selec colums to X (weird column name so it does not overwrite user columns)
   X$TEMP....sgnl <- paste(X$sound.files, X$selec, sep = "-")
   
+  # set pb options 
+  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  
+  # set clusters for windows OS
+  if (Sys.info()[1] == "Windows" & parallel > 1)
+    cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
+  
   # add second column with names of the reference signals to be compare against
-  X$reference <- sapply(1:nrow(X), function(x, meth = method){
+  X$reference <- pbapply::pbsapply(1:nrow(X), cl = cl, function(x, meth = method){
     
     # extract for single signal and order by distance
     Y <- as.data.frame(X[X$signal.type == X$signal.type[X$TEMP....sgnl == X$TEMP....sgnl[x]], , drop = FALSE])

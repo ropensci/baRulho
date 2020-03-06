@@ -94,7 +94,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2020-03-04”
+“2020-03-05”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -514,7 +514,7 @@ example_master.wav-1
 </tbody>
 </table>
 <p>The output of <code><a href="https://rdrr.io/pkg/warbleR/man/find_peaks.html">find_peaks()</a></code> indicates that the start markers are found starting at ~2 s and ~3 s (2.00062 s and 3.00084 s), which was expected as <code><a href="../reference/master_sound_file.html">master_sound_file()</a></code> inserts a 1 second silence at the beginning of the master sound files and we added 1 s and 2 s to each simulated file respectively. With this information we can infer the position of all other selections in the new recordings. A selection table from re-recorded files can be generated using the function <code><a href="../reference/align_test_files.html">align_test_files()</a></code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alg.tests &lt;-<span class="st"> </span><span class="kw"><a href="../reference/align_test_files.html">align_test_files</a></span>(<span class="dt">X =</span>  master.sf, <span class="dt">Y =</span> pks, <span class="dt">path =</span> td, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">alg.tests &lt;-<span class="st"> </span><span class="kw"><a href="../reference/align_test_files.html">align_test_files</a></span>(<span class="dt">X =</span>  master.sf, <span class="dt">Y =</span> pks, <span class="dt">path =</span> td, <span class="dt">by.song =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>By default the function returns a extended selection table created ‘by song’:</p>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:800px; ">
 <table class="table table table-striped">
@@ -1145,7 +1145,7 @@ end_marker
 </div>
 <p> </p>
 <p>We can check the precision of the alignment by looking at the spectrograms:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/spectrograms.html">spectrograms</a></span>(alg.est, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>, <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">dest.path =</span> td, <span class="dt">osci =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/spectrograms.html">spectrograms</a></span>(alg.tests, <span class="dt">by.song =</span> <span class="st">"sound.files"</span>, <span class="dt">xl =</span> <span class="dv">3</span>, <span class="dt">collevels =</span> <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="op">-</span><span class="dv">60</span>, <span class="dv">0</span>, <span class="dv">5</span>), <span class="dt">dest.path =</span> td, <span class="dt">osci =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p><img src="example_test1.wav.jpeg" alt="test 1"></p>
 <p> </p>
 <p><img src="example_test2.wav.jpeg" alt="test 2"></p>

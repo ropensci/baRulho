@@ -99,7 +99,7 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     stop("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-  X <- prep_X_bRlo_int(X, method = method)
+  X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
   # set pb options 
   pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))

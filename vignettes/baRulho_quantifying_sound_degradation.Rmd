@@ -490,7 +490,7 @@ The output of `find_peaks()` indicates that the start markers are found starting
 
 ```{r, eval = FALSE}
 
-alg.tests <- align_test_files(X =  master.sf, Y = pks, path = td, by.song = "sound.files")
+alg.tests <- align_test_files(X =  master.sf, Y = pks, path = td, by.song = TRUE)
 
 ```
 
@@ -763,7 +763,7 @@ We can check the precision of the alignment by looking at the spectrograms:
 
 ```{r, eval = FALSE}
 
-spectrograms(alg.est, by.song = "sound.files", xl = 3, collevels = seq(-60, 0, 5), dest.path = td, osci = TRUE)
+spectrograms(alg.tests, by.song = "sound.files", xl = 3, collevels = seq(-60, 0, 5), dest.path = td, osci = TRUE)
 
 ```
 

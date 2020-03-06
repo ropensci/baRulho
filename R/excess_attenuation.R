@@ -76,7 +76,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-  X <- prep_X_bRlo_int(X, method = method)
+  X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
   # function to measure RMS for signal and noise
   rms_FUN <- function(y, bp, wl, ovlp){

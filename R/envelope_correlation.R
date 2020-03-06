@@ -77,7 +77,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-  X <- prep_X_bRlo_int(X, method = method)
+  X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
   # set pb options 
   pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))

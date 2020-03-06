@@ -110,7 +110,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     ssmooth <- NULL
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-  X <- prep_X_bRlo_int(X, method = method)
+  X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
     
   # print message
   if (pb) write(file = "", x = "calculating amplitude envelopes (step 1 of 2):")

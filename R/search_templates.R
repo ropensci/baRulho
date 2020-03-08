@@ -3,7 +3,7 @@
 #' \code{search_templates} searches acoustic templates on test (re-recorded) sound files.
 #' @usage search_templates(X, template.rows, test.files, path = NULL, pb = TRUE, ...)
 #' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). Required.
-#' @param template.rows numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwhise, 'template.rows' must be the same length as 'test.files'. Required.
+#' @param template.rows numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.
 #' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows').
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -14,6 +14,7 @@
 #' @details The function takes the output of \code{\link[warbleR]{find_peaks}} ('Y') and aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
 #' @seealso \code{\link{spcc_align}}; \code{\link{align_test_files}}
 #' @examples
+#' \dontrun{
 #' # use a temporary directory
 #' td <- tempdir()  
 #' 
@@ -76,7 +77,7 @@
 #' master.sf$orig.sound.file == "end_marker"), 
 #' test.files = c("example_test1.wav", "example_test1.wav"), 
 #' path = td, pb = FALSE)
-#' 
+#' }
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
@@ -98,7 +99,8 @@ search_templates <- function(X, template.rows, test.files, path = NULL,  pb = TR
   # find peaks
   pks <- find_peaks(xc.output = xc, max.peak = TRUE, path = path, pb = pb, cutoff = 0)
   
-    names(pks)[names(pks) == "sound.files"] <- "test.files"
-    return(pks)
-  
+  # rename sound file column
+  names(pks)[names(pks) == "sound.files"] <- "test.files"
+  return(pks)
+
   }

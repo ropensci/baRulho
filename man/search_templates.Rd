@@ -9,7 +9,7 @@ search_templates(X, template.rows, test.files, path = NULL, pb = TRUE, ...)
 \arguments{
 \item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). Required.}
 
-\item{template.rows}{numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwhise, 'template.rows' must be the same length as 'test.files'. Required.}
+\item{template.rows}{numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.}
 
 \item{test.files}{Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows').}
 
@@ -29,6 +29,7 @@ A data frame with the time, start, end, test file names, template name, maximum 
 The function takes the output of \code{\link[warbleR]{find_peaks}} ('Y') and aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
 }
 \examples{
+\dontrun{
 # use a temporary directory
 td <- tempdir()  
 
@@ -91,7 +92,7 @@ template.rows = which(master.sf$orig.sound.file == "start_marker" |
 master.sf$orig.sound.file == "end_marker"), 
 test.files = c("example_test1.wav", "example_test1.wav"), 
 path = td, pb = FALSE)
-
+}
 }
 \references{
 {

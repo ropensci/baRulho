@@ -1209,7 +1209,6 @@ sa
 
 ```{r, echo = FALSE}
 
-names(sa)[ncol(sa)] <- "signal.to.noise.ratio"
 
 kbl <- kable(sa, align = "c", row.names = F,  format = "html", escape = F)
 

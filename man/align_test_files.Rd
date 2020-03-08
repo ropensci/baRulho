@@ -4,17 +4,15 @@
 \alias{align_test_files}
 \title{Align test sound files}
 \usage{
-align_test_files(X, Y, output = "est", marker = "start_marker", path = NULL, 
+align_test_files(X, Y, output = "est", path = NULL, 
 by.song = TRUE, ...)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. This should be the same data than that used for aligning signals using \code{\link[warbleR]{xcorr}}.}
+\item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that used for aligning signals in \code{\link{search_templates}}.}
 
-\item{Y}{object of class 'data.frame' with the output of \code{\link[warbleR]{find_peaks}} from the warbleR package.}
+\item{Y}{object of class 'data.frame' with the output of \code{\link{search_templates}}.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data.frame ("data.frame").}
-
-\item{marker}{Character string of length 1 with the name of the marker that was used for aligning signals. Default is 'start_marker'.}
 
 \item{path}{Character string containing the directory path where test (re-recorded) sound files are found.}
 
@@ -82,20 +80,13 @@ extensible = FALSE)
 writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), 
 extensible = FALSE)
 
-# create a matrix that contains the selection/files to be cross-correlated
-comp_mat <- matrix(c(rep(paste(master.sf$sound.files[1], 
-master.sf$selec[1], sep = "-"), 2), "example_test1.wav", 
-"example_test2.wav"), nrow = 2)
-
-# run cross correlation
-xc <- warbleR::xcorr(master.sf, compare.matrix = comp_mat, wl = 100, 
-ovlp = 50, path = td, output = "list", pb = FALSE)
-
-# find peaks
-pks <- warbleR::find_peaks(xc.output = xc, max.peak = TRUE, path = td)
+# find  tempaltes
+found.templts <- search_templates(X = master.sf, 
+template.rows = which(master.sf$orig.sound.file == "start_marker"), 
+test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 
 # align signals and output extended selection table
-alg.tests <- align_test_files(X =  master.sf, Y = pks, path = td)
+alg.tests <- align_test_files(X =  master.sf, Y = found.templts, path = td, pb = FALSE)
 }
 
 }
@@ -105,7 +96,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 }
 }
 \seealso{
-\code{\link{spcc_align}}
+\code{\link{spcc_align}}; \code{\link{search_templates}}
 }
 \author{
 Marcelo Araya-Salas (\email{marceloa27@gmail.com})

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Align test sound files — align_test_files • baRulho</title>
+<title>Search acoustic templates on test sound files — search_templates • baRulho</title>
 
 
 <!-- jquery -->
@@ -35,8 +35,8 @@
 
 
 
-<meta property="og:title" content="Align test sound files — align_test_files" />
-<meta property="og:description" content="align_test_files aligns test (re-recorded) sound files." />
+<meta property="og:title" content="Search acoustic templates on test sound files — search_templates" />
+<meta property="og:description" content="search_templates searches acoustic templates on test (re-recorded) sound files." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -120,50 +120,49 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Align test sound files</h1>
-    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/align_test_files.R'><code>R/align_test_files.R</code></a></small>
-    <div class="hidden name"><code>align_test_files.Rd</code></div>
+    <h1>Search acoustic templates on test sound files</h1>
+    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/search_templates.R'><code>R/search_templates.R</code></a></small>
+    <div class="hidden name"><code>search_templates.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>align_test_files</code> aligns test (re-recorded) sound files.</p>
+    <p><code>search_templates</code> searches acoustic templates on test (re-recorded) sound files.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>align_test_files</span>(<span class='no'>X</span>, <span class='no'>Y</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"est"</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-<span class='kw'>by.song</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>search_templates</span>(<span class='no'>X</span>, <span class='no'>template.rows</span>, <span class='no'>test.files</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package). This should be the same data than that used for aligning signals in <code><a href='search_templates.html'>search_templates</a></code>.</p></td>
+      <td><p>object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package). Required.</p></td>
     </tr>
     <tr>
-      <th>Y</th>
-      <td><p>object of class 'data.frame' with the output of <code><a href='search_templates.html'>search_templates</a></code>.</p></td>
+      <th>template.rows</th>
+      <td><p>numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwhise, 'template.rows' must be the same length as 'test.files'. Required.</p></td>
     </tr>
     <tr>
-      <th>output</th>
-      <td><p>Character vector of length 1 to determine if an extended selection table ('est', default) or a data.frame ("data.frame").</p></td>
+      <th>test.files</th>
+      <td><p>Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows').</p></td>
     </tr>
     <tr>
       <th>path</th>
       <td><p>Character string containing the directory path where test (re-recorded) sound files are found.</p></td>
     </tr>
     <tr>
-      <th>by.song</th>
-      <td><p>Logical argument to indicate if the extended selection table should be created by song (see 'by.song' <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> argument). Default is <code>TRUE</code>.</p></td>
+      <th>pb</th>
+      <td><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments to be passed to <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> for customizing extended selection table.</p></td>
+      <td><p>Additional arguments to be passed to <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code> for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An extended selection table with the aligned signals from test (re-recorded) sound files.</p>
+    <p>A data frame with the time, start, end, test file names, template name, maximum cross-correlation score and the time where it was detected.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The function takes the output of <code><a href='https://rdrr.io/pkg/warbleR/man/find_peaks.html'>find_peaks</a></code> ('Y') and aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.</p>
@@ -172,15 +171,15 @@
     <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='spcc_align.html'>spcc_align</a></code>; <code><a href='search_templates.html'>search_templates</a></code></p></div>
+    <div class='dont-index'><p><code><a href='spcc_align.html'>spcc_align</a></code>; <code><a href='align_test_files.html'>align_test_files</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
-<span class='co'># set temporary directory</span>
+    <pre class="examples"><div class='input'><span class='co'># use a temporary directory</span>
 <span class='no'>td</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/tempfile.html'>tempdir</a></span>()
 
 <span class='co'># load example data from warbleR</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>list</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Phae.long1"</span>, <span class='st'>"Phae.long2"</span>, <span class='st'>"Phae.long3"</span>, <span class='st'>"Phae.long4"</span>, <span class='st'>"lbh_selec_table"</span>))
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='kw'>list</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Phae.long1"</span>, <span class='st'>"Phae.long2"</span>, <span class='st'>"Phae.long3"</span>, <span class='st'>"Phae.long4"</span>,
+<span class='st'>"lbh_selec_table"</span>))
 
 <span class='co'># save sound files to temporary folder</span>
 <span class='fu'>writeWave</span>(<span class='no'>Phae.long1</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>td</span>, <span class='st'>"Phae.long1.wav"</span>))
@@ -189,9 +188,8 @@
 <span class='fu'>writeWave</span>(<span class='no'>Phae.long4</span>, <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>td</span>, <span class='st'>"Phae.long4.wav"</span>))
 
 <span class='co'># make an extended selection table</span>
-<span class='no'>est</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>warbleR</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>lbh_selec_table</span>, <span class='kw'>extended</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-<span class='kw'>confirm.extended</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>td</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
+<span class='no'>est</span> <span class='kw'>&lt;-</span> <span class='fu'>selection_table</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>lbh_selec_table</span>, <span class='kw'>extended</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>confirm.extended</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+<span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>td</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; all selections are OK </div><div class='input'>
 <span class='co'># create master sound file</span>
 <span class='no'>master.sf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='master_sound_file.html'>master_sound_file</a></span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>est</span>, <span class='kw'>file.name</span> <span class='kw'>=</span> <span class='st'>"example_master"</span>,
 <span class='kw'>dest.path</span> <span class='kw'>=</span> <span class='no'>td</span>, <span class='kw'>gap.duration</span> <span class='kw'>=</span> <span class='fl'>0.3</span>)
@@ -200,11 +198,11 @@
 <span class='no'>exmp.master</span> <span class='kw'>&lt;-</span> <span class='fu'>readWave</span>(<span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>td</span>, <span class='st'>"example_master.wav"</span>))
 
 <span class='co'># add 1 s silence</span>
-<span class='no'>exmp.test1</span> <span class='kw'>&lt;-</span> <span class='fu'>addsilw</span>(<span class='kw'>wave</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"start"</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"Wave"</span>,
-<span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>@<span class='kw'>samp.rate</span>)
+<span class='no'>exmp.test1</span> <span class='kw'>&lt;-</span> <span class='fu'>addsilw</span>(<span class='kw'>wave</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"start"</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>1</span>,
+<span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"Wave"</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>@<span class='kw'>samp.rate</span>)
 
-<span class='no'>exmp.test2</span> <span class='kw'>&lt;-</span> <span class='fu'>addsilw</span>(<span class='kw'>wave</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"start"</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"Wave"</span>,
-<span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>@<span class='kw'>samp.rate</span>)
+<span class='no'>exmp.test2</span> <span class='kw'>&lt;-</span> <span class='fu'>addsilw</span>(<span class='kw'>wave</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"start"</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+<span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"Wave"</span>, <span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>@<span class='kw'>samp.rate</span>)
 
 <span class='co'># create noise</span>
 <span class='no'>ns</span> <span class='kw'>&lt;-</span> <span class='fu'>noisew</span>(<span class='kw'>f</span> <span class='kw'>=</span> <span class='no'>exmp.master</span>@<span class='kw'>samp.rate</span>, <span class='kw'>d</span> <span class='kw'>=</span> <span class='fu'>duration</span>(<span class='no'>exmp.test2</span>) + <span class='fl'>1</span>,
@@ -214,25 +212,41 @@
 <span class='no'>exmp.test1</span>@<span class='kw'>left</span> <span class='kw'>&lt;-</span> <span class='no'>exmp.test1</span>@<span class='kw'>left</span> + (<span class='no'>ns</span>@<span class='kw'>left</span>[<span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>exmp.test1</span>@<span class='kw'>left</span>)] * <span class='fl'>500</span>)
 <span class='no'>exmp.test2</span>@<span class='kw'>left</span> <span class='kw'>&lt;-</span> <span class='no'>exmp.test2</span>@<span class='kw'>left</span> + (<span class='no'>ns</span>@<span class='kw'>left</span>[<span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>exmp.test2</span>@<span class='kw'>left</span>)] * <span class='fl'>500</span>)
 
-<span class='co'># normalize before saving</span>
 <span class='no'>exmp.test1</span> <span class='kw'>&lt;-</span> <span class='fu'>normalize</span>(<span class='no'>exmp.test1</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"16"</span>)
 <span class='no'>exmp.test2</span> <span class='kw'>&lt;-</span> <span class='fu'>normalize</span>(<span class='no'>exmp.test2</span>, <span class='kw'>unit</span> <span class='kw'>=</span> <span class='st'>"16"</span>)
 
 <span class='co'># save examples</span>
-<span class='fu'>writeWave</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>exmp.test1</span>, <span class='kw'>filename</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>td</span>, <span class='st'>"example_test1.wav"</span>),
-<span class='kw'>extensible</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>writeWave</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>exmp.test1</span>, <span class='kw'>filename</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>td</span>, <span class='st'>"example_test1.wav"</span>), <span class='kw'>extensible</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>writeWave</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>exmp.test2</span>, <span class='kw'>filename</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>td</span>, <span class='st'>"example_test2.wav"</span>), <span class='kw'>extensible</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>writeWave</span>(<span class='kw'>object</span> <span class='kw'>=</span> <span class='no'>exmp.test2</span>, <span class='kw'>filename</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/file.path.html'>file.path</a></span>(<span class='no'>td</span>, <span class='st'>"example_test2.wav"</span>),
-<span class='kw'>extensible</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='co'># find  tempaltes</span>
-<span class='no'>found.templts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='search_templates.html'>search_templates</a></span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>master.sf</span>,
+<span class='co'># search using start marker as template</span>
+<span class='fu'>search_templates</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>master.sf</span>,
 <span class='kw'>template.rows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>master.sf</span>$<span class='no'>orig.sound.file</span> <span class='kw'>==</span> <span class='st'>"start_marker"</span>),
-<span class='kw'>test.files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"example_test1.wav"</span>, <span class='st'>"example_test2.wav"</span>), <span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>td</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='co'># align signals and output extended selection table</span>
-<span class='no'>alg.tests</span> <span class='kw'>&lt;-</span> <span class='fu'>align_test_files</span>(<span class='kw'>X</span> <span class='kw'>=</span>  <span class='no'>master.sf</span>, <span class='kw'>Y</span> <span class='kw'>=</span> <span class='no'>found.templts</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>td</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-}</div></pre>
+<span class='kw'>test.files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"example_test1.wav"</span>, <span class='st'>"example_test2.wav"</span>), <span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>td</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;          test.files selec    start      end             template     time
+#&gt; 1 example_test1.wav     1 2.000356 2.999023 example_master.wav-1 2.499690
+#&gt; 2 example_test2.wav     1 2.998072 3.996739 example_master.wav-1 3.497406
+#&gt;       score
+#&gt; 1 0.8406498
+#&gt; 2 0.7839632</div><div class='input'>
+<span class='co'># search using start marker as template</span>
+<span class='fu'>search_templates</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>master.sf</span>, <span class='kw'>template.rows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>master.sf</span>$<span class='no'>orig.sound.file</span> <span class='kw'>==</span> <span class='st'>"start_marker"</span>),
+<span class='kw'>test.files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"example_test1.wav"</span>, <span class='st'>"example_test2.wav"</span>, <span class='st'>"example_test1.wav"</span>),
+<span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>td</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt;          test.files selec    start      end             template     time
+#&gt; 1 example_test1.wav     1 2.000356 2.999023 example_master.wav-1 2.499690
+#&gt; 2 example_test2.wav     1 2.998072 3.996739 example_master.wav-1 3.497406
+#&gt;       score
+#&gt; 1 0.8406498
+#&gt; 2 0.7839632</div><div class='input'>
+<span class='co'># search using both start and end markers as template</span>
+<span class='fu'>search_templates</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>master.sf</span>,
+<span class='kw'>template.rows</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span>(<span class='no'>master.sf</span>$<span class='no'>orig.sound.file</span> <span class='kw'>==</span> <span class='st'>"start_marker"</span> <span class='kw'>|</span>
+<span class='no'>master.sf</span>$<span class='no'>orig.sound.file</span> <span class='kw'>==</span> <span class='st'>"end_marker"</span>),
+<span class='kw'>test.files</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"example_test1.wav"</span>, <span class='st'>"example_test1.wav"</span>),
+<span class='kw'>path</span> <span class='kw'>=</span> <span class='no'>td</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: ningun argumento finito para max; retornando -Inf</span></div><div class='output co'>#&gt;          test.files selec    start      end             template    time
+#&gt; 1 example_test1.wav     1 2.000356 2.999023 example_master.wav-1 2.49969
+#&gt;       score
+#&gt; 1 0.8406498</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

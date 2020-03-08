@@ -28,7 +28,7 @@
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
 #' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations. 
-#' @return Extended selection table similar to input data, but also includes a new column (snr.attenuation)
+#' @return Extended selection table similar to input data, but also includes a new column (signal.to.noise.ratio)
 #' with the signal-to-noise ratio values.
 #' @export
 #' @name snr
@@ -60,6 +60,10 @@ snr <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
                        noise.ref = "adjacent", type = 1, bp = NULL, output = "est", hop.size = 1, 
                        wl = NULL){
   
+  
+  argus <- names(as.list(base::match.call()))
+  
+
   # set pb options 
   on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
   
@@ -133,7 +137,7 @@ snr <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
       f <- r$sample.rate
       
       # set margin to half of signal duration
-      if (eq.dur) mar <- (X$end[y] - X$start[y])/2
+      if (eq.dur) mar <- (X$end[y] - X$start[y]) else if(all(argus != "mar")) stop("'mar' must be provided when 'eq.dur = FALSE'")
       
       #reset time coordinates of signals if lower than 0 o higher than duration
       stn <- X$start[y] - mar
@@ -171,7 +175,7 @@ snr <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
   X$TEMP....y <- names(envs) <- paste(X$sound.files, X$selec, sep = "-")
 
   # calculate SNR 
-  X$snr.attenuation <- sapply(1:nrow(X), function(y){
+  X$signal.to.noise.ratio <- sapply(1:nrow(X), function(y){
     
     if (X$signal.type[y] != "ambient"){
       

@@ -157,7 +157,7 @@ spectro(synth.l$wave, scale = FALSE, palette = reverse.topo.colors,
 
 ```
 
- <img src="spectro_synth_song.png" alt="spectrogram syntehtic sounds" width="550">
+ <img src="spectro_synth_song.png" alt="spectrogram syntehtic sounds" width="750">
 
 
 &nbsp;
@@ -424,25 +424,19 @@ writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), ex
 
 ```
 
+&nbsp;
 
-To find the location of the start marker on these (simulated) re-recorded sound files we can use the [warbleR](https://cran.r-project.org/package=warbleR) functions `xcorr()` to run a cross-correlation of the marker across the sound files and `find_peaks()` to determine the exact time in which the marker are found. See an example of how this works below (check [warbleR](https://cran.r-project.org/package=warbleR) documentation for more information on how these functions work): 
+To find the location of the start marker on these (simulated) re-recorded sound files we use the functions `search_templates()` to run a cross-correlation of one or  more markers across the test (re-recorded) files to determine the exact time in which each marker is found: 
 
 ```{r, eval = FALSE}
 
-# create a matrix that contains the selection/files to be cross-correlated
-comp_mat <- matrix(c(rep(paste(master.sf$sound.files[1], master.sf$selec[1], sep = "-"), 2), "example_test1.wav", "example_test2.wav"), nrow = 2)
-
-# run cross correlation
-xc <- xcorr(master.sf, compare.matrix = comp_mat, wl = 300, ovlp = 30, path = td, output = "list")
-
-# find peaks
-pks <- find_peaks(xc.output = xc, max.peak = TRUE, path = td)
+found.starts <- search_templates(X = master.sf, template.rows = which(master.sf$orig.sound.file == "start_marker"), test.files = c("example_test1.wav", "example_test2.wav"), path = td); pks
 
 ```
 
 ```{r, eval = FALSE, echo=FALSE}
 
-kbl <- kable(pks, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(found.starts, align = "c", row.names = F,  format = "html", escape = F)
 
 kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
@@ -455,7 +449,7 @@ kbl
 <table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
-   <th style="text-align:center;"> sound.files </th>
+   <th style="text-align:center;"> test.files </th>
    <th style="text-align:center;"> selec </th>
    <th style="text-align:center;"> start </th>
    <th style="text-align:center;"> end </th>
@@ -486,15 +480,19 @@ kbl
 </tbody>
 </table>
 
-The output of `find_peaks()` indicates that the start markers are found starting at ~2 s and ~3 s (2.00062 s and 3.00084 s), which was expected as `master_sound_file()` inserts a 1 second silence at the beginning of the master sound files and we added 1 s and 2 s to each simulated file respectively. With this information we can infer the position of all other selections in the new recordings. A selection table from re-recorded files can be generated using the function `align_test_files()`:
+We could also use the end marker as template in case the start marker was masked by other sounds.
+
+The output of `search_templates()` indicates that the start markers are found starting at ~2 s and ~3 s (2.00062 s and 3.00084 s), which was expected as `master_sound_file()` inserts a 1 second silence at the beginning of the master sound files and we added 1 s and 2 s to each simulated file respectively. With this information we can infer the position of all other selections in the new recordings. A selection table from re-recorded files can be generated using the function `align_test_files()`:
 
 ```{r, eval = FALSE}
 
-alg.tests <- align_test_files(X =  master.sf, Y = pks, path = td, by.song = TRUE)
+alg.tests <- align_test_files(X =  master.sf, Y = found.starts, path = td, by.song = TRUE)
 
 ```
 
-By default the function returns a extended selection table created 'by song': 
+&nbsp;
+
+By default the function returns an `extended_selection_table`  created 'by.song' (see '?selection_table()'), which is the data format that pretty much all [baRulho](https://marce10.github.io/baRulho/) functions take.  
 
 ```{r, eval = FALSE,  echo = FALSE}
 
@@ -776,10 +774,6 @@ spectrograms(alg.tests, by.song = "sound.files", xl = 3, collevels = seq(-60, 0,
 
 &nbsp;
 
-
-Note that data was converted into an `extended_selection_table`, which is the data format that pretty much all [baRulho](https://marce10.github.io/baRulho/) functions take. 
-
-
 ```{r, eval = FALSE}
 
 is_extended_selection_table(alg.est)
@@ -792,7 +786,7 @@ print(TRUE)
 
 ```
 
-Below are some examples from actual test signals that were re-recorded at 1, 30, 65, and 100 m respectively, and were later aligned using the start marker:
+Below are some examples from actual test signals that were re-recorded in the field at 1, 30, 65, and 100 m respectively, and were later aligned using the start marker:
 
  <img src="tlalpan_playback.jpeg" alt="Re-recorded at Tlalpan">
 
@@ -1214,6 +1208,8 @@ sa
 ```
 
 ```{r, echo = FALSE}
+
+names(sa)[ncol(sa)] <- "signal.to.noise.ratio"
 
 kbl <- kable(sa, align = "c", row.names = F,  format = "html", escape = F)
 

@@ -45,7 +45,7 @@ is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
 }
 \value{
-Extended selection table similar to input data, but also includes a new column (snr.attenuation)
+Extended selection table similar to input data, but also includes a new column (signal.to.noise.ratio)
 with the signal-to-noise ratio values.
 }
 \description{

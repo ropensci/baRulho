@@ -1,12 +1,11 @@
 #' Align test sound files
 #' 
 #' \code{align_test_files} aligns test (re-recorded) sound files.
-#' @usage align_test_files(X, Y, output = "est", marker = "start_marker", path = NULL, 
+#' @usage align_test_files(X, Y, output = "est", path = NULL, 
 #' by.song = TRUE, ...)
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. This should be the same data than that used for aligning signals using \code{\link[warbleR]{xcorr}}.
-#' @param Y object of class 'data.frame' with the output of \code{\link[warbleR]{find_peaks}} from the warbleR package. 
+#' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that used for aligning signals in \code{\link{search_templates}}.
+#' @param Y object of class 'data.frame' with the output of \code{\link{search_templates}}. 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data.frame ("data.frame").
-#' @param marker Character string of length 1 with the name of the marker that was used for aligning signals. Default is 'start_marker'.
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found. 
 #' @param by.song Logical argument to indicate if the extended selection table should be created by song (see 'by.song' \code{\link[warbleR]{selection_table}} argument). Default is \code{TRUE}.
 #' @param ...	Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.
@@ -14,7 +13,7 @@
 #' @export
 #' @name align_test_files
 #' @details The function takes the output of \code{\link[warbleR]{find_peaks}} ('Y') and aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
-#' @seealso \code{\link{spcc_align}}
+#' @seealso \code{\link{spcc_align}}; \code{\link{search_templates}}
 #' @examples
 #' \dontrun{
 #' # set temporary directory
@@ -66,20 +65,13 @@
 #' writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), 
 #' extensible = FALSE)
 #' 
-#' # create a matrix that contains the selection/files to be cross-correlated
-#' comp_mat <- matrix(c(rep(paste(master.sf$sound.files[1], 
-#' master.sf$selec[1], sep = "-"), 2), "example_test1.wav", 
-#' "example_test2.wav"), nrow = 2)
-#' 
-#' # run cross correlation
-#' xc <- warbleR::xcorr(master.sf, compare.matrix = comp_mat, wl = 100, 
-#' ovlp = 50, path = td, output = "list", pb = FALSE)
-#' 
-#' # find peaks
-#' pks <- warbleR::find_peaks(xc.output = xc, max.peak = TRUE, path = td)
+#' # find  tempaltes
+#' found.templts <- search_templates(X = master.sf, 
+#' template.rows = which(master.sf$orig.sound.file == "start_marker"), 
+#' test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 #' 
 #' # align signals and output extended selection table
-#' alg.tests <- align_test_files(X =  master.sf, Y = pks, path = td)
+#' alg.tests <- align_test_files(X =  master.sf, Y = found.templts, path = td, pb = FALSE)
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) 
@@ -88,7 +80,7 @@
 #' }
 #last modification on dec-26-2019 (MAS)
 
-align_test_files <- function(X, Y, output = "est", marker = "start_marker", path = NULL, by.song = TRUE, ...){
+align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, ...){
   
   #check output
   if (!any(output %in% c("est", "data.frame"))) stop("'output' must be either 'est' or 'data.frame'")  
@@ -100,13 +92,13 @@ align_test_files <- function(X, Y, output = "est", marker = "start_marker", path
    mstr.nm <- substr(Y$template[x], start = 0, regexpr("\\-[^\\-]*$", Y$template[x]) - 1)
    
     # start on new recording
-    start  <- X$start - X$start[X$sound.files == mstr.nm & X$orig.sound.file == marker] + Y$start[x]
+    start  <- X$start - X$start[paste(X$sound.files, X$selec, sep = "-") == Y$template[x]] + Y$start[x]
     
     # end on new recording
-    end  <- X$end - X$end[X$sound.files == mstr.nm & X$orig.sound.file == marker] + Y$end[x]
+    end  <- X$end - X$end[paste(X$sound.files, X$selec, sep = "-") == Y$template[x]] + Y$end[x]
     
     # make data frame
-    W <- data.frame(sound.files = Y$sound.files[x], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq[1:length(start)], top.freq = X$top.freq[1:length(start)], template = X$orig.sound.file[1:length(start)])
+    W <- data.frame(sound.files = Y$test.files[x], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq[1:length(start)], top.freq = X$top.freq[1:length(start)], template = X$orig.sound.file[1:length(start)])
     
     return(W)
   })

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Measure reverberations as tail_to_signal ratio — tail_to_signal_ratio • baRulho</title>
+<title>Measure reverberations as tail-to-signal ratio — tail_to_signal_ratio • baRulho</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="Measure reverberations as tail_to_signal ratio — tail_to_signal_ratio" />
+<meta property="og:title" content="Measure reverberations as tail-to-signal ratio — tail_to_signal_ratio" />
 <meta property="og:description" content="tail_to_signal_ratio measures reverberations as tail-to-signal ratio of signals referenced in an extended selection table." />
 <meta name="twitter:card" content="summary" />
 
@@ -120,7 +120,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Measure reverberations as tail_to_signal ratio</h1>
+    <h1>Measure reverberations as tail-to-signal ratio</h1>
     <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/tail_to_signal_ratio.R'><code>R/tail_to_signal_ratio.R</code></a></small>
     <div class="hidden name"><code>tail_to_signal_ratio.Rd</code></div>
     </div>
@@ -154,8 +154,7 @@ the start and end points of selection over which to measure ambient noise.</p></
     </tr>
     <tr>
       <th>type</th>
-      <td><p>Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail
-, N = background noise):</p><ul>
+      <td><p>Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):</p><ul>
 <li><p><code>1</code>: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
  (<code>rms(env(T))/rms(env(S))</code>) as described by Dabelsteen et al. (1993).</p></li>
 <li><p><code>2</code>: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (<code>rms(env(T))/rms(env(N))</code>). N is measure in the margin right before the signal. So type 2 actually measures tail-to-noise ratio.</p></li>
@@ -163,7 +162,7 @@ the start and end points of selection over which to measure ambient noise.</p></
     </tr>
     <tr>
       <th>bp</th>
-      <td><p>Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, it can be set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range. Default is <code>'freq.range'</code>.</p></td>
+      <td><p>Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range.</p></td>
     </tr>
     <tr>
       <th>output</th>
@@ -187,10 +186,10 @@ Note that lower values will increase time resolution, which is more important fo
 with the tail-to-signal ratio values.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Tail-to-signal ratio (SNR) measures ratio of energy in the tail of reverberations to energy in the signal. A general margin in which reverberation tail will be measured must be specified.  The function will measure tail-to-signal ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of tail-to-signal ratio in Dabelsteen et al. (1993) (type 2 is better referred to as tail-to-noise ratio).</p>
+    <p>Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberations to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Darden, SK, Pedersen SB, Larsen ON, &amp; Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.</p>
+    <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.Darden, SK, Pedersen SB, Larsen ON, &amp; Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='excess_attenuation.html'>excess_attenuation</a></code></p></div>

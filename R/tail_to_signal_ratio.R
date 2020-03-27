@@ -1,4 +1,4 @@
-#' Measure reverberations as tail_to_signal ratio 
+#' Measure reverberations as tail-to-signal ratio 
 #' 
 #' \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of signals referenced in an extended selection table.
 #' @usage tail_to_signal_ratio(X, mar, parallel = 1, pb = TRUE,  type = 1, 
@@ -8,11 +8,10 @@
 #'   the start and end points of selection over which to measure ambient noise.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, it can be set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range. Default is \code{'freq.range'}.
+#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
-#' @param type Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail
-#' , N = background noise): 
+#' @param type Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise): 
 #' \itemize{
 #' \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
 #'  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
@@ -25,7 +24,7 @@
 #' with the tail-to-signal ratio values.
 #' @export
 #' @name tail_to_signal_ratio
-#' @details Tail-to-signal ratio (SNR) measures ratio of energy in the tail of reverberations to energy in the signal. A general margin in which reverberation tail will be measured must be specified.  The function will measure tail-to-signal ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of tail-to-signal ratio in Dabelsteen et al. (1993) (type 2 is better referred to as tail-to-noise ratio).  
+#' @details Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberations to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.  
 #' @examples
 #' {
 #' # load example data
@@ -44,7 +43,7 @@
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @seealso \code{\link{excess_attenuation}}
 #' @references {
-#' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+#' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' 
 #' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 #' 

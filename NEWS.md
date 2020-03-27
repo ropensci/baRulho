@@ -1,5 +1,6 @@
 # *baRulho 1.0.2*
 
+* New function 'noise_profile()' 
 * rename 'snr()' to 'signal_to_noise_ratio()'
 * New function 'tail_to_signal_ratio()' to measure reverberations
 * Fix bug on 'excess_attenuation()' when method = 1

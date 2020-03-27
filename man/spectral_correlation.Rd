@@ -40,7 +40,6 @@ with the calculated frequency spectrum correlation coefficients.
 }
 \description{
 \code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
-\code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
 }
 \details{
 spectral correlation measures the similarity of two signals in the frequency domain. The function measures the spectral correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectral correlation are provided (see 'method' argument). Use \code{\link{spectral_blur_ratio}} to get spectra for plotting.
@@ -63,7 +62,7 @@ spectral_correlation(X = pe, method = 2)
 }
 \references{
 {
-Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 
 Apol, C.A., Sturdy, C.B. & Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.
 }

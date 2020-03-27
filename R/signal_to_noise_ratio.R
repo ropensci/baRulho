@@ -11,10 +11,10 @@
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param eq.dur Logical. Controls whether the ambient noise segment that is measured has the same duration 
 #' to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.
-#' @param noise.ref Character vector of length 1 to determined if a measure ambient noise segment to be used for measuring ambient noise. Two options are available: 
+#' @param noise.ref Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available: 
 #' \itemize{
-#' \item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments). If several 'ambient' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
-#' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'signal.type' column). Those segments will be used to apply the same ambient noise reference to all signals in a sound file. Therefore, at least one 'ambient' selection for each sound file must be provided.
+#' \item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments). 
+#' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'signal.type' column). Those segments will be used to apply the same ambient noise reference to all signals in a sound file. Therefore, at least one 'ambient' selection for each sound file must be provided. If several 'ambient' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
 #' }
 #' @param type  Numeric vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
 #' , N = background noise): 
@@ -23,7 +23,7 @@
 #'  (\code{rms(env(S))/rms(env(N))}) as described by Darden (2008).
 #' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as described by Dabelsteen et al (1993).
 #' }
-#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, it can be set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range. Default is \code{'freq.range'}.
+#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
@@ -53,7 +53,7 @@
 #' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
 #' @seealso \code{\link{excess_attenuation}}
 #' @references {
-#' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+#' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' 
 #' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 #' 

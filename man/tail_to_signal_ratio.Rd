@@ -2,7 +2,7 @@
 % Please edit documentation in R/tail_to_signal_ratio.R
 \name{tail_to_signal_ratio}
 \alias{tail_to_signal_ratio}
-\title{Measure reverberations as tail_to_signal ratio}
+\title{Measure reverberations as tail-to-signal ratio}
 \usage{
 tail_to_signal_ratio(X, mar, parallel = 1, pb = TRUE,  type = 1, 
 bp = 'freq.range', output = "est", hop.size = 1, wl = NULL)
@@ -17,15 +17,14 @@ the start and end points of selection over which to measure ambient noise.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{type}{Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail
-, N = background noise): 
+\item{type}{Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise): 
 \itemize{
 \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
 \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the signal. So type 2 actually measures tail-to-noise ratio.
 }}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, it can be set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range. Default is \code{'freq.range'}.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 
@@ -43,7 +42,7 @@ with the tail-to-signal ratio values.
 \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of signals referenced in an extended selection table.
 }
 \details{
-Tail-to-signal ratio (SNR) measures ratio of energy in the tail of reverberations to energy in the signal. A general margin in which reverberation tail will be measured must be specified.  The function will measure tail-to-signal ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of tail-to-signal ratio in Dabelsteen et al. (1993) (type 2 is better referred to as tail-to-noise ratio).
+Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberations to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
 }
 \examples{
 {
@@ -63,7 +62,7 @@ data("playback_est")
 }
 \references{
 {
-Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 
 Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 

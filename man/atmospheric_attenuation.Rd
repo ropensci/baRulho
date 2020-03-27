@@ -51,7 +51,7 @@ atmospheric_attenuation(f = 20000, temp = 20, RH = 90, p = 88000, formula = 1)
 }
 \references{
 {
-Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 }
 }
 \author{

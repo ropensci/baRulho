@@ -494,6 +494,19 @@ alg.tests <- align_test_files(X =  master.sf, Y = found.starts, path = td, by.so
 
 By default the function returns an `extended_selection_table`  created 'by.song' (see '?selection_table()'), which is the data format that pretty much all [baRulho](https://marce10.github.io/baRulho/) functions take.  
 
+```{r, eval = FALSE}
+
+is_extended_selection_table(alg.est)
+
+alg.est
+```
+
+```{r, eval = TRUE, echo = FALSE}
+
+print(TRUE)
+
+```
+
 ```{r, eval = FALSE,  echo = FALSE}
 
 kbl <- kable(alg.tests, align = "c", row.names = F,  format = "html", escape = F)
@@ -773,18 +786,6 @@ spectrograms(alg.tests, by.song = "sound.files", xl = 3, collevels = seq(-60, 0,
  <img src="example_test2.wav.jpeg" alt="test 2">
 
 &nbsp;
-
-```{r, eval = FALSE}
-
-is_extended_selection_table(alg.est)
-
-```
-
-```{r, eval = TRUE, echo = FALSE}
-
-print(TRUE)
-
-```
 
 Below are some examples from actual test signals that were re-recorded in the field at 1, 30, 65, and 100 m respectively, and were later aligned using the start marker:
 

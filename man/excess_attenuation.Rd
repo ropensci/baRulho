@@ -4,7 +4,7 @@
 \alias{excess_attenuation}
 \title{Measure excess attenuation}
 \usage{
-excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, 
+excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Marten",
 bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70)
 }
 \arguments{
@@ -18,6 +18,12 @@ bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70)
 \itemize{
 \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
 \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
+}}
+
+\item{type}{Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
+\itemize{
+\item \code{Marten}: as described by Marten et al. 1977:(total_attenuation - spheric_spreading_attenuation) / distance. This is the default method. Attenuation is measured as changes in energy on amplitude RMS (root mean square).
+\item \code{Darden}: as described by Darden et al 2008: microphone_gain - 20 x log(distance / 10) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the combined microphone gain of the reference and re-recorded signals.
 }}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
@@ -59,15 +65,17 @@ excess_attenuation(X = playback_est, method = 2)
 }
 \references{
 {
-Araya-Salas, M. (2020),=. baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
+Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0
 
-Marten, K., & Marler, P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.
+Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
 
-Morton, E. S. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.
+Marten K, & Marler P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.
+
+Morton ES. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.
 }
 }
 \seealso{
-\code{\link{spcc}}
+\code{\link{spcc}}; \code{\link{envelope_correlation}}
 }
 \author{
 Marcelo Araya-Salas (\email{marceloa27@gmail.com})

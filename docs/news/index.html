@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
       </span>
     </div>
 
@@ -122,13 +122,24 @@
       <small>Source: <a href='https://github.com/maRce10/baRulho/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="barulho-1-0-1" class="section level1">
+    <div id="barulho-1-0-2" class="section level1">
 <h1 class="page-header">
-<a href="#barulho-1-0-1" class="anchor"></a><small> Unreleased </small><em>baRulho 1.0.1</em>
+<a href="#barulho-1-0-2" class="anchor"></a><small> Unreleased </small><em>baRulho 1.0.2</em>
 </h1>
 <ul>
-<li>New function search_templates() to find signals in re-recorded sound files</li>
-<li>New function align_test_files() to set time of signals in aligned re-recorded files</li>
+<li>rename ‘snr()’ to ‘signal_to_noise_ratio()’</li>
+<li>New function ‘tail_to_signal_ratio()’ to measure reverberations</li>
+<li>Fix bug on ‘excess_attenuation()’ when method = 1</li>
+<li>Added type argument to ‘excess_attenuation()’ to run “Darden” version of excess attenuation</li>
+</ul>
+</div>
+    <div id="barulho-1-0-1" class="section level1">
+<h1 class="page-header">
+<a href="#barulho-1-0-1" class="anchor"></a><small> 2020-03-09 </small><em>baRulho 1.0.1</em>
+</h1>
+<ul>
+<li>New function ‘search_templates()’ to find signals in re-recorded sound files</li>
+<li>New function ‘align_test_files()’ to set time of signals in aligned re-recorded files</li>
 <li>Parallel available on internal ‘prep_X_bRlo_int()’ function</li>
 <li>Data frame are also returned by most functions</li>
 </ul>
@@ -147,6 +158,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#barulho-1-0-2">1.0.2</a></li>
         <li><a href="#barulho-1-0-1">1.0.1</a></li>
         <li><a href="#barulho-1-0-0">1.0.0</a></li>
       </ul>

@@ -131,7 +131,7 @@
 
     <pre class="usage"><span class='fu'>noise_profile</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>files</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
 <span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>"adjacent"</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-<span class='kw'>bp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>PSD</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>norm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>dB</span> <span class='kw'>=</span> <span class='st'>"A"</span>)</pre>
+<span class='kw'>bp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>PSD</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>norm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>dB</span> <span class='kw'>=</span> <span class='st'>"A"</span>, <span class='kw'>averaged</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -195,6 +195,10 @@ Note that lower values will increase time resolution, which is more important fo
       <th>dB</th>
       <td><p>A character string of length 1 specifying the type dB to return: "max0" for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights. See <code><a href='https://rdrr.io/pkg/seewave/man/meanspec.html'>meanspec</a></code>. Default is <code>"A"</code>.</p></td>
     </tr>
+    <tr>
+      <th>averaged</th>
+      <td><p>Logical to control if frequency spectra are averaged within a sound file. Default is <code>TRUE</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -202,7 +206,7 @@ Note that lower values will increase time resolution, which is more important fo
     <p>A list containing the the frequency spectra for each sound file or wave object (if 'X' is supplied).</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function uses <code><a href='https://rdrr.io/pkg/seewave/man/meanspec.html'>meanspec</a></code> internally.</p>
+    <p>The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses <code><a href='https://rdrr.io/pkg/seewave/man/meanspec.html'>meanspec</a></code> internally to calculate frequency spectra.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2.</p>

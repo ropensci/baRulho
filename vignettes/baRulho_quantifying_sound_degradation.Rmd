@@ -83,6 +83,8 @@ library(kableExtra)
 
 # also set a working directory, for this example we will use a temporary directory
 td <- tempdir()
+
+source('~/sda5/Dropbox/R_package_testing/baRulho/baRulho/R/noise_profile.R')
 ```
 
 For this vignette we will also need a few more packages:
@@ -393,7 +395,7 @@ Once we went to the field (or lab) and re-recorded the master sound files at dif
 
 &nbsp;
 
-To simulate re-recorded sound files we will make two copies of the master sound file, add some silence at the beggining (1 and 2 seconds) and add noise:    
+To simulate re-recorded sound files we will make two copies of the master sound file, add some silence at the beginning (1 and 2 seconds) and add noise:    
 
 ```{r, eval = FALSE}
 
@@ -919,7 +921,7 @@ kbl
 
 ### Blur ratio
  
-Blur ratio quantifies the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. Low values indicate low degradation of signals.  The function `blur_ratio()` measures the blur ratio of signals in which a reference playback has been re-recorded at different distances. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal (‘bottom.freq’ and ‘top.freq’ columns in ‘X’). The ‘signal.type’ column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
+Blur ratio quantifies the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. Low values indicate low degradation of signals.  The function `blur_ratio()` measures the blur ratio of signals in which a reference playback has been re-recorded at different distances. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
 Blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}
@@ -993,7 +995,7 @@ envs$distance <- as.factor(envs$distance)
 ggplot(envs, aes(x= time, y = amp, col = distance)) +
     geom_line() +
     facet_wrap(~ signal.type) + 
-    scale_color_manual(values = viridis(4)) +
+    scale_color_viridis_d(alpha = 0.7) +  
     labs(x = "Time (s)", y = "Amplitude (PMF)") +
     theme_classic()
 ```
@@ -1009,7 +1011,7 @@ envs$distance <- as.factor(envs$distance)
 ggplot(envs, aes(x= time, y = amp, col = distance)) +
     geom_line() +
     facet_wrap(~ signal.type) + 
-    scale_color_manual(values = viridis(4)) +
+    scale_color_viridis_d(alpha = 0.7) +  
     labs(x = "Time (s)", y = "Amplitude (PMF)") +
     theme_classic()
 
@@ -1079,12 +1081,12 @@ spctr <- sbr$spectra
 spctr$distance <- as.factor(spctr$distance)
 
 ggplot(spctr, aes(y = amp, x = freq, col = distance)) +
-geom_line() +
-facet_wrap(~ signal.type) + 
-scale_color_manual(values = viridis(4)) +
-labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
-coord_flip() +
-theme_classic()
+  geom_line() +
+  facet_wrap(~ signal.type) + 
+  scale_color_viridis_d(alpha = 0.7) +  
+  labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
+  coord_flip() +
+  theme_classic()
 
 ```
 
@@ -1096,12 +1098,12 @@ We can also zoom in to the frequency range of the signals by subsetting the spec
 spctr <- spctr[spctr$freq > min(playback_est$bottom.freq) & spctr$freq < max(playback_est$top.freq), ]
 
 ggplot(spctr, aes(y = amp, x = freq, col = distance)) +
-geom_line() +
-facet_wrap(~ signal.type) + 
-scale_color_manual(values = viridis(4)) +
-labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
-coord_flip() +
-theme_classic()
+  geom_line() +
+  facet_wrap(~ signal.type) + 
+  scale_color_viridis_d(alpha = 0.7) +  
+  labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
+  coord_flip() +
+  theme_classic()
 
 ```
 &nbsp;
@@ -1189,12 +1191,12 @@ As in `envelope_correlation()`, `spectral_correlation()` doesn't provide a graph
 
 ### Signal-to-noise ratio
 
-Signal-to-noise ratio (SNR) quantifies signal amplitude level in relation to ambient noise as a metric of overall signal attenuation. Therefore, attenuation refers to the loss of energy as described by Dabelsteen et al (1993). This method is implemented in the function `snr()`. The function requires a measurement of ambient noise, which could either be the noise right before each signal (`noise.ref = "adjacent"`) or one or more ambient noise measurements per recording (`noise.ref = "custom"`). For the latter, selections on signal parameters in which ambient noise will be measured must be specified. Alternatively, one or more selections of ambient noise can be used as reference (see 'noise.ref' argument). This can potentially provide a more accurate representation of ambient noise. When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. SNR can be measured as follows:
+Signal-to-noise ratio (SNR) quantifies signal amplitude level in relation to ambient noise as a metric of overall signal attenuation. Therefore, attenuation refers to the loss of energy as described by Dabelsteen et al (1993). This method is implemented in the function `signal_to_noise_ratio()`. The function requires a measurement of ambient noise, which could either be the noise right before each signal (`noise.ref = "adjacent"`) or one or more ambient noise measurements per recording (`noise.ref = "custom"`). For the latter, selections on signal parameters in which ambient noise will be measured must be specified. Alternatively, one or more selections of ambient noise can be used as reference (see 'noise.ref' argument). This can potentially provide a more accurate representation of ambient noise. When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. SNR can be measured as follows:
 
 ```{r, eval = TRUE}
 
-# run blur ratio
-sa <- snr(playback_est,  pb = FALSE, noise.ref = "custom")
+# run signal to noise ratio
+sa <- signal_to_noise_ratio(playback_est,  pb = FALSE, noise.ref = "custom")
 
 # check output class
 is_extended_selection_table(sa)
@@ -1227,6 +1229,46 @@ kbl
 
 Note that this function does not compare signals to references, so no reference column is added.
 
+### Tail-to=signal ratio
+
+Tail-to-signal ratio (TSR) is used to quantify reverberations. Specifically TSR measures the ratio of energy in the reverberation tail  (the time segment right after the signal) to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). `Type 1` is based on the original description of TSR in Dabelsteen et al. (1993) while `type 2` is better referred to as "tail-to-noise ratio", given that it compares the amplitude of tails to those of ambient noise. For both types higher values represent more reverberations. TSR can be measured as follows:
+
+```{r, eval = TRUE}
+
+# run tail to signal ratio
+tsr <- tail_to_signal_ratio(playback_est,  pb = FALSE, 
+                           type = 1, mar = 0.05)
+
+# check output class
+is_extended_selection_table(tsr)
+
+```
+
+Again, the output is similar to other functions:
+
+```{r, eval = FALSE}
+# print output
+
+tsr
+
+```
+
+```{r, echo = FALSE}
+
+
+kbl <- kable(tsr, align = "c", row.names = F,  format = "html", escape = F)
+
+kbl <-  column_spec(kbl, 9, background = "#ccebff", bold = TRUE)
+
+kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+
+kbl <- scroll_box(kbl, height = "400px")
+
+kbl
+
+```
+
+&nbsp;
 
 ### Spectrogram distortion
 
@@ -1264,6 +1306,98 @@ kbl
 ```
 
 &nbsp;
+
+## Other measurements
+
+### Noise profiles
+
+The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra. The following code measures the ambient noise profile for the recordings at distance >= 5m on the example extended selection table:
+
+```{r, eval = TRUE}
+
+# run noise profile
+np <- noise_profile(X = playback_est[playback_est$distance > 5, ], mar = 0.05, pb = FALSE)
+
+str(np)
+```
+
+The output is a data frame with amplitude values for the frequency bins for each wave object in the extended selection table:
+
+```{r, eval = FALSE}
+# print output
+head(np, 20)
+
+```
+
+```{r, echo = FALSE}
+
+kbl <- kable(np[1:20, ], align = "c", row.names = F,  format = "html", escape = F)
+
+kbl <-  column_spec(kbl, 2:3, background = "#ccebff", bold = TRUE)
+
+kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+
+kbl <- scroll_box(kbl, height = "400px")
+
+kbl
+
+```
+
+This can be graphically represented as follows:
+
+```{r, eval = TRUE}
+
+ggplot(np, aes(y = amp, x = freq, col = sound.files)) +
+  geom_line(size = 1.4) +
+   scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +  
+ labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
+  coord_flip() +
+  theme_classic()
+
+```
+
+The output data is actually an average of several frequency spectra for each sound file. We can obtain the original spectra by setting the argument `averaged = FALSE`: 
+
+```{r, eval = TRUE, warning = FALSE}
+
+np <- noise_profile(X = playback_est[playback_est$distance > 5, ], 
+      mar = 0.1, pb = FALSE, averaged = FALSE)
+
+# make a column containing sound file and selection
+np$sf.sl <- paste(np$sound.files, np$selec)
+
+ggplot(np, aes(y = amp, x = freq, col = sound.files, group = sf.sl)) +
+  geom_line(size = 1.4) +
+    scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +  
+ labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
+  coord_flip() +
+  theme_classic()
+
+```
+
+Note that we can limit the frequency range by using a bandpass filter ('bp' argument). In addition, the argument 'hop.size', which control the size of the time windows, affects the precision in the frequency domain. We can get a better precision by increasing 'hop.size' (or 'wl'):
+
+
+```{r, eval = TRUE}
+
+np <- noise_profile(X = playback_est[playback_est$distance > 5, ], 
+      mar = 0.05, pb = FALSE, bp = c(0, 10), 
+      averaged = FALSE, hop.size = 3)
+
+# make a column containing sound file and selection
+np$sf.sl <- paste(np$sound.files, np$selec)
+
+ggplot(np, aes(y = amp, x = freq, col = sound.files, group = sf.sl)) +
+  geom_line(size = 1.4) +
+  scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +  
+  labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
+  coord_flip() +
+  theme_classic()
+
+```
+
+
+The function can estimate noise profiles for complete sound files, by supplying a list of the files (argument 'files', and not supplying  'X') or by simply running it without supplying 'X' or 'files'. In this case it will run over all sound files in the working directory (or 'path' supplied). 
 
 ---
 

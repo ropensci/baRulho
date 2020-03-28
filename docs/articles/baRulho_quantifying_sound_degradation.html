@@ -405,7 +405,7 @@ master.sf &lt;-<span class="st"> </span><span class="kw"><a href="../reference/m
 <img src="align-crop-optimize.gif" alt="Align recordings diagram" width="550">
 </center>
 <p> </p>
-<p>To simulate re-recorded sound files we will make two copies of the master sound file, add some silence at the beggining (1 and 2 seconds) and add noise:</p>
+<p>To simulate re-recorded sound files we will make two copies of the master sound file, add some silence at the beginning (1 and 2 seconds) and add noise:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># read master</span>
 exmp.master &lt;-<span class="st"> </span><span class="kw">readWave</span>(<span class="kw"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span>(td, <span class="st">"example_master.wav"</span>))
 
@@ -3067,7 +3067,7 @@ envs<span class="op">$</span>distance &lt;-<span class="st"> </span><span class=
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span>(<span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st">  </span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-38-1.png" width="560"></p>
@@ -3079,7 +3079,7 @@ envs<span class="op">$</span>distance &lt;-<span class="st"> </span><span class=
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(envs, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">x=</span> time, <span class="dt">y =</span> amp, <span class="dt">col =</span> distance)) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span>(<span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st">  </span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Time (s)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
 <span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-39-1.png" width="560"></p>
@@ -4045,24 +4045,24 @@ spctr &lt;-<span class="st"> </span>sbr<span class="op">$</span>spectra
 spctr<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(spctr<span class="op">$</span>distance)
 
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span>(<span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st">  </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-44-1.png" width="560"></p>
 <p>We can also zoom in to the frequency range of the signals by subsetting the spectrum data:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># get the frequencies higher than lowest bottom but lower than highest top freq</span>
 spctr &lt;-<span class="st"> </span>spctr[spctr<span class="op">$</span>freq <span class="op">&gt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span>(playback_est<span class="op">$</span>bottom.freq) <span class="op">&amp;</span><span class="st"> </span>spctr<span class="op">$</span>freq <span class="op">&lt;</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span>(playback_est<span class="op">$</span>top.freq), ]
 
 <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(spctr, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> distance)) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span>(<span class="dt">values =</span> <span class="kw"><a href="https://rdrr.io/pkg/viridis/man/reexports.html">viridis</a></span>(<span class="dv">4</span>)) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
-<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span>(<span class="op">~</span><span class="st"> </span>signal.type) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span>(<span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">+</span><span class="st">  </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (PMF)"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-45-1.png" width="560">  </p>
 </div>
 <div id="envelope-correlation" class="section level3">
@@ -5969,9 +5969,9 @@ SUR-K1
 <div id="signal-to-noise-ratio" class="section level3">
 <h3 class="hasAnchor">
 <a href="#signal-to-noise-ratio" class="anchor"></a>Signal-to-noise ratio</h3>
-<p>Signal-to-noise ratio (SNR) quantifies signal amplitude level in relation to ambient noise as a metric of overall signal attenuation. Therefore, attenuation refers to the loss of energy as described by Dabelsteen et al (1993). This method is implemented in the function <code><a href="../reference/snr.html">snr()</a></code>. The function requires a measurement of ambient noise, which could either be the noise right before each signal (<code>noise.ref = "adjacent"</code>) or one or more ambient noise measurements per recording (<code>noise.ref = "custom"</code>). For the latter, selections on signal parameters in which ambient noise will be measured must be specified. Alternatively, one or more selections of ambient noise can be used as reference (see ‘noise.ref’ argument). This can potentially provide a more accurate representation of ambient noise. When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. SNR can be measured as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run blur ratio</span>
-sa &lt;-<span class="st"> </span><span class="kw"><a href="../reference/snr.html">snr</a></span>(playback_est,  <span class="dt">pb =</span> <span class="ot">FALSE</span>, <span class="dt">noise.ref =</span> <span class="st">"custom"</span>)
+<p>Signal-to-noise ratio (SNR) quantifies signal amplitude level in relation to ambient noise as a metric of overall signal attenuation. Therefore, attenuation refers to the loss of energy as described by Dabelsteen et al (1993). This method is implemented in the function <code><a href="../reference/signal_to_noise_ratio.html">signal_to_noise_ratio()</a></code>. The function requires a measurement of ambient noise, which could either be the noise right before each signal (<code>noise.ref = "adjacent"</code>) or one or more ambient noise measurements per recording (<code>noise.ref = "custom"</code>). For the latter, selections on signal parameters in which ambient noise will be measured must be specified. Alternatively, one or more selections of ambient noise can be used as reference (see ‘noise.ref’ argument). This can potentially provide a more accurate representation of ambient noise. When margins overlap with another acoustic signal nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the acoustic signal. SNR can be measured as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run signal to noise ratio</span>
+sa &lt;-<span class="st"> </span><span class="kw"><a href="../reference/signal_to_noise_ratio.html">signal_to_noise_ratio</a></span>(playback_est,  <span class="dt">pb =</span> <span class="ot">FALSE</span>, <span class="dt">noise.ref =</span> <span class="st">"custom"</span>)
 
 <span class="co"># check output class</span>
 <span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/is_extended_selection_table.html">is_extended_selection_table</a></span>(sa)</code></pre></div>
@@ -6828,6 +6828,870 @@ SUR-K1
 </div>
 <p> </p>
 <p>Note that this function does not compare signals to references, so no reference column is added.</p>
+</div>
+<div id="tail-tosignal-ratio" class="section level3">
+<h3 class="hasAnchor">
+<a href="#tail-tosignal-ratio" class="anchor"></a>Tail-to=signal ratio</h3>
+<p>Tail-to-signal ratio (TSR) is used to quantify reverberations. Specifically TSR measures the ratio of energy in the reverberation tail (the time segment right after the signal) to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal (‘bottom.freq’ and ‘top.freq’ columns in ‘X’). Two methods for calculating reverberations are provided (see ‘type’ argument). <code>Type 1</code> is based on the original description of TSR in Dabelsteen et al. (1993) while <code>type 2</code> is better referred to as “tail-to-noise ratio”, given that it compares the amplitude of tails to those of ambient noise. For both types higher values represent more reverberations. TSR can be measured as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run tail to signal ratio</span>
+tsr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/tail_to_signal_ratio.html">tail_to_signal_ratio</a></span>(playback_est,  <span class="dt">pb =</span> <span class="ot">FALSE</span>, 
+                           <span class="dt">type =</span> <span class="dv">1</span>, <span class="dt">mar =</span> <span class="fl">0.05</span>)
+
+<span class="co"># check output class</span>
+<span class="kw"><a href="https://rdrr.io/pkg/warbleR/man/is_extended_selection_table.html">is_extended_selection_table</a></span>(tsr)</code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<p>Again, the output is similar to other functions:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># print output</span>
+
+tsr</code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; ">
+<table class="table table table-striped">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+sound.files
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+selec
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+start
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+end
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+bottom.freq
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+top.freq
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+signal.type
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+distance
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+tail.to.signal.ratio
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+01m_re-rec.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.0500000
+</td>
+<td style="text-align:center;">
+0.2072789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+CCE-F1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+50.848249
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+05m_re-rec.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.0444060
+</td>
+<td style="text-align:center;">
+0.2016849
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+CCE-F1
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+18.466631
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.0420688
+</td>
+<td style="text-align:center;">
+0.1993477
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+CCE-F1
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+14.917809
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;">
+0.0420688
+</td>
+<td style="text-align:center;">
+0.1993477
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+CCE-F1
+</td>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+12.067894
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+01m_re-rec.wav
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+1.0500000
+</td>
+<td style="text-align:center;">
+1.2444898
+</td>
+<td style="text-align:center;">
+1.544095
+</td>
+<td style="text-align:center;">
+10.89459
+</td>
+<td style="text-align:center;">
+CCE-I2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+49.469932
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+05m_re-rec.wav
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+1.0465092
+</td>
+<td style="text-align:center;">
+1.2409990
+</td>
+<td style="text-align:center;">
+1.544095
+</td>
+<td style="text-align:center;">
+10.89459
+</td>
+<td style="text-align:center;">
+CCE-I2
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+17.940550
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+1.0418547
+</td>
+<td style="text-align:center;">
+1.2363445
+</td>
+<td style="text-align:center;">
+1.544095
+</td>
+<td style="text-align:center;">
+10.89459
+</td>
+<td style="text-align:center;">
+CCE-I2
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+14.901707
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;">
+4
+</td>
+<td style="text-align:center;">
+1.0418547
+</td>
+<td style="text-align:center;">
+1.2363445
+</td>
+<td style="text-align:center;">
+1.544095
+</td>
+<td style="text-align:center;">
+10.89459
+</td>
+<td style="text-align:center;">
+CCE-I2
+</td>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+7.305585
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+01m_re-rec.wav
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;">
+1.5500000
+</td>
+<td style="text-align:center;">
+1.6814512
+</td>
+<td style="text-align:center;">
+2.376997
+</td>
+<td style="text-align:center;">
+11.72750
+</td>
+<td style="text-align:center;">
+CCL-K2
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+51.037878
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+05m_re-rec.wav
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;">
+1.5482417
+</td>
+<td style="text-align:center;">
+1.6796930
+</td>
+<td style="text-align:center;">
+2.376997
+</td>
+<td style="text-align:center;">
+11.72750
+</td>
+<td style="text-align:center;">
+CCL-K2
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+19.394622
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;">
+1.5423809
+</td>
+<td style="text-align:center;">
+1.6738321
+</td>
+<td style="text-align:center;">
+2.376997
+</td>
+<td style="text-align:center;">
+11.72750
+</td>
+<td style="text-align:center;">
+CCL-K2
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+15.614886
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;">
+1.5423809
+</td>
+<td style="text-align:center;">
+1.6738321
+</td>
+<td style="text-align:center;">
+2.376997
+</td>
+<td style="text-align:center;">
+11.72750
+</td>
+<td style="text-align:center;">
+CCL-K2
+</td>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+10.483529
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+01m_re-rec.wav
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.7980000
+</td>
+<td style="text-align:center;">
+0.9552789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+ambient
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+05m_re-rec.wav
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.7980000
+</td>
+<td style="text-align:center;">
+0.9552789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+ambient
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.7980000
+</td>
+<td style="text-align:center;">
+0.9552789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+ambient
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;">
+3
+</td>
+<td style="text-align:center;">
+0.7980000
+</td>
+<td style="text-align:center;">
+0.9552789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+ambient
+</td>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+01m_re-rec.wav
+</td>
+<td style="text-align:center;">
+6
+</td>
+<td style="text-align:center;">
+1.7650000
+</td>
+<td style="text-align:center;">
+1.9222789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+ambient
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+05m_re-rec.wav
+</td>
+<td style="text-align:center;">
+6
+</td>
+<td style="text-align:center;">
+1.7650000
+</td>
+<td style="text-align:center;">
+1.9222789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+ambient
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;">
+6
+</td>
+<td style="text-align:center;">
+1.7650000
+</td>
+<td style="text-align:center;">
+1.9222789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+ambient
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;">
+6
+</td>
+<td style="text-align:center;">
+1.7650000
+</td>
+<td style="text-align:center;">
+1.9222789
+</td>
+<td style="text-align:center;">
+2.238685
+</td>
+<td style="text-align:center;">
+11.58918
+</td>
+<td style="text-align:center;">
+ambient
+</td>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+01m_re-rec.wav
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.5500000
+</td>
+<td style="text-align:center;">
+0.7000680
+</td>
+<td style="text-align:center;">
+1.743639
+</td>
+<td style="text-align:center;">
+11.09414
+</td>
+<td style="text-align:center;">
+SUR-A4
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+51.080224
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+05m_re-rec.wav
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.5464984
+</td>
+<td style="text-align:center;">
+0.6965664
+</td>
+<td style="text-align:center;">
+1.743639
+</td>
+<td style="text-align:center;">
+11.09414
+</td>
+<td style="text-align:center;">
+SUR-A4
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+20.768431
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.5418296
+</td>
+<td style="text-align:center;">
+0.6918977
+</td>
+<td style="text-align:center;">
+1.743639
+</td>
+<td style="text-align:center;">
+11.09414
+</td>
+<td style="text-align:center;">
+SUR-A4
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+15.523739
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;">
+2
+</td>
+<td style="text-align:center;">
+0.5418296
+</td>
+<td style="text-align:center;">
+0.6918977
+</td>
+<td style="text-align:center;">
+1.743639
+</td>
+<td style="text-align:center;">
+11.09414
+</td>
+<td style="text-align:center;">
+SUR-A4
+</td>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+11.192860
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+01m_re-rec.wav
+</td>
+<td style="text-align:center;">
+7
+</td>
+<td style="text-align:center;">
+2.0499773
+</td>
+<td style="text-align:center;">
+2.1885488
+</td>
+<td style="text-align:center;">
+2.030939
+</td>
+<td style="text-align:center;">
+11.38144
+</td>
+<td style="text-align:center;">
+SUR-K1
+</td>
+<td style="text-align:center;">
+1
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+53.550750
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+05m_re-rec.wav
+</td>
+<td style="text-align:center;">
+7
+</td>
+<td style="text-align:center;">
+2.0494093
+</td>
+<td style="text-align:center;">
+2.1879808
+</td>
+<td style="text-align:center;">
+2.030939
+</td>
+<td style="text-align:center;">
+11.38144
+</td>
+<td style="text-align:center;">
+SUR-K1
+</td>
+<td style="text-align:center;">
+5
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+20.723342
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;">
+7
+</td>
+<td style="text-align:center;">
+2.0423533
+</td>
+<td style="text-align:center;">
+2.1809248
+</td>
+<td style="text-align:center;">
+2.030939
+</td>
+<td style="text-align:center;">
+11.38144
+</td>
+<td style="text-align:center;">
+SUR-K1
+</td>
+<td style="text-align:center;">
+10
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+17.263923
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;">
+7
+</td>
+<td style="text-align:center;">
+2.0423533
+</td>
+<td style="text-align:center;">
+2.1809248
+</td>
+<td style="text-align:center;">
+2.030939
+</td>
+<td style="text-align:center;">
+11.38144
+</td>
+<td style="text-align:center;">
+SUR-K1
+</td>
+<td style="text-align:center;">
+15
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+8.007810
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p> </p>
 </div>
 <div id="spectrogram-distortion" class="section level3">
 <h3 class="hasAnchor">
@@ -7777,6 +8641,302 @@ SUR-K1
 </table>
 </div>
 <p> </p>
+</div>
+</div>
+<div id="other-measurements" class="section level2">
+<h2 class="hasAnchor">
+<a href="#other-measurements" class="anchor"></a>Other measurements</h2>
+<div id="noise-profiles" class="section level3">
+<h3 class="hasAnchor">
+<a href="#noise-profiles" class="anchor"></a>Noise profiles</h3>
+<p>The function <code><a href="../reference/noise_profile.html">noise_profile()</a></code> allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses  internally to calculate frequency spectra. The following code measures the ambient noise profile for the recordings at distance &gt;= 5m on the example extended selection table:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run noise profile</span>
+np &lt;-<span class="st"> </span><span class="kw"><a href="../reference/noise_profile.html">noise_profile</a></span>(<span class="dt">X =</span> playback_est[playback_est<span class="op">$</span>distance <span class="op">&gt;</span><span class="st"> </span><span class="dv">5</span>, ], <span class="dt">mar =</span> <span class="fl">0.05</span>, <span class="dt">pb =</span> <span class="ot">FALSE</span>)
+
+<span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(np)</code></pre></div>
+<pre><code>## 'data.frame':    42 obs. of  3 variables:
+##  $ sound.files: Factor w/ 2 levels "10m_re-rec.wav",..: 1 2 1 2 1 2 1 2 1 2 ...
+##  $ freq       : num  1 1 2 2 3.01 ...
+##  $ amp        : num  -3.59 -0.792 -8.615 -0.869 -9.355 ...</code></pre>
+<p>The output is a data frame with amplitude values for the frequency bins for each wave object in the extended selection table:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># print output</span>
+<span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(np, <span class="dv">20</span>)</code></pre></div>
+<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:400px; ">
+<table class="table table table-striped">
+<thead><tr>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+sound.files
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+freq
+</th>
+<th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
+amp
+</th>
+</tr></thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+1.002273
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-3.5900568
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+1.002273
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-0.7922537
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+2.004545
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-8.6146031
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+2.004545
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-0.8686308
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+3.006818
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-9.3551517
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+3.006818
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-3.8335173
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+4.009091
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-10.1784820
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+4.009091
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-6.4391762
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+5.011364
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-12.4675444
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+5.011364
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-9.4476033
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+6.013636
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-15.3716112
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+6.013636
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-13.9408297
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+7.015909
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-18.0099982
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+7.015909
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-17.5349425
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+8.018182
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-19.0796970
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+8.018182
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-20.8234723
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+9.020454
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-21.3206714
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+9.020454
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-23.3147755
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+10m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+10.022727
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-23.8809077
+</td>
+</tr>
+<tr>
+<td style="text-align:center;">
+15m_re-rec.wav
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+10.022727
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+-24.9302715
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>This can be graphically represented as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(np, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> sound.files)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">size =</span> <span class="fl">1.4</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span>(<span class="dt">begin =</span> <span class="fl">0.2</span>, <span class="dt">end =</span> <span class="fl">0.8</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st">  </span>
+<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (dBA)"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-64-1.png" width="560"></p>
+<p>The output data is actually an average of several frequency spectra for each sound file. We can obtain the original spectra by setting the argument <code>averaged = FALSE</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">np &lt;-<span class="st"> </span><span class="kw"><a href="../reference/noise_profile.html">noise_profile</a></span>(<span class="dt">X =</span> playback_est[playback_est<span class="op">$</span>distance <span class="op">&gt;</span><span class="st"> </span><span class="dv">5</span>, ], 
+      <span class="dt">mar =</span> <span class="fl">0.1</span>, <span class="dt">pb =</span> <span class="ot">FALSE</span>, <span class="dt">averaged =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># make a column containing sound file and selection</span>
+np<span class="op">$</span>sf.sl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(np<span class="op">$</span>sound.files, np<span class="op">$</span>selec)
+
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(np, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> sound.files, <span class="dt">group =</span> sf.sl)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">size =</span> <span class="fl">1.4</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span>(<span class="dt">begin =</span> <span class="fl">0.2</span>, <span class="dt">end =</span> <span class="fl">0.8</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st">  </span>
+<span class="st"> </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (dBA)"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-65-1.png" width="560"></p>
+<p>Note that we can limit the frequency range by using a bandpass filter (‘bp’ argument). In addition, the argument ‘hop.size’, which control the size of the time windows, affects the precision in the frequency domain. We can get a better precision by increasing ‘hop.size’ (or ‘wl’):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">np &lt;-<span class="st"> </span><span class="kw"><a href="../reference/noise_profile.html">noise_profile</a></span>(<span class="dt">X =</span> playback_est[playback_est<span class="op">$</span>distance <span class="op">&gt;</span><span class="st"> </span><span class="dv">5</span>, ], 
+      <span class="dt">mar =</span> <span class="fl">0.05</span>, <span class="dt">pb =</span> <span class="ot">FALSE</span>, <span class="dt">bp =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">0</span>, <span class="dv">10</span>), 
+      <span class="dt">averaged =</span> <span class="ot">FALSE</span>, <span class="dt">hop.size =</span> <span class="dv">3</span>)
+
+<span class="co"># make a column containing sound file and selection</span>
+np<span class="op">$</span>sf.sl &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(np<span class="op">$</span>sound.files, np<span class="op">$</span>selec)
+
+<span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(np, <span class="kw"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(<span class="dt">y =</span> amp, <span class="dt">x =</span> freq, <span class="dt">col =</span> sound.files, <span class="dt">group =</span> sf.sl)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(<span class="dt">size =</span> <span class="fl">1.4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span>(<span class="dt">begin =</span> <span class="fl">0.2</span>, <span class="dt">end =</span> <span class="fl">0.8</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span><span class="st">  </span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span>(<span class="dt">x =</span> <span class="st">"Frequency (kHz)"</span>, <span class="dt">y =</span> <span class="st">"Amplitude (dBA)"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span>()</code></pre></div>
+<pre><code>## Warning: Removed 14 rows containing missing values (geom_path).</code></pre>
+<p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-66-1.png" width="560"></p>
+<p>The function can estimate noise profiles for complete sound files, by supplying a list of the files (argument ‘files’, and not supplying ‘X’) or by simply running it without supplying ‘X’ or ‘files’. In this case it will run over all sound files in the working directory (or ‘path’ supplied).</p>
 <hr>
 <p>Please report any bugs <a href="https://github.com/maRce10/baRulho/issues">here</a>.</p>
 <p>The package <a href="https://marce10.github.io/baRulho/">baRulho</a> should be cited as follows:</p>
@@ -7855,6 +9015,7 @@ SUR-K1
 <a href="#quantifying-signal-degradation">Quantifying signal degradation</a><ul class="nav nav-pills nav-stacked">
 <li><a href="#required-data-structure">Required data structure</a></li>
       <li><a href="#degradation-measurements">Degradation measurements</a></li>
+      <li><a href="#other-measurements">Other measurements</a></li>
       </ul>
 </li>
       <li><a href="#references">References</a></li>

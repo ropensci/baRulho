@@ -3,7 +3,7 @@
 #' \code{noise_profile} Measure noise profiles in sound files or extended selection tables.
 #' @usage noise_profile(X = NULL, files = NULL, mar = NULL, 
 #' noise.ref = "adjacent", parallel = 1, pb = TRUE, path = NULL,
-#' bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A")
+#' bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A", averaged = TRUE)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. Default is \code{NULL}.
 #' @param files Character vector with names of wave files to be analyzed. Files must be found in 'path' supplied (or in the working directory if 'path' is not supplied). Default is \code{NULL}.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
@@ -25,10 +25,11 @@
 #' @param PSD Logical to control whether the Probability Mass Function (the probability distribution of frequencies). See \code{\link[seewave]{meanspec}}. Default is \code{FALSE}.
 #' @param norm Logical to control whether amplitude values are normalized (divided by the maximum) so the highest value is 1. See \code{\link[seewave]{meanspec}}. Default is \code{TRUE}.
 #' @param dB A character string of length 1 specifying the type dB to return: "max0" for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights. See \code{\link[seewave]{meanspec}}. Default is \code{"A"}.
+#' @param averaged Logical to control if frequency spectra are averaged within a sound file. Default is \code{TRUE}.
 #' @return A list containing the the frequency spectra for each sound file or wave object (if 'X' is supplied).
 #' @export
 #' @name noise_profile
-#' @details The function uses \code{\link[seewave]{meanspec}} internally. 
+#' @details The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra. 
 #' @examples
 #' {
 #' # load example data
@@ -52,7 +53,7 @@
 #last modification on nov-01-2019 (MAS)
 
 noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjacent", parallel = 1, pb = TRUE, path = NULL,
-                      bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A"){
+                      bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A",  averaged = TRUE){
   
   # get call argument names
   argus <- names(as.list(base::match.call()))
@@ -150,19 +151,18 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
         noise.wv <- warbleR::read_wave(X = X, index = y, from = stn, to = X$start[y])
         }
       
-      # add band-pass frequency filter
-      if (!is.null(bp)) 
-        noise.wv <- seewave::ffilter(noise.wv, f = noise.wv@samp.rate, from = bp[1] * 1000, ovlp = 0,
-                                   to = bp[2] * 1000, bandpass = TRUE, wl = wl, output = "Wave")
-      
       # mean spec
       mspc <- meanspec(wave = noise.wv, f = noise.wv@samp.rate, plot = FALSE, wl = wl, ovlp = 0, PSD = PSD, PMF = FALSE, norm = norm, dB = dB)  
 
       # name columns
       colnames(mspc) <- c("freq", "amp")
-      
+
       # add sound file name
       mspc <- data.frame(sound.files = X$sound.files[y], selec= X$selec[y], mspc)
+
+      # add band-pass frequency filter
+      if (!is.null(bp)) 
+        mspc <- mspc[mspc$freq >= bp[1] & mspc$freq <= bp[2], ]
       
       return(mspc)
       })
@@ -197,7 +197,8 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
   noise.profile <- do.call(rbind, noise.profiles)
   
   # get mean by sound file
-  noise.profile <- aggregate(formula = amp ~ sound.files + freq, data = noise.profile, FUN = mean)  
+  if (averaged)
+    noise.profile <- aggregate(formula = amp ~ sound.files + freq, data = noise.profile, FUN = mean)  
   
   return(noise.profile)
   }

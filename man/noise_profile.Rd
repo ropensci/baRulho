@@ -6,7 +6,7 @@
 \usage{
 noise_profile(X = NULL, files = NULL, mar = NULL, 
 noise.ref = "adjacent", parallel = 1, pb = TRUE, path = NULL,
-bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A")
+bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A", averaged = TRUE)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. Default is \code{NULL}.}
@@ -42,6 +42,8 @@ Note that lower values will increase time resolution, which is more important fo
 \item{norm}{Logical to control whether amplitude values are normalized (divided by the maximum) so the highest value is 1. See \code{\link[seewave]{meanspec}}. Default is \code{TRUE}.}
 
 \item{dB}{A character string of length 1 specifying the type dB to return: "max0" for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights. See \code{\link[seewave]{meanspec}}. Default is \code{"A"}.}
+
+\item{averaged}{Logical to control if frequency spectra are averaged within a sound file. Default is \code{TRUE}.}
 }
 \value{
 A list containing the the frequency spectra for each sound file or wave object (if 'X' is supplied).
@@ -50,7 +52,7 @@ A list containing the the frequency spectra for each sound file or wave object (
 \code{noise_profile} Measure noise profiles in sound files or extended selection tables.
 }
 \details{
-The function uses \code{\link[seewave]{meanspec}} internally.
+The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
 }
 \examples{
 {

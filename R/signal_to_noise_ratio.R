@@ -227,13 +227,3 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   
   return(X)
   }
-
-
-##############################################################################################################
-#' alternative name for \code{\link{signal_to_noise_ratio}}
-#'
-#' @keywords internal
-#' @details see \code{\link{signal_to_noise_ratio}} for documentation. \code{\link{snr}} will be deprecated in future versions.
-#' @export
-
-snr <- signal_to_noise_ratio

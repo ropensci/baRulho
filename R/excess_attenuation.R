@@ -105,7 +105,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
     
     # get RMS for signal
     sigRMS <- seewave::rms(seewave::env(clp, f = clp@samp.rate, envt = "abs", plot = FALSE))
-    sigRMS <- - 20 * log10(sigRMS)
+    sigRMS <- 20 * log10(sigRMS)
     
     return(data.frame(X[y, , drop = FALSE], sigRMS))
   }

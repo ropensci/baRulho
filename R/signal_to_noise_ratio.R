@@ -214,7 +214,7 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
       }
     
     # Calculate signal-to-noise ratio
-    snr <- 20 * log10(sig_RMS / bg_RMS)
+    snr <- - 20 * log10(sig_RMS / bg_RMS)
    
     return(snr)  
     } else return(NA) # return NA if current row is noise

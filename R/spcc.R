@@ -71,6 +71,9 @@ spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson"
   if (is.null(wl))
     wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
 
+  # make wl even if odd
+  if (!(wl %% 2) == 0) wl <- wl + 1
+  
   # If method is not numeric
   if (!is.character(cor.method)) stop("'cor.method' must be a character vector of length 1")
   

@@ -79,6 +79,9 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   if (is.null(wl))
     wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
   
+  # make wl even if odd
+  if (!(wl %% 2) == 0) wl <- wl + 1
+  
   # If method is not numeric
   if (!is.numeric(method)) stop("'method' must be a numeric vector of length 1") 
   if (!any(method %in% 1:2)) stop("'method' must be either 1 or 2")

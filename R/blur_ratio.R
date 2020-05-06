@@ -79,6 +79,9 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (is.null(wl))
     wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
   
+  # make wl even if odd
+  if (!(wl %% 2) == 0) wl <- wl + 1
+  
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
   if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")

@@ -125,6 +125,9 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
   if (is.null(wl))
     wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
   
+  # make wl even if odd
+  if (!(wl %% 2) == 0) wl <- wl + 1
+  
   # set pb options 
   pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
   

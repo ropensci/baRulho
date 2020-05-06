@@ -80,6 +80,9 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
   if (is.null(wl))
     wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
   
+  # make wl even if odd
+  if (!(wl %% 2) == 0) wl <- wl + 1
+  
   # check signal.type column 
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
   

@@ -2,7 +2,7 @@
 % Please edit documentation in R/noise_profile.R
 \name{noise_profile}
 \alias{noise_profile}
-\title{Measure noise profiles}
+\title{Measure full spectrum sound noise profiles}
 \usage{
 noise_profile(X = NULL, files = NULL, mar = NULL, 
 noise.ref = "adjacent", parallel = 1, pb = TRUE, path = NULL,
@@ -49,10 +49,10 @@ Note that lower values will increase time resolution, which is more important fo
 A list containing the the frequency spectra for each sound file or wave object (if 'X' is supplied).
 }
 \description{
-\code{noise_profile} Measure noise profiles in sound files or extended selection tables.
+\code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.
 }
 \details{
-The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
+The function `noise_profile()` allows to estimate full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
 }
 \examples{
 {

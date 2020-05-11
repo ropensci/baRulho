@@ -1,5 +1,6 @@
 # *baRulho 1.0.2*
 
+* Windows length is converted to even in all functions
 * Fix sign error in signal amplitude measurements (`signal_to_noise_ratio()` and `excess_attenuation()`)
 * New function `noise_profile()` 
 * rename `snr()` to `signal_to_noise_ratio()`

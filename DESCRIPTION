@@ -2,7 +2,7 @@ Package: baRulho
 Type: Package
 Title: Quantifying Habitat-Induced Acoustic Signal Degradation  
 Version: 1.0.2
-Date: 2020-03-26
+Date: 2020-06-05
 Author: Marcelo Araya-Salas [aut, cre]
 Maintainer: Marcelo Araya-Salas <marceloa27@gmail.com>
 Description: Intended to facilitate acoustic analysis of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics, including blur ratio, signal-to-noise ratio, excess attenuation and envelope correlation among others (Dabelsteen et al 1993 <doi:10.1121/1.406682>).
@@ -15,7 +15,7 @@ BugReports: https://github.com/maRce10/baRulho/issues
 NeedsCompilation: no
 Suggests: ggplot2, knitr, kableExtra, viridis, png
 VignetteBuilder: knitr
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0
 Repository: CRANs
 Language: en-US
 Authors@R: person("Marcelo", "Araya-Salas", role = c("aut", "cre"), email = "marceloa27@gmail.com")

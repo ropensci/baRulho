@@ -4,7 +4,11 @@
 \name{playback_est}
 \alias{playback_est}
 \title{Extended selection table with re-recorded playbacks}
-\format{Extended selection table object in the \code{\link{warbleR}} format, which contains annotations and acoustic data}
+\format{
+Extended selection table object in the \code{\link{warbleR}} format, which contains annotations and acoustic data
+
+Extended selection table object in the \code{\link{warbleR}} format, which contains annotations and acoustic data
+}
 \source{
 Marcelo Araya-Salas
 

@@ -9,8 +9,6 @@
 #'   }
 #' Most functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency.
 #'   
-#' @exportClass selection_table
-#' @exportClass extended_selection_table
 #' @import pbapply
 #' @import tuneR
 #' @import seewave

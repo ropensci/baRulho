@@ -24,7 +24,7 @@ the start and end points of selection over which to measure ambient noise.}
 \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the signal. So type 2 actually measures tail-to-noise ratio.
 }}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 

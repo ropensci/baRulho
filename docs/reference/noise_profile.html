@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/spacelab/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/spacelab/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,7 +43,6 @@
 
 <meta property="og:title" content="Measure full spectrum sound noise profiles — noise_profile" />
 <meta property="og:description" content="noise_profile Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -57,7 +60,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -86,17 +89,8 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/baRulho_quantifying_sound_degradation.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -104,7 +98,7 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/maRce10/baRulho">
+  <a href="https://github.com/maRce10/baRulho/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -229,105 +223,96 @@ Note that lower values will increase time resolution, which is more important fo
 
  <span class='fu'>noise_profile</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>pe</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>"adjacent"</span>)
 }</div><div class='output co'>#&gt;       sound.files      freq         amp
-#&gt; 1  01m_re-rec.wav  1.002273  -2.3911028
-#&gt; 2  05m_re-rec.wav  1.002273  -3.1340992
-#&gt; 3  10m_re-rec.wav  1.002273  -3.9535533
-#&gt; 4  15m_re-rec.wav  1.002273  -1.2022325
-#&gt; 5  01m_re-rec.wav  2.004545  -0.6772180
-#&gt; 6  05m_re-rec.wav  2.004545  -6.8784734
-#&gt; 7  10m_re-rec.wav  2.004545 -10.8181089
-#&gt; 8  15m_re-rec.wav  2.004545  -2.1382526
-#&gt; 9  01m_re-rec.wav  3.006818  -0.2730785
-#&gt; 10 05m_re-rec.wav  3.006818  -7.2939848
-#&gt; 11 10m_re-rec.wav  3.006818 -12.4996014
-#&gt; 12 15m_re-rec.wav  3.006818  -5.0525681
-#&gt; 13 01m_re-rec.wav  4.009091  -0.9137029
-#&gt; 14 05m_re-rec.wav  4.009091  -7.7143054
-#&gt; 15 10m_re-rec.wav  4.009091 -13.0370413
-#&gt; 16 15m_re-rec.wav  4.009091  -8.6942744
-#&gt; 17 01m_re-rec.wav  5.011364  -1.3050603
-#&gt; 18 05m_re-rec.wav  5.011364 -10.2738457
-#&gt; 19 10m_re-rec.wav  5.011364 -15.8574199
-#&gt; 20 15m_re-rec.wav  5.011364 -12.9950823
-#&gt; 21 01m_re-rec.wav  6.013636  -1.4657344
-#&gt; 22 05m_re-rec.wav  6.013636 -15.4418485
-#&gt; 23 10m_re-rec.wav  6.013636 -19.0654354
-#&gt; 24 15m_re-rec.wav  6.013636 -17.0374771
-#&gt; 25 01m_re-rec.wav  7.015909  -2.1597502
-#&gt; 26 05m_re-rec.wav  7.015909 -17.5001572
-#&gt; 27 10m_re-rec.wav  7.015909 -20.4208131
-#&gt; 28 15m_re-rec.wav  7.015909 -20.5450074
-#&gt; 29 01m_re-rec.wav  8.018182  -3.1912770
-#&gt; 30 05m_re-rec.wav  8.018182 -19.1563757
-#&gt; 31 10m_re-rec.wav  8.018182 -21.0948948
-#&gt; 32 15m_re-rec.wav  8.018182 -22.6848792
-#&gt; 33 01m_re-rec.wav  9.020455  -3.4496752
-#&gt; 34 05m_re-rec.wav  9.020455 -20.7520839
-#&gt; 35 10m_re-rec.wav  9.020455 -22.5693150
-#&gt; 36 15m_re-rec.wav  9.020455 -23.1145186
-#&gt; 37 01m_re-rec.wav 10.022727  -4.5280445
-#&gt; 38 05m_re-rec.wav 10.022727 -21.1947004
-#&gt; 39 10m_re-rec.wav 10.022727 -24.8010207
-#&gt; 40 15m_re-rec.wav 10.022727 -25.2492812
-#&gt; 41 01m_re-rec.wav 11.025000  -5.7050117
-#&gt; 42 05m_re-rec.wav 11.025000 -21.9565608
-#&gt; 43 10m_re-rec.wav 11.025000 -26.6222094
-#&gt; 44 15m_re-rec.wav 11.025000 -26.9922515
-#&gt; 45 01m_re-rec.wav 12.027273  -6.0883878
-#&gt; 46 05m_re-rec.wav 12.027273 -22.6163644
-#&gt; 47 10m_re-rec.wav 12.027273 -28.0309082
-#&gt; 48 15m_re-rec.wav 12.027273 -28.4002299
-#&gt; 49 01m_re-rec.wav 13.029545  -5.8126516
-#&gt; 50 05m_re-rec.wav 13.029545 -23.3155004
-#&gt; 51 10m_re-rec.wav 13.029545 -28.3972595
-#&gt; 52 15m_re-rec.wav 13.029545 -29.8642028
-#&gt; 53 01m_re-rec.wav 14.031818  -7.0122809
-#&gt; 54 05m_re-rec.wav 14.031818 -23.5202554
-#&gt; 55 10m_re-rec.wav 14.031818 -28.6476971
-#&gt; 56 15m_re-rec.wav 14.031818 -30.0107143
-#&gt; 57 01m_re-rec.wav 15.034091  -7.5942280
-#&gt; 58 05m_re-rec.wav 15.034091 -24.9624459
-#&gt; 59 10m_re-rec.wav 15.034091 -29.3366002
-#&gt; 60 15m_re-rec.wav 15.034091 -30.7468526
-#&gt; 61 01m_re-rec.wav 16.036364  -7.6764497
-#&gt; 62 05m_re-rec.wav 16.036364 -26.2655344
-#&gt; 63 10m_re-rec.wav 16.036364 -29.8495238
-#&gt; 64 15m_re-rec.wav 16.036364 -30.4113778
-#&gt; 65 01m_re-rec.wav 17.038636  -9.4431284
-#&gt; 66 05m_re-rec.wav 17.038636 -27.8777427
-#&gt; 67 10m_re-rec.wav 17.038636 -30.4058862
-#&gt; 68 15m_re-rec.wav 17.038636 -29.7945882
-#&gt; 69 01m_re-rec.wav 18.040909  -9.1984885
-#&gt; 70 05m_re-rec.wav 18.040909 -28.4715803
-#&gt; 71 10m_re-rec.wav 18.040909 -30.7947273
-#&gt; 72 15m_re-rec.wav 18.040909 -31.0106211
-#&gt; 73 01m_re-rec.wav 19.043182  -9.8178999
-#&gt; 74 05m_re-rec.wav 19.043182 -28.6900562
-#&gt; 75 10m_re-rec.wav 19.043182 -31.8055902
-#&gt; 76 15m_re-rec.wav 19.043182 -32.1430182
-#&gt; 77 01m_re-rec.wav 20.045455 -11.0491310
-#&gt; 78 05m_re-rec.wav 20.045455 -29.5345935
-#&gt; 79 10m_re-rec.wav 20.045455 -31.7333762
-#&gt; 80 15m_re-rec.wav 20.045455 -34.1750908
-#&gt; 81 01m_re-rec.wav 21.047727 -11.5005668
-#&gt; 82 05m_re-rec.wav 21.047727 -31.6625220
-#&gt; 83 10m_re-rec.wav 21.047727 -34.3158112
-#&gt; 84 15m_re-rec.wav 21.047727 -36.7360789</div><div class='input'>
+#&gt; 1  01m_re-rec.wav  1.002273  -2.2532443
+#&gt; 2  05m_re-rec.wav  1.002273  -3.0413888
+#&gt; 3  10m_re-rec.wav  1.002273  -3.9732349
+#&gt; 4  15m_re-rec.wav  1.002273  -1.2053299
+#&gt; 5  01m_re-rec.wav  2.004545  -0.6909814
+#&gt; 6  05m_re-rec.wav  2.004545  -6.9442057
+#&gt; 7  10m_re-rec.wav  2.004545 -10.7919247
+#&gt; 8  15m_re-rec.wav  2.004545  -2.1165384
+#&gt; 9  01m_re-rec.wav  3.006818  -0.2716827
+#&gt; 10 05m_re-rec.wav  3.006818  -7.2823787
+#&gt; 11 10m_re-rec.wav  3.006818 -12.6046184
+#&gt; 12 15m_re-rec.wav  3.006818  -5.1599786
+#&gt; 13 01m_re-rec.wav  4.009091  -0.8138351
+#&gt; 14 05m_re-rec.wav  4.009091  -7.6421811
+#&gt; 15 10m_re-rec.wav  4.009091 -13.1475066
+#&gt; 16 15m_re-rec.wav  4.009091  -8.8460655
+#&gt; 17 01m_re-rec.wav  5.011364  -1.2037548
+#&gt; 18 05m_re-rec.wav  5.011364 -10.1569869
+#&gt; 19 10m_re-rec.wav  5.011364 -15.8927258
+#&gt; 20 15m_re-rec.wav  5.011364 -13.0932185
+#&gt; 21 01m_re-rec.wav  6.013636  -1.4943981
+#&gt; 22 05m_re-rec.wav  6.013636 -15.3383886
+#&gt; 23 10m_re-rec.wav  6.013636 -19.0681979
+#&gt; 24 15m_re-rec.wav  6.013636 -17.0763860
+#&gt; 25 01m_re-rec.wav  7.015909  -2.1414682
+#&gt; 26 05m_re-rec.wav  7.015909 -17.5006699
+#&gt; 27 10m_re-rec.wav  7.015909 -20.5585505
+#&gt; 28 15m_re-rec.wav  7.015909 -20.7143113
+#&gt; 29 01m_re-rec.wav  8.018182  -3.1073995
+#&gt; 30 05m_re-rec.wav  8.018182 -19.3363166
+#&gt; 31 10m_re-rec.wav  8.018182 -21.2329218
+#&gt; 32 15m_re-rec.wav  8.018182 -22.7623081
+#&gt; 33 01m_re-rec.wav  9.020455  -3.4377929
+#&gt; 34 05m_re-rec.wav  9.020455 -20.9422345
+#&gt; 35 10m_re-rec.wav  9.020455 -22.6311834
+#&gt; 36 15m_re-rec.wav  9.020455 -23.2217100
+#&gt; 37 01m_re-rec.wav 10.022727  -4.4559123
+#&gt; 38 05m_re-rec.wav 10.022727 -21.1776230
+#&gt; 39 10m_re-rec.wav 10.022727 -24.7976760
+#&gt; 40 15m_re-rec.wav 10.022727 -25.3171512
+#&gt; 41 01m_re-rec.wav 11.025000  -5.6207578
+#&gt; 42 05m_re-rec.wav 11.025000 -22.0324211
+#&gt; 43 10m_re-rec.wav 11.025000 -26.4245492
+#&gt; 44 15m_re-rec.wav 11.025000 -26.9855887
+#&gt; 45 01m_re-rec.wav 12.027273  -6.0670984
+#&gt; 46 05m_re-rec.wav 12.027273 -22.8498687
+#&gt; 47 10m_re-rec.wav 12.027273 -27.9525135
+#&gt; 48 15m_re-rec.wav 12.027273 -28.4808445
+#&gt; 49 01m_re-rec.wav 13.029545  -5.7592948
+#&gt; 50 05m_re-rec.wav 13.029545 -23.3496568
+#&gt; 51 10m_re-rec.wav 13.029545 -28.3442814
+#&gt; 52 15m_re-rec.wav 13.029545 -29.7696207
+#&gt; 53 01m_re-rec.wav 14.031818  -7.0894995
+#&gt; 54 05m_re-rec.wav 14.031818 -23.4142156
+#&gt; 55 10m_re-rec.wav 14.031818 -28.6948257
+#&gt; 56 15m_re-rec.wav 14.031818 -30.1101591
+#&gt; 57 01m_re-rec.wav 15.034091  -7.4323758
+#&gt; 58 05m_re-rec.wav 15.034091 -24.8435810
+#&gt; 59 10m_re-rec.wav 15.034091 -29.5905336
+#&gt; 60 15m_re-rec.wav 15.034091 -31.0022175
+#&gt; 61 01m_re-rec.wav 16.036364  -7.6733733
+#&gt; 62 05m_re-rec.wav 16.036364 -26.4112546
+#&gt; 63 10m_re-rec.wav 16.036364 -30.0180308
+#&gt; 64 15m_re-rec.wav 16.036364 -30.4158774
+#&gt; 65 01m_re-rec.wav 17.038636  -9.3157457
+#&gt; 66 05m_re-rec.wav 17.038636 -28.1215009
+#&gt; 67 10m_re-rec.wav 17.038636 -30.4461634
+#&gt; 68 15m_re-rec.wav 17.038636 -29.9404637
+#&gt; 69 01m_re-rec.wav 18.040909  -9.0656420
+#&gt; 70 05m_re-rec.wav 18.040909 -28.5300672
+#&gt; 71 10m_re-rec.wav 18.040909 -30.6998153
+#&gt; 72 15m_re-rec.wav 18.040909 -31.0568108
+#&gt; 73 01m_re-rec.wav 19.043182  -9.7682791
+#&gt; 74 05m_re-rec.wav 19.043182 -28.7972724
+#&gt; 75 10m_re-rec.wav 19.043182 -31.8639822
+#&gt; 76 15m_re-rec.wav 19.043182 -32.1661937
+#&gt; 77 01m_re-rec.wav 20.045455 -10.8878775
+#&gt; 78 05m_re-rec.wav 20.045455 -29.5155007
+#&gt; 79 10m_re-rec.wav 20.045455 -31.7452545
+#&gt; 80 15m_re-rec.wav 20.045455 -34.2860682
+#&gt; 81 01m_re-rec.wav 21.047727 -11.4022093
+#&gt; 82 05m_re-rec.wav 21.047727 -31.7338033
+#&gt; 83 10m_re-rec.wav 21.047727 -34.2368134
+#&gt; 84 15m_re-rec.wav 21.047727 -36.7757146</div><div class='input'>
 </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#value">Value</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#references">References</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
-    <h2>Author</h2>
-    <p>Marcelo Araya-Salas (<a href='mailto:marceloa27@gmail.com'>marceloa27@gmail.com</a>)</p>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -338,7 +323,7 @@ Note that lower values will increase time resolution, which is more important fo
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

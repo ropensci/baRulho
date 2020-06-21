@@ -4,7 +4,9 @@
 \name{playback_est_unaligned}
 \alias{playback_est_unaligned}
 \title{Extended selection table with re-recorded playbacks before alignment}
-\format{Extended selection table object in the \code{\link{warbleR}} format, which contains annotations and acoustic data}
+\format{
+Extended selection table object in the \code{\link{warbleR}} format, which contains annotations and acoustic data
+}
 \source{
 Marcelo Araya-Salas
 }

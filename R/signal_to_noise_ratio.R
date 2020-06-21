@@ -23,7 +23,7 @@
 #'  (\code{rms(env(S))/rms(env(N))}) as described by Darden (2008).
 #' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as described by Dabelsteen et al (1993).
 #' }
-#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range.
+#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 

@@ -35,7 +35,7 @@ to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} 
 \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as described by Dabelsteen et al (1993).
 }}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the funcition use the 'bottom.freq' and 'top.freq' as the bandpass range.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 

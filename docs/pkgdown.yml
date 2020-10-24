@@ -1,7 +1,7 @@
-pandoc: 1.19.2.1
+pandoc: 2.7.3
 pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
   baRulho_quantifying_sound_degradation: baRulho_quantifying_sound_degradation.html
-last_built: 2020-06-21T02:34Z
+last_built: 2020-10-24T19:00Z
 

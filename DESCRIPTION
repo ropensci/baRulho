@@ -13,9 +13,15 @@ LazyData: TRUE
 URL: https://github.com/maRce10/baRulho
 BugReports: https://github.com/maRce10/baRulho/issues
 NeedsCompilation: no
-Suggests: ggplot2, knitr, kableExtra, viridis, png
+Suggests: 
+    ggplot2,
+    knitr,
+    kableExtra,
+    viridis,
+    png,
+    testthat
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Repository: CRANs
 Language: en-US
 Authors@R: person("Marcelo", "Araya-Salas", role = c("aut", "cre"), email = "marceloa27@gmail.com")

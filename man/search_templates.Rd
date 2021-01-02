@@ -26,7 +26,7 @@ A data frame with the time, start, end, test file names, template name, maximum 
 \code{search_templates} searches acoustic templates on test (re-recorded) sound files.
 }
 \details{
-The function takes the output of \code{\link[warbleR]{find_peaks}} ('Y') and aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
+The function takes a master sound file's reference data ('X') and finds the position of acoustics templates included as selections in 'X'. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. Take a look at the package vignette for information on how to:: incorporate this into a sound degradation analysis workflow.
 }
 \examples{
 \dontrun{

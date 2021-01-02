@@ -11,7 +11,7 @@
 #' @return A data frame with the time, start, end, test file names, template name, maximum cross-correlation score and the time where it was detected.
 #' @export
 #' @name search_templates
-#' @details The function takes the output of \code{\link[warbleR]{find_peaks}} ('Y') and aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
+#' @details The function takes a master sound file's reference data ('X') and finds the position of acoustics templates included as selections in 'X'. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. Take a look at the package vignette for information on how to:: incorporate this into a sound degradation analysis workflow.
 #' @seealso \code{\link{spcc_align}}; \code{\link{align_test_files}}
 #' @examples
 #' \dontrun{
@@ -94,10 +94,10 @@ search_templates <- function(X, template.rows, test.files, path = NULL,  pb = TR
     comp_mat <- matrix(c(paste(X$sound.files[template.rows], X$selec[template.rows], sep = "-"), test.files), ncol = 2) 
   
   # run cross correlation
-  xc <- xcorr(X, compare.matrix = comp_mat, path = path, output = "list", pb = pb, ...)
+  xc <- warbleR::xcorr(X, compare.matrix = comp_mat, path = path, output = "list", pb = pb, ...)
   
   # find peaks
-  pks <- find_peaks(xc.output = xc, max.peak = TRUE, path = path, pb = pb, cutoff = 0)
+  pks <- warbleR::find_peaks(xc.output = xc, max.peak = TRUE, path = path, pb = pb, cutoff = 0)
   
   # rename sound file column
   names(pks)[names(pks) == "sound.files"] <- "test.files"

@@ -2,12 +2,13 @@
 #' 
 #' \code{align_test_files} aligns test (re-recorded) sound files.
 #' @usage align_test_files(X, Y, output = "est", path = NULL, 
-#' by.song = TRUE, ...)
+#' by.song = TRUE, marker = "start", ...)
 #' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that used for aligning signals in \code{\link{search_templates}}.
 #' @param Y object of class 'data.frame' with the output of \code{\link{search_templates}}. 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data.frame ("data.frame").
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found. 
 #' @param by.song Logical argument to indicate if the extended selection table should be created by song (see 'by.song' \code{\link[warbleR]{selection_table}} argument). Default is \code{TRUE}.
+#' @param marker Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is "start".
 #' @param ...	Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.
 #' @return An extended selection table with the aligned signals from test (re-recorded) sound files.
 #' @export
@@ -74,13 +75,13 @@
 #' alg.tests <- align_test_files(X =  master.sf, Y = found.templts, path = td, pb = FALSE)
 #' }
 #' 
-#' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) 
+#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) 
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' }
 #last modification on dec-26-2019 (MAS)
 
-align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, ...){
+align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, marker = "start", ...){
   
   #check output
   if (!any(output %in% c("est", "data.frame"))) stop("'output' must be either 'est' or 'data.frame'")  
@@ -88,15 +89,25 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
   # align each file
  out <- lapply(1:nrow(Y), function(x) {
     
-   # name of master sound file
-   mstr.nm <- substr(Y$template[x], start = 0, regexpr("\\-[^\\-]*$", Y$template[x]) - 1)
-   
-    # start on new recording
-    start  <- X$start - X$start[paste(X$sound.files, X$selec, sep = "-") == Y$template[x]] + Y$start[x]
+   if (marker == "start"){ 
+     # start on new recording
+     start  <- X$start - X$start[paste(X$sound.files, X$selec, sep = "-") == Y$template[x]] + Y$start[x]
     
     # end on new recording
     end  <- X$end - X$end[paste(X$sound.files, X$selec, sep = "-") == Y$template[x]] + Y$end[x]
-    
+   }
+   
+   if (marker == "end"){ 
+   
+       durs <- X$end - X$start
+   
+     start <- Y$start[x] - (X$start[paste(X$sound.files, X$selec, sep = "-") == Y$template[x]] - X$start)
+
+          # end on new recording
+     end  <- start + durs   
+     }
+   
+   
     # make data frame
     W <- data.frame(sound.files = Y$test.files[x], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq[1:length(start)], top.freq = X$top.freq[1:length(start)], template = X$orig.sound.file[1:length(start)])
     
@@ -118,9 +129,17 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
     # remove exceeding selections
     sync.sls <- sync.sls[!sync.sls$end > sync.sls$duration, ]
   }
+
+  if (any(sync.sls$start < 0)) {
+    write(file = "", x = paste(sum(sync.sls$start < 0), "selection(s) were absent at the start of the files (negative start values) and were removed"))
+    
+    # remove exceeding selections
+    sync.sls <- sync.sls[sync.sls$start >= 0, ]
+  }
   
   # remove duration column
   sync.sls$duration <- NULL
+  
   
   if (output == "est")
   {

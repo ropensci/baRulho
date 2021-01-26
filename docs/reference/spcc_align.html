@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -136,15 +136,15 @@
     <p><code>spcc_align</code> aligns start and end of signal in an extended selection table using spectrographic cross-correlation</p>
     </div>
 
-    <pre class="usage"><span class='fu'>spcc_align</span>(<span class='no'>X</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>11.6</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ovlp</span> <span class='kw'>=</span> <span class='fl'>90</span>,
-<span class='kw'>wn</span> <span class='kw'>=</span> <span class='st'>'hanning'</span>)</pre>
+    <pre class="usage"><span class='fu'>spcc_align</span><span class='op'>(</span><span class='va'>X</span>, parallel <span class='op'>=</span> <span class='fl'>1</span>, pb <span class='op'>=</span> <span class='cn'>TRUE</span>, hop.size <span class='op'>=</span> <span class='fl'>11.6</span>, wl <span class='op'>=</span> <span class='cn'>NULL</span>, ovlp <span class='op'>=</span> <span class='fl'>90</span>, 
+wn <span class='op'>=</span> <span class='st'>'hanning'</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>object of class 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.</p></td>
+      <td><p>object of class 'extended_selection_table' created by the function <code><a href='https://marce10.github.io/warbleR/reference/selection_table.html'>selection_table</a></code> from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.</p></td>
     </tr>
     <tr>
       <th>parallel</th>
@@ -180,49 +180,59 @@ slow down the function but produce more accurate results.</p></td>
     <p>Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference signal.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code> and <code><a href='https://rdrr.io/pkg/warbleR/man/find_peaks.html'>find_peaks</a></code> internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.</p>
+    <p>This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's <code><a href='https://marce10.github.io/warbleR/reference/xcorr.html'>xcorr</a></code> and <code><a href='https://marce10.github.io/warbleR/reference/find_peaks.html'>find_peaks</a></code> internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code>, <code><a href='https://rdrr.io/pkg/warbleR/man/xcorr.html'>xcorr</a></code></p></div>
+    <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code>, <code><a href='https://marce10.github.io/warbleR/reference/xcorr.html'>xcorr</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Marcelo Araya-Salas (<a href='mailto:marcelo.araya@ucr.ac.cr'>marcelo.araya@ucr.ac.cr</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>{
+    <pre class="examples"><div class='input'><span class='op'>{</span>
 <span class='co'># load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"playback_est_unaligned"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"playback_est_unaligned"</span><span class='op'>)</span>
 
 <span class='co'># method 1</span>
-<span class='fu'>spcc_align</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est_unaligned</span>)
-}</div><div class='output co'>#&gt; running cross-correlation (step 3 of 3):
+<span class='fu'>spcc_align</span><span class='op'>(</span>X <span class='op'>=</span> <span class='va'>playback_est_unaligned</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; running cross-correlation (step 3 of 3):
 #&gt;   |                                                  | 0 % ~calculating    |+++++++++                                         | 17% ~00s            |+++++++++++++++++                                 | 33% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |++++++++++++++++++++++++++++++++++++++++++        | 83% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  
 #&gt; finding peaks and aligning (step 3 of 3)
-#&gt;   |                                                  | 0 % ~calculating    |+++++++++                                         | 17% ~00s            |+++++++++++++++++                                 | 33% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |++++++++++++++++++++++++++++++++++++++++++        | 83% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; object of class 'extended_selection_table' 
-#&gt;  contains a selection table data frame with 8 rows and 8 columns: 
-#&gt;       sound.files selec     start      end bottom.freq top.freq signal.type
-#&gt; 5  01m_re-rec.wav     4 1.0500000 1.244490    1.544095 10.89459      CCE-I2
-#&gt; 6  05m_re-rec.wav     4 1.9615299 2.156020    1.544095 10.89459      CCE-I2
-#&gt; 7  10m_re-rec.wav     4 1.9557118 2.150202    1.544095 10.89459      CCE-I2
-#&gt; 8  15m_re-rec.wav     4 1.9557118 2.150202    1.544095 10.89459      CCE-I2
-#&gt; 21 01m_re-rec.wav     2 0.5500000 0.700068    1.743639 11.05000      SUR-A4
-#&gt; 22 05m_re-rec.wav     2 0.9914508 1.141519    1.743639 11.05000      SUR-A4
-#&gt;    distance
-#&gt; 5         1
-#&gt; 6         5
-#&gt; 7        10
-#&gt; 8        15
-#&gt; 21        1
-#&gt; 22        5
-#&gt; ... and 2 more rows 
-#&gt; 4 wave objects (as attributes): 
-#&gt; [1] "01m_re-rec.wav" "05m_re-rec.wav" "10m_re-rec.wav" "15m_re-rec.wav"
-#&gt; and a data frame (check.results) generated by check_sels() (as attribute) 
-#&gt; the selection table was created by song (see 'class_extended_selection_table') 
-#&gt; 1 sampling rate(s): 22.1 
-#&gt; 1 bit depth(s): 8 
-#&gt; created by warbleR &lt; 1.1.21</div><div class='input'>
-</div></pre>
+#&gt;   |                                                  | 0 % ~calculating    |+++++++++                                         | 17% ~00s            |+++++++++++++++++                                 | 33% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |++++++++++++++++++++++++++++++++++++++++++        | 83% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; <span style='color: #00BBBB;'>Object of class </span><span style='color: #00BBBB;font-weight: bold;'>'extended_selection_table' 
+#&gt; </span><span style='color: #555555;font-weight: bold;'>Contains:</span><span style='color: #555555;'> 
+#&gt; * A selection table data frame with 8 rows and 8 columns: 
+#&gt; </span><span>        </span><span style='color: #555555;font-weight: bold;'>sound.fi</span><span>   </span><span style='color: #555555;font-weight: bold;'>selec</span><span>   </span><span style='color: #555555;font-weight: bold;'>start</span><span>   </span><span style='color: #555555;font-weight: bold;'> end</span><span>   </span><span style='color: #555555;font-weight: bold;'>bottom.f</span><span>   </span><span style='color: #555555;font-weight: bold;'>top.freq</span><span>   </span><span style='color: #555555;font-weight: bold;'>signal.t</span><span>  
+#&gt;         </span><span style='color: #555555;font-weight: bold;'>les     </span><span>                          </span><span style='color: #555555;font-weight: bold;'>     req</span><span>              </span><span style='color: #555555;font-weight: bold;'>ype     </span><span>  
+#&gt;       ────────────────────────────────────────────────────────────────────
+#&gt;         </span><span style='color: #555555;'>01m_re-r</span><span>   </span><span style='color: #555555;'>    4</span><span>   </span><span style='color: #555555;'>1.05 </span><span>   </span><span style='color: #555555;'>1.24</span><span>   </span><span style='color: #555555;'>    1.54</span><span>   </span><span style='color: #555555;'>    10.9</span><span>   </span><span style='color: #555555;'>CCE-I2  </span><span>  
+#&gt;         </span><span style='color: #555555;'>ec.wav  </span><span>                                                          
+#&gt;         </span><span style='color: #555555;'>05m_re-r</span><span>   </span><span style='color: #555555;'>    4</span><span>   </span><span style='color: #555555;'>1.96 </span><span>   </span><span style='color: #555555;'>2.16</span><span>   </span><span style='color: #555555;'>    1.54</span><span>   </span><span style='color: #555555;'>    10.9</span><span>   </span><span style='color: #555555;'>CCE-I2  </span><span>  
+#&gt;         </span><span style='color: #555555;'>ec.wav  </span><span>                                                          
+#&gt;         </span><span style='color: #555555;'>10m_re-r</span><span>   </span><span style='color: #555555;'>    4</span><span>   </span><span style='color: #555555;'>1.96 </span><span>   </span><span style='color: #555555;'>2.15</span><span>   </span><span style='color: #555555;'>    1.54</span><span>   </span><span style='color: #555555;'>    10.9</span><span>   </span><span style='color: #555555;'>CCE-I2  </span><span>  
+#&gt;         </span><span style='color: #555555;'>ec.wav  </span><span>                                                          
+#&gt;         </span><span style='color: #555555;'>15m_re-r</span><span>   </span><span style='color: #555555;'>    4</span><span>   </span><span style='color: #555555;'>1.96 </span><span>   </span><span style='color: #555555;'>2.15</span><span>   </span><span style='color: #555555;'>    1.54</span><span>   </span><span style='color: #555555;'>    10.9</span><span>   </span><span style='color: #555555;'>CCE-I2  </span><span>  
+#&gt;         </span><span style='color: #555555;'>ec.wav  </span><span>                                                          
+#&gt;         </span><span style='color: #555555;'>01m_re-r</span><span>   </span><span style='color: #555555;'>    2</span><span>   </span><span style='color: #555555;'>0.55 </span><span>   </span><span style='color: #555555;'>0.7 </span><span>   </span><span style='color: #555555;'>    1.74</span><span>   </span><span style='color: #555555;'>    11.1</span><span>   </span><span style='color: #555555;'>SUR-A4  </span><span>  
+#&gt;         </span><span style='color: #555555;'>ec.wav  </span><span>                                                          
+#&gt;         </span><span style='color: #555555;'>05m_re-r</span><span>   </span><span style='color: #555555;'>    2</span><span>   </span><span style='color: #555555;'>0.991</span><span>   </span><span style='color: #555555;'>1.14</span><span>   </span><span style='color: #555555;'>    1.74</span><span>   </span><span style='color: #555555;'>    11.1</span><span>   </span><span style='color: #555555;'>SUR-A4  </span><span>  
+#&gt;         </span><span style='color: #555555;'>ec.wav  </span><span>                                                          
+#&gt; 7/8 columns shown.
+#&gt; </span><span style='color: #555555;'>... and 2 more rows 
+#&gt; 
+#&gt; * 4 wave objects (as attributes): 01m_re-rec.wav</span><span> </span><span style='color: #555555;'>05m_re-rec.wav</span><span> </span><span style='color: #555555;'>10m_re-rec.wav</span><span> </span><span style='color: #555555;'>15m_re-rec.wav</span><span>
+#&gt;  </span><span style='color: #555555;'>
+#&gt; * A data frame (check.results) generated by check_sels() (as attribute) 
+#&gt; </span><span style='color: #555555;font-weight: bold;'>
+#&gt; Additional information:</span><span style='color: #555555;'>
+#&gt; * The selection table was created</span><span style='color: #555555;font-weight: bold;font-style: italic;'> by song </span><span style='color: #555555;'>(see 'class_extended_selection_table') 
+#&gt; * 1 sampling rate(s) (in kHz): </span><span style='color: #555555;font-weight: bold;'>22.1</span><span style='color: #555555;'> 
+#&gt; * 1 bit depth(s): </span><span style='color: #555555;font-weight: bold;'>8</span><span style='color: #555555;'> 
+#&gt; * Created by warbleR &lt; 1.1.21</span><span></div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -238,7 +248,7 @@ slow down the function but produce more accurate results.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -7,9 +7,9 @@
 search_templates(X, template.rows, test.files, path = NULL, pb = TRUE, ...)
 }
 \arguments{
-\item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). Required.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.}
 
-\item{template.rows}{numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.}
+\item{template.rows}{Numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.}
 
 \item{test.files}{Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows').}
 
@@ -69,8 +69,8 @@ output = "Wave")
 exmp.test1@left <- exmp.test1@left + (ns@left[1:length(exmp.test1@left)] * 500)
 exmp.test2@left <- exmp.test2@left + (ns@left[1:length(exmp.test2@left)] * 500)
 
-exmp.test1 <- normalize(exmp.test1, unit = "16")
-exmp.test2 <- normalize(exmp.test2, unit = "16")
+exmp.test1 <- tuneR::normalize(exmp.test1, unit = "16")
+exmp.test2 <- tuneR::normalize(exmp.test2, unit = "16")
 
 # save examples
 writeWave(object = exmp.test1, filename = file.path(td, "example_test1.wav"), extensible = FALSE)
@@ -81,16 +81,16 @@ search_templates(X = master.sf,
 template.rows = which(master.sf$orig.sound.file == "start_marker"), 
 test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 
-# search using start marker as template
-search_templates(X = master.sf, template.rows = which(master.sf$orig.sound.file == "start_marker"), 
-test.files = c("example_test1.wav", "example_test2.wav", "example_test1.wav"), 
+# search using end marker as template
+search_templates(X = master.sf, template.rows = which(master.sf$orig.sound.file == "end_marker"), 
+test.files = c("example_test1.wav", "example_test2.wav"), 
 path = td, pb = FALSE)
 
 # search using both start and end markers as template
 search_templates(X = master.sf, 
 template.rows = which(master.sf$orig.sound.file == "start_marker" | 
 master.sf$orig.sound.file == "end_marker"), 
-test.files = c("example_test1.wav", "example_test1.wav"), 
+test.files = c("example_test1.wav", "example_test2.wav"), 
 path = td, pb = FALSE)
 }
 }
@@ -103,5 +103,5 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 \code{\link{spcc_align}}; \code{\link{align_test_files}}
 }
 \author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com})
+Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }

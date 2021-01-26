@@ -78,5 +78,5 @@ Morton ES. (1975). Ecological sources of selection on avian sounds. The American
 \code{\link{spcc}}; \code{\link{envelope_correlation}}
 }
 \author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com})
+Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }

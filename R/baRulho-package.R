@@ -17,11 +17,11 @@
 #' @import utils
 #' @import parallel
 #' @import warbleR
-#' @importFrom stats cor aggregate approx
+#' @importFrom stats cor aggregate approx ave
 #' 
 #' @author Marcelo Araya-Salas
 #'   
-#'   Maintainer: Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
+#'   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'   
 #' @docType package
 #' @name baRulho

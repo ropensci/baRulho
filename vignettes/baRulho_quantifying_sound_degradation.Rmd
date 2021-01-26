@@ -1235,7 +1235,7 @@ kbl
 
 Note that this function does not compare signals to references, so no reference column is added.
 
-### Tail-to=signal ratio
+### Tail-to-signal ratio
 
 Tail-to-signal ratio (TSR) is used to quantify reverberations. Specifically TSR measures the ratio of energy in the reverberation tail  (the time segment right after the signal) to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). `Type 1` is based on the original description of TSR in Dabelsteen et al. (1993) while `type 2` is better referred to as "tail-to-noise ratio", given that it compares the amplitude of tails to those of ambient noise. For both types higher values represent more reverberations. TSR can be measured as follows:
 

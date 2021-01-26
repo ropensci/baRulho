@@ -5,7 +5,7 @@
 \title{Align test sound files}
 \usage{
 align_test_files(X, Y, output = "est", path = NULL, 
-by.song = TRUE, ...)
+by.song = TRUE, marker = "start", ...)
 }
 \arguments{
 \item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that used for aligning signals in \code{\link{search_templates}}.}
@@ -17,6 +17,8 @@ by.song = TRUE, ...)
 \item{path}{Character string containing the directory path where test (re-recorded) sound files are found.}
 
 \item{by.song}{Logical argument to indicate if the extended selection table should be created by song (see 'by.song' \code{\link[warbleR]{selection_table}} argument). Default is \code{TRUE}.}
+
+\item{marker}{Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is "start".}
 
 \item{...}{Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.}
 }
@@ -99,5 +101,5 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 \code{\link{spcc_align}}; \code{\link{search_templates}}
 }
 \author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com})
+Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }

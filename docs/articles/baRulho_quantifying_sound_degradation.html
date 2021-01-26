@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2021-01-02”
+“2021-01-26”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -6866,9 +6866,9 @@ SUR-K1
 <p> </p>
 <p>Note that this function does not compare signals to references, so no reference column is added.</p>
 </div>
-<div id="tail-tosignal-ratio" class="section level3">
+<div id="tail-to-signal-ratio" class="section level3">
 <h3 class="hasAnchor">
-<a href="#tail-tosignal-ratio" class="anchor"></a>Tail-to=signal ratio</h3>
+<a href="#tail-to-signal-ratio" class="anchor"></a>Tail-to-signal ratio</h3>
 <p>Tail-to-signal ratio (TSR) is used to quantify reverberations. Specifically TSR measures the ratio of energy in the reverberation tail (the time segment right after the signal) to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal (‘bottom.freq’ and ‘top.freq’ columns in ‘X’). Two methods for calculating reverberations are provided (see ‘type’ argument). <code>Type 1</code> is based on the original description of TSR in Dabelsteen et al. (1993) while <code>type 2</code> is better referred to as “tail-to-noise ratio”, given that it compares the amplitude of tails to those of ambient noise. For both types higher values represent more reverberations. TSR can be measured as follows:</p>
 <div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># run tail to signal ratio</span>
@@ -9015,7 +9015,7 @@ amp
 ## 
 ## other attached packages:
 ##  [1] viridis_0.5.1      viridisLite_0.3.0  ggplot2_3.3.2      kableExtra_1.3.1  
-##  [5] baRulho_1.0.2      warbleR_1.1.25     NatureSounds_1.0.3 seewave_2.1.6     
+##  [5] baRulho_1.0.3      warbleR_1.1.25     NatureSounds_1.0.3 seewave_2.1.6     
 ##  [9] tuneR_1.3.3        knitr_1.30        
 ## 
 ## loaded via a namespace (and not attached):

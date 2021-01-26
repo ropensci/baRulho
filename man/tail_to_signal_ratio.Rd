@@ -74,5 +74,5 @@ Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission a
 \code{\link{excess_attenuation}}
 }
 \author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com})
+Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }

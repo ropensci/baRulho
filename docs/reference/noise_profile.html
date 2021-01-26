@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -136,16 +136,16 @@
     <p><code>noise_profile</code> Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>noise_profile</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>files</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-<span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>"adjacent"</span>, <span class='kw'>parallel</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>path</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-<span class='kw'>bp</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>hop.size</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>wl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>PSD</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>norm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>dB</span> <span class='kw'>=</span> <span class='st'>"A"</span>, <span class='kw'>averaged</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>noise_profile</span><span class='op'>(</span>X <span class='op'>=</span> <span class='cn'>NULL</span>, files <span class='op'>=</span> <span class='cn'>NULL</span>, mar <span class='op'>=</span> <span class='cn'>NULL</span>, 
+noise.ref <span class='op'>=</span> <span class='st'>"adjacent"</span>, parallel <span class='op'>=</span> <span class='fl'>1</span>, pb <span class='op'>=</span> <span class='cn'>TRUE</span>, path <span class='op'>=</span> <span class='cn'>NULL</span>,
+bp <span class='op'>=</span> <span class='cn'>NULL</span>, hop.size <span class='op'>=</span> <span class='fl'>1</span>, wl <span class='op'>=</span> <span class='cn'>NULL</span>, PSD <span class='op'>=</span> <span class='cn'>FALSE</span>, norm <span class='op'>=</span> <span class='cn'>TRUE</span>, dB <span class='op'>=</span> <span class='st'>"A"</span>, averaged <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>object of class 'extended_selection_table' created by the function <code><a href='https://rdrr.io/pkg/warbleR/man/selection_table.html'>selection_table</a></code> from the warbleR package. Default is <code>NULL</code>.</p></td>
+      <td><p>object of class 'extended_selection_table' created by the function <code><a href='https://marce10.github.io/warbleR/reference/selection_table.html'>selection_table</a></code> from the warbleR package. Default is <code>NULL</code>.</p></td>
     </tr>
     <tr>
       <th>files</th>
@@ -220,20 +220,24 @@ Note that lower values will increase time resolution, which is more important fo
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='excess_attenuation.html'>excess_attenuation</a></code></p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Marcelo Araya-Salas (<a href='mailto:marcelo.araya@ucr.ac.cr'>marcelo.araya@ucr.ac.cr</a>)</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>{
+    <pre class="examples"><div class='input'><span class='op'>{</span>
 <span class='co'># load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"playback_est"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"playback_est"</span><span class='op'>)</span>
 
 <span class='co'># custom noise reference</span>
-<span class='fu'>noise_profile</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>playback_est</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>"custom"</span>)
+<span class='fu'>noise_profile</span><span class='op'>(</span>X <span class='op'>=</span> <span class='va'>playback_est</span>, mar <span class='op'>=</span> <span class='fl'>0.01</span>, pb <span class='op'>=</span> <span class='cn'>FALSE</span>, noise.ref <span class='op'>=</span> <span class='st'>"custom"</span><span class='op'>)</span>
 
 <span class='co'># remove noise selections</span>
-<span class='no'>pe</span> <span class='kw'>&lt;-</span> <span class='no'>playback_est</span>[<span class='no'>playback_est</span>$<span class='no'>signal.type</span> <span class='kw'>!=</span> <span class='st'>"ambient"</span>, ]
-
- <span class='fu'>noise_profile</span>(<span class='kw'>X</span> <span class='kw'>=</span> <span class='no'>pe</span>, <span class='kw'>mar</span> <span class='kw'>=</span> <span class='fl'>0.01</span>, <span class='kw'>pb</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>noise.ref</span> <span class='kw'>=</span> <span class='st'>"adjacent"</span>)
-}</div><div class='output co'>#&gt;       sound.files      freq         amp
+<span class='va'>pe</span> <span class='op'>&lt;-</span> <span class='va'>playback_est</span><span class='op'>[</span><span class='va'>playback_est</span><span class='op'>$</span><span class='va'>signal.type</span> <span class='op'>!=</span> <span class='st'>"ambient"</span>, <span class='op'>]</span>
+ 
+ <span class='fu'>noise_profile</span><span class='op'>(</span>X <span class='op'>=</span> <span class='va'>pe</span>, mar <span class='op'>=</span> <span class='fl'>0.01</span>, pb <span class='op'>=</span> <span class='cn'>FALSE</span>, noise.ref <span class='op'>=</span> <span class='st'>"adjacent"</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt;       sound.files      freq         amp
 #&gt; 1  01m_re-rec.wav  1.002273  -2.2532443
 #&gt; 2  05m_re-rec.wav  1.002273  -3.0413888
 #&gt; 3  10m_re-rec.wav  1.002273  -3.9732349
@@ -334,7 +338,7 @@ Note that lower values will increase time resolution, which is more important fo
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

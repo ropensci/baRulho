@@ -1,5 +1,5 @@
 # internal baRulho function, not to be called by users. It prepares X for comparing signals
-# @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
+# @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 # last modification on jan-3-2020 (MAS)
 
 prep_X_bRlo_int <- function(X, method = 1, parallel = 1, pb = TRUE) {

@@ -2,8 +2,8 @@
 #' 
 #' \code{search_templates} searches acoustic templates on test (re-recorded) sound files.
 #' @usage search_templates(X, template.rows, test.files, path = NULL, pb = TRUE, ...)
-#' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). Required.
-#' @param template.rows numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.
+#' @param template.rows Numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.
 #' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows').
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -54,8 +54,8 @@
 #' exmp.test1@left <- exmp.test1@left + (ns@left[1:length(exmp.test1@left)] * 500)
 #' exmp.test2@left <- exmp.test2@left + (ns@left[1:length(exmp.test2@left)] * 500)
 #' 
-#' exmp.test1 <- normalize(exmp.test1, unit = "16")
-#' exmp.test2 <- normalize(exmp.test2, unit = "16")
+#' exmp.test1 <- tuneR::normalize(exmp.test1, unit = "16")
+#' exmp.test2 <- tuneR::normalize(exmp.test2, unit = "16")
 #' 
 #' # save examples
 #' writeWave(object = exmp.test1, filename = file.path(td, "example_test1.wav"), extensible = FALSE)
@@ -66,19 +66,19 @@
 #' template.rows = which(master.sf$orig.sound.file == "start_marker"), 
 #' test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 #' 
-#' # search using start marker as template
-#' search_templates(X = master.sf, template.rows = which(master.sf$orig.sound.file == "start_marker"), 
-#' test.files = c("example_test1.wav", "example_test2.wav", "example_test1.wav"), 
+#' # search using end marker as template
+#' search_templates(X = master.sf, template.rows = which(master.sf$orig.sound.file == "end_marker"), 
+#' test.files = c("example_test1.wav", "example_test2.wav"), 
 #' path = td, pb = FALSE)
 #' 
 #' # search using both start and end markers as template
 #' search_templates(X = master.sf, 
 #' template.rows = which(master.sf$orig.sound.file == "start_marker" | 
 #' master.sf$orig.sound.file == "end_marker"), 
-#' test.files = c("example_test1.wav", "example_test1.wav"), 
+#' test.files = c("example_test1.wav", "example_test2.wav"), 
 #' path = td, pb = FALSE)
 #' }
-#' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com})
+#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' }
@@ -91,16 +91,26 @@ search_templates <- function(X, template.rows, test.files, path = NULL,  pb = TR
   # create a matrix that contains the selection/files to be cross-correlated
   if (length(template.rows) == 1) # in only 1 template, repeate it
   comp_mat <- matrix(c(rep(paste(X$sound.files[template.rows], X$selec[template.rows], sep = "-"), length(test.files)), test.files), ncol = 2) else 
-    comp_mat <- matrix(c(paste(X$sound.files[template.rows], X$selec[template.rows], sep = "-"), test.files), ncol = 2) 
+    comp_mat <- matrix(c(rep(paste(X$sound.files[template.rows], X$selec[template.rows], sep = "-"), length(test.files)), rep((test.files), each = length(template.rows))), ncol = 2) 
+  
+  wi <- wav_info(path = path, parallel = 1, pb = FALSE)
+  
+  wi <- wi[wi$sound.files %in% unique(c(X$sound.files, test.files)), ]
+  
+  if (length(unique(wi$sample.rate)) > 1) 
+    stop("Not all sound files share the same sampling rate (check wave properties with warbleR::wav_info())")
   
   # run cross correlation
   xc <- warbleR::xcorr(X, compare.matrix = comp_mat, path = path, output = "list", pb = pb, ...)
   
   # find peaks
-  pks <- warbleR::find_peaks(xc.output = xc, max.peak = TRUE, path = path, pb = pb, cutoff = 0)
+  pks <- warbleR::find_peaks(xc.output = xc, max.peak = if(length(template.rows) == 1) TRUE else FALSE, path = path, pb = pb, cutoff = 0)
+  
+  if(length(template.rows) > 1)
+  pks <- pks[stats::ave(x = -pks$score, as.factor(pks$sound.files), as.factor(pks$template), FUN = rank) <= 1, ]
   
   # rename sound file column
-  names(pks)[names(pks) == "sound.files"] <- "test.files"
+  try(names(pks)[names(pks) == "sound.files"] <- "test.files")
   return(pks)
 
   }

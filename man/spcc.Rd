@@ -70,5 +70,5 @@ Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal voca
 \code{\link{blur_ratio}}, \code{\link{spcc_align}}, \code{\link[warbleR]{xcorr}}
 }
 \author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com})
+Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }

@@ -83,5 +83,5 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 \code{\link{envelope_correlation}}, \code{\link{spectral_blur_ratio}}
 }
 \author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com})
+Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }

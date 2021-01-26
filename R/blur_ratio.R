@@ -47,7 +47,7 @@
 #' blur_ratio(X = playback_est, method = 2)
 #' }
 #' 
-#' @author Marcelo Araya-Salas (\email{marceloa27@@gmail.com}) 
+#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) 
 #' @references {
 #' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 #' 

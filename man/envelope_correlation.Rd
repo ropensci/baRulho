@@ -74,5 +74,5 @@ Apol, C.A., Sturdy, C.B. & Proppe, D.S. (2017). Seasonal variability in habitat 
 \code{\link{blur_ratio}}, \code{\link{spectral_blur_ratio}}
 }
 \author{
-Marcelo Araya-Salas (\email{marceloa27@gmail.com})
+Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }

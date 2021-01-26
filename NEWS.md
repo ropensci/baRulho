@@ -1,3 +1,8 @@
+# *baRulho 1.0.3*
+
+* New argument 'marker' in `align_test_files()` to control if the start or end marker is being used for aliging
+* Fix bug when detecting several templates per sound file in `search_templates()`
+
 # *baRulho 1.0.2*
 
 * Windows length is converted to even in all functions

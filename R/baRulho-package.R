@@ -17,6 +17,7 @@
 #' @import utils
 #' @import parallel
 #' @import warbleR
+#' @import fftw
 #' @importFrom stats cor aggregate approx ave
 #' 
 #' @author Marcelo Araya-Salas

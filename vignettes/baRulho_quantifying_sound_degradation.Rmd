@@ -3,7 +3,7 @@ title: <center><font size="7"><b>baRulho</b></font></center>
 subtitle: <center><font size="5">Quantifying (animal) acoustic signal transmission and degradation</font></center>
 pagetitle: baRulho quantifying sound degradation
 author: 
-- <center><a href="http://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></center>
+- <center><a href="https://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></center>
 date:  <center>"`r Sys.Date()`"</center>
 output:
   rmarkdown::html_document:
@@ -64,7 +64,7 @@ library(baRulho)
 
 ```
 
-To install the latest developmental version from [github](http://github.com/) you will need the R package [devtools](https://cran.r-project.org/package=devtools):
+To install the latest developmental version from [github](https://github.com/) you will need the R package [devtools](https://cran.r-project.org/package=devtools):
 
 ```{r, eval = FALSE}
 
@@ -371,7 +371,7 @@ spectrograms(master.sf, path = td, by.song = "sound.files",
 
  <img src="example_master.wav.jpeg" alt="spectrogram of master file">
 
-Note that the output could also be exported to [Raven sound analysis software](http://ravensoundsoftware.com/software/raven-pro) ([Cornell Lab of Ornithology](http://www.birds.cornell.edu)) for visualization or further manipulation using the function `exp_raven()` from the [Rraven](https://cran.r-project.org/package=Rraven) package. `exp_raven()` exports selections in the R environment to a '.txt' file that can be read in Raven:
+Note that the output could also be exported to [Raven sound analysis software](https://ravensoundsoftware.com/software/raven-pro) ([Cornell Lab of Ornithology](https://www.birds.cornell.edu/home)) for visualization or further manipulation using the function `exp_raven()` from the [Rraven](https://cran.r-project.org/package=Rraven) package. `exp_raven()` exports selections in the R environment to a '.txt' file that can be read in Raven:
  
 
 ```{r, eval = FALSE}

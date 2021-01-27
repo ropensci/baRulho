@@ -171,7 +171,7 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
       # plot
       if (img)
       {
-        warbleR:::img_wrlbr_int(filename = paste0("blur_ratio_", X$signal.type[x], "-", rfrnc, "-", sgnl, ".jpeg"), path = dest.path, width = 10.16 * 1.5, 
+        img_bRlo_int(filename = paste0("blur_ratio_", X$signal.type[x], "-", rfrnc, "-", sgnl, ".jpeg"), path = dest.path, width = 10.16 * 1.5, 
                                 height = 10.16 , units = "cm", res = res)
         
         # create time values for area calculation

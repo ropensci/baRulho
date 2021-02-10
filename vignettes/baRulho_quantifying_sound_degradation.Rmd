@@ -3,7 +3,7 @@ title: <center><font size="7"><b>baRulho</b></font></center>
 subtitle: <center><font size="5">Quantifying (animal) acoustic signal transmission and degradation</font></center>
 pagetitle: baRulho quantifying sound degradation
 author: 
-- <center><a href="https://marceloarayasalas.weebly.com/">Marcelo Araya-Salas, PhD</a></center>
+- <center><a href="https://marceloarayasalas.weebly.com">Marcelo Araya-Salas, PhD</a></center>
 date:  <center>"`r Sys.Date()`"</center>
 output:
   rmarkdown::html_document:

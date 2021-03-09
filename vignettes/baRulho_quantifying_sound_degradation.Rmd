@@ -1114,6 +1114,46 @@ ggplot(spctr, aes(y = amp, x = freq, col = distance)) +
 ```
 &nbsp;
 
+### Excess attenuation
+
+With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading, due to atmospheric conditions or habitat (Wiley & Richards, 1978). This degradation metric can be measured using the `excess_attenuation()` function. Low values indicate little signal attenuation. The function will then compare each signal type to the corresponding reference signal within the frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating excess attenuation are provided (see 'method' argument).
+
+`excess_attenuation()`  can be measured like this:
+
+```{r, eval = TRUE}
+
+# run  envelope correlation
+ea <- excess_attenuation(playback_est, method = 1, pb = FALSE)
+
+# check output class
+is_extended_selection_table(ea)
+
+```
+
+
+The output, similar to those of other functions, is an extended selection table with the input data, but also including two new columns ('reference' and  'excess.attenuation') with the reference signal and the excess attenuation:
+
+```{r, eval = FALSE}
+# print output
+ea
+```
+
+```{r, echo = FALSE}
+
+kbl <- kable(ea, align = "c", row.names = F,  format = "html", escape = F)
+
+kbl <-  column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+
+kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+
+kbl <- scroll_box(kbl, height = "400px")
+
+kbl
+
+```
+
+&nbsp;
+
 ### Envelope correlation
 
 Amplitude envelope correlation measures the similarity of two signals in the time domain. The `envelope_correlation()` function measures the envelope correlation coefficients between reference playback and re-recorded signals. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (that is when signals have different lengths) cross-correlation is applied and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step. As in the functions detailed above, 'signal.type' column must be used to instruct the function to only compare signals that belong to the same category.

@@ -118,7 +118,9 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
   sync.sls <- do.call(rbind, out)
   
   # check if any selection exceeds length of recordings
-  wvdr <- wav_dur(path = path)
+  #if(exists("wav_dur"))
+    wvdr <- wavdur(path = path) #else
+  #wvdr <- warbleR::duration_wavs(path = path)
   
   # add duration to data frame
   sync.sls <- merge(sync.sls, wvdr)

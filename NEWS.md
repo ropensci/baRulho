@@ -1,3 +1,7 @@
+# *baRulho 1.0.4*
+
+* `warbleR::freq_range_detec()` is now used internally to detect frequency range of markers in `master_sound_file()` 
+
 # *baRulho 1.0.3*
 
 * Update requested by CRAN

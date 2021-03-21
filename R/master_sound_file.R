@@ -146,6 +146,10 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   strt_mrkr <- tuneR::normalize(strt_mrkr)
   end_mrkr <- tuneR::normalize(end_mrkr)
   
+  # frequency range of markers
+  strt_mrkr_freq <- warbleR::freq_range_detec(strt_mrkr, fsmooth = 0.2, plot = FALSE)
+  end_mrkr_freq <- warbleR::freq_range_detec(end_mrkr, fsmooth = 0.2, plot = FALSE)
+  
   # amplify markers
   strt_mrkr@left <- strt_mrkr@left * amp.marker
   end_mrkr@left <- end_mrkr@left * amp.marker
@@ -159,10 +163,10 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   
   # add delay at the beggining
   if (delay > 0)
-    strt_mrkr <- seewave::addsilw(strt_mrkr, d = delay, output = "Wave", at = "start")
+    strt_mrkr <- seewave::addsilw(strt_mrkr, d = delay, output = "Wave", at = "start", f = strt_mrkr@samp.rate)
 
   # add gap to start marker
-  strt_mrkr <- seewave::addsilw(strt_mrkr, d = gap.duration, output = "Wave", at = "end")
+  strt_mrkr <- seewave::addsilw(strt_mrkr, d = gap.duration, output = "Wave", at = "end", f = strt_mrkr@samp.rate)
       
   # add columns to attach durations
   X$pb.start <- NA
@@ -202,7 +206,7 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
   X$pb.end[i] <- seewave::duration(plbck) + seewave::duration(wv) 
   
   # add gaps
-  wv <- seewave::addsilw(wv, d = gap.duration, output = "Wave", at = "end")
+  wv <- seewave::addsilw(wv, d = gap.duration, output = "Wave", at = "end", f = wv@samp.rate)
   
   # normalize
   wv <- tuneR::normalize(wv)
@@ -230,12 +234,13 @@ master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE,
     
   # add bottom freq info
   if (!is.null(X$bottom.freq))
-  sel.tab$bottom.freq <- c(flim[1] + mar.f, X$bottom.freq, flim[1] + mar.f) 
+  sel.tab$bottom.freq <- c(strt_mrkr_freq$bottom.freq, X$bottom.freq, end_mrkr_freq$bottom.freq) else sel.tab$bottom.freq <- c(strt_mrkr_freq$bottom.freq, rep(NA, nrow(X)), end_mrkr_freq$bottom.freq)
   
+
   # add top freq info
   if (!is.null(X$top.freq))
-  sel.tab$top.freq <- c(flim[2] - mar.f, X$top.freq, flim[2] - mar.f)
-  
+  sel.tab$top.freq <- c(strt_mrkr_freq$top.freq, X$top.freq, end_mrkr_freq$top.freq) else sel.tab$top.freq <- c(strt_mrkr_freq$top.freq, rep(NA, nrow(X)), end_mrkr_freq$top.freq)
+
   # add start & end markers
   sel.tab$orig.sound.file <- c("start_marker", X$sound.files, "end_marker")
   

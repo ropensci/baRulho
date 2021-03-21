@@ -102,7 +102,7 @@ search_templates <- function(X, template.rows, test.files, path = NULL,  pb = TR
     stop("Not all sound files share the same sampling rate (check wave properties with warbleR::wav_info())")
   
   # run cross correlation
-  xc <- warbleR::xcorr(X, compare.matrix = comp_mat, path = path, output = "list", pb = pb, ...)
+  xc <- warbleR::cross_correlation(X, compare.matrix = comp_mat, path = path, output = "list", pb = pb, ...)
   
   # find peaks
   pks <- warbleR::find_peaks(xc.output = xc, max.peak = if(length(template.rows) == 1) TRUE else FALSE, path = path, pb = pb, cutoff = 0)

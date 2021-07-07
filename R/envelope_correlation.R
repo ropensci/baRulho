@@ -157,7 +157,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
     }
   
 
-  if (pb) write(file = "", x = "calculating envelope cross-correlations (step 2 of 2):")
+  if (pb) write(file = "", x = "calculating envelope correlations (step 2 of 2):")
   
   # calculate all envelops apply function
   X$envelope.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {

@@ -68,9 +68,8 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   #get call argument names
   argus <- names(as.list(base::match.call()))
   
-
   # set pb options 
-  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  # on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -84,7 +83,7 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -108,14 +107,14 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   if (noise.ref == "custom" & any(sapply(unique(X$sound.files), function(x) sum(X$sound.files == x & X$signal.type == "ambient")) == 0)) stop("Each sound file referenced in 'X' must have at least 1 'ambient' selection when 'noise.ref == custom'")
   
   # set pb options 
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  # pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
   # calculate all envelops with a apply function
-  envs <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y)   {
+  envs <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)   {
     if (noise.ref == "custom"){
       
       # read signal clip
@@ -165,10 +164,7 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
       if (enn > r$samples/f) enn <- r$samples/f
       
       # read signal and margin
-      r <- warbleR::read_wave(X = X, index = y, from = stn, to = enn)
-      
-      # read clip with signal  
-      signal <- warbleR::read_wave(X = X, index = y)
+      noise_sig <- warbleR::read_wave(X = X, index = y, from = 0, to = Inf)      
       
       # add band-pass frequency filter
       if (!is.null(bp)) {
@@ -177,18 +173,22 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
         if (bp == "freq.range") 
           bp <- c(X$bottom.freq[y], X$top.freq[y])
         
-        signal <- seewave::ffilter(signal, f = signal@samp.rate, from = bp[1] * 1000, ovlp = 0,
+        noise_sig <- seewave::ffilter(noise_sig, f = f, from = bp[1] * 1000, ovlp = 0,
                                    to = bp[2] * 1000, bandpass = TRUE, wl = wl, 
                                    output = "Wave")
       }
       
-      # get RMS for signal
-      sig.env <- seewave::env(signal, f = signal@samp.rate, envt = "abs", plot = FALSE)
+      
+      # read clip with signal  
+      signal <- seewave::cutw(noise_sig, from =  mar1, to = mar2, f = f)
+      
+      # get envelop for signal
+      sig.env <- seewave::env(signal, f = f, envt = "abs", plot = FALSE)
       
       # cut ambient noise before signal
-      noise1 <- seewave::cutw(r, from =  0, to = mar1, f = f)
+      noise1 <- seewave::cutw(noise_sig, from =  0, to = mar1, f = f)
       
-      # get RMS for background noise
+      # get envelop for background noise
       bg.env <- seewave::env(noise1, f = f, envt = "abs", plot = FALSE)
     }
     return(list(sig.env = sig.env, bg.env = bg.env))
@@ -217,7 +217,7 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
       }
     
     # Calculate signal-to-noise ratio
-    snr <- - 20 * log10(sig_RMS / bg_RMS)
+    snr <- 20 * log10(sig_RMS / bg_RMS)
    
     return(snr)  
     } else return(NA) # return NA if current row is noise

@@ -59,7 +59,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
                                bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70){
   
   # set pb options 
-  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  # on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -73,7 +73,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -114,14 +114,14 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   }
   
   # set pb options 
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  # pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
   # run loop apply function
-  RMS <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y)  rms_FUN(y, bp, wl, ovlp)) 
+  RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, bp, wl, ovlp)) 
   
   # put in a data frame
   RMS_df <- do.call(rbind, RMS)
@@ -144,16 +144,18 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
       # type Marten
       if (tp == "Marten"){
       # term 1: decrease in signal amplitude (RMS) of reference (Ref) vs re-recorded (RR)
-      term1 <- sig_RMS_REF - Y$sigRMS 
+      term1 <- sig_RMS_REF - Y$sigRMS
+      # term1 <- -20 * log10(sig_RMS_REF / Y$sigRMS)
         
       # lost due to spheric spreading
+      term2 <- 20 * log10(Y$distance - dist_REF)
       term2 <- -20 * log10(1 / Y$distance)
       
       # distance traveled by sound
       term3 <- Y$distance - dist_REF
       
       # excess attenuation = (total attenuation - spheric spreading attenuation) / distance
-      ea <- (term1 + term2) / term3
+      ea <- (term1 + term2)
       } 
       
       if (tp == "Darden"){
@@ -163,7 +165,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
         term1 <- sapply(Y$sigRMS, function(x) seewave::moredB(c(sig_RMS_REF, x)), USE.NAMES = FALSE)
         
         # term2 = - 20 log(d / 10)
-        term2 <- - 20 * log10(Y$distance / 10)
+        term2 <-  20 * log10(Y$distance / 10)
         
         # term3 = - 20 log(k)
         # get envelope correlation (k)

@@ -64,7 +64,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
   
   #check output
   if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  

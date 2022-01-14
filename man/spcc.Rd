@@ -28,7 +28,7 @@ hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
-is NULL. If supplied, 'hop.size' is ignored.}
+is \code{NULL}. If supplied, 'hop.size' is ignored.}
 
 \item{ovlp}{Numeric vector of length 1 specifying \% of overlap between two 
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp 

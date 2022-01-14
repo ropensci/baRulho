@@ -19,6 +19,7 @@
 #' @import warbleR
 #' @import fftw
 #' @importFrom stats cor aggregate approx ave
+#' @importFrom methods is
 #' 
 #' @author Marcelo Araya-Salas
 #'   

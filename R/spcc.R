@@ -16,7 +16,7 @@
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
-#' is NULL. If supplied, 'hop.size' is ignored.
+#' is \code{NULL}. If supplied, 'hop.size' is ignored.
 #' @param ovlp Numeric vector of length 1 specifying \% of overlap between two 
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp 
 #' slow down the function but produce more accurate results.
@@ -47,7 +47,7 @@
 #' }
 # last modification on jan-06-2020 (MAS)
 
-spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
+spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -65,7 +65,7 @@ spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson"
   if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -105,8 +105,20 @@ spcc <- function(X, parallel = 1, pb = TRUE,  method = 1, cor.method = "pearson"
   # put together in a single
   comp_mat <- do.call(rbind, comp_mats)
   
+  # save previous warbleR options
+  prev_wl <- .Options$warbleR
+  
+  on.exit(warbleR_options(wl = prev_wl$wl, ovlp = prev_wl$ovlp, wn = prev_wl$wn, parallel = prev_wl$parallel, pb = prev_wl$pb))
+  
+  # steps for warbleR message
+  options("int_warbleR_steps" = c(current = 0, total = 1))
+  
+  on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
+  
+  warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = parallel, pb = pb, compare.matrix = comp_mat)
+  
   # run spcc 
-  xcorrs <- warbleR::xcorr(X = X, wl = wl, ovlp = ovlp, wn = wn, cor.method = "pearson", parallel = parallel, pb = pb, compare.matrix = comp_mat)
+  xcorrs <- warbleR::cross_correlation(X = X, cor.method = "pearson")
   
   # put results back into X
   X$reference <- NA

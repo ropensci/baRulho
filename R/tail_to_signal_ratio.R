@@ -74,7 +74,7 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
   if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))

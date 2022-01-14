@@ -73,7 +73,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     stop("'dest.path' provided does not exist")
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))

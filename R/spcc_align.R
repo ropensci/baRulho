@@ -58,7 +58,7 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
     stop("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'parallel' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -115,15 +115,28 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   # make 0 any negatives
   attr(Y, "check.results")$start[Y$start < 0] <- Y$start[Y$start < 0] <- 0
 
+  # save previous warbleR options
+  prev_wl <- .Options$warbleR
+  
+  on.exit(warbleR_options(wl = prev_wl$wl, ovlp = prev_wl$ovlp, wn = prev_wl$wn, parallel = prev_wl$parallel, pb = prev_wl$pb))
+  
+  # steps for warbleR message
+  options("int_warbleR_steps" = c(current = 0, total = 2))
+  
+  on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
+  
+  
+  warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = parallel, pb = pb, compare.matrix = comp_mat, X = Y)
+  
   # run spcc 
-  xcorrs <- warbleR::xcorr(X = Y, wl = wl, ovlp = ovlp, wn = wn, parallel = parallel, pb = pb, compare.matrix = comp_mat, output = "list")
+  xcorrs <- warbleR::cross_correlation(output = "list")
   
   # message
   if (pb)  
-    write(file = "", x = "finding peaks and aligning (step 3 of 3)")
+    write(file = "", x = "finding peaks and aligning (step 2 of 2)")
   
   # find peaks and lags
-  peaks <- warbleR::find_peaks(xc.output = xcorrs, parallel = parallel, max.peak = TRUE)
+  peaks <- find_peaks_bRlh_int(xc.output = xcorrs, parallel = parallel, max.peak = TRUE)
   
   # fix start and end in original data set and its attributes 
   # start

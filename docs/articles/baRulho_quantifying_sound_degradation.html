@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -41,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -69,7 +69,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/maRce10/baRulho/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -83,8 +83,7 @@
 
       
 
-      </header><script src="baRulho_quantifying_sound_degradation_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="baRulho_quantifying_sound_degradation_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="baRulho_quantifying_sound_degradation_files/anchor-sections-1.0/anchor-sections.js"></script><script src="baRulho_quantifying_sound_degradation_files/kePrint-0.0.1/kePrint.js"></script><link href="baRulho_quantifying_sound_degradation_files/lightable-0.0.1/lightable.css" rel="stylesheet">
+      </header><script src="baRulho_quantifying_sound_degradation_files/header-attrs-2.9/header-attrs.js"></script><script src="baRulho_quantifying_sound_degradation_files/kePrint-0.0.1/kePrint.js"></script><link href="baRulho_quantifying_sound_degradation_files/lightable-0.0.1/lightable.css" rel="stylesheet">
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -99,7 +98,7 @@
 </center></h4>
             
             <h4 class="date"><center>
-“2021-03-21”
+“2022-01-14”
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/master/vignettes/baRulho_quantifying_sound_degradation.Rmd"><code>vignettes/baRulho_quantifying_sound_degradation.Rmd</code></a></small>
@@ -136,7 +135,7 @@
 <p>To install the latest developmental version from <a href="https://github.com/">github</a> you will need the R package <a href="https://cran.r-project.org/package=devtools">devtools</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># From github</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"maRce10/baRulho"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"maRce10/baRulho"</span><span class="op">)</span>
 
 <span class="co"># load package</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/maRce10/baRulho">baRulho</a></span><span class="op">)</span>
@@ -147,8 +146,8 @@
 <p>For this vignette we will also need a few more packages:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://marce10.github.io/warbleR/">warbleR</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/sjmgarnier/viridis">viridis</a></span><span class="op">)</span></code></pre></div>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://sjmgarnier.github.io/viridis/">viridis</a></span><span class="op">)</span></code></pre></div>
 <div id="inputting-acoustic-data-and-annotations" class="section level3">
 <h3 class="hasAnchor">
 <a href="#inputting-acoustic-data-and-annotations" class="anchor"></a>Inputting acoustic data and annotations</h3>
@@ -186,11 +185,11 @@
 <p>We can synthesize the same pure tones using the function <code><a href="https://marce10.github.io/warbleR/reference/sim_songs.html">sim_songs()</a></code> from the package <a href="https://cran.r-project.org/package=warbleR">warbleR</a>. The function requires 1) the number of tones to synthesize (argument <code>n</code>), 2) the duration of the tones (<code>durs</code>, in seconds), 3) the duration of the intervals (<code>gaps</code>, in seconds) and 4) the frequencies for each tone to be synthesized (<code>freqs</code>, in kHz). In addition, the argument <code>diff.fun</code> should be set to “pure.tone” and the argument <code>harm</code> to 1 to remove harmonics. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu <a href="https://cran.r-project.org/package=warbleR">warbleR</a>) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument <code>selec.table = TRUE</code>. This can be done as follows:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># synthesize</span>
-<span class="va">synth.l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/sim_songs.html">sim_songs</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">6</span>, durs <span class="op">=</span> <span class="fl">0.1</span>, freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, harms <span class="op">=</span> <span class="fl">1</span>, gaps <span class="op">=</span> <span class="fl">0.15</span>, 
+<span class="va">synth.l</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/sim_songs.html">sim_songs</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">6</span>, durs <span class="op">=</span> <span class="fl">0.1</span>, freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span>, harms <span class="op">=</span> <span class="fl">1</span>, gaps <span class="op">=</span> <span class="fl">0.15</span>,
     diff.fun <span class="op">=</span> <span class="st">"pure.tone"</span>, selec.table <span class="op">=</span> <span class="cn">TRUE</span>, path <span class="op">=</span> <span class="va">td</span><span class="op">)</span>
 
 <span class="co"># plot spectro</span>
-<span class="fu">spectro</span><span class="op">(</span><span class="va">synth.l</span><span class="op">$</span><span class="va">wave</span>, scale <span class="op">=</span> <span class="cn">FALSE</span>, palette <span class="op">=</span> <span class="va">reverse.topo.colors</span>, grid <span class="op">=</span> <span class="cn">FALSE</span>, 
+<span class="fu">spectro</span><span class="op">(</span><span class="va">synth.l</span><span class="op">$</span><span class="va">wave</span>, scale <span class="op">=</span> <span class="cn">FALSE</span>, palette <span class="op">=</span> <span class="va">reverse.topo.colors</span>, grid <span class="op">=</span> <span class="cn">FALSE</span>,
     flim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">6</span><span class="op">)</span>, collevels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">20</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="spectro_synth_song.png" alt="spectrogram syntehtic sounds" width="750"></p>
 <p> </p>
@@ -368,17 +367,17 @@ top.freq
 <span class="va">st</span><span class="op">$</span><span class="va">top.freq</span> <span class="op">&lt;-</span> <span class="va">st</span><span class="op">$</span><span class="va">top.freq</span> <span class="op">+</span> <span class="fl">0.25</span>
 
 <span class="co"># make an extended selection table</span>
-<span class="va">synth.est</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/selection_table.html">selection_table</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">st</span>, extended <span class="op">=</span> <span class="cn">TRUE</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>, confirm.extended <span class="op">=</span> <span class="cn">FALSE</span>, 
+<span class="va">synth.est</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/selection_table.html">selection_table</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">st</span>, extended <span class="op">=</span> <span class="cn">TRUE</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>, confirm.extended <span class="op">=</span> <span class="cn">FALSE</span>,
     path <span class="op">=</span> <span class="va">td</span><span class="op">)</span>
 
 <span class="co"># create master sound file</span>
-<span class="va">synth.master.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/master_sound_file.html">master_sound_file</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">synth.est</span>, file.name <span class="op">=</span> <span class="st">"synthetic_master"</span>, 
+<span class="va">synth.master.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/master_sound_file.html">master_sound_file</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">synth.est</span>, file.name <span class="op">=</span> <span class="st">"synthetic_master"</span>,
     dest.path <span class="op">=</span> <span class="va">td</span>, gap.duration <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span></code></pre></div>
 <p> </p>
 <p>The function saves the master sound file as a wave file and returns a selection table in the R environment with the time and frequency ‘coordinates’ of the signals in that file. We can look at the spectrogram of the output file using the <a href="https://cran.r-project.org/package=warbleR">warbleR</a> function <code><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms()</a></code> as follows:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># plot spectro (saved in working directory)</span>
-<span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms</a></span><span class="op">(</span><span class="va">synth.master.sf</span>, path <span class="op">=</span> <span class="va">td</span>, by.song <span class="op">=</span> <span class="st">"sound.files"</span>, xl <span class="op">=</span> <span class="fl">3</span>, collevels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>, 
+<span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms</a></span><span class="op">(</span><span class="va">synth.master.sf</span>, path <span class="op">=</span> <span class="va">td</span>, by.song <span class="op">=</span> <span class="st">"sound.files"</span>, xl <span class="op">=</span> <span class="fl">3</span>, collevels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>,
     <span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span>, osci <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="synthetic_master.wav.jpeg" alt="spectrogram of master file"></p>
 <p>The function can also create a master sound file from sounds from different sounds files, as is likely the case with recordings collected in the field. The following example shows how to create a master sound file using several sound files. The code uses the example data and recordings from the package <a href="https://cran.r-project.org/package=warbleR">warbleR</a>:</p>
@@ -393,16 +392,16 @@ top.freq
 <span class="fu">writeWave</span><span class="op">(</span><span class="va">Phae.long4</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">td</span>, <span class="st">"Phae.long4.wav"</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># make an extended selection table</span>
-<span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/selection_table.html">selection_table</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">lbh_selec_table</span>, extended <span class="op">=</span> <span class="cn">TRUE</span>, confirm.extended <span class="op">=</span> <span class="cn">FALSE</span>, 
+<span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/selection_table.html">selection_table</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">lbh_selec_table</span>, extended <span class="op">=</span> <span class="cn">TRUE</span>, confirm.extended <span class="op">=</span> <span class="cn">FALSE</span>,
     path <span class="op">=</span> <span class="va">td</span><span class="op">)</span>
 
 <span class="co"># create master sound file</span>
-<span class="va">master.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/master_sound_file.html">master_sound_file</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">est</span>, file.name <span class="op">=</span> <span class="st">"example_master"</span>, dest.path <span class="op">=</span> <span class="va">td</span>, 
+<span class="va">master.sf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/master_sound_file.html">master_sound_file</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">est</span>, file.name <span class="op">=</span> <span class="st">"example_master"</span>, dest.path <span class="op">=</span> <span class="va">td</span>,
     gap.duration <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></code></pre></div>
 <p> </p>
 <p>Again, we can look at the spectrogram of the output file:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms</a></span><span class="op">(</span><span class="va">master.sf</span>, path <span class="op">=</span> <span class="va">td</span>, by.song <span class="op">=</span> <span class="st">"sound.files"</span>, xl <span class="op">=</span> <span class="fl">3</span>, collevels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>, 
+<code class="sourceCode R"><span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms</a></span><span class="op">(</span><span class="va">master.sf</span>, path <span class="op">=</span> <span class="va">td</span>, by.song <span class="op">=</span> <span class="st">"sound.files"</span>, xl <span class="op">=</span> <span class="fl">3</span>, collevels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>,
     <span class="fl">0</span>, <span class="fl">5</span><span class="op">)</span>, osci <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="example_master.wav.jpeg" alt="spectrogram of master file"></p>
 <p>Note that the output could also be exported to <a href="https://ravensoundsoftware.com/software/raven-pro">Raven sound analysis software</a> (<a href="https://www.birds.cornell.edu/home">Cornell Lab of Ornithology</a>) for visualization or further manipulation using the function <code>exp_raven()</code> from the <a href="https://cran.r-project.org/package=Rraven">Rraven</a> package. <code>exp_raven()</code> exports selections in the R environment to a ‘.txt’ file that can be read in Raven:</p>
@@ -452,7 +451,7 @@ top.freq
 <p> </p>
 <p>To find the location of the start marker on these (simulated) re-recorded sound files we use the functions <code><a href="../reference/search_templates.html">search_templates()</a></code> to run a cross-correlation of one or more markers across the test (re-recorded) files to determine the exact time in which each marker is found:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">found.starts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_templates.html">search_templates</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">master.sf</span>, template.rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">master.sf</span><span class="op">$</span><span class="va">orig.sound.file</span> <span class="op">==</span> 
+<code class="sourceCode R"><span class="va">found.starts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/search_templates.html">search_templates</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">master.sf</span>, template.rows <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">master.sf</span><span class="op">$</span><span class="va">orig.sound.file</span> <span class="op">==</span>
     <span class="st">"start_marker"</span><span class="op">)</span>, test.files <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"example_test1.wav"</span>, <span class="st">"example_test2.wav"</span><span class="op">)</span>, path <span class="op">=</span> <span class="va">td</span><span class="op">)</span>
 <span class="va">pks</span></code></pre></div>
 <p> </p>
@@ -1170,7 +1169,7 @@ end_marker
 <p> </p>
 <p>We can check the precision of the alignment by looking at the spectrograms:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms</a></span><span class="op">(</span><span class="va">alg.tests</span>, by.song <span class="op">=</span> <span class="st">"sound.files"</span>, xl <span class="op">=</span> <span class="fl">3</span>, collevels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>, <span class="fl">0</span>, 
+<code class="sourceCode R"><span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms</a></span><span class="op">(</span><span class="va">alg.tests</span>, by.song <span class="op">=</span> <span class="st">"sound.files"</span>, xl <span class="op">=</span> <span class="fl">3</span>, collevels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">60</span>, <span class="fl">0</span>,
     <span class="fl">5</span><span class="op">)</span>, dest.path <span class="op">=</span> <span class="va">td</span>, osci <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p><img src="example_test1.wav.jpeg" alt="test 1"></p>
 <p> </p>
@@ -1195,9 +1194,9 @@ end_marker
 <p>This is how the signals look before and after being aligned:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># rename sound files so aligned and unaligned signals are intercalated</span>
-<span class="va">unalg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/rename_waves_est.html">rename_waves_est</a></span><span class="op">(</span><span class="va">playback_est_unaligned</span>, <span class="va">playback_est_unaligned</span><span class="op">$</span><span class="va">sound.files</span>, 
+<span class="va">unalg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/rename_waves_est.html">rename_waves_est</a></span><span class="op">(</span><span class="va">playback_est_unaligned</span>, <span class="va">playback_est_unaligned</span><span class="op">$</span><span class="va">sound.files</span>,
     new.selec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">200</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">playback_est_unaligned</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
-<span class="va">alg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/rename_waves_est.html">rename_waves_est</a></span><span class="op">(</span><span class="va">playback_est_aligned</span>, <span class="va">playback_est_aligned</span><span class="op">$</span><span class="va">sound.files</span>, new.selec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span>, 
+<span class="va">alg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/rename_waves_est.html">rename_waves_est</a></span><span class="op">(</span><span class="va">playback_est_aligned</span>, <span class="va">playback_est_aligned</span><span class="op">$</span><span class="va">sound.files</span>, new.selec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span>,
     <span class="fl">200</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">playback_est_aligned</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 
 <span class="co"># add label</span>
@@ -1208,7 +1207,7 @@ end_marker
 <span class="va">unalg.alg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">unalg</span>, <span class="va">alg</span><span class="op">)</span>
 
 <span class="co"># create spectrograms</span>
-<span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms</a></span><span class="op">(</span><span class="va">unalg.alg</span><span class="op">[</span><span class="va">unalg.alg</span><span class="op">$</span><span class="va">signal.type</span> <span class="op">!=</span> <span class="st">"ambient"</span>, <span class="op">]</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>, 
+<span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html">spectrograms</a></span><span class="op">(</span><span class="va">unalg.alg</span><span class="op">[</span><span class="va">unalg.alg</span><span class="op">$</span><span class="va">signal.type</span> <span class="op">!=</span> <span class="st">"ambient"</span>, <span class="op">]</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempdir</a></span><span class="op">(</span><span class="op">)</span>,
     res <span class="op">=</span> <span class="fl">100</span>, wl <span class="op">=</span> <span class="fl">300</span>, title.labels <span class="op">=</span> <span class="st">"type"</span>, sel.labels <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></code></pre></div>
 <center>
 <img src="spcc_align_results.gif" alt="time sync with spcc_align">
@@ -3089,7 +3088,7 @@ SUR-K1
 <p>If <code>img = TRUE</code> it also returns 1 image file (in ‘jpeg’ format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)).</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># run blur ratio</span>
-<span class="va">br</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/blur_ratio.html">blur_ratio</a></span><span class="op">(</span><span class="va">playback_est</span>, method <span class="op">=</span> <span class="fl">1</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>, img <span class="op">=</span> <span class="cn">TRUE</span>, ssmooth <span class="op">=</span> <span class="fl">300</span>, 
+<span class="va">br</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/blur_ratio.html">blur_ratio</a></span><span class="op">(</span><span class="va">playback_est</span>, method <span class="op">=</span> <span class="fl">1</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>, img <span class="op">=</span> <span class="cn">TRUE</span>, ssmooth <span class="op">=</span> <span class="fl">300</span>,
     dest.path <span class="op">=</span> <span class="va">td</span><span class="op">)</span></code></pre></div>
 <p>Output image files (in the working directory) look like these ones:</p>
 <center>
@@ -3103,8 +3102,8 @@ SUR-K1
 
 <span class="va">envs</span><span class="op">$</span><span class="va">distance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">envs</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">envs</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">amp</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time (s)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span> 
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">envs</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">amp</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time (s)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-39-1.png" width="560" style="display: block; margin: auto;"></p>
 <p>Note than the <code>smooth</code> argument could change envelope shapes and related measurements. The following code sets <code>smooth = 800</code>:</p>
@@ -3113,8 +3112,8 @@ SUR-K1
 
 <span class="va">envs</span><span class="op">$</span><span class="va">distance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">envs</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">envs</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">amp</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time (s)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span> 
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">envs</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">amp</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time (s)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-40-1.png" width="560" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -4081,18 +4080,18 @@ SUR-K1
 
 <span class="va">spctr</span><span class="op">$</span><span class="va">distance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">spctr</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">spctr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span> 
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">spctr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-45-1.png" width="560" style="display: block; margin: auto;"></p>
 <p>We can also zoom in to the frequency range of the signals by subsetting the spectrum data:</p>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># get the frequencies higher than lowest bottom but lower than highest top freq</span>
-<span class="va">spctr</span> <span class="op">&lt;-</span> <span class="va">spctr</span><span class="op">[</span><span class="va">spctr</span><span class="op">$</span><span class="va">freq</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">bottom.freq</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">spctr</span><span class="op">$</span><span class="va">freq</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">top.freq</span><span class="op">)</span>, 
+<span class="va">spctr</span> <span class="op">&lt;-</span> <span class="va">spctr</span><span class="op">[</span><span class="va">spctr</span><span class="op">$</span><span class="va">freq</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">bottom.freq</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">spctr</span><span class="op">$</span><span class="va">freq</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">top.freq</span><span class="op">)</span>,
     <span class="op">]</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">spctr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span> 
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">spctr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-46-1.png" width="560" style="display: block; margin: auto;">  </p>
 </div>
@@ -4464,7 +4463,7 @@ CCE-F1
 01m_re-rec.wav-1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-4.248642
+16.99457
 </td>
 </tr>
 <tr>
@@ -4496,7 +4495,7 @@ CCE-F1
 01m_re-rec.wav-1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-2.635849
+23.72264
 </td>
 </tr>
 <tr>
@@ -4528,7 +4527,7 @@ CCE-F1
 01m_re-rec.wav-1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1.930062
+27.02087
 </td>
 </tr>
 <tr>
@@ -4592,7 +4591,7 @@ CCE-I2
 01m_re-rec.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-3.818052
+15.27221
 </td>
 </tr>
 <tr>
@@ -4624,7 +4623,7 @@ CCE-I2
 01m_re-rec.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-2.362197
+21.25977
 </td>
 </tr>
 <tr>
@@ -4656,7 +4655,7 @@ CCE-I2
 01m_re-rec.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1.763583
+24.69016
 </td>
 </tr>
 <tr>
@@ -4720,7 +4719,7 @@ CCL-K2
 01m_re-rec.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-4.815291
+19.26116
 </td>
 </tr>
 <tr>
@@ -4752,7 +4751,7 @@ CCL-K2
 01m_re-rec.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-2.857503
+25.71753
 </td>
 </tr>
 <tr>
@@ -4784,7 +4783,7 @@ CCL-K2
 01m_re-rec.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-2.076950
+29.07730
 </td>
 </tr>
 <tr>
@@ -4848,7 +4847,7 @@ SUR-A4
 01m_re-rec.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-3.513140
+14.05256
 </td>
 </tr>
 <tr>
@@ -4880,7 +4879,7 @@ SUR-A4
 01m_re-rec.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-2.253013
+20.27712
 </td>
 </tr>
 <tr>
@@ -4912,7 +4911,7 @@ SUR-A4
 01m_re-rec.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1.682609
+23.55652
 </td>
 </tr>
 <tr>
@@ -4976,7 +4975,7 @@ SUR-K1
 01m_re-rec.wav-7
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-6.140415
+24.56166
 </td>
 </tr>
 <tr>
@@ -5008,7 +5007,7 @@ SUR-K1
 01m_re-rec.wav-7
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-3.301486
+29.71337
 </td>
 </tr>
 <tr>
@@ -5040,7 +5039,7 @@ SUR-K1
 01m_re-rec.wav-7
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-2.551872
+35.72621
 </td>
 </tr>
 </tbody>
@@ -7026,7 +7025,7 @@ CCE-F1
 1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--34.343497
+34.343497
 </td>
 </tr>
 <tr>
@@ -7055,7 +7054,7 @@ CCE-F1
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--28.332970
+28.332970
 </td>
 </tr>
 <tr>
@@ -7084,7 +7083,7 @@ CCE-F1
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--24.728347
+24.728347
 </td>
 </tr>
 <tr>
@@ -7113,7 +7112,7 @@ CCE-F1
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--14.762225
+14.762225
 </td>
 </tr>
 <tr>
@@ -7142,7 +7141,7 @@ CCE-I2
 1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--39.764789
+39.764789
 </td>
 </tr>
 <tr>
@@ -7171,7 +7170,7 @@ CCE-I2
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--35.788237
+35.788237
 </td>
 </tr>
 <tr>
@@ -7200,7 +7199,7 @@ CCE-I2
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--32.690266
+32.690266
 </td>
 </tr>
 <tr>
@@ -7229,7 +7228,7 @@ CCE-I2
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--22.691011
+22.691011
 </td>
 </tr>
 <tr>
@@ -7258,7 +7257,7 @@ CCL-K2
 1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--35.096738
+35.096738
 </td>
 </tr>
 <tr>
@@ -7287,7 +7286,7 @@ CCL-K2
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--26.538427
+26.538427
 </td>
 </tr>
 <tr>
@@ -7316,7 +7315,7 @@ CCL-K2
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--23.014474
+23.014474
 </td>
 </tr>
 <tr>
@@ -7345,7 +7344,7 @@ CCL-K2
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--13.010145
+13.010145
 </td>
 </tr>
 <tr>
@@ -7606,7 +7605,7 @@ SUR-A4
 1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--40.125423
+40.125423
 </td>
 </tr>
 <tr>
@@ -7635,7 +7634,7 @@ SUR-A4
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--36.963176
+36.963176
 </td>
 </tr>
 <tr>
@@ -7664,7 +7663,7 @@ SUR-A4
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--33.690208
+33.690208
 </td>
 </tr>
 <tr>
@@ -7693,7 +7692,7 @@ SUR-A4
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--23.812451
+23.812451
 </td>
 </tr>
 <tr>
@@ -7722,7 +7721,7 @@ SUR-K1
 1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--37.198457
+37.198457
 </td>
 </tr>
 <tr>
@@ -7751,7 +7750,7 @@ SUR-K1
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--23.650075
+23.650075
 </td>
 </tr>
 <tr>
@@ -7780,7 +7779,7 @@ SUR-K1
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--21.331685
+21.331685
 </td>
 </tr>
 <tr>
@@ -7809,7 +7808,7 @@ SUR-K1
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
--8.625902
+8.625902
 </td>
 </tr>
 </tbody>
@@ -8689,7 +8688,7 @@ SUR-K1
 <p>Finally, the function <code><a href="../reference/spcc.html">spcc()</a></code> measures spectrogram cross-correlation as a metric of signal distortion of signals. Values close to 1 means very similar spectrograms (i.e. little signal distortion). The function is a wrapper on <a href="https://cran.r-project.org/package=warbleR">warbleR</a>’s <code><a href="https://marce10.github.io/warbleR/reference/xcorr.html">xcorr()</a></code>. It can be run as follows:</p>
 <div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># run spcc</span>
-<span class="va">spd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spcc.html">spcc</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">playback_est</span>, method <span class="op">=</span> <span class="fl">1</span>, pb <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="va">spd</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spcc.html">spcc</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">playback_est</span>, method <span class="op">=</span> <span class="fl">1</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>, wl <span class="op">=</span> <span class="fl">512</span><span class="op">)</span>
 
 <span class="co"># check output class</span>
 <span class="fu"><a href="https://marce10.github.io/warbleR/reference/is_extended_selection_table.html">is_extended_selection_table</a></span><span class="op">(</span><span class="va">spd</span><span class="op">)</span></code></pre></div>
@@ -8791,10 +8790,10 @@ CCE-F1
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-1
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.7885561
+NA
 </td>
 </tr>
 <tr>
@@ -8823,10 +8822,10 @@ CCE-F1
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-1
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.7677576
+NA
 </td>
 </tr>
 <tr>
@@ -8855,10 +8854,10 @@ CCE-F1
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-1
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.6778129
+NA
 </td>
 </tr>
 <tr>
@@ -8919,10 +8918,10 @@ CCE-I2
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-4
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.7235336
+NA
 </td>
 </tr>
 <tr>
@@ -8951,10 +8950,10 @@ CCE-I2
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-4
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.7389918
+NA
 </td>
 </tr>
 <tr>
@@ -8983,10 +8982,10 @@ CCE-I2
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-4
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.3961346
+NA
 </td>
 </tr>
 <tr>
@@ -9047,10 +9046,10 @@ CCL-K2
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-5
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.6817855
+NA
 </td>
 </tr>
 <tr>
@@ -9079,10 +9078,10 @@ CCL-K2
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-5
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.7049221
+NA
 </td>
 </tr>
 <tr>
@@ -9111,10 +9110,10 @@ CCL-K2
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-5
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.5525476
+NA
 </td>
 </tr>
 <tr>
@@ -9431,10 +9430,10 @@ SUR-A4
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-2
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.8120594
+NA
 </td>
 </tr>
 <tr>
@@ -9463,10 +9462,10 @@ SUR-A4
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-2
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.8337550
+NA
 </td>
 </tr>
 <tr>
@@ -9495,10 +9494,10 @@ SUR-A4
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-2
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.7469876
+NA
 </td>
 </tr>
 <tr>
@@ -9559,10 +9558,10 @@ SUR-K1
 5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-7
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.8589689
+NA
 </td>
 </tr>
 <tr>
@@ -9591,10 +9590,10 @@ SUR-K1
 10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-7
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.8397630
+NA
 </td>
 </tr>
 <tr>
@@ -9623,10 +9622,10 @@ SUR-K1
 15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-01m_re-rec.wav-7
+NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-0.6923990
+NA
 </td>
 </tr>
 </tbody>
@@ -9894,32 +9893,32 @@ amp
 </div>
 <p>This can be graphically represented as follows:</p>
 <div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">np</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">sound.files</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, 
-    end <span class="op">=</span> <span class="fl">0.8</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (dBA)"</span><span class="op">)</span> <span class="op">+</span> 
+<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">np</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">sound.files</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>,
+    end <span class="op">=</span> <span class="fl">0.8</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (dBA)"</span><span class="op">)</span> <span class="op">+</span>
     <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-68-1.png" width="560" style="display: block; margin: auto;"></p>
 <p>The output data is actually an average of several frequency spectra for each sound file. We can obtain the original spectra by setting the argument <code>averaged = FALSE</code>:</p>
 <div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/noise_profile.html">noise_profile</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">playback_est</span><span class="op">[</span><span class="va">playback_est</span><span class="op">$</span><span class="va">distance</span> <span class="op">&gt;</span> <span class="fl">5</span>, <span class="op">]</span>, mar <span class="op">=</span> <span class="fl">0.1</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>, 
+<code class="sourceCode R"><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/noise_profile.html">noise_profile</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">playback_est</span><span class="op">[</span><span class="va">playback_est</span><span class="op">$</span><span class="va">distance</span> <span class="op">&gt;</span> <span class="fl">5</span>, <span class="op">]</span>, mar <span class="op">=</span> <span class="fl">0.1</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>,
     averaged <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># make a column containing sound file and selection</span>
 <span class="va">np</span><span class="op">$</span><span class="va">sf.sl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">np</span><span class="op">$</span><span class="va">sound.files</span>, <span class="va">np</span><span class="op">$</span><span class="va">selec</span><span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">np</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">sound.files</span>, group <span class="op">=</span> <span class="va">sf.sl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, 
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">np</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">sound.files</span>, group <span class="op">=</span> <span class="va">sf.sl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>,
     y <span class="op">=</span> <span class="st">"Amplitude (dBA)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-69-1.png" width="560" style="display: block; margin: auto;"></p>
 <p>Note that we can limit the frequency range by using a bandpass filter (‘bp’ argument). In addition, the argument ‘hop.size’, which control the size of the time windows, affects the precision in the frequency domain. We can get a better precision by increasing ‘hop.size’ (or ‘wl’):</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/noise_profile.html">noise_profile</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">playback_est</span><span class="op">[</span><span class="va">playback_est</span><span class="op">$</span><span class="va">distance</span> <span class="op">&gt;</span> <span class="fl">5</span>, <span class="op">]</span>, mar <span class="op">=</span> <span class="fl">0.05</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>, 
+<code class="sourceCode R"><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/noise_profile.html">noise_profile</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">playback_est</span><span class="op">[</span><span class="va">playback_est</span><span class="op">$</span><span class="va">distance</span> <span class="op">&gt;</span> <span class="fl">5</span>, <span class="op">]</span>, mar <span class="op">=</span> <span class="fl">0.05</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>,
     bp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>, averaged <span class="op">=</span> <span class="cn">FALSE</span>, hop.size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
 
 <span class="co"># make a column containing sound file and selection</span>
 <span class="va">np</span><span class="op">$</span><span class="va">sf.sl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">np</span><span class="op">$</span><span class="va">sound.files</span>, <span class="va">np</span><span class="op">$</span><span class="va">selec</span><span class="op">)</span>
 
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">np</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">sound.files</span>, group <span class="op">=</span> <span class="va">sf.sl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span> <span class="op">+</span> 
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, 
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">np</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">sound.files</span>, group <span class="op">=</span> <span class="va">sf.sl</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>,
     y <span class="op">=</span> <span class="st">"Amplitude (dBA)"</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Removed 14 row(s) containing missing values (geom_path).</code></pre>
 <p><img src="baRulho_quantifying_sound_degradation_files/figure-html/unnamed-chunk-70-1.png" width="560" style="display: block; margin: auto;"></p>
@@ -9946,18 +9945,18 @@ amp
 </ol>
 <hr>
 <p><font size="4">Session information</font></p>
-<pre><code>## R version 4.0.4 (2021-02-15)
+<pre><code>## R version 4.1.0 (2021-05-18)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.2 LTS
 ## 
 ## Matrix products: default
-## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
-## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+## BLAS:   /usr/lib/x86_64-linux-gnu/atlas/libblas.so.3.10.3
+## LAPACK: /usr/lib/x86_64-linux-gnu/atlas/liblapack.so.3.10.3
 ## 
 ## locale:
-##  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
-##  [3] LC_TIME=es_CR.UTF-8        LC_COLLATE=en_US.UTF-8    
-##  [5] LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=en_US.UTF-8   
+##  [1] LC_CTYPE=pt_BR.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=es_CR.UTF-8        LC_COLLATE=pt_BR.UTF-8    
+##  [5] LC_MONETARY=es_CR.UTF-8    LC_MESSAGES=pt_BR.UTF-8   
 ##  [7] LC_PAPER=es_CR.UTF-8       LC_NAME=C                 
 ##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
 ## [11] LC_MEASUREMENT=es_CR.UTF-8 LC_IDENTIFICATION=C       
@@ -9966,27 +9965,29 @@ amp
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] viridis_0.5.1      viridisLite_0.3.0  ggplot2_3.3.2      kableExtra_1.3.1  
-##  [5] baRulho_1.0.4      warbleR_1.1.26     NatureSounds_1.0.3 seewave_2.1.6     
-##  [9] tuneR_1.3.3        knitr_1.31        
+##  [1] viridis_0.6.2      viridisLite_0.4.0  ggplot2_3.3.5      kableExtra_1.3.1  
+##  [5] baRulho_1.0.5      warbleR_1.1.27     NatureSounds_1.0.4 seewave_2.1.8     
+##  [9] tuneR_1.3.3.1      knitr_1.37        
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.6        fftw_1.0-6        assertthat_0.2.1  rprojroot_2.0.2  
-##  [5] digest_0.6.27     R6_2.5.0          signal_0.7-6      evaluate_0.14    
-##  [9] highr_0.8         httr_1.4.2        pillar_1.4.6      rlang_0.4.10     
-## [13] rstudioapi_0.13   rmarkdown_2.5     pkgdown_1.6.1     textshaping_0.2.1
-## [17] desc_1.2.0        labeling_0.4.2    webshot_0.5.2     stringr_1.4.0    
-## [21] RCurl_1.98-1.3    munsell_0.5.0     proxy_0.4-25      compiler_4.0.4   
-## [25] xfun_0.22         pkgconfig_2.0.3   systemfonts_0.3.2 htmltools_0.5.1.1
-## [29] tidyselect_1.1.0  tibble_3.0.4      gridExtra_2.3     dtw_1.22-3       
-## [33] crayon_1.4.1      dplyr_1.0.2       withr_2.3.0       MASS_7.3-53.1    
-## [37] bitops_1.0-6      grid_4.0.4        gtable_0.3.0      lifecycle_0.2.0  
-## [41] magrittr_2.0.1    formatR_1.7       scales_1.1.1      stringi_1.5.3    
-## [45] cachem_1.0.1      pbapply_1.4-3     farver_2.0.3      fs_1.5.0         
-## [49] xml2_1.3.2        ellipsis_0.3.1    ragg_0.4.0        vctrs_0.3.6      
-## [53] generics_0.1.0    rjson_0.2.20      tools_4.0.4       glue_1.4.2       
-## [57] purrr_0.3.4       parallel_4.0.4    fastmap_1.1.0     yaml_2.2.1       
-## [61] colorspace_2.0-0  rvest_0.3.6       memoise_2.0.0</code></pre>
+##  [1] Rcpp_1.0.8        fftw_1.0-6.1      assertthat_0.2.1  rprojroot_2.0.2  
+##  [5] digest_0.6.29     utf8_1.2.2        R6_2.5.1          signal_0.7-7     
+##  [9] evaluate_0.14     highr_0.9         httr_1.4.2        pillar_1.6.4     
+## [13] rlang_0.4.12      rstudioapi_0.13   jquerylib_0.1.4   rmarkdown_2.9    
+## [17] pkgdown_1.6.1     labeling_0.4.2    textshaping_0.3.5 desc_1.3.0       
+## [21] webshot_0.5.2     stringr_1.4.0     RCurl_1.98-1.5    munsell_0.5.0    
+## [25] proxy_0.4-26      compiler_4.1.0    xfun_0.29         pkgconfig_2.0.3  
+## [29] systemfonts_1.0.2 htmltools_0.5.2   tidyselect_1.1.1  gridExtra_2.3    
+## [33] tibble_3.1.6      dtw_1.22-3        fansi_1.0.0       withr_2.4.3      
+## [37] crayon_1.4.2      dplyr_1.0.7       MASS_7.3-54       bitops_1.0-7     
+## [41] grid_4.1.0        DBI_1.1.1         jsonlite_1.7.2    gtable_0.3.0     
+## [45] lifecycle_1.0.1   magrittr_2.0.1    formatR_1.11      scales_1.1.1     
+## [49] stringi_1.7.6     cachem_1.0.5      pbapply_1.5-0     farver_2.1.0     
+## [53] fs_1.5.0          xml2_1.3.2        bslib_0.2.5.1     ellipsis_0.3.2   
+## [57] ragg_1.1.3        vctrs_0.3.8       generics_0.1.0    rjson_0.2.21     
+## [61] tools_4.1.0       glue_1.6.0        purrr_0.3.4       parallel_4.1.0   
+## [65] fastmap_1.1.0     yaml_2.2.1        colorspace_2.0-2  rvest_1.0.0      
+## [69] memoise_2.0.0     sass_0.4.0</code></pre>
 </div>
   </div>
 

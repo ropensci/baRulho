@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.5</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -110,7 +110,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/maRce10/baRulho/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -177,7 +177,7 @@ hop.size <span class='op'>=</span> <span class='fl'>11.6</span>, wl <span class=
     <tr>
       <th>wl</th>
       <td><p>A numeric vector of length 1 specifying the window length of the spectrogram, default 
-is NULL. If supplied, 'hop.size' is ignored.</p></td>
+is <code>NULL</code>. If supplied, 'hop.size' is ignored.</p></td>
     </tr>
     <tr>
       <th>ovlp</th>
@@ -220,39 +220,30 @@ with the spectrogram cross-correlation coefficients.</p>
 <span class='fu'>spcc</span><span class='op'>(</span>X <span class='op'>=</span> <span class='va'>playback_est</span>, method <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 <span class='op'>}</span>
 </div><div class='output co'>#&gt; running cross-correlation (step 1 of 1):
-#&gt;   |                                                  | 0 % ~calculating    |++++                                              | 7 % ~00s            |+++++++                                           | 13% ~00s            |++++++++++                                        | 20% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++                                 | 33% ~00s            |++++++++++++++++++++                              | 40% ~00s            |++++++++++++++++++++++++                          | 47% ~00s            |+++++++++++++++++++++++++++                       | 53% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; running cross-correlation (step 1 of 1):
-#&gt;   |                                                  | 0 % ~calculating    |++++                                              | 7 % ~00s            |+++++++                                           | 13% ~00s            |++++++++++                                        | 20% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++                                 | 33% ~00s            |++++++++++++++++++++                              | 40% ~00s            |++++++++++++++++++++++++                          | 47% ~00s            |+++++++++++++++++++++++++++                       | 53% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |++++++++++++++++++++++++++++++++++++++++++++      | 87% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; <span style='color: #00BBBB;'>Object of class </span><span style='color: #00BBBB;font-weight: bold;'>'extended_selection_table' 
-#&gt; </span><span style='color: #555555;font-weight: bold;'>Contains:</span><span style='color: #555555;'> 
-#&gt; * A selection table data frame with 28 rows and 10 columns: 
-#&gt; </span><span>       </span><span style='color: #555555;font-weight: bold;'>sound.fi</span><span>   </span><span style='color: #555555;font-weight: bold;'>selec</span><span>   </span><span style='color: #555555;font-weight: bold;'> start</span><span>   </span><span style='color: #555555;font-weight: bold;'>  end</span><span>   </span><span style='color: #555555;font-weight: bold;'>bottom.f</span><span>   </span><span style='color: #555555;font-weight: bold;'>top.freq</span><span>   </span><span style='color: #555555;font-weight: bold;'>signal.t</span><span>  
-#&gt;        </span><span style='color: #555555;font-weight: bold;'>les     </span><span>                            </span><span style='color: #555555;font-weight: bold;'>     req</span><span>              </span><span style='color: #555555;font-weight: bold;'>ype     </span><span>  
-#&gt;      ──────────────────────────────────────────────────────────────────────
-#&gt;        </span><span style='color: #555555;'>01m_re-r</span><span>   </span><span style='color: #555555;'>    1</span><span>   </span><span style='color: #555555;'>0.05  </span><span>   </span><span style='color: #555555;'>0.207</span><span>   </span><span style='color: #555555;'>    2.24</span><span>   </span><span style='color: #555555;'>    11.6</span><span>   </span><span style='color: #555555;'>CCE-F1  </span><span>  
-#&gt;        </span><span style='color: #555555;'>ec.wav  </span><span>                                                            
-#&gt;        </span><span style='color: #555555;'>05m_re-r</span><span>   </span><span style='color: #555555;'>    1</span><span>   </span><span style='color: #555555;'>0.0444</span><span>   </span><span style='color: #555555;'>0.202</span><span>   </span><span style='color: #555555;'>    2.24</span><span>   </span><span style='color: #555555;'>    11.6</span><span>   </span><span style='color: #555555;'>CCE-F1  </span><span>  
-#&gt;        </span><span style='color: #555555;'>ec.wav  </span><span>                                                            
-#&gt;        </span><span style='color: #555555;'>10m_re-r</span><span>   </span><span style='color: #555555;'>    1</span><span>   </span><span style='color: #555555;'>0.0421</span><span>   </span><span style='color: #555555;'>0.199</span><span>   </span><span style='color: #555555;'>    2.24</span><span>   </span><span style='color: #555555;'>    11.6</span><span>   </span><span style='color: #555555;'>CCE-F1  </span><span>  
-#&gt;        </span><span style='color: #555555;'>ec.wav  </span><span>                                                            
-#&gt;        </span><span style='color: #555555;'>15m_re-r</span><span>   </span><span style='color: #555555;'>    1</span><span>   </span><span style='color: #555555;'>0.0421</span><span>   </span><span style='color: #555555;'>0.199</span><span>   </span><span style='color: #555555;'>    2.24</span><span>   </span><span style='color: #555555;'>    11.6</span><span>   </span><span style='color: #555555;'>CCE-F1  </span><span>  
-#&gt;        </span><span style='color: #555555;'>ec.wav  </span><span>                                                            
-#&gt;        </span><span style='color: #555555;'>01m_re-r</span><span>   </span><span style='color: #555555;'>    4</span><span>   </span><span style='color: #555555;'>1.05  </span><span>   </span><span style='color: #555555;'>1.24 </span><span>   </span><span style='color: #555555;'>    1.54</span><span>   </span><span style='color: #555555;'>    10.9</span><span>   </span><span style='color: #555555;'>CCE-I2  </span><span>  
-#&gt;        </span><span style='color: #555555;'>ec.wav  </span><span>                                                            
-#&gt;        </span><span style='color: #555555;'>05m_re-r</span><span>   </span><span style='color: #555555;'>    4</span><span>   </span><span style='color: #555555;'>1.05  </span><span>   </span><span style='color: #555555;'>1.24 </span><span>   </span><span style='color: #555555;'>    1.54</span><span>   </span><span style='color: #555555;'>    10.9</span><span>   </span><span style='color: #555555;'>CCE-I2  </span><span>  
-#&gt;        </span><span style='color: #555555;'>ec.wav  </span><span>                                                            
-#&gt; 7/10 columns shown.
-#&gt; </span><span style='color: #555555;'>... and 22 more rows 
+#&gt; running cross-correlation (step 1 of 1):</div><div class='output co'>#&gt; <span style='color: #000000;'>Object of class </span><span style='color: #000000; font-weight: bold;'>'extended_selection_table' 
+#&gt; </span><span style='color: #555555; font-weight: bold;'>
+#&gt; Contains:</span><span style='color: #555555;'> 
+#&gt; *  A selection table data frame with 28 row(s) and 10 columns: 
+#&gt; |sound.files    | selec|  start|    end| bottom.freq| top.freq|
+#&gt; |:--------------|-----:|------:|------:|-----------:|--------:|
+#&gt; |01m_re-rec.wav |     1| 0.0500| 0.2073|      2.2387|  11.5892|
+#&gt; |05m_re-rec.wav |     1| 0.0444| 0.2017|      2.2387|  11.5892|
+#&gt; |10m_re-rec.wav |     1| 0.0421| 0.1993|      2.2387|  11.5892|
+#&gt; |15m_re-rec.wav |     1| 0.0421| 0.1993|      2.2387|  11.5892|
+#&gt; |01m_re-rec.wav |     4| 1.0500| 1.2445|      1.5441|  10.8946|
+#&gt; |05m_re-rec.wav |     4| 1.0465| 1.2410|      1.5441|  10.8946|
+#&gt; ... 4 more column(s) (signal.type, distance, reference, cross.correlation) and 22 more row(s) 
 #&gt; 
-#&gt; * 4 wave objects (as attributes): 01m_re-rec.wav</span><span> </span><span style='color: #555555;'>05m_re-rec.wav</span><span> </span><span style='color: #555555;'>10m_re-rec.wav</span><span> </span><span style='color: #555555;'>15m_re-rec.wav</span><span>
-#&gt;  </span><span style='color: #555555;'>
+#&gt; * 4 wave object(s) (as attributes): 01m_re-rec.wav</span> <span style='color: #555555;'>05m_re-rec.wav</span> <span style='color: #555555;'>10m_re-rec.wav</span> <span style='color: #555555;'>15m_re-rec.wav</span>
+#&gt;  <span style='color: #555555;'>
 #&gt; * A data frame (check.results) generated by check_sels() (as attribute) 
-#&gt; </span><span style='color: #555555;font-weight: bold;'>
+#&gt; </span><span style='color: #555555; font-weight: bold;'>
 #&gt; Additional information:</span><span style='color: #555555;'>
-#&gt; * The selection table was created</span><span style='color: #555555;font-weight: bold;font-style: italic;'> by song </span><span style='color: #555555;'>(see 'class_extended_selection_table') 
-#&gt; * 1 sampling rate(s) (in kHz): </span><span style='color: #555555;font-weight: bold;'>44.1</span><span style='color: #555555;'> 
-#&gt; * 1 bit depth(s): </span><span style='color: #555555;font-weight: bold;'>16</span><span style='color: #555555;'> 
-#&gt; * Created by warbleR &lt; 1.1.21</span><span></div><div class='input'>
-</div></span></pre>
+#&gt; * The selection table was created</span><span style='color: #555555; font-weight: bold; font-style: italic;'> by song </span><span style='color: #555555;'>(see 'class_extended_selection_table') 
+#&gt; * 1 sampling rate(s) (in kHz): </span><span style='color: #555555; font-weight: bold;'>44.1</span><span style='color: #555555;'> 
+#&gt; * 1 bit depth(s): </span><span style='color: #555555; font-weight: bold;'>8</span><span style='color: #555555;'> 
+#&gt; * Created by warbleR &lt; 1.1.21</span></div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

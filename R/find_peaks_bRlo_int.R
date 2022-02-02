@@ -145,7 +145,7 @@ find_peaks_bRlh_int <- function(xc.output, parallel = 1, cutoff = 0.4, path = NU
         peaks$selec[i] <- peaks$selec[i - 1] + 1
   
   # sort columns in a intuitive order
-  peaks <- sort_colms(peaks)
+  peaks <- warbleR::sort_colms(peaks)
   
   # output results
   if (output == "data.frame") return(peaks) else{

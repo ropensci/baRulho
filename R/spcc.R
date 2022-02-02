@@ -25,7 +25,7 @@
 #' with the spectrogram cross-correlation coefficients.
 #' @export
 #' @name spcc
-#' @details Spectrographic cross-correlation measures frequency distortion of signals as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little signal distortion has occurred). Cross-correlation is measured of signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{xcorr}} function.
+#' @details Spectrographic cross-correlation measures frequency distortion of signals as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little signal distortion has occurred). Cross-correlation is measured of signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{cross_correlation}} function.
 #' @examples
 #' {
 #' # load example data
@@ -39,7 +39,7 @@
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @seealso \code{\link{blur_ratio}}, \code{\link{spcc_align}}, \code{\link[warbleR]{xcorr}}
+#' @seealso \code{\link{blur_ratio}}, \code{\link{spcc_align}}, \code{\link[warbleR]{cross_correlation}}
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' 

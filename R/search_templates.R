@@ -7,7 +7,7 @@
 #' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows').
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param ...	Additional arguments to be passed to \code{\link[warbleR]{xcorr}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).
+#' @param ...	Additional arguments to be passed to \code{\link[warbleR]{cross_correlation}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).
 #' @return A data frame with the time, start, end, test file names, template name, maximum cross-correlation score and the time where it was detected.
 #' @export
 #' @name search_templates
@@ -94,18 +94,28 @@ search_templates <- function(X, template.rows, test.files, path = NULL,  pb = TR
     comp_mat <- matrix(c(rep(paste(X$sound.files[template.rows], X$selec[template.rows], sep = "-"), length(test.files)), rep((test.files), each = length(template.rows))), ncol = 2) 
   
   # patch to work on warbleR versions before 1.1.26
-  wi <- warbleR::info_wavs(path = path, parallel = 1, pb = FALSE) 
+  wi <- warbleR::info_sound_files(path = path, parallel = 1, pb = FALSE) 
   
   wi <- wi[wi$sound.files %in% unique(c(X$sound.files, test.files)), ]
   
   if (length(unique(wi$sample.rate)) > 1) 
     stop("Not all sound files share the same sampling rate (check wave properties with warbleR::wav_info())")
   
+  # steps for warbleR message
+  if (pb){
+  options("int_warbleR_steps" = c(current = 0, total = 2))
+  
+  on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
+  }
+  
+  
   # run cross correlation
   xc <- warbleR::cross_correlation(X, compare.matrix = comp_mat, path = path, output = "list", pb = pb, ...)
   
   # find peaks
-  pks <- warbleR::find_peaks(xc.output = xc, max.peak = if(length(template.rows) == 1) TRUE else FALSE, path = path, pb = pb, cutoff = 0)
+  if (pb) 
+    write(file = "", x = paste0("running peak detection (step 2 of 2):"))
+  pks <- find_peaks_bRlh_int(xc.output = xc, max.peak = if(length(template.rows) == 1) TRUE else FALSE, path = path, pb = pb, cutoff = 0)
   
   if(length(template.rows) > 1)
   pks <- pks[stats::ave(x = -pks$score, as.factor(pks$sound.files), as.factor(pks$template), FUN = rank) <= 1, ]

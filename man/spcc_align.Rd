@@ -32,7 +32,7 @@ Extended selection table similar to input data in which time parameters (columns
 \code{spcc_align} aligns start and end of signal in an extended selection table using spectrographic cross-correlation
 }
 \details{
-This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's \code{\link[warbleR]{xcorr}} and \code{\link[warbleR]{find_peaks}} internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.
+This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.
 }
 \examples{
 {
@@ -52,7 +52,7 @@ Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal voca
 }
 }
 \seealso{
-\code{\link{blur_ratio}}, \code{\link[warbleR]{xcorr}}
+\code{\link{blur_ratio}}, \code{\link[warbleR]{cross_correlation}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

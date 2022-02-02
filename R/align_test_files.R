@@ -13,7 +13,7 @@
 #' @return An extended selection table with the aligned signals from test (re-recorded) sound files.
 #' @export
 #' @name align_test_files
-#' @details The function takes the output of \code{\link[warbleR]{find_peaks}} ('Y') and aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
+#' @details The function aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
 #' @seealso \code{\link{spcc_align}}; \code{\link{search_templates}}
 #' @examples
 #' \dontrun{

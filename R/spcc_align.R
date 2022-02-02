@@ -16,7 +16,7 @@
 #' @return Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference signal. 
 #' @export
 #' @name spcc_align
-#' @details This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's \code{\link[warbleR]{xcorr}} and \code{\link[warbleR]{find_peaks}} internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment. 
+#' @details This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment. 
 #' @examples
 #' {
 #' # load example data
@@ -27,7 +27,7 @@
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @seealso \code{\link{blur_ratio}}, \code{\link[warbleR]{xcorr}}
+#' @seealso \code{\link{blur_ratio}}, \code{\link[warbleR]{cross_correlation}}
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' 

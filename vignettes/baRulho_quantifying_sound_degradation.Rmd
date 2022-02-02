@@ -808,7 +808,7 @@ Below are some examples from actual test signals that were re-recorded in the fi
 
 When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded signals. This is problematic for quantifying degradation in [baRulho](https://marce10.github.io/baRulho/) (and other sound analysis software) as precise alignment of signal is crucial for the accuracy of downstream measures of signal degradation. 
 
-Misalignment can be fixed with the function `spcc_align()`. This function uses spectrogram cross-correlation to sync the position in time of signals with regard to a reference signal. `spcc_align()` takes the signal recorded at the closest distance to the source as the reference signal. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `xcorr()` and `find_peaks()` (just as we did above) internally to align signals using cross-correlation. 
+Misalignment can be fixed with the function `spcc_align()`. This function uses spectrogram cross-correlation to sync the position in time of signals with regard to a reference signal. `spcc_align()` takes the signal recorded at the closest distance to the source as the reference signal. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align signals using cross-correlation. 
 
 [baRulho](https://marce10.github.io/baRulho/) comes with an example data set called  `playback_est_unaligned`, which contains signals in which the time position of signals is slightly unaligned. We can use this data to show how the function `spcc_align()` works: 
 
@@ -1318,7 +1318,7 @@ kbl
 
 ### Spectrogram distortion
 
-Finally, the function `spcc()` measures spectrogram cross-correlation as a metric of signal distortion of signals. Values close to 1 means very similar spectrograms (i.e. little signal distortion). The function is a wrapper on [warbleR](https://cran.r-project.org/package=warbleR)'s `xcorr()`. It can be run as follows:
+Finally, the function `spcc()` measures spectrogram cross-correlation as a metric of signal distortion of signals. Values close to 1 means very similar spectrograms (i.e. little signal distortion). The function is a wrapper on [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()`. It can be run as follows:
 
 ```{r, eval = TRUE}
 

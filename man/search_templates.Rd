@@ -17,7 +17,7 @@ search_templates(X, template.rows, test.files, path = NULL, pb = TRUE, ...)
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{...}{Additional arguments to be passed to \code{\link[warbleR]{xcorr}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).}
+\item{...}{Additional arguments to be passed to \code{\link[warbleR]{cross_correlation}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).}
 }
 \value{
 A data frame with the time, start, end, test file names, template name, maximum cross-correlation score and the time where it was detected.

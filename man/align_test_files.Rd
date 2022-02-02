@@ -29,7 +29,7 @@ An extended selection table with the aligned signals from test (re-recorded) sou
 \code{align_test_files} aligns test (re-recorded) sound files.
 }
 \details{
-The function takes the output of \code{\link[warbleR]{find_peaks}} ('Y') and aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
+The function aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
 }
 \examples{
 \dontrun{

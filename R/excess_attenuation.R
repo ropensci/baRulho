@@ -90,6 +90,9 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
+  if (pb) 
+    write(file = "", x = paste0("Preparing data for analysis:"))
+  
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
   # function to measure RMS for signal and noise
@@ -119,6 +122,9 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
+  
+  if (pb) 
+    write(file = "", x = paste0("Calculating excess attenuation:"))
   
   # run loop apply function
   RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, bp, wl, ovlp)) 

@@ -84,7 +84,7 @@
 #' }
 #last modification on dec-26-2019 (MAS)
 
-search_templates <- function(X, template.rows, test.files, path = NULL,  pb = TRUE, ...){
+search_templates <- function(X, template.rows, test.files, path = NULL, pb = TRUE, ...){
   
  if (length(template.rows) != 1 & length(test.files) != length(template.rows)) stop("'template.rows' must be 1 or the same length than 'test.files'")
   
@@ -115,7 +115,7 @@ search_templates <- function(X, template.rows, test.files, path = NULL,  pb = TR
   # find peaks
   if (pb) 
     write(file = "", x = paste0("running peak detection (step 2 of 2):"))
-  pks <- find_peaks_bRlh_int(xc.output = xc, max.peak = if(length(template.rows) == 1) TRUE else FALSE, path = path, pb = pb, cutoff = 0)
+  pks <- find_peaks_bRlh_int(xc.output = xc, max.peak = if(length(template.rows) == 1) TRUE else FALSE, pb = pb, cutoff = 0)
   
   if(length(template.rows) > 1)
   pks <- pks[stats::ave(x = -pks$score, as.factor(pks$sound.files), as.factor(pks$template), FUN = rank) <= 1, ]

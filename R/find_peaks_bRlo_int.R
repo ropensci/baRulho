@@ -44,7 +44,7 @@
 # H. Khanna, S.L.L. Gaunt & D.A. McCallum (1997). Digital spectrographic cross-correlation: tests of sensitivity. Bioacoustics 7(3): 209-234
 # }
 # last modification on jan-014-2021 (MAS)
-find_peaks_bRlh_int <- function(xc.output, parallel = 1, cutoff = 0.4, path = NULL, pb = TRUE, max.peak = FALSE, output = "data.frame") 
+find_peaks_bRlh_int <- function(xc.output, parallel = 1, cutoff = 0.4, pb = TRUE, max.peak = FALSE, output = "data.frame") 
 {
   # #### set arguments from options
   # # get function arguments
@@ -67,11 +67,11 @@ find_peaks_bRlh_int <- function(xc.output, parallel = 1, cutoff = 0.4, path = NU
   #   for (q in 1:length(opt.argms))
   #     assign(names(opt.argms)[q], opt.argms[[q]])
   
-  #check path to working directory
-  if (is.null(path)) path <- getwd() else 
-    if (!dir.exists(path)) 
-      stop("'path' provided does not exist") else
-        path <- normalizePath(path)
+  #check pth to working directory
+  # if (is.null(pth)) pth <- getwd() else 
+  #   if (!dir.exists(pth)) 
+  #     stop("'pth' provided does not exist") else
+  #       path <- normalizePath(path)
   
   # set clusters for windows OS and no soz
   if (Sys.info()[1] == "Windows" & parallel > 1)

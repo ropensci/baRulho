@@ -3,6 +3,5 @@
 ^docs$
 ^pkgdown$
 ^testing$
-^README\\.Rmd$
-^LICENSE\\.md$
+^README\.Rmd$
 LICENSE.md

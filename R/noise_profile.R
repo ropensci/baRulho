@@ -201,7 +201,7 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
   
   # get mean by sound file
   if (averaged)
-    noise.profile <- aggregate(formula = amp ~ sound.files + freq, data = noise.profile, FUN = mean)  
+    noise.profile <- aggregate(amp ~ sound.files + freq, data = noise.profile, FUN = mean)  
   
   return(noise.profile)
   }

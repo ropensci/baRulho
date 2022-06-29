@@ -2,3 +2,7 @@
 ^\.Rproj\.user$
 ^docs$
 ^pkgdown$
+^testing$
+^README\\.Rmd$
+^LICENSE\\.md$
+LICENSE.md

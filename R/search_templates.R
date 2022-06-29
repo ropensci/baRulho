@@ -108,7 +108,6 @@ search_templates <- function(X, template.rows, test.files, path = NULL, pb = TRU
   on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
   }
   
-  
   # run cross correlation
   xc <- warbleR::cross_correlation(X, compare.matrix = comp_mat, path = path, output = "list", pb = pb, ...)
   

@@ -4,14 +4,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Intended to facilitate acoustic analysis of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics, including blur ratio, signal-to-noise ratio, excess attenuation and envelope correlation among others (Dabelsteen et al 1993 &lt;doi:10.1121/1.406682&gt;).">
 <title>Quantifying Habitat-Induced Acoustic Signal Degradation   • baRulho</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/spacelab/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
 <meta property="og:title" content="Quantifying Habitat-Induced Acoustic Signal Degradation  ">
 <meta property="og:description" content="Intended to facilitate acoustic analysis of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics, including blur ratio, signal-to-noise ratio, excess attenuation and envelope correlation among others (Dabelsteen et al 1993 &lt;doi:10.1121/1.406682&gt;).">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -19,72 +19,59 @@
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body data-spy="scroll" data-target="#toc">
+<body>
+    <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <div class="container template-home">
-      <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.6</span>
-      </span>
-    </div>
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    
+    <a class="navbar-brand me-2" href="index.html">baRulho</a>
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-<li>
-  <a href="reference/index.html">Reference</a>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.6</small>
+
+    
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div id="navbar" class="collapse navbar-collapse ms-3">
+      <ul class="navbar-nav me-auto">
+<li class="nav-item">
+  <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    </li>
-<li class="dropdown-header">vignettes</li>
-    <li>
-      <a href="articles/baRulho_quantifying_sound_degradation.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
-    </li>
-  </ul>
-</li>
-<li>
-  <a href="news/index.html">Changelog</a>
-</li>
-      </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
-  <a href="https://github.com/maRce10/baRulho/" class="external-link">
-    <span class="fab fa-github fa-lg"></span>
-     
-  </a>
-</li>
-      </ul>
-</div>
-<!--/.nav-collapse -->
+<li class="nav-item dropdown">
+  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
+  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="articles/baRulho_quantifying_sound_degradation.html">&lt;center&gt;&lt;font size="7"&gt;&lt;b&gt;baRulho&lt;/b&gt;&lt;/font&gt;&lt;/center&gt;</a>
   </div>
-<!--/.container -->
+</li>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
+</li>
+      </ul>
+<form class="form-inline my-2 my-lg-0" role="search">
+        <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
+</form>
+
+      <ul class="navbar-nav">
+<li class="nav-item">
+  <a class="external-link nav-link" href="https://github.com/maRce10/baRulho/" aria-label="github">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
-<!--/.navbar -->
 
-      
-
-      </header><div class="row">
-  <div class="contents col-md-9">
-
-<p>baRulho: quantifying habitat-induced degradation of (animal) acoustic signals ================</p>
+    
+  </div>
+</nav><div class="container template-home">
+<div class="row">
+  <main id="main" class="col-md-9"><div class="section level1">
+<div class="page-header"><h1 id="barulho-quantifying-habitat-induced-degradation-of-animal-acoustic-signals">baRulho: quantifying habitat-induced degradation of (animal) acoustic signals<a class="anchor" aria-label="anchor" href="#barulho-quantifying-habitat-induced-degradation-of-animal-acoustic-signals"></a>
+</h1></div>
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-<p><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-brightgreen.svg" alt="lifecycle"></a> <a href="https://cran.r-project.org/package=baRulho" class="external-link"><img src="https://tinyverse.netlify.com/badge/baRulho" alt="Dependencies"></a> <a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active The project has reached a stable, usable state and is being actively developed."></a> <a href="https://www.gnu.org/licenses/gpl-3.0.en.html" class="external-link"><img src="https://img.shields.io/badge/licence-GPL--3-blue.svg" alt="Licence"></a> <a href="https://cran.r-project.org/" class="external-link"><img src="https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg" alt="minimal R version"></a> <a href="commits/develop"><img src="https://img.shields.io/badge/Package%20version-1.0.6-orange.svg?style=flat-square" alt="packageversion"></a> <a href="/commits/master"><img src="https://img.shields.io/badge/last%20change-2022--06--30-yellowgreen.svg" alt="Last-changedate"></a> <a href="https://cran.r-project.org/package=baRulho" class="external-link"><img src="https://www.r-pkg.org/badges/version/baRulho" alt="CRAN_Status_Badge"></a> <a href="https://cranlogs.r-pkg.org/badges/grand-total/baRulho" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/baRulho" alt="Total Downloads"></a></p>
+
 <p><code>baRulho</code> is intended to facilitate acoustic analysis of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics, including blur ratio, signal-to-noise ratio, excess attenuation and envelope correlation among others (Dabelsteen et al 1993).</p>
 <p>Install/load the package from CRAN as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -102,9 +89,10 @@
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/maRce10/baRulho" class="external-link">baRulho</a></span><span class="op">)</span></code></pre></div>
 <p>Please cite <a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a> as follows:</p>
 <p>Araya-Salas, M. (2020), <em>baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R</em>. R package version 1.0.0.</p>
+</div>
 <div class="section level1">
-<div class="page-header"><h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1></div>
+<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h1>
 <ol style="list-style-type: decimal">
 <li><p>Dabelsteen, T., Larsen, O. N., &amp; Pedersen, S. B. (1993). <em>Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song</em>. The Journal of the Acoustical Society of America, 93(4), 2206.</p></li>
 <li><p>Marten, K., &amp; Marler, P. (1977). <em>Sound transmission and its significance for animal vocalization</em>. Behavioral Ecology and Sociobiology, 2(3), 271-290.</p></li>
@@ -112,10 +100,7 @@
 </ol>
 </div>
 
-  </div>
-
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="links">
+  </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://cloud.r-project.org/package=baRulho" class="external-link">View on CRAN</a></li>
@@ -146,27 +131,39 @@
 </ul>
 </div>
 
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-brightgreen.svg" alt="lifecycle"></a></li>
+<li><a href="https://cran.r-project.org/package=baRulho" class="external-link"><img src="https://tinyverse.netlify.com/badge/baRulho" alt="Dependencies"></a></li>
+<li><a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active The project has reached a stable, usable state and is being actively developed."></a></li>
+<li><a href="https://www.gnu.org/licenses/gpl-3.0.en.html" class="external-link"><img src="https://img.shields.io/badge/licence-GPL--3-blue.svg" alt="Licence"></a></li>
+<li><a href="https://cran.r-project.org/" class="external-link"><img src="https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg" alt="minimal R version"></a></li>
+<li><a href="commits/develop"><img src="https://img.shields.io/badge/Package%20version-1.0.6-orange.svg?style=flat-square" alt="packageversion"></a></li>
+<li><a href="/commits/master"><img src="https://img.shields.io/badge/last%20change-2022--07--01-yellowgreen.svg" alt="Last-changedate"></a></li>
+<li><a href="https://cran.r-project.org/package=baRulho" class="external-link"><img src="https://www.r-pkg.org/badges/version/baRulho" alt="CRAN_Status_Badge"></a></li>
+<li><a href="https://cranlogs.r-pkg.org/badges/grand-total/baRulho" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/baRulho" alt="Total Downloads"></a></li>
+</ul>
+</div>
 
-
-  </div>
+  </aside>
 </div>
 
 
-      <footer><div class="copyright">
+    <footer><div class="pkgdown-footer-left">
   <p></p>
 <p>Developed by Marcelo Araya-Salas.</p>
 </div>
 
-<div class="pkgdown">
+<div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
-      </footer>
+    </footer>
 </div>
 
   
-
 
   
 

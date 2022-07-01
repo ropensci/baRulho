@@ -110,7 +110,7 @@ and re-recording animal sounds at increasing distances. We will refer to
 these changes in signal structure ‘degradation’ for the sake of
 simplicity. The package offers a workflow with functions to prepare the
 data set for analysis as well as to calculate and visualize several
-degradation metrics. <a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a> builds upon
+degradation metrics. <a href="https://marce10.github.io/baRulho/">baRulho</a> builds upon
 functions and data formats from the <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a> and <a href="https://cran.r-project.org/package=seewave" class="external-link">seewave</a> packages,
 so some experience with these packages is advised.</p>
 <p>The main features of the package are:</p>
@@ -135,7 +135,7 @@ to improve computational efficiency</li>
 <p>To install the latest developmental version from <a href="https://github.com/" class="external-link">github</a> you will need the R package <a href="https://cran.r-project.org/package=devtools" class="external-link">devtools</a>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># From github</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"maRce10/baRulho"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"maRce10/baRulho"</span><span class="op">)</span>
 
 <span class="co"># load package</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/maRce10/baRulho" class="external-link">baRulho</a></span><span class="op">)</span>
@@ -193,11 +193,11 @@ to signal transmission is depicted in the following diagram:</p>
 <img src="analysis_workflow.jpg" alt="analysis workflow" width="620">
 </center>
 <p> </p>
-<p><a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a> offers
+<p><a href="https://marce10.github.io/baRulho/">baRulho</a> offers
 functions for critical steps in this workflow (those in black, including
 ‘checks’) that required acoustic data manipulation and analysis.
 Additional functions from <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a> can be
-used (and are used in this vignette) to complement functions in <a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a>. All these tools
+used (and are used in this vignette) to complement functions in <a href="https://marce10.github.io/baRulho/">baRulho</a>. All these tools
 will be presented following the above workflow.</p>
 <p> </p>
 </div>
@@ -648,7 +648,7 @@ function <code><a href="../reference/align_test_files.html">align_test_files()</
 <p> </p>
 <p>By default the function returns an
 <code>extended_selection_table</code> created ‘by.song’ (see
-‘?selection_table()’), which is the data format that pretty much all <a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a> functions
+‘?selection_table()’), which is the data format that pretty much all <a href="https://marce10.github.io/baRulho/">baRulho</a> functions
 take.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://marce10.github.io/warbleR/reference/is_extended_selection_table.html" class="external-link">is_extended_selection_table</a></span><span class="op">(</span><span class="va">alg.est</span><span class="op">)</span>
@@ -1305,7 +1305,7 @@ later aligned using the start marker:</p>
 some short delays as the case of some bluetooth transmitters) there
 could be some small misalignment between the inferred versus the actual
 start time of re-recorded signals. This is problematic for quantifying
-degradation in <a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a>
+degradation in <a href="https://marce10.github.io/baRulho/">baRulho</a>
 (and other sound analysis software) as precise alignment of signal is
 crucial for the accuracy of downstream measures of signal
 degradation.</p>
@@ -1317,7 +1317,7 @@ at the closest distance to the source as the reference signal. The
 function calls <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a>’s
 <code><a href="https://marce10.github.io/warbleR/reference/cross_correlation.html" class="external-link">cross_correlation()</a></code> (just as we did above) internally to
 align signals using cross-correlation.</p>
-<p><a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a> comes with
+<p><a href="https://marce10.github.io/baRulho/">baRulho</a> comes with
 an example data set called <code>playback_est_unaligned</code>, which
 contains signals in which the time position of signals is slightly
 unaligned. We can use this data to show how the function
@@ -1361,7 +1361,7 @@ selection table.</p>
 <div class="section level2">
 <h2 id="quantifying-signal-degradation">Quantifying signal degradation<a class="anchor" aria-label="anchor" href="#quantifying-signal-degradation"></a>
 </h2>
-<p>Most <a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a>
+<p>Most <a href="https://marce10.github.io/baRulho/">baRulho</a>
 functions are design to quantify acoustic signal degradation. There are
 a few important things to keep in mind about functions for quantifying
 degradation:</p>
@@ -1390,7 +1390,7 @@ recorded at 10m and so on).</li>
 </h3>
 <p>As mentioned above the data must be in
 <code>extended_selection_table</code> format. The data should also
-contain some additional information. <a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a> comes with an
+contain some additional information. <a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an
 example <code>extended_selection_table</code> data set that can be used
 to understand the required data structure: s</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
@@ -10227,7 +10227,7 @@ it will run over all sound files in the working directory (or ‘path’
 supplied).</p>
 <hr>
 <p>Please report any bugs <a href="https://github.com/maRce10/baRulho/issues" class="external-link">here</a>.</p>
-<p>The package <a href="https://marce10.github.io/baRulho/" class="external-link">baRulho</a>
+<p>The package <a href="https://marce10.github.io/baRulho/">baRulho</a>
 should be cited as follows:</p>
 <p>Araya-Salas, M. (2020), <em>baRulho: quantifying habitat-induced
 degradation of (animal) acoustic signals in R</em>. R package version

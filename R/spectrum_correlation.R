@@ -1,7 +1,7 @@
 #' Measure frequency spectral correlation
 #' 
-#' \code{spectral_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
-#' @usage spectral_correlation(X, parallel = 1, pb = TRUE, method = 1, 
+#' \code{spectrum_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
+#' @usage spectrum_correlation(X, parallel = 1, pb = TRUE, method = 1, 
 #' cor.method = "pearson", output = "est", 
 #' hop.size = 11.6, wl = NULL, ovlp = 70)
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').ion(X, parallel = 1, pb = TRUE, method = 1, 
@@ -26,8 +26,8 @@
 #' @return Extended selection table similar to input data, but also includes a new column ('spectrum.correlation')
 #' with the calculated frequency spectrum correlation coefficients.
 #' @export
-#' @name spectral_correlation
-#' @details spectral correlation measures the similarity of two signals in the frequency domain. The function measures the spectral correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectral correlation are provided (see 'method' argument). Use \code{\link{spectral_blur_ratio}} to get spectra for plotting. 
+#' @name spectrum_correlation
+#' @details spectral correlation measures the similarity of two signals in the frequency domain. The function measures the spectral correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating spectral correlation are provided (see 'method' argument). Use \code{\link{spectrum_blur_ratio}} to get spectra for plotting. 
 #' @examples
 #' {
 #' # load example data
@@ -37,14 +37,14 @@
 #' pe <- playback_est[playback_est$signal.type != "ambient", ]
 #' 
 #' # method 1
-#'spectral_correlation(X = pe)
+#'spectrum_correlation(X = pe)
 #' 
 #' # method 2
-#' spectral_correlation(X = pe, method = 2)
+#' spectrum_correlation(X = pe, method = 2)
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @seealso \code{\link{envelope_correlation}}, \code{\link{spectral_blur_ratio}} 
+#' @seealso \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}} 
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' 
@@ -52,7 +52,7 @@
 #' }
 #last modification on nov-01-2019 (MAS)
 
-spectral_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 70){
+spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 70){
   
   # set pb options 
   on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)

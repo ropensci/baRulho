@@ -6,7 +6,7 @@
 \usage{
 blur_ratio(X, parallel = 1, pb = TRUE, method = 1, ssmooth = 200, 
 msmooth = NULL, output = "est", img = FALSE, res = 150, hop.size = 11.6, wl = NULL, 
-ovlp = 70, pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), dest.path = NULL)
+ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.}
@@ -40,9 +40,9 @@ is NULL. If supplied, 'hop.size' is ignored.}
 consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files.}
 
 \item{pal}{A color palette function to be used to assign colors in the 
-plot, as in \code{\link[seewave]{spectro}}. Default is reverse.gray.colors.2.}
+plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}.}
 
-\item{collevels}{Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-60, 0, 5)}.}
+\item{collevels}{Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.}
 
 \item{dest.path}{Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.}
 }
@@ -80,7 +80,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 }
 }
 \seealso{
-\code{\link{envelope_correlation}}, \code{\link{spectral_blur_ratio}}
+\code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

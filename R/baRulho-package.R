@@ -18,6 +18,7 @@
 #' @import parallel
 #' @import warbleR
 #' @import fftw
+#' @import viridis
 #' @importFrom stats cor aggregate approx ave
 #' @importFrom methods is
 #' 

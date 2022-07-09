@@ -1,7 +1,7 @@
 #' Measure spectrographic cross-correlation as a measure of signal distortion
 #' 
-#' \code{spcc} measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table.
-#' @usage spcc(X, parallel = 1, pb = TRUE,  method = 1, 
+#' \code{spcc_distortion} measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table.
+#' @usage spcc_distortion(X, parallel = 1, pb = TRUE,  method = 1, 
 #' cor.method = "pearson", output = "est", 
 #' hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
@@ -24,7 +24,7 @@
 #' @return Extended selection table similar to input data, but includes a new column (cross.correlation)
 #' with the spectrogram cross-correlation coefficients.
 #' @export
-#' @name spcc
+#' @name spcc_distortion
 #' @details Spectrographic cross-correlation measures frequency distortion of signals as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little signal distortion has occurred). Cross-correlation is measured of signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{cross_correlation}} function.
 #' @examples
 #' {
@@ -32,10 +32,10 @@
 #' data("playback_est")
 #' 
 #' # method 1
-#'spcc(X = playback_est, method = 1)
+#'spcc_distortion(X = playback_est, method = 1)
 #' 
 #' # method 2
-#' spcc(X = playback_est, method = 2)
+#' spcc_distortion(X = playback_est, method = 2)
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -47,7 +47,7 @@
 #' }
 # last modification on jan-06-2020 (MAS)
 
-spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
+spcc_distortion <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -118,8 +118,8 @@ spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson",
   warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = parallel, pb = pb, compare.matrix = comp_mat)
   
   # run spcc 
-  xcorrs <- warbleR::cross_correlation(X = X, cor.method = "pearson")
-  
+  xcorrs <- warbleR::cross_correlation(X = X, cor.method = "pearson")$max.xcorr.matrix
+
   # put results back into X
   X$reference <- NA
   X$cross.correlation <- NA

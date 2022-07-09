@@ -3,7 +3,7 @@
 #' \code{blur_ratio} measures blur ratio in signals referenced in an extended selection table.
 #' @usage blur_ratio(X, parallel = 1, pb = TRUE, method = 1, ssmooth = 200, 
 #' msmooth = NULL, output = "est", img = FALSE, res = 150, hop.size = 11.6, wl = NULL, 
-#' ovlp = 70, pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), dest.path = NULL)
+#' ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -23,15 +23,15 @@
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files.
 #' @param pal A color palette function to be used to assign colors in the 
-#'   plot, as in \code{\link[seewave]{spectro}}. Default is reverse.gray.colors.2. 
-#' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-60, 0, 5)}. 
+#'   plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}. 
+#' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}. 
 #' @param dest.path Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.
 #' @return Data frame similar to input data, but also includes two new columns ('reference' and 'blur.ratio')
 #' with the reference signal and blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would be a list including the data frame just described and a data frame with envelopes (amplitude values) for all signals.
 #' @export
 #' @name blur_ratio
 #' @details Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
-#' @seealso \code{\link{envelope_correlation}}, \code{\link{spectral_blur_ratio}}
+#' @seealso \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
 #' @examples
 #' {
 #' # load example data
@@ -57,7 +57,7 @@
 
 blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                        ssmooth = 200, msmooth = NULL, output = "est", 
-                       img = FALSE, res = 150, hop.size = 11.6, wl = NULL, ovlp = 70, pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), dest.path = NULL){
+                       img = FALSE, res = 150, hop.size = 11.6, wl = NULL, ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL){
   
   # set pb options 
   on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
@@ -112,10 +112,13 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     ssmooth <- NULL
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
+  if (pb) 
+    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
+  
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
     
   # print message
-  if (pb) write(file = "", x = "calculating amplitude envelopes (step 1 of 2):")
+  if (pb) write(file = "", x = "calculating amplitude envelopes (step 2 of 3):")
   
   # calculate all envelops apply function
   envs <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y, ssmth = ssmooth, msmth = msmooth)   {
@@ -207,31 +210,31 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
         par(mar = rep(4, 0, 4, 4))
         
         # reference envelope first        
-        plot(time.vals, rfrnc.pmf, type = "l", xlab = "", ylab = "", col = "#E37222", ylim = c(min(rfrnc.pmf, sgn.pmf), max(rfrnc.pmf, sgn.pmf) * 1.1), cex.main = 0.8, lwd = 1.2, yaxt = "n")
+        plot(time.vals, rfrnc.pmf, type = "l", xlab = "", ylab = "", col = "#31688E", ylim = c(min(rfrnc.pmf, sgn.pmf), max(rfrnc.pmf, sgn.pmf) * 1.1), cex.main = 0.8, lwd = 1.2, yaxt = "n")
       
         # add x axis label
         mtext(text = "Time (s)", side = 1, line = 2.5)
         
         # add title
-        mtext(text = paste("Signal type:", X$signal.type[x]), side = 3, line = 3, cex = 0.7)
-        mtext(text = paste("Reference:", rfrnc), side = 3, line = 2, col = "#E37222", cex = 0.7)
-        mtext(text = paste("Signal:", sgnl), side = 3, line = 1, col = "#07889B", cex = 0.7)
+        mtext(text = paste("Signal type:", X$signal.type[x]), side = 3, line = 3, cex = 1)
+        mtext(text = paste("Reference:", rfrnc), side = 3, line = 1.75, col = "#31688E", cex = 1)
+        mtext(text = paste("Signal:", sgnl), side = 3, line = 0.5, col = "#B4DE2C", cex = 1)
             
         # add y axis
         axis(side = 4)
         mtext(text = "Amplitude (PMF)", side = 4, line = 2.5)
         
         # add signal envelope
-        lines(time.vals, sgn.pmf, col= "#07889BFF", lwd = 1.2)
+        lines(time.vals, sgn.pmf, col= "#B4DE2CFF", lwd = 1.2)
         
         # signal envelope on top
-        polygon(x = c(time.vals, rev(time.vals)), y = c(sgn.pmf, rev(rfrnc.pmf)), col = "#07889B33", border = NA)
+        polygon(x = c(time.vals, rev(time.vals)), y = c(sgn.pmf, rev(rfrnc.pmf)), col = "#FDE72533", border = NA)
         
         # get plotting area limits
         usr <- par("usr")
         
         # and blu ratio value
-        text(x = ((usr[1] + usr[2]) / 2) + usr[1], y = usr[4] * 0.9, paste("Blur ratio:", round(bl.rt, 2)), cex = 0.8)
+        text(x = ((usr[1] + usr[2]) / 2) + usr[1], y = usr[4] * 0.9, paste("Blur ratio:", round(bl.rt, 2)), cex = 1)
         
         # index of reference
         rf.indx <- which(paste(X$sound.files, X$selec, sep = "-") == rfrnc)
@@ -271,10 +274,10 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                                      tlab = NULL, flab = NULL, main = NULL, grid = FALSE, rm.zero = TRUE, cexaxis = 1.2, add = TRUE, ovlp = ovlp, wl = wl, collevels = collevels, palette = pal)
         
         # lines showing position of signal
-        abline(v = c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf), col = "#07889BFF", lty = 2)
+        abline(v = c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf), col = "#B4DE2CFF", lty = 2)
                 
         # add box with signal color
-        box(col = "#07889BFF", lwd = 3)
+        box(col = "#B4DE2CFF", lwd = 3)
         
         # reference at top left
         screen(2)
@@ -285,10 +288,10 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
            tlab = NULL, flab = NULL, main = NULL, grid = FALSE, rm.zero = TRUE, cexaxis = 1.2, add = TRUE, ovlp = ovlp, wl = wl, collevels = collevels, palette = pal)
 
         # lines showing position of signal
-        abline(v = c(mar.rf.bf, X$end[rf.indx] - X$start[rf.indx] + mar.rf.bf), col = "#E37222CC", lty = 2)
+        abline(v = c(mar.rf.bf, X$end[rf.indx] - X$start[rf.indx] + mar.rf.bf), col = "#31688ECC", lty = 2)
         
         # add box with reference color
-        box(col = "#E37222", lwd = 3)
+        box(col = "#31688E", lwd = 3)
                 
         # close graph    
         dev.off()        
@@ -300,8 +303,8 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     return(out)
   } 
   
-  if (pb & !img) write(file = "", x = "calculating blur ratio (step 2 of 2):")
-  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 2 of 2):")
+  if (pb & !img) write(file = "", x = "calculating blur ratio (step 3 of 3):")
+  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 3 of 3):")
     
   # get blur ratio
   # calculate all envelops apply function

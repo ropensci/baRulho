@@ -43,7 +43,7 @@
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @seealso \code{\link{spcc}}; \code{\link{envelope_correlation}}
+#' @seealso \code{\link{spcc_distortion}}; \code{\link{envelope_correlation}}
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' 
@@ -91,7 +91,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
-    write(file = "", x = paste0("Preparing data for analysis:"))
+    write(file = "", x = paste0("Preparing data for analysis (step 1 of 2):"))
   
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
@@ -124,7 +124,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
   if (pb) 
-    write(file = "", x = paste0("Calculating excess attenuation:"))
+    write(file = "", x = paste0("Calculating excess attenuation (step 2 of 2):"))
   
   # run loop apply function
   RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, bp, wl, ovlp)) 

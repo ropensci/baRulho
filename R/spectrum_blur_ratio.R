@@ -1,9 +1,9 @@
 #' Measure blur ratio in the frequency domain 
 #' 
-#' \code{spectral_blur_ratio} measures blur ratio of frequency spectra from signals referenced in an extended selection table.
-#' @usage spectral_blur_ratio(X, parallel = 1, pb = TRUE, method = 1, ssmooth = 50, 
+#' \code{spectrum_blur_ratio} measures blur ratio of frequency spectra from signals referenced in an extended selection table.
+#' @usage spectrum_blur_ratio(X, parallel = 1, pb = TRUE, method = 1, ssmooth = 50, 
 #' output = "est", img = FALSE, res = 150, hop.size = 11.6, wl = NULL, 
-#' ovlp = 70, pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), dest.path = NULL)
+#' ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -22,13 +22,13 @@
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Applied to both spectra and spectrograms on image files.
 #' @param pal A color palette function to be used to assign colors in the 
-#'   plot, as in \code{\link[seewave]{spectro}}. Default is reverse.gray.colors.2. 
-#' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-60, 0, 5)}. 
+#'   plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}. 
+#' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}. 
 #' @param dest.path Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.
 #' @return Data frame similar to input data, but also includes a new column (spectral.blur.ratio)
 #' with the blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid power spectrum (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would a list including the data frame just described and a data frame with spectra (amplitude values) for all signals. 
 #' @export
-#' @name spectral_blur_ratio
+#' @name spectrum_blur_ratio
 #' @details Spectral blur ratio measures the degradation of sound as a function of the change in signal energy in the frequency domain, analogous to the blur ratio proposed by Dabelsteen et al (1993) for the time domain (and implemented in \code{\link{blur_ratio}}). Low values indicate low degradation of signals. The function measures the blur ratio of spectra from signals in which a reference playback has been re-recorded at different distances. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal. The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of spectra is comparable.   
 #' @examples
 #' {
@@ -39,10 +39,10 @@
 #' playback_est <- playback_est[playback_est$signal.type != "ambient", ]
 #' 
 #' # using method 1
-#' spectral_blur_ratio(X = playback_est)
+#' spectrum_blur_ratio(X = playback_est)
 #' 
 #' # using method 2
-#' spectral_blur_ratio(X = playback_est, method = 2)
+#' spectrum_blur_ratio(X = playback_est, method = 2)
 #' }
 #' 
 #' @seealso \code{\link{blur_ratio}}
@@ -54,10 +54,10 @@
 #' }
 #last modification on dec-27-2019 (MAS)
 
-spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
+spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                        ssmooth = 50, output = "est", 
                        img = FALSE, res = 150, hop.size = 11.6, wl = NULL, ovlp = 70, 
-                       pal = reverse.gray.colors.2, collevels = seq(-60, 0, 5), 
+                       pal = viridis, collevels = seq(-120, 0, 5), 
                        dest.path = NULL){
   
   # set pb options 
@@ -102,6 +102,10 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     stop("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
+  
+  if (pb) 
+    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
+  
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
   # set pb options 
@@ -112,7 +116,7 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
   # print message
-  if (pb) write(file = "", x = "calculating power spectra (step 1 of 2):")
+  if (pb) write(file = "", x = "calculating power spectra (step 2 of 3):")
   
   # calculate all spectra apply function
   specs <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y, wl)   {
@@ -203,31 +207,31 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
         par(mar = rep(4, 0, 4, 4))
         
         # reference spectrum first        
-        plot(x = rfrnc.spc, y = f.vals,  type = "l", xlab = "", ylab = "", col = "#E37222", xlim = c(min(rfrnc.spc, sgnl.spc), max(rfrnc.spc, sgnl.spc) * 1.1), cex.main = 0.8, lwd = 1.2, yaxt = "n")
+        plot(x = rfrnc.spc, y = f.vals,  type = "l", xlab = "", ylab = "", col = "#31688E", xlim = c(min(rfrnc.spc, sgnl.spc), max(rfrnc.spc, sgnl.spc) * 1.1), cex.main = 0.8, lwd = 1.2, yaxt = "n")
         
         # add x axis label
         mtext(text = "Power spectrum (PMF)", side = 1, line = 2.5)
         
         # add title
-        mtext(text = paste("Signal type:", X$signal.type[x]), side = 3, line = 3, cex = 0.7)
-        mtext(text = paste("Reference:", rfrnc), side = 3, line = 2, col = "#E37222", cex = 0.7)
-        mtext(text = paste("Signal:", sgnl), side = 3, line = 1, col = "#07889B", cex = 0.7)
+        mtext(text = paste("Signal type:", X$signal.type[x]), side = 3, line = 3, cex = 1)
+        mtext(text = paste("Reference:", rfrnc), side = 3, line = 1.75, col = "#31688E", cex = 1)
+        mtext(text = paste("Signal:", sgnl), side = 3, line = 0.5, col = "#B4DE2C", cex = 1)
         
         # add y axis
         axis(side = 4)
         mtext(text = "Frequency (kHz)", side = 4, line = 2.5)
         
         # add signal spectrum
-        lines(sgnl.spc, f.vals, col= "#07889B", lwd = 1.2)
+        lines(sgnl.spc, f.vals, col= "#B4DE2C", lwd = 1.2)
         
         # signal spectrum on top
-        polygon(y = c(f.vals, rev(f.vals)), x = c(sgnl.spc, rev(rfrnc.spc)), col =  "#07889B33", border = NA)
+        polygon(y = c(f.vals, rev(f.vals)), x = c(sgnl.spc, rev(rfrnc.spc)), col =  "#FDE72533", border = NA)
         
         # get plotting area limits
         usr <- par("usr")
         
         # and blu ratio value
-        text(x = ((usr[1] + usr[2]) / 2) + usr[1], y = usr[4] * 0.9, paste("Blur ratio of spectrum:", round(bl.rt, 2)), cex = 0.8)
+        text(x = ((usr[1] + usr[2]) / 2) + usr[1], y = usr[4] * 0.9, paste("Blur ratio of spectrum:", round(bl.rt, 2)), cex = 1)
         
         # index of reference
         rf.indx <- which(paste(X$sound.files, X$selec, sep = "-") == rfrnc)
@@ -268,10 +272,10 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                                      tlab = NULL, flab = NULL, main = NULL, grid = FALSE, rm.zero = TRUE, cexaxis = 1.2, add = TRUE, ovlp = ovlp, wl = wl, collevels = collevels, palette = pal)
         
         # lines showing position of signal
-        abline(v = c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf), col = "#07889BFF", lty = 2)
+        abline(v = c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf), col = "#B4DE2CFF", lty = 2)
         
         # add box with signal color
-        box(col = "#07889B", lwd = 3)
+        box(col = "#B4DE2C", lwd = 3)
         
         # reference at top left
         screen(2)
@@ -282,10 +286,10 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                                      tlab = NULL, flab = NULL, main = NULL, grid = FALSE, rm.zero = TRUE, cexaxis = 1.2, add = TRUE, ovlp = ovlp, wl = wl, collevels = collevels, palette = pal)
         
         # lines showing position of signal
-        abline(v = c(mar.rf.bf, X$end[rf.indx] - X$start[rf.indx] + mar.rf.bf), col = "#E37222CC", lty = 2)
+        abline(v = c(mar.rf.bf, X$end[rf.indx] - X$start[rf.indx] + mar.rf.bf), col = "#31688ECC", lty = 2)
         
         # add box with reference color
-        box(col = "#E37222", lwd = 3)
+        box(col = "#31688E", lwd = 3)
         
         # close graph    
         dev.off()        
@@ -297,8 +301,8 @@ spectral_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     return(out)
   } 
   
-  if (pb & !img) write(file = "", x = "calculating spectrum blur ratio (step 2 of 2):")
-  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 2 of 2):")
+  if (pb & !img) write(file = "", x = "calculating spectrum blur ratio (step 3 of 3):")
+  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 3 of 3):")
     
   # get blur ratio
   # calculate all spectra apply function

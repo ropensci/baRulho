@@ -38,7 +38,12 @@ editor_options:
 ```{r eval= TRUE, echo=FALSE}
 
 library(knitr)
-opts_chunk$set(tidy = TRUE, fig.align = "center")
+opts_chunk$set(tidy = TRUE, fig.align = "center", message = FALSE, warning = FALSE)
+
+source("~/Dropbox/R_package_testing/baRulho/R/spectrum_blur_ratio.R")
+source("~/Dropbox/R_package_testing/baRulho/R/prep_X_bRlo_int.R")
+source("~/Dropbox/R_package_testing/baRulho/R/spectrum_correlation.R")
+source("~/Dropbox/R_package_testing/baRulho/R/spcc_distortion.R")
 
 ```
 
@@ -64,12 +69,12 @@ library(baRulho)
 
 ```
 
-To install the latest developmental version from [github](https://github.com/) you will need the R package [devtools](https://cran.r-project.org/package=devtools):
+To install the latest developmental version from [github](https://github.com/) you will need the R package [remotes](https://cran.r-project.org/package=remote):
 
 ```{r, eval = FALSE}
 
 # From github
-devtools::install_github("maRce10/baRulho")
+remotes::install_github("maRce10/baRulho")
 
 #load package
 library(baRulho)
@@ -160,7 +165,7 @@ synth.l <- sim_songs(n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0
                      diff.fun = "pure.tone", selec.table = TRUE, path = td)
 
 # plot spectro
-spectro(synth.l$wave, scale = FALSE, palette = reverse.topo.colors, 
+spectro(synth.l$wave, scale = FALSE, palette = viridis, 
         grid = FALSE, flim = c(0,6), collevels = seq(-20, 0, 1))
 
 ```
@@ -310,7 +315,7 @@ st$bottom.freq <- st$bottom.freq - 0.25
 st$top.freq <- st$top.freq + 0.25
 
 # make an extended selection table
-synth.est <- selection_table(X = st, extended = TRUE, pb = FALSE,
+synth.est <- selection_table(X = st, extended = TRUE,
                              confirm.extended = FALSE, path = td)
 
 # create master sound file
@@ -382,13 +387,13 @@ Rraven::exp_raven(master.sf, path = td, file.name = "example_master_selection_ta
 
 &nbsp;
 
-Both sound files and annotations can be visualized in Raven:
+Both sound files and annotations can be visualized in Raven ( acoustic analysis software):
 
  <img src="example_master_table.jpg" alt="Raven view">
 
 &nbsp;
 
-Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details. 
+Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details on how to export data from R to Raven. 
 
 Note that the start and end markers are placed at relatively low amplitudes so they are less affected by degradation. The frequency range of markers can be set with argument `flim`. The relative amplitude of markers can also be adjusted with the `amp.marker` argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than signals. These two features should increases the chances of being "detected" at further distances regardless of the amplitude of signals. 
 
@@ -933,7 +938,7 @@ Blur ratio can be calculated as follows:
 ```{r, eval = FALSE}
 
 # run blur ratio
-br <- blur_ratio(playback_est, method = 1, pb = FALSE)
+br <- blur_ratio(playback_est, method = 1)
 
 # check output class
 is_extended_selection_table(br)
@@ -942,11 +947,10 @@ is_extended_selection_table(br)
 ```{r, eval = TRUE, echo = FALSE}
 
 # run blur ratio
-br <- blur_ratio(playback_est, method = 1, pb = FALSE)
+br <- blur_ratio(playback_est, method = 1, img = FALSE)
 
 # check output class
 is_extended_selection_table(br)
-
 ```
 
 ```{r, eval = FALSE}
@@ -978,7 +982,16 @@ If `img = TRUE` it also returns 1 image file (in 'jpeg' format) for each compari
 ```{r, eval = FALSE}
 
 # run blur ratio
-br <- blur_ratio(playback_est, method = 1, pb = FALSE, img = TRUE, ssmooth = 300, dest.path = td)
+br <- blur_ratio(playback_est, method = 1, img = TRUE, ssmooth = 300, dest.path = td)
+
+```
+
+```{r, eval = FALSE, echo = FALSE}
+
+sbr <- blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tempdir())
+
+# make the gif here
+# https://ezgif.com
 
 ```
 
@@ -994,7 +1007,7 @@ The function can also return the amplitude spectrum contours when the argument `
 
 ```{r}
 
-envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 300, pb = FALSE)$envelopes
+envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 300, img = FALSE)$envelopes
 
 envs$distance <- as.factor(envs$distance)
 
@@ -1010,7 +1023,7 @@ Note than the `smooth` argument could change envelope shapes and related measure
 
 ```{r}
 
-envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 1000, pb = FALSE)$envelopes
+envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 1000, img = FALSE)$envelopes
 
 envs$distance <- as.factor(envs$distance)
 
@@ -1025,16 +1038,16 @@ ggplot(envs, aes(x= time, y = amp, col = distance)) +
 
 &nbsp;
 
-### Spectral blur ratio
+### Spectrum blur ratio
  
-Spectral blur ratio (measured by `spectral_blur_ratio()`) quantifies the degradation of sound as a function of the change in signal energy across the frequency domain, analogous to the blur ratio described above for the time domain (and implemented in `blur_ratio()`). Low values also indicate low degradation of signals. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference signal and the re-recorded signal. It works in the same way than `blur_ratio()`, comparing each signal type to the corresponding reference signal, and the output and images are alike as well.
+Spectrum blur ratio (measured by `spectrum_blur_ratio()`) quantifies the degradation of sound as a function of the change in signal energy across the frequency domain, analogous to the blur ratio described above for the time domain (and implemented in `blur_ratio()`). Low values also indicate low degradation of signals. Spectrum blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference signal and the re-recorded signal. It works in the same way than `blur_ratio()`, comparing each signal type to the corresponding reference signal, and the output and images are alike as well.
 
-Spectral blur ratio can be calculated as follows:
+Spectrum blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}
 
-# run Spectral blur ratio
-sbr <- spectral_blur_ratio(playback_est, method = 1, pb = FALSE, img = TRUE, dest.path = td)
+# run Spectrum blur ratio
+sbr <- spectrum_blur_ratio(playback_est, method = 1, img = TRUE, dest.path = td)
 
 # check output class
 is_extended_selection_table(sbr)
@@ -1042,13 +1055,23 @@ is_extended_selection_table(sbr)
 
 ```{r, eval = TRUE, echo = FALSE}
 
-# run Spectral blur ratio
-sbr <- spectral_blur_ratio(playback_est, method = 1, pb = FALSE)
+# run Spectrum blur ratio
+sbr <- spectrum_blur_ratio(playback_est, method = 1)
 
 # check output class
 is_extended_selection_table(sbr)
 
 ```
+
+```{r, eval = FALSE, echo = FALSE}
+
+sbr <- spectrum_blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tempdir())
+
+# make the gif here
+# https://ezgif.com
+
+```
+
 
 ```{r, eval = FALSE}
 
@@ -1072,15 +1095,15 @@ kbl
 ```
 &nbsp;
 
-<center><img src="spectral_blur_ratio_example.gif" alt="spectral blur-ratio"></center>
+<center><img src="spectrum_blur_ratio_example.gif" alt="spectrum blur-ratio"></center>
 
 &nbsp;
 
-As in `blur_ratio()`, `spectral_blur_ratio()` can also return the amplitude spectrum contours with the argument `output = "list"`:
+As in `blur_ratio()`, `spectrum_blur_ratio()` can also return the amplitude spectrum contours with the argument `output = "list"`:
 
 ```{r}
 
-sbr <- spectral_blur_ratio(X = playback_est, output = "list", pb = FALSE)
+sbr <- spectrum_blur_ratio(X = playback_est, output = "list")
 
 spctr <- sbr$spectra
 
@@ -1123,7 +1146,7 @@ With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude 
 ```{r, eval = TRUE}
 
 # run  envelope correlation
-ea <- excess_attenuation(playback_est, method = 1, pb = FALSE)
+ea <- excess_attenuation(playback_est, method = 1)
 
 # check output class
 is_extended_selection_table(ea)
@@ -1163,7 +1186,7 @@ Amplitude envelope correlation measures the similarity of two signals in the tim
 ```{r, eval = TRUE}
 
 # run  envelope correlation
-ec <- envelope_correlation(playback_est, method = 1, pb = FALSE)
+ec <- envelope_correlation(playback_est, method = 1)
 
 # check output class
 is_extended_selection_table(ec)
@@ -1196,14 +1219,14 @@ kbl
 
 Note that this function doesn't provide a graphical output. However, the graphs generated by `blur_ratio()` can be used to inspect the envelope shapes and the alignment of signals.
 
-### Spectral correlation
+### Spectrum correlation
 
-Spectrum correlation measures the similarity of two signals in the frequency domain. This is similar to `spectral_correlation()`, but no cross-correlation is applied as both signals are compared within the frequency range of the reference signal (so both spectra have the same length). Again, values near 1 indicate identical frequency spectrum  (i.e. no degradation). 
+Spectrum correlation measures the similarity of two signals in the frequency domain. This is similar to `envelope_correlation()`, but in the frequency domain. Both signals are compared within the frequency range of the reference signal (so both spectra have the same length). Again, values near 1 indicate identical frequency spectrum  (i.e. no degradation). 
 
 ```{r, eval = TRUE}
 
-# run spectral correlation
-sc <- spectral_correlation(playback_est, method = 1, pb = FALSE)
+# run spectrum correlation
+sc <- spectrum_correlation(playback_est, method = 1)
 
 # check output class
 is_extended_selection_table(sc)
@@ -1233,7 +1256,7 @@ kbl
 
 &nbsp;
 
-As in `envelope_correlation()`, `spectral_correlation()` doesn't provide a graphical output. However, the graphs generated by `spectral_blur_ratio()` can also be used to inspect the spectrum shapes and the signal alignment.
+As in `envelope_correlation()`, `spectrum_correlation()` doesn't provide a graphical output. However, the graphs generated by `spectrum_blur_ratio()` can also be used to inspect the spectrum shapes and the signal alignment.
 
 ### Signal-to-noise ratio
 
@@ -1318,12 +1341,12 @@ kbl
 
 ### Spectrogram distortion
 
-Finally, the function `spcc()` measures spectrogram cross-correlation as a metric of signal distortion of signals. Values close to 1 means very similar spectrograms (i.e. little signal distortion). The function is a wrapper on [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()`. It can be run as follows:
+Finally, the function `spcc_distortion()` measures spectrogram cross-correlation as a metric of signal distortion of signals. Values close to 1 means very similar spectrograms (i.e. little signal distortion). The function is a wrapper on [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()`. It can be run as follows:
 
 ```{r, eval = TRUE}
 
 # run spcc
-spd <- spcc(X = playback_est, method = 1, pb = FALSE, wl = 512)
+spd <- spcc_distortion(X = playback_est, method = 1, wl = 512)
 
 # check output class
 is_extended_selection_table(spd)
@@ -1362,7 +1385,7 @@ The function `noise_profile()` allows to estimate the frequency spectrum of ambi
 ```{r, eval = TRUE}
 
 # run noise profile
-np <- noise_profile(X = playback_est[playback_est$distance > 5, ], mar = 0.05, pb = FALSE)
+np <- noise_profile(X = playback_est[playback_est$distance > 5, ], mar = 0.05)
 
 str(np)
 ```
@@ -1407,7 +1430,7 @@ The output data is actually an average of several frequency spectra for each sou
 ```{r, eval = TRUE, warning = FALSE}
 
 np <- noise_profile(X = playback_est[playback_est$distance > 5, ], 
-      mar = 0.1, pb = FALSE, averaged = FALSE)
+      mar = 0.1, averaged = FALSE)
 
 # make a column containing sound file and selection
 np$sf.sl <- paste(np$sound.files, np$selec)
@@ -1427,7 +1450,7 @@ Note that we can limit the frequency range by using a bandpass filter ('bp' argu
 ```{r, eval = TRUE}
 
 np <- noise_profile(X = playback_est[playback_est$distance > 5, ], 
-      mar = 0.05, pb = FALSE, bp = c(0, 10), 
+      mar = 0.05, bp = c(0, 10), 
       averaged = FALSE, hop.size = 3)
 
 # make a column containing sound file and selection

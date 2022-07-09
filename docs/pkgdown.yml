@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   baRulho_quantifying_sound_degradation: baRulho_quantifying_sound_degradation.html
-last_built: 2022-07-09T01:19Z
+last_built: 2022-07-09T01:24Z
 urls:
   reference: https://marce10.github.io/baRulho/reference
   article: https://marce10.github.io/baRulho/articles

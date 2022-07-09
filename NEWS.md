@@ -1,3 +1,12 @@
+# *baRulho 1.0.7*
+
+* `spectral_correlation()`, `spcc()` and `spectral_blur_ratio()` renamed to `spectrum_correlation()`, `spcc_distortion()` and `spectrum_blur_ratio()` respectively
+* Fix bug in `spcc_distortion()`
+
+# *baRulho 1.0.6*
+
+* Update requested by CRAN
+
 # *baRulho 1.0.5*
 
 * Update requested by CRAN

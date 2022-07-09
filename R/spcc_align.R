@@ -133,7 +133,7 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   
   # message
   if (pb)  
-    write(file = "", x = "finding peaks and aligning (step 2 of 2)")
+    write(file = "", x = "finding peaks and aligning (step 2 out of 2)")
   
   # find peaks and lags
   peaks <- find_peaks_bRlh_int(xc.output = xcorrs, parallel = parallel, max.peak = TRUE)

@@ -113,7 +113,7 @@ search_templates <- function(X, template.rows, test.files, path = NULL, pb = TRU
   
   # find peaks
   if (pb) 
-    write(file = "", x = paste0("running peak detection (step 2 of 2):"))
+    write(file = "", x = paste0("running peak detection (step 2 out of 2):"))
   pks <- find_peaks_bRlh_int(xc.output = xc, max.peak = if(length(template.rows) == 1) TRUE else FALSE, pb = pb, cutoff = 0)
   
   if(length(template.rows) > 1)

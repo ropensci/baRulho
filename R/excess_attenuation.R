@@ -58,8 +58,8 @@
 excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Marten", 
                                bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70){
   
-  # set pb options 
-  # on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  
+  # 
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -91,7 +91,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
-    write(file = "", x = paste0("Preparing data for analysis (step 1 of 2):"))
+    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 2):"))
   
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
@@ -116,15 +116,15 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
     return(data.frame(X[y, , drop = FALSE], sigRMS))
   }
   
-  # set pb options 
-  # pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  
+  # 
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
   if (pb) 
-    write(file = "", x = paste0("Calculating excess attenuation (step 2 of 2):"))
+    write(file = "", x = paste0("Calculating excess attenuation (step 2 out of 2):"))
   
   # run loop apply function
   RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, bp, wl, ovlp)) 

@@ -60,9 +60,6 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                        pal = viridis, collevels = seq(-120, 0, 5), 
                        dest.path = NULL){
   
-  # set pb options 
-  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
-  
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
     stop("'X' must be and extended selection table")
@@ -104,22 +101,19 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   
   if (pb) 
-    write(file = "", x = paste0("Preparing data for analysis (step 1 of 3):"))
+    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
   
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
-  
-  # set pb options 
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
   # print message
-  if (pb) write(file = "", x = "calculating power spectra (step 2 of 3):")
+  if (pb) write(file = "", x = "calculating power spectra (step 2 out of 3):")
   
   # calculate all spectra apply function
-  specs <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y, wl)   {
+  specs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, wl)   {
     
     # load clip
     clp <- warbleR::read_wave(X = X, index = y)
@@ -301,8 +295,8 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     return(out)
   } 
   
-  if (pb & !img) write(file = "", x = "calculating spectrum blur ratio (step 3 of 3):")
-  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 3 of 3):")
+  if (pb & !img) write(file = "", x = "calculating spectrum blur ratio (step 3 out of 3):")
+  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 3 out of 3):")
     
   # get blur ratio
   # calculate all spectra apply function
@@ -329,7 +323,6 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
       # applied ssmooth
       if (!is.null(ssmooth)) 
         x[, 2] <- as.matrix(seewave::sumsmooth( x[, 2], wl = ssmth))
-
       
       # put in data framme
       out <- data.frame(signal = names(specs)[y], signal.type = X$signal.type[paste(X$sound.files, X$selec, sep = "-") == names(specs)[y]], distance  = X$distance[paste(X$sound.files, X$selec, sep = "-") == names(specs)[y]], freq = x[, 1], amp = x[, 2])

@@ -7,8 +7,8 @@ prep_X_bRlo_int <- function(X, method = 1, parallel = 1, pb = TRUE) {
   # add sound file selec colums to X (weird column name so it does not overwrite user columns)
   X$TEMP....sgnl <- paste(X$sound.files, X$selec, sep = "-")
   
-  # set pb options 
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  
+  
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)

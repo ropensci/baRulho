@@ -68,8 +68,8 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   #get call argument names
   argus <- names(as.list(base::match.call()))
   
-  # set pb options 
-  # on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  
+  # 
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -106,8 +106,8 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   
   if (noise.ref == "custom" & any(sapply(unique(X$sound.files), function(x) sum(X$sound.files == x & X$signal.type == "ambient")) == 0)) stop("Each sound file referenced in 'X' must have at least 1 'ambient' selection when 'noise.ref == custom'")
   
-  # set pb options 
-  # pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  
+  # 
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)

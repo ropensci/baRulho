@@ -58,8 +58,8 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
   # get call argument names
   argus <- names(as.list(base::match.call()))
   
-  # set pb options 
-  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  
+  
   
   # if X was supplied
   if (!is.null(X)){
@@ -128,15 +128,15 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
   # make wl even if odd
   if (!(wl %% 2) == 0) wl <- wl + 1
   
-  # set pb options 
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  
+  
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
   # calculate STR 
-  noise.profiles <- pbapply::pblapply(1:nrow(X), cl = cl, function(y){
+  noise.profiles <- warbleR:::pblapply_wrblr_int(pbar = pb, 1:nrow(X), cl = cl, function(y){
       
      # extract  complete sound file for custom or files in folder
       if (noise.ref == "custom")

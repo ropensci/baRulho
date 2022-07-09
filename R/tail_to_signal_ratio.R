@@ -59,8 +59,8 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
   # get call argument names
   argus <- names(as.list(base::match.call()))
   
-  # set pb options 
-  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  
+  
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -86,8 +86,8 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
   # check signal.type column 
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
   
-  # set pb options 
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  
+  
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)

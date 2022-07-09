@@ -54,8 +54,8 @@
 
 spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 70){
   
-  # set pb options 
-  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  
+  
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -88,17 +88,17 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
-  # set pb options 
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  
+  
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
-  if (pb) write(file = "", x = "calculating frequency spectrums (step 1 of 2):")
+  if (pb) write(file = "", x = "calculating frequency spectrums (step 1 out of 2):")
   
   # calculate all spectra apply function
-  spcs <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y, wle = wl, ovl = ovlp){
+  spcs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, wle = wl, ovl = ovlp){
    
     # load clip
     clp <- warbleR::read_wave(X = X, index = y)
@@ -153,7 +153,7 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
     return(z)
   })
   
-  if (pb) write(file = "", x = "calculating envelope cross-correlations (step 2 of 2):")
+  if (pb) write(file = "", x = "calculating envelope cross-correlations (step 2 out of 2):")
   
   # calculate all envelops apply function
   X$spectral.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {

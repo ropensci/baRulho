@@ -59,8 +59,8 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                        ssmooth = 200, msmooth = NULL, output = "est", 
                        img = FALSE, res = 150, hop.size = 11.6, wl = NULL, ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL){
   
-  # set pb options 
-  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  
+  
 
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -100,8 +100,8 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
     stop("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
   
-  # set pb options 
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+  
+  
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
@@ -113,15 +113,15 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
-    write(file = "", x = paste0("Preparing data for analysis (step 1 of 3):"))
+    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
   
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
     
   # print message
-  if (pb) write(file = "", x = "calculating amplitude envelopes (step 2 of 3):")
+  if (pb) write(file = "", x = "calculating amplitude envelopes (step 2 out of 3):")
   
   # calculate all envelops apply function
-  envs <- pbapply::pblapply(X = 1:nrow(X), cl = cl, FUN = function(y, ssmth = ssmooth, msmth = msmooth)   {
+  envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, ssmth = ssmooth, msmth = msmooth)   {
     
     # load clip
     clp <- warbleR::read_wave(X = X, index = y)
@@ -303,8 +303,8 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     return(out)
   } 
   
-  if (pb & !img) write(file = "", x = "calculating blur ratio (step 3 of 3):")
-  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 3 of 3):")
+  if (pb & !img) write(file = "", x = "calculating blur ratio (step 3 out of 3):")
+  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 3 out of 3):")
     
   # get blur ratio
   # calculate all envelops apply function
@@ -319,7 +319,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (output == "list") 
   {
     
-    env.dfs <- pbapply::pblapply(1:length(envs), cl = cl, function(y){
+    env.dfs <- warbleR:::pblapply_wrblr_int(pbar = pb, 1:length(envs), cl = cl, function(y){
       
       # extract 1 envelope
       x <- envs[[y]]

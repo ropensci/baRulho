@@ -104,7 +104,7 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   
   if (pb) 
-    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
+    write(file = "", x = paste0("Preparing data for analysis (step 1 of 3):"))
   
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   

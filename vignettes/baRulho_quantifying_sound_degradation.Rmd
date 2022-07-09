@@ -165,7 +165,7 @@ synth.l <- sim_songs(n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0
                      diff.fun = "pure.tone", selec.table = TRUE, path = td)
 
 # plot spectro
-spectro(synth.l$wave, scale = FALSE, palette = viridis, 
+seewave::spectro(synth.l$wave, scale = FALSE, palette = viridis, 
         grid = FALSE, flim = c(0,6), collevels = seq(-20, 0, 1))
 
 ```

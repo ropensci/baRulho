@@ -2,7 +2,7 @@
 #' 
 #' \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
 #' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Marten",
-#' bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70)
+#'  output = "est", hop.size = 1, wl = NULL, ovlp = 70)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -16,11 +16,10 @@
 #' \item \code{Marten}: as described by Marten et al. 1977:(total_attenuation - spheric_spreading_attenuation) / distance. This is the default method. Attenuation is measured as changes in energy on amplitude RMS (root mean square).
 #' \item \code{Darden}: as described by Darden et al 2008: microphone_gain - 20 x log(distance / 10) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the combined microphone gain of the reference and re-recorded signals.
 #' }
-#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
-#' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
+#' is \code{NULL}. If supplied, 'hop.size' is ignored.
 #' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations. 
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Only used for bandpass filtering.
@@ -56,10 +55,7 @@
 #last modification on nov-01-2019 (MAS)
 
 excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Marten", 
-                               bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70){
-  
-  
-  # 
+                              output = "est", hop.size = 1, wl = NULL, ovlp = 70){
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -88,55 +84,51 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   
   # check signal.type column 
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
-  
+
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
     write(file = "", x = paste0("Preparing data for analysis (step 1 out of 2):"))
-  
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
-  # function to measure RMS for signal and noise
-  rms_FUN <- function(y, bp, wl, ovlp){
-    
+  # # function to measure RMS for signal and noise
+  rms_FUN <- function(y, wl, ovlp){
+
     # read signal clip
     clp <- warbleR::read_wave(X = X, index = y)
-    
+
     # define bandpass based on reference
     bp <- c(X$bottom.freq[X$TEMP....sgnl == X$reference[y]], X$top.freq[X$TEMP....sgnl == X$reference[y]])
-    
+
     # bandpass filter
-    clp <- seewave::ffilter(clp, from = bp[1] * 1000, 
-                            ovlp = ovlp, to = bp[2] * 1000, bandpass = TRUE, 
+    clp <- seewave::ffilter(clp, from = bp[1] * 1000,
+                            ovlp = ovlp, to = bp[2] * 1000, bandpass = TRUE,
                             wl = wl, output = "Wave")
-    
+
     # get RMS for signal
     sigRMS <- seewave::rms(seewave::env(clp, f = clp@samp.rate, envt = "abs", plot = FALSE))
     sigRMS <- 20 * log10(sigRMS)
-    
-    return(data.frame(X[y, , drop = FALSE], sigRMS))
+
+    return(data.frame((X[y, , drop = FALSE]), sigRMS))
   }
-  
-  
-  # 
-  
+
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
-  
+
   if (pb) 
-    write(file = "", x = paste0("Calculating excess attenuation (step 2 out of 2):"))
+    write(file = "", x = paste0("Measuring signal energy (root mean square) (step 2 out of 2):"))
   
-  # run loop apply function
-  RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, bp, wl, ovlp)) 
-  
+   # run loop apply function
+  RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, wl, ovlp))
+
   # put in a data frame
   RMS_df <- do.call(rbind, RMS)
-  
+  # 
   # split by signal ID
-  RMS_list <- split(RMS_df, RMS_df$signal.type)
+  SPL_list <- split(RMS_df, RMS_df$signal.type)
   
   # calculate excess attenuation
-  X_list <- sapply(RMS_list, function(Y, meth = method, tp = type){
+  X_list <- sapply(SPL_list, function(Y, meth = method, tp = type){
     
     if (Y$signal.type[1] == "ambient") Y$excess.attenuation <- NA else {
     
@@ -145,23 +137,47 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
       
       # extract RMS of signal and background references
       sig_RMS_REF <- Y$sigRMS[which.min(Y$distance)]
+      # sig_SPL_REF <- Y$SPL[which.min(Y$distance)]
       dist_REF <- Y$distance[which.min(Y$distance)]
       
       # type Marten
       if (tp == "Marten"){
       # term 1: decrease in signal amplitude (RMS) of reference (Ref) vs re-recorded (RR)
       term1 <- sig_RMS_REF - Y$sigRMS
-      # term1 <- -20 * log10(sig_RMS_REF / Y$sigRMS)
-        
+      
+
       # lost due to spheric spreading
       term2 <- 20 * log10(Y$distance - dist_REF)
-      term2 <- -20 * log10(1 / Y$distance)
+      # term2 <- -20 * log10(1 / Y$distance)
+      # observed_attenuation <- (sig_SPL_REF - Y$SPL)
       
-      # distance traveled by sound
-      term3 <- Y$distance - dist_REF
+                    
+      # expected_attenuation <- sapply(Y$distance, function(x){
+      #                 att <- attenuation(lref = sig_SPL_REF, dref = dist_REF, dstop = x, n = 2, plot = FALSE)
+      #                 
+      #                 att <- if (length(att) > 0) att[2] else NA
+      #                 
+      #                 return(att)
+      #               }
+      #               )
+      #            
+      # based on seewave attenuation functionc
+      # expected_attenuation <- sig_SPL_REF - (20 * log10(Y$distance / dist_REF))
+        
+      # based on https://www.engineeringtoolbox.com/outdoor-propagation-sound-d_64.html
+      # Lp = LN - 20 log (r) + K'     
+      # expected_attenuation <- sig_SPL_REF - (20 * log10(Y$distance - dist_REF))
+      # expected_attenuation <- 20 * log10(Y$distance / dist_REF)
       
       # excess attenuation = (total attenuation - spheric spreading attenuation) / distance
       ea <- (term1 + term2)
+      
+      # ea <- observed_attenuation - expected_attenuation
+      
+      # segun chirras
+      ## EA = -20logK - 6dB / dd + dB anadidos
+      # ea <- (-20 * log(sig_SPL_REF)) - (6/(2* Y$distance)) +  Y$SPL
+      
       } 
       
       if (tp == "Darden"){
@@ -246,6 +262,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
       }
     }
     
+    Y <- as.data.frame(Y)
     return(Y)
     
   }, simplify = FALSE)

@@ -24,7 +24,7 @@ the start and end points of selection over which to measure ambient noise.}
 \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the signal. So type 2 actually measures tail-to-noise ratio.
 }}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each signal as the bandpass range.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 
@@ -64,10 +64,9 @@ data("playback_est")
 {
 Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 
-Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
-
 Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
 
+Mathevon, N., Dabelsteen, T., & Blumenrath, S. H. (2005). Are high perches in the blackcap Sylvia atricapilla song or listening posts? A sound transmission study. The Journal of the Acoustical Society of America, 117(1), 442-449.
 }
 }
 \seealso{

@@ -86,16 +86,16 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
+  if (pb) 
+    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
+  
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
-  
-  
-  
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
-  if (pb) write(file = "", x = "calculating frequency spectrums (step 1 out of 2):")
+  if (pb) write(file = "", x = "calculating frequency spectrums (step 2 out of 3):")
   
   # calculate all spectra apply function
   spcs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, wle = wl, ovl = ovlp){
@@ -153,10 +153,10 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
     return(z)
   })
   
-  if (pb) write(file = "", x = "calculating envelope cross-correlations (step 2 out of 2):")
+  if (pb) write(file = "", x = "calculating spectrum correlations (step 3 out of 3):")
   
   # calculate all envelops apply function
-  X$spectral.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {
+  X$spectrum.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {
     spctr_cor_FUN(y = X$TEMP....sgnl[x], z = X$reference[x])
   }) 
   

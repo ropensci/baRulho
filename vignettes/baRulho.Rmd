@@ -1,6 +1,6 @@
 ---
 title: <center><font size="7"><b>baRulho</b></font></center>
-subtitle: <center><font size="5">Quantifying (animal) acoustic signal transmission and degradation</font></center>
+subtitle: <center><font size="5">Quantifying habitat-induced degradation of (animal) acoustic signals</font></center>
 pagetitle: baRulho quantifying sound degradation
 author: 
 - <center><a href="https://marceloarayasalas.weebly.com">Marcelo Araya-Salas, PhD</a></center>
@@ -15,7 +15,7 @@ output:
       smooth_scroll: true
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{1. Introduction to baRulho}
+  %\VignetteIndexEntry{baRulho}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console

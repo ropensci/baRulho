@@ -20,8 +20,8 @@
 #' , N = background noise): 
 #' \itemize{
 #' \item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
-#'  (\code{rms(env(S))/rms(env(N))}) as described by Darden (2008).
-#' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as described by Dabelsteen et al (1993).
+#'  (\code{20 * log10(rms(env(S))/rms(env(N)))}) as described by Darden (2008).
+#' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
 #' }
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
@@ -105,10 +105,7 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   if (!any(X$signal.type %in% 'ambient') & noise.ref == "custom") stop("'ambient' selections must be contained in 'X' (and label in 'signal.type' column) when 'noise.ref == TRUE'")
   
   if (noise.ref == "custom" & any(sapply(unique(X$sound.files), function(x) sum(X$sound.files == x & X$signal.type == "ambient")) == 0)) stop("Each sound file referenced in 'X' must have at least 1 'ambient' selection when 'noise.ref == custom'")
-  
-  
-  # 
-  
+
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
@@ -217,8 +214,12 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
       }
     
     # Calculate signal-to-noise ratio
-    snr <- 20 * log10(sig_RMS / bg_RMS)
+     if (type == 1)
+        snr <- 20 * log10(sig_RMS / bg_RMS)
    
+     if (type == 2)
+        snr <- 20 * log10((sig_RMS- bg_RMS) / bg_RMS)
+    
     return(snr)  
     } else return(NA) # return NA if current row is noise
   })

@@ -2,8 +2,8 @@ pandoc: 2.17.1.1
 pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
-  baRulho_quantifying_sound_degradation: baRulho_quantifying_sound_degradation.html
-last_built: 2022-07-09T01:58Z
+  baRulho: baRulho.html
+last_built: 2022-07-09T14:03Z
 urls:
   reference: https://marce10.github.io/baRulho/reference
   article: https://marce10.github.io/baRulho/articles

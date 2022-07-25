@@ -58,9 +58,6 @@
 excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Marten", 
                                bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70){
   
-  
-  # 
-  
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
     stop("'X' must be and extended selection table")
@@ -88,55 +85,56 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   
   # check signal.type column 
   if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
-  
+
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
     write(file = "", x = paste0("Preparing data for analysis (step 1 out of 2):"))
   
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
+  # add sound pressure level
+  
+  if (pb) 
+    write(file = "", x = paste0("Measuring sound pressure level (step 2 out of 2):"))
+  X <- sound_pressure_level(X, parallel = parallel, pb = pb)
+  
   # function to measure RMS for signal and noise
   rms_FUN <- function(y, bp, wl, ovlp){
-    
+
     # read signal clip
     clp <- warbleR::read_wave(X = X, index = y)
-    
+
     # define bandpass based on reference
     bp <- c(X$bottom.freq[X$TEMP....sgnl == X$reference[y]], X$top.freq[X$TEMP....sgnl == X$reference[y]])
-    
+
     # bandpass filter
-    clp <- seewave::ffilter(clp, from = bp[1] * 1000, 
-                            ovlp = ovlp, to = bp[2] * 1000, bandpass = TRUE, 
+    clp <- seewave::ffilter(clp, from = bp[1] * 1000,
+                            ovlp = ovlp, to = bp[2] * 1000, bandpass = TRUE,
                             wl = wl, output = "Wave")
-    
+
     # get RMS for signal
     sigRMS <- seewave::rms(seewave::env(clp, f = clp@samp.rate, envt = "abs", plot = FALSE))
     sigRMS <- 20 * log10(sigRMS)
-    
-    return(data.frame(X[y, , drop = FALSE], sigRMS))
+
+    return(data.frame((X[y, , drop = FALSE]), sigRMS))
   }
-  
-  
-  # 
-  
+
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
-  
-  if (pb) 
-    write(file = "", x = paste0("Calculating excess attenuation (step 2 out of 2):"))
-  
-  # run loop apply function
-  RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, bp, wl, ovlp)) 
-  
+
+   # run loop apply function
+  RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, bp, wl, ovlp))
+
   # put in a data frame
   RMS_df <- do.call(rbind, RMS)
   
   # split by signal ID
-  RMS_list <- split(RMS_df, RMS_df$signal.type)
+  SPL_list <- split(RMS_df, RMS_df$signal.type)
+  # SPL_list <- split(X, X$signal.type)
   
   # calculate excess attenuation
-  X_list <- sapply(RMS_list, function(Y, meth = method, tp = type){
+  X_list <- sapply(SPL_list, function(Y, meth = method, tp = type){
     
     if (Y$signal.type[1] == "ambient") Y$excess.attenuation <- NA else {
     
@@ -145,30 +143,59 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
       
       # extract RMS of signal and background references
       sig_RMS_REF <- Y$sigRMS[which.min(Y$distance)]
+      sig_SPL_REF <- Y$SPL[which.min(Y$distance)]
       dist_REF <- Y$distance[which.min(Y$distance)]
       
       # type Marten
       if (tp == "Marten"){
       # term 1: decrease in signal amplitude (RMS) of reference (Ref) vs re-recorded (RR)
-      term1 <- sig_RMS_REF - Y$sigRMS
+      # term1 <- sig_RMS_REF - Y$sigRMS
       # term1 <- -20 * log10(sig_RMS_REF / Y$sigRMS)
         
+
       # lost due to spheric spreading
-      term2 <- 20 * log10(Y$distance - dist_REF)
-      term2 <- -20 * log10(1 / Y$distance)
+      # term2 <- 20 * log10(Y$distance - dist_REF)
+      # term2 <- -20 * log10(1 / Y$distance)
+      observed_attenuation <- (sig_SPL_REF  - Y$SPL)
+      
+                    
+      # expected_attenuation <- sapply(Y$distance, function(x){
+      #                 att <- attenuation(lref = sig_SPL_REF, dref = dist_REF, dstop = x, n = 2, plot = FALSE)
+      #                 
+      #                 att <- if (length(att) > 0) att[2] else NA
+      #                 
+      #                 return(att)
+      #               }
+      #               )
+      #            
+      # based on seewave attenuation functionc
+      # expected_attenuation <- sig_SPL_REF - (20 * log10(Y$distance / dist_REF))
+        
+      # based on https://www.engineeringtoolbox.com/outdoor-propagation-sound-d_64.html
+      # Lp = LN - 20 log (r) + K'     
+      expected_attenuation <- sig_SPL_REF - (20 * log10(Y$distance - dist_REF)) - 8 
+      # expected_attenuation <- 20 * log10(Y$distance / dist_REF)
       
       # distance traveled by sound
-      term3 <- Y$distance - dist_REF
+      # term3 <- Y$distance - dist_REF
       
       # excess attenuation = (total attenuation - spheric spreading attenuation) / distance
-      ea <- (term1 + term2)
+      # ea <- (term1 + term2)
+      # ea <- observed_attenuation - expected_attenuation 
+      
+      
+      
+      # segun chirras
+      ## EA = -20logK - 6dB / dd + dB anadidos
+      ea <- (-20 * log(sig_RMS_REF)) - (6/(2* Y$distance)) +  Y$RMS
+      
       } 
       
       if (tp == "Darden"){
         
         #EA = g - 20 log(d / 10) - 20 log(k)
         # term1 = g (combined mic gain)
-        term1 <- sapply(Y$sigRMS, function(x) seewave::moredB(c(sig_RMS_REF, x)), USE.NAMES = FALSE)
+        term1 <- sapply(Y$sigRMS, function(x) seewave::moredB(c(sig_SPL_REF, x)), USE.NAMES = FALSE)
         
         # term2 = - 20 log(d / 10)
         term2 <-  20 * log10(Y$distance / 10)
@@ -246,6 +273,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
       }
     }
     
+    Y <- as.data.frame(Y)
     return(Y)
     
   }, simplify = FALSE)

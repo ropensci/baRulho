@@ -45,10 +45,9 @@
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' 
-#' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
-#' 
 #' Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
 #' 
+#' Mathevon, N., Dabelsteen, T., & Blumenrath, S. H. (2005). Are high perches in the blackcap Sylvia atricapilla song or listening posts? A sound transmission study. The Journal of the Acoustical Society of America, 117(1), 442-449.
 #' }
 #last modification on nov-01-2019 (MAS)
 
@@ -58,9 +57,6 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
   
   # get call argument names
   argus <- names(as.list(base::match.call()))
-  
-  
-  
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -150,9 +146,9 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
     tail_RMS <- seewave::rms(tail.env)  
     
     # Calculate tail.to.signal ratio
-    str <- sig_RMS / tail_RMS
+    str <- tail_RMS / sig_RMS
    
-    return(20*log10(str))  
+    return(log10(str))  
     } else return(NA) # return NA if current row is noise
   })
   

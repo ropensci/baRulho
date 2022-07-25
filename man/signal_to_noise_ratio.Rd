@@ -31,8 +31,8 @@ to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} 
 , N = background noise): 
 \itemize{
 \item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
- (\code{rms(env(S))/rms(env(N))}) as described by Darden (2008).
-\item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{(rms(env(S)) - rms(env(N)))/rms(env(N))}, as described by Dabelsteen et al (1993).
+ (\code{20 * log10(rms(env(S))/rms(env(N)))}) as described by Darden (2008).
+\item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
 }}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.}

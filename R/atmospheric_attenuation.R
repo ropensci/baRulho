@@ -1,6 +1,6 @@
-#' Measure atmospheric attenuation and absorption of sound 
+#' Estimate atmospheric attenuation and absorption of sound 
 #' 
-#' \code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption.
+#' \code{atmospheric_attenuation} estimates atmospheric attenuation and atmospheric absorption.
 #' @usage atmospheric_attenuation(f, temp, RH, p = 101325, 
 #' formula = 1, spi = NULL, dist = NULL)
 #' @param f numeric vector of length 1 with frequency (in Hertz).
@@ -21,14 +21,8 @@
 #' If 'spi' and 'dist' are supplied the function also returns the atmospheric absorption (in dB).
 #' @examples
 #' {
-#' # load example data
-#' data("playback_est")
-#' 
-#' #' # remove ambient selections
-#' playback_est <- playback_est[playback_est$signal.type != "ambient", ]
-#'
 #' # measure atmospheric attenuation formula 1
-#'atmospheric_attenuation(f = 20000, temp = 20, RH = 90, p = 88000, formula = 1)
+#' atmospheric_attenuation(f = 20000, temp = 20, RH = 90, p = 88000, formula = 1)
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) 

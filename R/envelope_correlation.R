@@ -157,9 +157,14 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   if (pb) write(file = "", x = "calculating envelope correlations (step 3 out of 3):")
   
   # calculate all envelops apply function
-  X$envelope.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {
-    env_cor_FUN(y = X$TEMP....sgnl[x], z = X$reference[x])
-  }) 
+  X_list <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(x) {
+    Y <- X[x, , drop = FALSE]
+    Y$envelope.correlation <- env_cor_FUN(y = Y$TEMP....sgnl, z = Y$reference)
+    return(as.data.frame(Y))
+    
+    }) 
+  
+   X <- do.call(rbind, X_list)
   
   # remove temporal columns
   X$TEMP....sgnl <- NULL

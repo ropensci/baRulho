@@ -4,13 +4,19 @@
 
 prep_X_bRlo_int <- function(X, method = 1, parallel = 1, pb = TRUE) {
   
+  # set pb options 
+  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
+  
   # add sound file selec colums to X (weird column name so it does not overwrite user columns)
   X$TEMP....sgnl <- paste(X$sound.files, X$selec, sep = "-")
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
-  
+    
+    # set pb options 
+    pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
+    
   # add second column with names of the reference signals to be compare against
   X$reference <- pbapply::pbsapply(1:nrow(X), cl = cl, function(x, meth = method){
     

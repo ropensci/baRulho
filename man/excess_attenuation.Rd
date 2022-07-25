@@ -5,7 +5,7 @@
 \title{Measure excess attenuation}
 \usage{
 excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Marten",
-bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70)
+ output = "est", hop.size = 1, wl = NULL, ovlp = 70)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.}
@@ -25,8 +25,6 @@ bp = NULL, output = "est", hop.size = 1, wl = NULL, ovlp = 70)
 \item \code{Marten}: as described by Marten et al. 1977:(total_attenuation - spheric_spreading_attenuation) / distance. This is the default method. Attenuation is measured as changes in energy on amplitude RMS (root mean square).
 \item \code{Darden}: as described by Darden et al 2008: microphone_gain - 20 x log(distance / 10) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the combined microphone gain of the reference and re-recorded signals.
 }}
-
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 

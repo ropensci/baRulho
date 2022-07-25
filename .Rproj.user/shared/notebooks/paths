@@ -2,6 +2,8 @@
 /home/m/Dropbox/R_package_testing/baRulho/.gitignore="574EE968"
 /home/m/Dropbox/R_package_testing/baRulho/DESCRIPTION="06CF1128"
 /home/m/Dropbox/R_package_testing/baRulho/NEWS.md="73CA699B"
+/home/m/Dropbox/R_package_testing/baRulho/R/atmospheric_attenuation.R="496E2800"
+/home/m/Dropbox/R_package_testing/baRulho/R/attenuation.R="12B61646"
 /home/m/Dropbox/R_package_testing/baRulho/R/baRulho-package.R="18BC8B2D"
 /home/m/Dropbox/R_package_testing/baRulho/R/blur_ratio.R="841E38AB"
 /home/m/Dropbox/R_package_testing/baRulho/R/envelope_correlation.R="A14B61EA"

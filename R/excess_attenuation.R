@@ -13,7 +13,7 @@
 #' }
 #' @param type Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
 #' \itemize{
-#' \item \code{Marten}: as described by Marten et al. 1977:(total_attenuation - spheric_spreading_attenuation) / distance. This is the default method. Attenuation is measured as changes in energy on amplitude RMS (root mean square).
+#' \item \code{Marten}: as described by Marten et al. 1977: (total_attenuation - spheric_spreading_attenuation) / distance. This is the default method.
 #' \item \code{Darden}: as described by Darden et al 2008: microphone_gain - 20 x log(distance / 10) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the combined microphone gain of the reference and re-recorded signals.
 #' }
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
@@ -87,7 +87,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
 
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
-    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 2):"))
+    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
   # # function to measure RMS for signal and noise
@@ -116,7 +116,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
 
   if (pb) 
-    write(file = "", x = paste0("Measuring signal energy (root mean square) (step 2 out of 2):"))
+    write(file = "", x = paste0("Measuring signal energy (step 2 out of 3):"))
   
    # run loop apply function
   RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, wl, ovlp))
@@ -127,8 +127,11 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
   # split by signal ID
   SPL_list <- split(RMS_df, RMS_df$signal.type)
   
+  if (pb) 
+    write(file = "", x = paste0("Measuring signal energy (step 3 out of 3):"))
+  
   # calculate excess attenuation
-  X_list <- sapply(SPL_list, function(Y, meth = method, tp = type){
+  X_list <- warbleR:::pblapply_wrblr_int(X = SPL_list, pbar = pb, cl = cl, function(Y, meth = method, tp = type){
     
     if (Y$signal.type[1] == "ambient") Y$excess.attenuation <- NA else {
     
@@ -176,7 +179,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
       
       # segun chirras
       ## EA = -20logK - 6dB / dd + dB anadidos
-      # ea <- (-20 * log(sig_SPL_REF)) - (6/(2* Y$distance)) +  Y$SPL
+      ea <- (-20 * log(sig_RMS_REF)) - (6/(2* Y$distance)) + -20 * log(Y$sigRMS)
       
       } 
       
@@ -265,7 +268,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "M
     Y <- as.data.frame(Y)
     return(Y)
     
-  }, simplify = FALSE)
+  })
   
   # put together in a data frame as X
   X2 <- do.call(rbind, X_list)

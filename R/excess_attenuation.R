@@ -52,7 +52,7 @@
 #' 
 #' Morton ES. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.
 #' }
-#last modification on nov-01-2019 (MAS)
+#last modification on jul-19-2021 (MAS)
 
 excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Marten", 
                               output = "est", hop.size = 1, wl = NULL, ovlp = 70){

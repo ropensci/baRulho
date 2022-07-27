@@ -1,287 +1,149 @@
-#' Measure excess attenuation
+#' Estimate atmospheric attenuation and absorption of sound 
 #' 
-#' \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
-#' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Marten",
-#'  output = "est", hop.size = 1, wl = NULL, ovlp = 70)
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.
-#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring excess attenuation. Two methods are available:
-#' \itemize{
-#' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
-#' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
-#' }
-#' @param type Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
-#' \itemize{
-#' \item \code{Marten}: as described by Marten et al. 1977: (total_attenuation - spheric_spreading_attenuation) / distance. This is the default method.
-#' \item \code{Darden}: as described by Darden et al 2008: microphone_gain - 20 x log(distance / 10) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the combined microphone gain of the reference and re-recorded signals.
-#' }
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
-#' is \code{NULL}. If supplied, 'hop.size' is ignored.
-#' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations. 
-#' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Only used for bandpass filtering.
-#' @return Extended selection table similar to input data, but also includes a new column (excess.attenuation)
-#' with the excess attenuation values.
+#' \code{atmospheric_attenuation} estimates atmospheric attenuation and atmospheric absorption.
+#' @usage atmospheric_attenuation(f, temp, RH, p = 101325, 
+#' formula = 1, spi = NULL, dist = NULL)
+#' @param f numeric vector of length 1 with frequency (in Hertz).
+#' @param temp numeric vector of length 1 with frequency (in Celsius).
+#' @param RH numeric vector of length 1 with relative humidity
+#' @param p numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default).
+#' @param formula 1 = Bazley 1976, 2 = Rossing 2007 (p. 116, see details). 
+#' @param spi numeric vector of length 1 with the initial sound pressure in Pa. Required for calculating atmospheric absorption. Default is \code{NULL}. 
+#' @param dist numeric vector of length 1 with distance (m) over which a sound propagates. Required for calculating atmospheric absorption. Default is \code{NULL}. 
+#' @return Returns atmospheric attenuation (in dB/m) of sound based on supplied parameters. If 'spi' and 'dist' are supplied the function also returns atmospheric absorption (in dB).  
 #' @export
-#' @name excess_attenuation
-#' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading, due to atmospheric conditions or habitat (Wiley & Richards, 1978). Low values indicate little signal attenuation. 
-#' The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal within the frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating excess attenuation are provided (see 'method' argument). 
+#' @name atmospheric_attenuation
+#' @details Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency. The function can applied to formulae based on:
+#' \itemize{
+#' \item \code{1}: default. As used by Bazley (1976), Sound absorption in air at frequencies up to 100 kHz. NPL acoustics report Ac 74. 
+#' \item \code{2}: as used by Rossing (2007), Handbook of Acoustics, Springer.
+#' }
+#' If 'spi' and 'dist' are supplied the function also returns the atmospheric absorption (in dB).
 #' @examples
 #' {
-#' # load example data
-#' data("playback_est")
-#' 
-#' # using method 1
-#'excess_attenuation(X = playback_est)
-#' 
-#' # using method 2
-#' excess_attenuation(X = playback_est, method = 2)
+#' # measure atmospheric attenuation formula 1
+#' atmospheric_attenuation(f = 20000, temp = 20, RH = 90, p = 88000, formula = 1)
 #' }
 #' 
-#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @seealso \code{\link{spcc_distortion}}; \code{\link{envelope_correlation}}
+#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) 
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
-#' 
-#' Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
-#' 
-#' Marten K, & Marler P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.
-#' 
-#' Morton ES. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.
 #' }
 #last modification on jul-19-2021 (MAS)
 
-excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Marten", 
-                              output = "est", hop.size = 1, wl = NULL, ovlp = 70){
+### NOT SURE IF ABSORPTION WORKS 
+atmospheric_attenuation <- function(f, temp, RH, p = 101325, formula = 1, spi = NULL, dist = NULL){
   
-  # is extended sel tab
-  if (!warbleR::is_extended_selection_table(X)) 
-    stop("'X' must be and extended selection table")
+  if (!is.null(spi) & is.null(dist)) stop("'dist' must also be supplied to calculate atmospheric absorption")
   
-  # If parallel is not numeric
-  if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  if (is.null(spi) & !is.null(dist)) stop("'spi' must also be supplied to calculate atmospheric absorption")
   
-  #check output
-  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
+  Ta <- temp + 273.15      # convert to Kelvin
+  Tr <- Ta / 293.15    # convert to relative air temperature (re 20 deg C)
   
-  # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
-  
-  # adjust wl based on hope.size
-  if (is.null(wl))
-    wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
-  
-  # make wl even if odd
-  if (!(wl %% 2) == 0) wl <- wl + 1
-  
-  # If method is not numeric
-  if (!is.numeric(method)) stop("'method' must be a numeric vector of length 1") 
-  if (!any(method %in% 1:2)) stop("'method' must be either 1 or 2")
-  
-  # check signal.type column 
-  if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
-
-  # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-  if (pb) 
-    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
-  X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
-  
-  # # function to measure RMS for signal and noise
-  rms_FUN <- function(y, wl, ovlp){
-
-    # read signal clip
-    clp <- warbleR::read_wave(X = X, index = y)
-
-    # define bandpass based on reference
-    bp <- c(X$bottom.freq[X$TEMP....sgnl == X$reference[y]], X$top.freq[X$TEMP....sgnl == X$reference[y]])
-
-    # bandpass filter
-    clp <- seewave::ffilter(clp, from = bp[1] * 1000,
-                            ovlp = ovlp, to = bp[2] * 1000, bandpass = TRUE,
-                            wl = wl, output = "Wave")
-
-    # get RMS for signal
-    sigRMS <- seewave::rms(seewave::env(clp, f = clp@samp.rate, envt = "abs", plot = FALSE))
-    sigRMS <- 20 * log10(sigRMS)
-
-    return(data.frame((X[y, , drop = FALSE]), sigRMS))
+  if (formula == 1){ # According to Bazley 1976 (Marc)
+    
+    P = p / 101325   #convert to atm
+    
+    # percentage water molecules:
+    h <- ((RH / P)  * Ta ^-4.922 * 10^(20.5318-2939 / Ta))
+    
+    # molecular attenuation caused by oxygen:
+    umax <- (0.0000042425 + 0.000000088168 * temp + 0.00000000054834 * temp^2)
+    fo  <- (30560 * P * h^1.3)
+    mo <- (2 * umax * (f / (f / fo + fo / f)))
+    
+    # molecular attenuation caused by nitrogen:
+    mn <- 0.0000000171 / sqrt(1 + 0.00366 * T) * (h * P * f^2 / (0.0000277 * f^2 + h^2 * P^2))
+    
+    # classical and rotational effects:
+    mcr <- 0.000000000036 * (1+0.001 * temp) * f^2 / P
+    
+    atmatt <- 4.343 * (mo + mn + mcr)
+  } else
+  { # formula 2
+    ## According to Rossing 2007 (Peter) - correct, 5.4.2012
+    # Saturation Concentration of water vapor.
+    # NOTE the *ERROR* in Rossing 2007!! Instead of Tref = 293.15 K (20 C),
+    # here the triple-point isotherm temperature (273.15 K + 0.01 K =
+    # 273.16 K) has to be used!
+    # See http://forum.studiotips.com/viewtopic.php?t=158
+    
+    P <- p / 101325       # convert to relative pressure
+    
+    C <- 4.6151 - 6.8346 * ((273.16 / Ta)^1.261)
+    
+    # percentage molar concentration of water vapor:
+    h <- RH * 10^C / P
+    
+    # relaxation frequencies associated with the vibration of oxygen and nitrogen:  
+    frO <- P * (24+4.04e4 * h * (0.02 + h) / (0.391 + h))
+    frN <- P *(Tr^(-0.5)) * (9+280 * h * exp(-4.17 * ((Tr^(-1/3))-1)))
+    
+    # attenuation coefficient (Np/(m*atm)):
+    alpha <- f * f * (1.84e-11 * (1 / P) * sqrt(Tr) + (Tr^(-2.5)) * (0.01275 * (exp(-2239.1 / Ta) * 1 / (frO + f * f / frO)) + 0.1068 * (exp(-3352 / Ta) * 1 / (frN + f * f /frN))))
+    
+    atmatt <- 8.686 * alpha # convert to dB (lg(x/x0)) from Neper (ln(x/x0))
   }
-
-  # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & parallel > 1)
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
-
-  if (pb) 
-    write(file = "", x = paste0("Measuring signal energy (step 2 out of 3):"))
   
-   # run loop apply function
-  RMS <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  rms_FUN(y, wl, ovlp))
-
-  # put in a data frame
-  RMS_df <- do.call(rbind, RMS)
-  # 
-  # split by signal ID
-  SPL_list <- split(RMS_df, RMS_df$signal.type)
-  
-  if (pb) 
-    write(file = "", x = paste0("Measuring signal energy (step 3 out of 3):"))
-  
-  # calculate excess attenuation
-  X_list <- warbleR:::pblapply_wrblr_int(X = SPL_list, pbar = pb, cl = cl, function(Y, meth = method, tp = type){
+  if (!is.null(spi) & !is.null(dist)){
+    #        a ........ pure-tone sound attenuation coefficient, in dB/m, for atmospheric absorption
+    #        s ........ distance in m through which the sounds propagates
+    #        Pi (spi) ....... initial sound pressure amplitude, in Pa
+    #        Pt ....... sound pressure amplitude, in Pa
+    #        Pa (p / 1000) ...... ambient atmospheric pressure in kPa
+    #        Pr ....... reference ambient atmospheric pressure: 101.325 kPa
+    #        Psat .. saturation vapor pressure ca equals:
+    #          .................. International Meteorological Tables WMO-No.188 TP94
+    #        .................. World Meteorological Organization - Geneva Switzerland
+    #        T ........ ambient atmospheric temperature in K (Kelvin).
+    #        ........... K = 273.15 + Temperature in C (by US known as centigrade, Europe as Celsius)
+    #        To ...... reference temperature in K: 293.15 K (20 C)
+    #        To1..... triple-point isotherm temp: 273.16 K = 273.15 + 0.01 K (0.01 C)
+    #        h ........ molar concentration of water vapor, as a percentage
+    #        hr (RH)........ relative humidity as a percentage
+    #        f ......... frequency
+    #        frO ..... oxygen relaxation frequency
+    #        frN ..... nitrogen relaxation frequency
+    #        x ........ Just a help factor to shorten formula, improvement on standard by Eric Desart
+    #        y ........ Just a help factor to shorten formula
+    #        z ........ Just a help factor to shorten formula
     
-    if (Y$signal.type[1] == "ambient") Y$excess.attenuation <- NA else {
+    To <- 293.15
+    To1 <- 273.16
+    Pa <- p / 1000
+    Pr <- 101.325
     
-    # method 1 compare to closest distance to source
-    if (meth == 1){
-      
-      # extract RMS of signal and background references
-      sig_RMS_REF <- Y$sigRMS[which.min(Y$distance)]
-      # sig_SPL_REF <- Y$SPL[which.min(Y$distance)]
-      dist_REF <- Y$distance[which.min(Y$distance)]
-      
-      # type Marten
-      if (tp == "Marten"){
-      # term 1: decrease in signal amplitude (RMS) of reference (Ref) vs re-recorded (RR)
-      term1 <- sig_RMS_REF - Y$sigRMS
-      
-
-      # lost due to spheric spreading
-      term2 <- 20 * log10(Y$distance - dist_REF)
-      # term2 <- -20 * log10(1 / Y$distance)
-      # observed_attenuation <- (sig_SPL_REF - Y$SPL)
-      
-                    
-      # expected_attenuation <- sapply(Y$distance, function(x){
-      #                 att <- attenuation(lref = sig_SPL_REF, dref = dist_REF, dstop = x, n = 2, plot = FALSE)
-      #                 
-      #                 att <- if (length(att) > 0) att[2] else NA
-      #                 
-      #                 return(att)
-      #               }
-      #               )
-      #            
-      # based on seewave attenuation functionc
-      # expected_attenuation <- sig_SPL_REF - (20 * log10(Y$distance / dist_REF))
-        
-      # based on https://www.engineeringtoolbox.com/outdoor-propagation-sound-d_64.html
-      # Lp = LN - 20 log (r) + K'     
-      # expected_attenuation <- sig_SPL_REF - (20 * log10(Y$distance - dist_REF))
-      # expected_attenuation <- 20 * log10(Y$distance / dist_REF)
-      
-      # excess attenuation = (total attenuation - spheric spreading attenuation) / distance
-      ea <- (term1 + term2)
-      
-      # ea <- observed_attenuation - expected_attenuation
-      
-      # segun chirras
-      ## EA = -20logK - 6dB / dd + dB anadidos
-      ea <- (-20 * log(sig_RMS_REF)) - (6/(2* Y$distance)) + -20 * log(Y$sigRMS)
-      
-      } 
-      
-      if (tp == "Darden"){
-        
-        #EA = g - 20 log(d / 10) - 20 log(k)
-        # term1 = g (combined mic gain)
-        term1 <- sapply(Y$sigRMS, function(x) seewave::moredB(c(sig_RMS_REF, x)), USE.NAMES = FALSE)
-        
-        # term2 = - 20 log(d / 10)
-        term2 <-  20 * log10(Y$distance / 10)
-        
-        # term3 = - 20 log(k)
-        # get envelope correlation (k)
-       k <- envelope_correlation(X[X$signal.type == Y$signal.type[1],], output = "data.frame", pb = FALSE)$envelope.correlation
-        term3 <- -20 * log10(k)
-        
-        # excess attenuation = (total attenuation - spheric spreading attenuation) / distance
-        ea <- term1 + term2 + term3
-      } 
-      
-      Y$excess.attenuation <- ea
-      Y$excess.attenuation[which.min(Y$distance)] <- NA
-      }
+    Psat <- Pr * 10^(-6.8346 * (To1/Ta)^1.261 + 4.6151)
     
-    # compare to previous distance 
-    if (meth == 2){
-      
-      # save original order
-      Y$org....ord <- 1:nrow(Y)
-      
-      # sort by distance
-      Y <- Y[order(Y$distance), ]
-      
-      
-      if (tp == "Marten"){
-        # term 1: decrease in signal amplitude (RMS) of reference (Ref) vs re-recorded (RR)
-      term1 <- Y$sigRMS[-nrow(Y)] - Y$sigRMS[-1] 
-      
-      # lost due to spheric spreading
-      term2 <- -20 * log10(1 / (Y$distance[-1]))
-      
-      # distance traveled by sound
-      term3 <- Y$distance[-1] - Y$distance[-nrow(Y)]
-      
-      # excess attenuation = (total attenuation - spheric spreading attenuation) / distance
-      ea <- (term1 + term2) / term3
-      
-      # add NA for first distance
-      ea <- c(NA, ea)      
-      }
-      
-      # type Darden
-      if (tp == "Darden"){
-        
-        #EA = g - 20 log(d / 10) - 20 log(k)
-        # term1 = g (combined mic gain)
-        term1 <- sapply(2:nrow(Y), function(x) seewave::moredB(c(Y$sigRMS[x - 1], Y$sigRMS[x])), USE.NAMES = FALSE)
-        
-        # term2 = - 20 log(d / 10)
-        term2 <- - 20 * log10(Y$distance[-1] - Y$distance[-nrow(Y)] / 10)
-        
-        # term3 = - 20 log(k)
-        # get envelope correlation (k)
-        k <- envelope_correlation(X[X$signal.type == Y$signal.type[1],], output = "data.frame", pb = FALSE, method = 2)$envelope.correlation
-        
-        # order by distance too
-        k <- k[order(X$distance[X$signal.type == Y$signal.type[1]])]
-        term3 <- -20 * log10(k[-1])
-        
-        # excess attenuation
-        ea <- term1 + term2 + term3
-        
-        # add NA for first distance
-        ea <- c(NA, ea)  
-      } 
-      
-      Y$excess.attenuation <- ea
-      # reorder results
-      Y <- Y[order(Y$org....ord), ]
-      
-      Y$org....ord <- NULL
-      }
-    }
+    h <- RH * ((Psat / Pr) / (Pa / Pr))
     
-    Y <- as.data.frame(Y)
-    return(Y)
+    frO <- (Pa / Pr) * (24 + 4.04 * 10^4 * h * ((0.02 + h) / (0.391 + h)))
     
-  })
+    frN <- (Pa / Pr) * (Ta / To)^(-1/2) * (9 + 280 * h * exp(-4.170 * ((Ta / To)^(-1/3)-1)))
+    
+    z <- 0.1068 * exp(-3352 / Ta) * (frN + f ^2 / frN)^-1
+    
+    y <- (T / To)^(-5/2) * (0.01275 * exp(-2239.1 / T) * (frO + f ^2 / frO)^-1 + z)
+    
+    a <- 8.686 * f^2 * ((1.84 * 10^-11 * (Pa / Pr)^-1 * (Ta / To)^(1/2)) + y) #[dB/m]
+    
+    
+    x <- 1 / (10 * log((exp(1))^2)) #= ca 0.1151 #(value in norm, formula E. Desart)
+    
+    as = a * dist #[dB] total absorption at distance s
+    
+    # Pt <- spi * exp(-x * as) # in Pa
+    # 
+    # as <- 10 * log( spi^2 / Pt^2 ) #= as [dB] (was Delta.Lt)
+    # 
+    
+    
+    reslt <- list(atmospheric.attenuation = atmatt, atmospheric.absorption = as) 
+  } else reslt <- list(atmospheric.attenuation = atmatt) 
   
-  # put together in a data frame as X
-  X2 <- do.call(rbind, X_list)
+  return(reslt)  
   
-  # fix row names 
-  rownames(X2) <-  rownames(X)
-  
-  # remove temporal column
-  X2$sigRMS <- X2$TEMP....sgnl <- NULL
-  
-  # fix est
-  if (output == "est")
-  X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
-  
-  return(X2)
 }
+
+##### from http://forum.studiotips.com/viewtopic.php?t=158

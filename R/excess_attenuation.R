@@ -57,7 +57,7 @@
 #' 
 #' Wiley, R., & Richards, D. G. (1978). Physical constraints on acoustic communication in the atmosphere: implications for the evolution of animal vocalizations. Behavioral Ecology and Sociobiology, 3(1), 69-94.
 #' }
-#last modification on nov-01-2019 (MAS)
+#last modification on jul-19-2021 (MAS)
 
 excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Darden", 
                                output = "est", hop.size = 1, wl = NULL, ovlp = 70, gain = 0){

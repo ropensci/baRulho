@@ -4,8 +4,8 @@
 \alias{excess_attenuation}
 \title{Measure excess attenuation}
 \usage{
-excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Marten",
- output = "est", hop.size = 1, wl = NULL, ovlp = 70)
+excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Darden",
+ output = "est", hop.size = 1, wl = NULL, ovlp = 70, gain = 0)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.}
@@ -22,8 +22,8 @@ excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Marten",
 
 \item{type}{Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
 \itemize{
-\item \code{Marten}: as described by Marten et al. 1977:(total_attenuation - spheric_spreading_attenuation) / distance. This is the default method. Attenuation is measured as changes in energy on amplitude RMS (root mean square).
-\item \code{Darden}: as described by Darden et al 2008: microphone_gain - 20 x log(distance / 10) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the combined microphone gain of the reference and re-recorded signals.
+\item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the microphone gain of the reference and re-recorded signals. This is the default method. If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
+\item \code{Marten}: as described by Marten et al. (1977): Observed attenuation is calculated as the difference in sound pressure level between the reference and the re-recorded signal. Sound pressure level is measured as the root mean square of the amplitude envelope and as such it is not calibrated. Background noise amplitude (measured on the noise right before the signals) is subtracted from the sound pressure level estimates.
 }}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
@@ -31,11 +31,13 @@ excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Marten",
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
-is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
+is \code{NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
 consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Only used for bandpass filtering.}
+
+\item{gain}{Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.}
 }
 \value{
 Extended selection table similar to input data, but also includes a new column (excess.attenuation)
@@ -45,8 +47,8 @@ with the excess attenuation values.
 \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
 }
 \details{
-Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading. With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading, due to atmospheric conditions or habitat (Wiley & Richards, 1978). Low values indicate little signal attenuation. 
-The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal within the frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating excess attenuation are provided (see 'method' argument).
+Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents energy loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation. 
+The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating excess attenuation are provided (see 'method' argument).
 }
 \examples{
 {
@@ -65,11 +67,15 @@ excess_attenuation(X = playback_est, method = 2)
 {
 Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 
+Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
+
 Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
 
 Marten K, & Marler P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.
 
 Morton ES. (1975). Ecological sources of selection on avian sounds. The American Naturalist, 109(965), 17-34.
+
+Wiley, R., & Richards, D. G. (1978). Physical constraints on acoustic communication in the atmosphere: implications for the evolution of animal vocalizations. Behavioral Ecology and Sociobiology, 3(1), 69-94.
 }
 }
 \seealso{

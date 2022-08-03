@@ -2,7 +2,7 @@
 % Please edit documentation in R/atmospheric_attenuation.R
 \name{atmospheric_attenuation}
 \alias{atmospheric_attenuation}
-\title{Measure atmospheric attenuation and absorption of sound}
+\title{Estimate atmospheric attenuation and absorption of sound}
 \usage{
 atmospheric_attenuation(f, temp, RH, p = 101325, 
 formula = 1, spi = NULL, dist = NULL)
@@ -26,7 +26,7 @@ formula = 1, spi = NULL, dist = NULL)
 Returns atmospheric attenuation (in dB/m) of sound based on supplied parameters. If 'spi' and 'dist' are supplied the function also returns atmospheric absorption (in dB).
 }
 \description{
-\code{atmospheric_attenuation} measures atmospheric attenuation and atmospheric absorption.
+\code{atmospheric_attenuation} estimates atmospheric attenuation and atmospheric absorption.
 }
 \details{
 Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency. The function can applied to formulae based on:
@@ -38,12 +38,6 @@ If 'spi' and 'dist' are supplied the function also returns the atmospheric absor
 }
 \examples{
 {
-# load example data
-data("playback_est")
-
-#' # remove ambient selections
-playback_est <- playback_est[playback_est$signal.type != "ambient", ]
-
 # measure atmospheric attenuation formula 1
 atmospheric_attenuation(f = 20000, temp = 20, RH = 90, p = 88000, formula = 1)
 }

@@ -3,7 +3,7 @@
 #' \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of signals referenced in an extended selection table.
 #' @usage signal_to_noise_ratio(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
 #' noise.ref = "adjacent", type = 1, bp = 'freq.range', 
-#' output = "est", hop.size = 1, wl = NULL)
+#' output = "est", hop.size = 1, wl = NULL, ovlp = 0)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure ambient noise.
@@ -23,12 +23,14 @@
 #'  (\code{20 * log10(rms(env(S))/rms(env(N)))}) as described by Darden (2008).
 #' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
 #' }
-#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.
+#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-#' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations. 
+#' Note that lower values will increase time resolution, which is more important for amplitude ratios calculations. 
+#' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
+#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.
 #' @return Extended selection table similar to input data, but also includes a new column (signal.to.noise.ratio)
 #' with the signal-to-noise ratio values.
 #' @export
@@ -63,7 +65,7 @@
 
 signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
                        noise.ref = "adjacent", type = 1, bp = "freq.range", output = "est", hop.size = 1, 
-                       wl = NULL){
+                       wl = NULL, ovlp = 0){
   
   #get call argument names
   argus <- names(as.list(base::match.call()))
@@ -170,7 +172,7 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
         if (bp == "freq.range") 
           bp <- c(X$bottom.freq[y], X$top.freq[y])
         
-        noise_sig <- seewave::ffilter(noise_sig, f = f, from = bp[1] * 1000, ovlp = 0,
+        noise_sig <- seewave::ffilter(noise_sig, f = f, from = bp[1] * 1000, ovlp = ovlp,
                                    to = bp[2] * 1000, bandpass = TRUE, wl = wl, 
                                    output = "Wave")
       }
@@ -180,13 +182,13 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
       signal <- seewave::cutw(noise_sig, from =  mar1, to = mar2, f = f)
       
       # get envelop for signal
-      sig.env <- seewave::env(signal, f = f, envt = "abs", plot = FALSE)
+      sig.env <- seewave::env(signal, f = f, envt = "hil", plot = FALSE)
       
       # cut ambient noise before signal
       noise1 <- seewave::cutw(noise_sig, from =  0, to = mar1, f = f)
       
       # get envelop for background noise
-      bg.env <- seewave::env(noise1, f = f, envt = "abs", plot = FALSE)
+      bg.env <- seewave::env(noise1, f = f, envt = "hil", plot = FALSE)
     }
     return(list(sig.env = sig.env, bg.env = bg.env))
   }) 
@@ -218,7 +220,7 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
         snr <- 20 * log10(sig_RMS / bg_RMS)
    
      if (type == 2)
-        snr <- 20 * log10((sig_RMS- bg_RMS) / bg_RMS)
+        snr <- 20 * log10((sig_RMS - bg_RMS) / bg_RMS)
     
     return(snr)  
     } else return(NA) # return NA if current row is noise

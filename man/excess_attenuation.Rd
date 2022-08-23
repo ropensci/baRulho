@@ -4,8 +4,8 @@
 \alias{excess_attenuation}
 \title{Measure excess attenuation}
 \usage{
-excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Darden",
- output = "est", hop.size = 1, wl = NULL, ovlp = 70, gain = 0)
+excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Dabelsteen",
+ output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, bp = "freq.range")
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.}
@@ -22,9 +22,10 @@ excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Darden",
 
 \item{type}{Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
 \itemize{
-\item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the microphone gain of the reference and re-recorded signals. This is the default method. If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
-\item \code{Marten}: as described by Marten et al. (1977): Observed attenuation is calculated as the difference in sound pressure level between the reference and the re-recorded signal. Sound pressure level is measured as the root mean square of the amplitude envelope and as such it is not calibrated. Background noise amplitude (measured on the noise right before the signals) is subtracted from the sound pressure level estimates.
-}}
+\item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference signals. This is the default method. 
+\item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference signals. Microphone gain is the microphone gain of the reference and re-recorded signals. 
+}
+If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 
@@ -35,9 +36,11 @@ is \code{NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
-consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Only used for bandpass filtering.}
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering.}
 
 \item{gain}{Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.}
+
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.}
 }
 \value{
 Extended selection table similar to input data, but also includes a new column (excess.attenuation)
@@ -68,6 +71,8 @@ excess_attenuation(X = playback_est, method = 2)
 Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 
 Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
+
+Dabelsteen, T., & Mathevon, N. (2002). Why do songbirds sing intensively at dawn?. Acta ethologica, 4(2), 65-72.
 
 Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
 

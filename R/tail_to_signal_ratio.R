@@ -2,7 +2,7 @@
 #' 
 #' \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of signals referenced in an extended selection table.
 #' @usage tail_to_signal_ratio(X, mar, parallel = 1, pb = TRUE,  type = 1, 
-#' bp = 'freq.range', output = "est", hop.size = 1, wl = NULL)
+#' bp = 'freq.range', output = "est", hop.size = 1, wl = NULL, ovlp = 0)
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure ambient noise.
@@ -19,7 +19,9 @@
 #' }
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-#' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations. 
+#' Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.
+#' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
+#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering. 
 #' @return Extended selection table similar to input data, but also includes a new column (tail.to.signal.ratio)
 #' with the tail-to-signal ratio values.
 #' @export
@@ -53,7 +55,7 @@
 
 tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
                       type = 1, bp = 'freq.range', output = "est", hop.size = 1, 
-                       wl = NULL){
+                       wl = NULL, ovlp = 0){
   
   # get call argument names
   argus <- names(as.list(base::match.call()))
@@ -123,21 +125,21 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
         if (bp == "freq.range") 
           bp <- c(X$bottom.freq[y], X$top.freq[y])
         
-        signal <- seewave::ffilter(signal, f = signal@samp.rate, from = bp[1] * 1000, ovlp = 0,
+        signal <- seewave::ffilter(signal, f = signal@samp.rate, from = bp[1] * 1000, ovlp = ovlp,
                                    to = bp[2] * 1000, bandpass = TRUE, wl = wl, 
                                    output = "Wave")
         
-        tail.wv <- seewave::ffilter(tail.wv, f = tail.wv@samp.rate, from = bp[1] * 1000, ovlp = 0,
+        tail.wv <- seewave::ffilter(tail.wv, f = tail.wv@samp.rate, from = bp[1] * 1000, ovlp = ovlp,
                                    to = bp[2] * 1000, bandpass = TRUE, wl = wl, 
                                    output = "Wave")  
       }
       
       
       # get RMS for signal (or noise if type 2)
-      sig.env <- seewave::env(signal, f = signal@samp.rate, envt = "abs", plot = FALSE)
+      sig.env <- seewave::env(signal, f = signal@samp.rate, envt = "hil", plot = FALSE)
       
       # get RMS for background noise
-      tail.env <- seewave::env(tail.wv, f = f, envt = "abs", plot = FALSE)
+      tail.env <- seewave::env(tail.wv, f = f, envt = "hil", plot = FALSE)
 
     # signal (or noise) RMS
     sig_RMS <- seewave::rms(sig.env)  
@@ -148,7 +150,7 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
     # Calculate tail.to.signal ratio
     str <- tail_RMS / sig_RMS
    
-    return(log10(str))  
+    return(10 * log(str))  
     } else return(NA) # return NA if current row is noise
   })
   

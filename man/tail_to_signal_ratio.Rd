@@ -5,7 +5,7 @@
 \title{Measure reverberations as tail-to-signal ratio}
 \usage{
 tail_to_signal_ratio(X, mar, parallel = 1, pb = TRUE,  type = 1, 
-bp = 'freq.range', output = "est", hop.size = 1, wl = NULL)
+bp = 'freq.range', output = "est", hop.size = 1, wl = NULL, ovlp = 0)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
@@ -32,7 +32,10 @@ the start and end points of selection over which to measure ambient noise.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
+Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
+
+\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.}
 }
 \value{
 Extended selection table similar to input data, but also includes a new column (tail.to.signal.ratio)

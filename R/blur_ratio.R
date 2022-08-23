@@ -100,9 +100,6 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
     stop("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
   
-  
-  
-  
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
@@ -121,7 +118,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (pb) write(file = "", x = "calculating amplitude envelopes (step 2 out of 3):")
   
   # calculate all envelops apply function
-  envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, ssmth = ssmooth, msmth = msmooth)   {
+  envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, ssmth = ssmooth, msmth = msmooth, ov = ovlp)   {
     
     # load clip
     clp <- warbleR::read_wave(X = X, index = y)
@@ -131,11 +128,11 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     
     # bandpass filter
     clp <- seewave::ffilter(clp, from = bp[1] * 1000, 
-                            ovlp = ovlp, to = bp[2] * 1000, bandpass = TRUE, 
+                            ovlp = ov, to = bp[2] * 1000, bandpass = TRUE, 
                             wl = wl, output = "Wave")
     
     # calculate envelope
-    nv <- seewave::env(wave = clp, f = clp@samp.rate, ssmooth = ssmth, msmooth = msmth, plot = FALSE)[, 1]
+    nv <- seewave::env(wave = clp, f = clp@samp.rate, ssmooth = ssmth, msmooth = msmth, plot = FALSE, envt = "hil")[, 1]
     
     return(nv)
   }) 

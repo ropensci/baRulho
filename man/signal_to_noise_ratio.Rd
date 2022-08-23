@@ -6,7 +6,7 @@
 \usage{
 signal_to_noise_ratio(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
 noise.ref = "adjacent", type = 1, bp = 'freq.range', 
-output = "est", hop.size = 1, wl = NULL)
+output = "est", hop.size = 1, wl = NULL, ovlp = 0)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
@@ -35,7 +35,7 @@ to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} 
 \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
 }}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 
@@ -43,7 +43,10 @@ to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} 
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
+Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
+
+\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.}
 }
 \value{
 Extended selection table similar to input data, but also includes a new column (signal.to.noise.ratio)

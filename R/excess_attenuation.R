@@ -1,8 +1,8 @@
 #' Measure excess attenuation
 #' 
 #' \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
-#' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Darden",
-#'  output = "est", hop.size = 1, wl = NULL, ovlp = 70, gain = 0)
+#' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Dabelsteen",
+#'  output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, bp = "freq.range")
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -13,17 +13,19 @@
 #' }
 #' @param type Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
 #' \itemize{
-#' \item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(envelope_correlation). The function \code{\link{envelope_correlation}} is used internally. Microphone gain is the microphone gain of the reference and re-recorded signals. This is the default method. If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
-#' \item \code{Marten}: as described by Marten et al. (1977): Observed attenuation is calculated as the difference in sound pressure level between the reference and the re-recorded signal. Sound pressure level is measured as the root mean square of the amplitude envelope and as such it is not calibrated. Background noise amplitude (measured on the noise right before the signals) is subtracted from the sound pressure level estimates.
+#' \item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference signals. This is the default method. 
+#' \item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference signals. Microphone gain is the microphone gain of the reference and re-recorded signals. 
 #' }
+#' If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is \code{NULL}. If supplied, 'hop.size' is ignored.
 #' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations. 
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Only used for bandpass filtering.
+#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering.
 #' @param gain Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.  
+#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @return Extended selection table similar to input data, but also includes a new column (excess.attenuation)
 #' with the excess attenuation values.
 #' @export
@@ -49,6 +51,8 @@
 #' 
 #' Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song. The Journal of the Acoustical Society of America, 93(4), 2206.
 #' 
+#' Dabelsteen, T., & Mathevon, N. (2002). Why do songbirds sing intensively at dawn?. Acta ethologica, 4(2), 65-72.
+#' 
 #' Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
 #' 
 #' Marten K, & Marler P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.
@@ -59,8 +63,8 @@
 #' }
 #last modification on jul-19-2021 (MAS)
 
-excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Darden", 
-                               output = "est", hop.size = 1, wl = NULL, ovlp = 70, gain = 0){
+excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Dabelsteen", 
+                               output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, bp = "freq.range"){
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
@@ -72,7 +76,6 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
   
   #check output
   if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
-  
   # hopsize  
   if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
   
@@ -104,39 +107,60 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
     # read signal clip
     clp <- warbleR::read_wave(X = X, index = y, from = 0, to = X$end[y])
     
-    # get RMS for signal
-    sigRMS <- seewave::rms(seewave::env(clp, f = clp@samp.rate, envt = "abs", plot = FALSE))
-    sigSPL <- 20 * log10(sigRMS)
+    if (X$signal.type[y] != "ambient")
+      noise_clp <- warbleR::read_wave(X = X, index = y, from = 0, to = X$start[y]- 0.001)
+    
+    # add band-pass frequency filter
+    if (!is.null(bp)) {
+      
+      # filter to bottom and top freq range
+      if (bp == "freq.range") 
+        bp <- c(X$bottom.freq[y], X$top.freq[y])
+      
+      clp <- seewave::ffilter(clp, f = clp@samp.rate, from = bp[1] * 1000, ovlp = ovlp,
+                                 to = bp[2] * 1000, bandpass = TRUE, wl = wl, 
+                                 output = "Wave")
 
+      if (X$signal.type[y] != "ambient")
+        noise_clp <- seewave::ffilter(noise_clp, f = noise_clp@samp.rate, from = bp[1] * 1000, ovlp = ovlp,
+                              to = bp[2] * 1000, bandpass = TRUE, wl = wl, 
+                              output = "Wave")
+      }
+    
+    # get RMS for signal
+    # sigRMS <- seewave::rms(seewave::env(clp, f = clp@samp.rate, envt = "abs", plot = FALSE))
+    sig_env <- mean(seewave::env(clp, f = clp@samp.rate, envt = "hil", plot = FALSE))
+    # sigSPL <- 20 * log10(sigRMS)
+    
     # measure ambient SPL
     # read noise before signal
     if (X$signal.type[y] != "ambient"){
       
-      noise_clp <- warbleR::read_wave(X = X, index = y, from = 0, to = X$start[y]- 0.001)
-      noiseRMS <- seewave::rms(seewave::env(noise_clp, f = noise_clp@samp.rate, envt = "abs", plot = FALSE))
+      noiseRMS <- seewave::rms(seewave::env(noise_clp, f = noise_clp@samp.rate, envt = "hil", plot = FALSE))
       noiseSPL <- 20 * log10(noiseRMS)
       
       # remove noise SPL from signal SPL
-      sigSPL <- lessdB(signal.noise = sigSPL, noise = noiseSPL)
-      } 
-    return(data.frame((X[y, , drop = FALSE]), sigSPL))
+      # sigSPL <- lessdB(signal.noise = sigSPL, noise = noiseSPL)
+    } 
+    
+    return(data.frame((X[y, , drop = FALSE]), sig_env))
   }
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
-  if (type == "Marten"){
+  # if (type == "Marten"){
   if (pb) 
-    write(file = "", x = paste0("Measuring sound pressure level (step 2 out of 3):"))
+    write(file = "", x = paste0("Calculating amplitude envelopes (step 2 out of 3):"))
   
   # run loop apply function
   SPLs <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  spl_FUN(y, wl, ovlp))
   
   # put in a data frame
   X2 <- do.call(rbind, SPLs)
-}  else 
-  X2 <- X
+# }  else 
+  # X2 <- X
   
   # split by signal ID
   sigtype_list <- split(X2, X2$signal.type)
@@ -155,97 +179,44 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
       if (meth == 1){
         
         # extract SPL of signal and background references
-        sig_SPL_REF <- Y$sigSPL[which.min(Y$distance)]
+        sig_env_REF <- Y$sig_env[which.min(Y$distance)]
         dist_REF <- Y$distance[which.min(Y$distance)]
         
-        # type Marten
-        if (tp == "Marten"){
-          # ea <- observed_attenuation - expected_attenuation
-          
-          # term 1: decrease in signal amplitude (RMS) of reference (Ref) vs re-recorded (RR)
-          term1 <- sig_SPL_REF - Y$sigSPL
-          
-          # lost due to spherical spreading
-          term2 <- 20 * log10(Y$distance / dist_REF)
-          
-          ea <- (term2 - term1)
-  
-          # segun chirras
-          ## EA = -20logK - 6dB / dd + dB anadidos
-           
-        } 
+        ks <- Y$sig_env / sig_env_REF
         
-        if (tp == "Darden"){
-          
-          #EA = g - 20 log(d / 10) - 20 log(k)
-          # term1 = g (combined mic gain)
-          term1 <- gain
-          
-          # term2 = -20 log(d / 10)
-          # term2 <-  -20 * log(Y$distance / 10)
-          term2 <- -20 * log10(dist_REF / Y$distance)
-          
-          # term3 = - 20 log(k)
-          # get envelope correlation (k)
-          k <- envelope_correlation(X[X$signal.type == Y$signal.type[1],], output = "data.frame", pb = FALSE)$envelope.correlation
-          term3 <- -20 * log(k)
-          
-          # excess attenuation = (total attenuation - spheric spreading attenuation) / distance
-          ea <- term1 + term2 + term3
-        } 
+        # type Dabelsteen
+        if (tp == "Dabelsteen")
+          ea <-  (-20 * log(ks)) - (6 / (2 * (Y$distance - dist_REF))) + gain
         
+        if (tp == "Darden") #EA = g - 20 log(d / 10) - 20 log(k)
+          ea <- gain -20 * log10(Y$distance / 10) -20 * log(ks)
+
         Y$excess.attenuation <- ea
         Y$excess.attenuation[which.min(Y$distance)] <- NA
       }
       
       # compare to previous distance 
       if (meth == 2){
-        
+    
         # save original order
         Y$org....ord <- 1:nrow(Y)
         
         # sort by distance
         Y <- Y[order(Y$distance), ]
         
+        ks <- Y$sig_env[-1] / Y$sig_env[-nrow(Y)]     
         
-        if (tp == "Marten"){
-          # term 1: decrease in signal amplitude (RMS) of reference (Ref) vs re-recorded (RR)
-          term1 <- Y$sigSPL[-nrow(Y)] - Y$sigSPL[-1] 
-          
-          # lost due to spheric spreading
-          term2 <- 20 * log10(Y$distance[-1] / Y$distance[-nrow(Y)])
-          
-          # ea <- observed_attenuation - expected_attenuation
-          ea <- term2 - term1
-          
-          # add NA for first distance
-          ea <- c(NA, ea)      
-        }
+        if (tp == "Dabelsteen")
+          ea <-  (-20 * log(ks)) - (6 / (2 * (Y$distance[-1] - Y$distance[1]))) + gain
+         
         
         # type Darden
-        if (tp == "Darden"){
-          
-          #EA = g - 20 log(d / 10) - 20 log(k)
-          # term1 = g (combined mic gain)
-          term1 <- gain
-          
-          # term2 = -20 log(ref d / d)
-          term2 <- -20 * log10(Y$distance[-nrow(Y)] / Y$distance[-1])
-
-          # term3 = - 20 log(k)
-          # get envelope correlation (k)
-          k <- envelope_correlation(X[X$signal.type == Y$signal.type[1],], output = "data.frame", pb = FALSE, method = 2)$envelope.correlation
-          
-          # order by distance too
-          k <- k[order(X$distance[X$signal.type == Y$signal.type[1]])]
-          term3 <- -20 * log10(k[-1])
-          
-          # excess attenuation
-          ea <- term1 + term2 + term3
-          
-          # add NA for first distance
+        if (tp == "Darden")    
+          ea <- gain -20 * log10(Y$distance[-1] / 10) -20 * log(ks)
+        
+        # add NA for first distance
           ea <- c(NA, ea)  
-        } 
+        
         
         Y$excess.attenuation <- ea
         # reorder results

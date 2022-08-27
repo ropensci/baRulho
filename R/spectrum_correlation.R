@@ -95,7 +95,7 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
-  if (pb) write(file = "", x = "calculating frequency spectrums (step 2 out of 3):")
+  if (pb) write(file = "", x = "Calculating frequency spectrums (step 2 out of 3):")
   
   # calculate all spectra apply function
   spcs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, wle = wl, ovl = ovlp){
@@ -153,7 +153,7 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
     return(z)
   })
   
-  if (pb) write(file = "", x = "calculating spectrum correlations (step 3 out of 3):")
+  if (pb) write(file = "", x = "Calculating spectrum correlations (step 3 out of 3):")
   
   # calculate all envelops apply function
   X$spectrum.correlation <- pbapply::pbsapply(X = 1:nrow(X), cl = cl, FUN = function(x) {

@@ -95,10 +95,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
-    if (type == "Marten")
-    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):")) else
-      write(file = "", x = paste0("Preparing data for analysis (step 1 out of 2):"))
-  
+    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):")) 
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
   # # function to measure RMS for signal and noise
@@ -127,22 +124,9 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
                               output = "Wave")
       }
     
-    # get RMS for signal
-    # sigRMS <- seewave::rms(seewave::env(clp, f = clp@samp.rate, envt = "abs", plot = FALSE))
+    # get mean envelopes
     sig_env <- mean(seewave::env(clp, f = clp@samp.rate, envt = "hil", plot = FALSE))
-    # sigSPL <- 20 * log10(sigRMS)
-    
-    # measure ambient SPL
-    # read noise before signal
-    if (X$signal.type[y] != "ambient"){
-      
-      noiseRMS <- seewave::rms(seewave::env(noise_clp, f = noise_clp@samp.rate, envt = "hil", plot = FALSE))
-      noiseSPL <- 20 * log10(noiseRMS)
-      
-      # remove noise SPL from signal SPL
-      # sigSPL <- lessdB(signal.noise = sigSPL, noise = noiseSPL)
-    } 
-    
+
     return(data.frame((X[y, , drop = FALSE]), sig_env))
   }
   
@@ -150,7 +134,6 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
-  # if (type == "Marten"){
   if (pb) 
     write(file = "", x = paste0("Calculating amplitude envelopes (step 2 out of 3):"))
   
@@ -159,17 +142,13 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
   
   # put in a data frame
   X2 <- do.call(rbind, SPLs)
-# }  else 
-  # X2 <- X
   
   # split by signal ID
   sigtype_list <- split(X2, X2$signal.type)
   
   if (pb)
-    if (type == "Marten")
-    write(file = "", x = paste0("Calculating excess attenuation (step 3 out of 3):")) else
-      write(file = "", x = paste0("Calculating excess attenuation (step 2 out of 2):"))
-  
+    write(file = "", x = paste0("Calculating excess attenuation (step 3 out of 3):")) 
+
   # calculate excess attenuation
   X_list <- warbleR:::pblapply_wrblr_int(X = sigtype_list, pbar = pb, cl = cl, function(Y, meth = method, tp = type){
     
@@ -178,7 +157,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
       # method 1 compare to closest distance to source
       if (meth == 1){
         
-        # extract SPL of signal and background references
+        # extract mean envelope of signals
         sig_env_REF <- Y$sig_env[which.min(Y$distance)]
         dist_REF <- Y$distance[which.min(Y$distance)]
         
@@ -217,8 +196,8 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
         # add NA for first distance
           ea <- c(NA, ea)  
         
-        
         Y$excess.attenuation <- ea
+        
         # reorder results
         Y <- Y[order(Y$org....ord), ]
         
@@ -246,17 +225,17 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
   
   return(X2)
 }
-
-## internal function to subtract SPL from background noise
-# signal = signal SPL
-# noise = noise SPL
-lessdB <- function(signal.noise, noise){
-  
-  puttative_SPLs <- seq(0.01, signal.noise, by = 0.01)
-  
-  sum_SPLs <-  20 * log10((10^(puttative_SPLs/20)) + (10^(noise/20)))
-  
-  signal_SPL <- puttative_SPLs[which.min(abs(sum_SPLs - signal.noise))]
-
-  return(signal_SPL)
-  }
+# 
+# ## internal function to subtract SPL from background noise
+# # signal = signal SPL
+# # noise = noise SPL
+# lessdB <- function(signal.noise, noise){
+#   
+#   puttative_SPLs <- seq(0.01, signal.noise, by = 0.01)
+#   
+#   sum_SPLs <-  20 * log10((10^(puttative_SPLs/20)) + (10^(noise/20)))
+#   
+#   signal_SPL <- puttative_SPLs[which.min(abs(sum_SPLs - signal.noise))]
+# 
+#   return(signal_SPL)
+#   }

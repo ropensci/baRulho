@@ -90,7 +90,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   if (Sys.info()[1] == "Windows" & parallel > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
-  if (pb) write(file = "", x = "calculating amplitude envelopes (step 2 out of 3):")
+  if (pb) write(file = "", x = "Calculating amplitude envelopes (step 2 out of 3):")
   
   # calculate all envelopes apply function
   envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y)   {
@@ -154,7 +154,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
     }
   
 
-  if (pb) write(file = "", x = "calculating envelope correlations (step 3 out of 3):")
+  if (pb) write(file = "", x = "Calculating envelope correlations (step 3 out of 3):")
   
   # calculate all envelops apply function
   X_list <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(x) {

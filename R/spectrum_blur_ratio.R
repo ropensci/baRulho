@@ -110,7 +110,7 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
   
   # print message
-  if (pb) write(file = "", x = "calculating power spectra (step 2 out of 3):")
+  if (pb) write(file = "", x = "Calculating power spectra (step 2 out of 3):")
   
   # calculate all spectra apply function
   specs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, wl)   {
@@ -295,8 +295,8 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     return(out)
   } 
   
-  if (pb & !img) write(file = "", x = "calculating spectrum blur ratio (step 3 out of 3):")
-  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 3 out of 3):")
+  if (pb & !img) write(file = "", x = "Calculating spectrum blur ratio (step 3 out of 3):")
+  if (pb & img) write(file = "", x = "Calculating blur ratio and producing images (step 3 out of 3):")
     
   # get blur ratio
   # calculate all spectra apply function

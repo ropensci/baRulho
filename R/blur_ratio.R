@@ -30,7 +30,7 @@
 #' with the reference signal and blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would be a list including the data frame just described and a data frame with envelopes (amplitude values) for all signals.
 #' @export
 #' @name blur_ratio
-#' @details Blur ratio measures the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
+#' @details Blur ratio measures the degradation of sound as a change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
 #' @seealso \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
 #' @examples
 #' {
@@ -115,7 +115,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
     
   # print message
-  if (pb) write(file = "", x = "calculating amplitude envelopes (step 2 out of 3):")
+  if (pb) write(file = "", x = "Calculating amplitude envelopes (step 2 out of 3):")
   
   # calculate all envelops apply function
   envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, ssmth = ssmooth, msmth = msmooth, ov = ovlp)   {
@@ -300,8 +300,8 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     return(out)
   } 
   
-  if (pb & !img) write(file = "", x = "calculating blur ratio (step 3 out of 3):")
-  if (pb & img) write(file = "", x = "calculating blur ratio and producing images (step 3 out of 3):")
+  if (pb & !img) write(file = "", x = "Calculating blur ratio (step 3 out of 3):")
+  if (pb & img) write(file = "", x = "Calculating blur ratio and producing images (step 3 out of 3):")
     
   # get blur ratio
   # calculate all envelops apply function

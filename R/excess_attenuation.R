@@ -17,7 +17,7 @@
 #' \item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference signals. Microphone gain is the microphone gain of the reference and re-recorded signals. 
 #' }
 #' If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is \code{NULL}. If supplied, 'hop.size' is ignored.
@@ -98,8 +98,8 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
     write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):")) 
   X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
   
-  # # function to measure RMS for signal and noise
-  spl_FUN <- function(y, wl, ovlp){
+  # function to extract mean envelopes
+  meanenv_FUN <- function(y, wl, ovlp){
     
     # read signal clip
     clp <- warbleR::read_wave(X = X, index = y, from = 0, to = X$end[y])
@@ -138,10 +138,10 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
     write(file = "", x = paste0("Calculating amplitude envelopes (step 2 out of 3):"))
   
   # run loop apply function
-  SPLs <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  spl_FUN(y, wl, ovlp))
+  mean_envs <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  meanenv_FUN(y, wl, ovlp))
   
   # put in a data frame
-  X2 <- do.call(rbind, SPLs)
+  X2 <- do.call(rbind, mean_envs)
   
   # split by signal ID
   sigtype_list <- split(X2, X2$signal.type)
@@ -165,11 +165,11 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
         
         # type Dabelsteen
         if (tp == "Dabelsteen")
-          ea <-  (-20 * log(ks)) - (6 / (2 * (Y$distance - dist_REF))) + gain
+          ea <- (-20 * log(ks)) - (6 / (2 * (Y$distance - dist_REF))) + gain
         
         if (tp == "Darden") #EA = g - 20 log(d / 10) - 20 log(k)
           ea <- gain -20 * log10(Y$distance / 10) -20 * log(ks)
-
+        
         Y$excess.attenuation <- ea
         Y$excess.attenuation[which.min(Y$distance)] <- NA
       }

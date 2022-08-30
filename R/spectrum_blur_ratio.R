@@ -113,17 +113,19 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (pb) write(file = "", x = "Calculating power spectra (step 2 out of 3):")
   
   # calculate all spectra apply function
-  specs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, wl)   {
+  specs.list <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, wl)   {
     
     # load clip
     clp <- warbleR::read_wave(X = X, index = y)
     
     # calculate spectrum
-    seewave::spec(wave = clp, f = clp@samp.rate, plot = FALSE, wl = wl)
+    clp.spc <- seewave::spec(wave = clp, f = clp@samp.rate, plot = FALSE, wl = wl)
+    
+    return(clp.spc)
   }) 
   
   # add sound file selec names to spectra
-  names(specs) <- X$TEMP....sgnl
+  names(specs.list) <- X$TEMP....sgnl
   
   ## function to measure blur ratio
   # y and z are the sound.files+selec names of the signals and reference signal (model)
@@ -138,8 +140,8 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     if (sgnl == rfrnc | any(c(X$signal.type[X$TEMP....sgnl == sgnl], X$signal.type[X$reference == rfrnc]) == "ambient")) out <- NA else {
       
       # extract spectrum for signal and model 
-      sgnl.spc <- specs[[which(names(specs) == sgnl)]]
-      rfrnc.spc <- specs[[which(names(specs) == rfrnc)]]
+      sgnl.spc <- specs.list[[which(names(specs.list) == sgnl)]]
+      rfrnc.spc <- specs.list[[which(names(specs.list) == rfrnc)]]
       
       # make them the same frequency range as reference
       bp <- c(X$bottom.freq[X$TEMP....sgnl == rfrnc], X$top.freq[X$TEMP....sgnl == rfrnc])
@@ -149,9 +151,9 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
       if (bp[2] > ceiling(attr(X, "check.results")$sample.rate[1] / 2) - 1) 
         bp[2] <- ceiling(attr(X, "check.results")$sample.rate[1] / 2) - 1 # force lower than nyquist freq if higher
       
-      # homogenize freq range and remove freq column
-      sgnl.spc <- sgnl.spc[sgnl.spc[, 1] > bp[1] & sgnl.spc[, 2] < bp[2], 2]
-      rfrnc.spc <- rfrnc.spc[rfrnc.spc[, 1] > bp[1] & rfrnc.spc[, 2] < bp[2], 2]
+      # apply bandpass by shrinking freq range and remove freq column
+      sgnl.spc <- sgnl.spc[sgnl.spc[, 1] > bp[1] & sgnl.spc[, 1] < bp[2], 2]
+      rfrnc.spc <- rfrnc.spc[rfrnc.spc[, 1] > bp[1] & rfrnc.spc[, 1] < bp[2], 2]
         
       # applied ssmooth
       if (!is.null(ssmooth)) {
@@ -160,11 +162,11 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
         }
 
       # convert envelopes to PMF (probability mass function)
-      rfrnc.spc <- rfrnc.spc / sum(rfrnc.spc)
-      sgnl.spc <- sgnl.spc / sum(sgnl.spc)
+      rfrnc.pmf <- rfrnc.spc / sum(rfrnc.spc)
+      sgnl.pmf <- sgnl.spc / sum(sgnl.spc)
       
       # get blur ratio as half the sum of absolute differences between spectra PMFs
-      bl.rt <- sum(abs(rfrnc.spc - sgnl.spc)) / 2
+      bl.rt <- sum(abs(rfrnc.pmf - sgnl.pmf)) / 2
       
       # plot
       if (img)
@@ -312,10 +314,10 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (output == "list") 
   {
     
-    spec.dfs <- lapply(1:length(specs), function(y, ssmth = ssmooth){
+    spec.dfs <- lapply(1:length(specs.list), function(y, ssmth = ssmooth){
       
       # extract 1 envelope
-      x <- specs[[y]]
+      x <- specs.list[[y]]
       
       # convert envelopes to PMF (probability mass function)
       x[, 2] <- x[, 2] / sum(x[, 2])       
@@ -325,7 +327,7 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
         x[, 2] <- as.matrix(seewave::sumsmooth( x[, 2], wl = ssmth))
       
       # put in data framme
-      out <- data.frame(signal = names(specs)[y], signal.type = X$signal.type[paste(X$sound.files, X$selec, sep = "-") == names(specs)[y]], distance  = X$distance[paste(X$sound.files, X$selec, sep = "-") == names(specs)[y]], freq = x[, 1], amp = x[, 2])
+      out <- data.frame(signal = names(specs.list)[y], signal.type = X$signal.type[paste(X$sound.files, X$selec, sep = "-") == names(specs.list)[y]], distance  = X$distance[paste(X$sound.files, X$selec, sep = "-") == names(specs.list)[y]], freq = x[, 1], amp = x[, 2])
    
       return(out)
     })

@@ -17,7 +17,7 @@ prep_X_bRlo_int <- function(X, method = 1, parallel = 1, pb = TRUE) {
     # set pb options 
     pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
     
-  # add second column with names of the reference signals to be compare against
+  # add second column with names of the reference signals to be compared against
   X$reference <- pbapply::pbsapply(1:nrow(X), cl = cl, function(x, meth = method){
     
     # extract for single signal and order by distance
@@ -34,11 +34,10 @@ prep_X_bRlo_int <- function(X, method = 1, parallel = 1, pb = TRUE) {
   })
   
   return(X)
-  
 }
 
 
-### functions copied from warbleR
+### functions wrappers over warbleR's functions
 # img_wrlbr_int and were copied from warbleR 1.25
 # author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 

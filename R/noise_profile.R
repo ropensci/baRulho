@@ -69,36 +69,36 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
     
     # is extended sel tab
     if (!warbleR::is_extended_selection_table(X)) 
-      stop("'X' must be and extended selection table") 
+      stop2("'X' must be and extended selection table") 
       
       # check signal.type column 
-      if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
+      if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
     
     # invert selections so gaps become selections instead if noise.ref != ambient
-    if (noise.ref == "custom" & !any(X$signal.type == "ambient")) stop("'noise.ref = custom' but no 'ambient' label found in 'signal.type' column ") 
+    if (noise.ref == "custom" & !any(X$signal.type == "ambient")) stop2("'noise.ref = custom' but no 'ambient' label found in 'signal.type' column ") 
     
     # keep only 'ambient' selections
     if (noise.ref == "custom")  
     X <- X[X$signal.type == "ambient", ]
      
-    if (noise.ref == "adjacent" & is.null(mar)) stop("'mar' must be supplied when 'noise.ref == 'adjacent''")
+    if (noise.ref == "adjacent" & is.null(mar)) stop2("'mar' must be supplied when 'noise.ref == 'adjacent''")
     
   } else # if  no  files and no X get files in path
   if (is.null(files)){
     
     #check path to working directory
     if (is.null(path)) path <- getwd() else 
-      if (!dir.exists(path)) stop("'path' provided does not exist") else
+      if (!dir.exists(path)) stop2("'path' provided does not exist") else
         path <- normalizePath(path)
       
       files <- list.files(path = path, pattern = "\\.wav$", ignore.case = TRUE) 
       
-      if (length(files) == 0) stop("No files found in working directory (alternatively supply 'X')")
+      if (length(files) == 0) stop2("No files found in working directory (alternatively supply 'X')")
       }
   
   # check files
   if (!is.null(files)){
-   if (any(!file.exists(file.path(path, files)))) stop(paste(paste(files[!file.exists(files)], collapse = "/"), "was (were) not found"))
+   if (any(!file.exists(file.path(path, files)))) stop2(paste(paste(files[!file.exists(files)], collapse = "/"), "was (were) not found"))
   
   # created selection table from sound files
   X <- warbleR::selection_table(whole.recs = TRUE, pb = FALSE, path = path)
@@ -114,12 +114,12 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
     }
   
   # if parallel is not numeric
-  if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
+  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
   
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))

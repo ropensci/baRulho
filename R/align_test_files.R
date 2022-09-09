@@ -84,7 +84,7 @@
 align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, marker = "start", ...){
   
   #check output
-  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be either 'est' or 'data.frame'")  
+  if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be either 'est' or 'data.frame'")  
   
   # align each file
  out <- lapply(1:nrow(Y), function(x) {

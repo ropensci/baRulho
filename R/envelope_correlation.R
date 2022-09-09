@@ -54,17 +54,17 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
-    stop("'X' must be and extended selection table")
+    stop2("'X' must be and extended selection table")
   
   # If parallel is not numeric
-  if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
+  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
   
   #check output
-  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
+  if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be 'est' or 'data.frame'")  
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -74,11 +74,11 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   if (!(wl %% 2) == 0) wl <- wl + 1
   
   # If method is not numeric
-  if (!is.character(cor.method)) stop("'cor.method' must be a character vector of length 1") 
-  if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop("'method' must be either  'pearson', 'kendall' or 'spearman'")
+  if (!is.character(cor.method)) stop2("'cor.method' must be a character vector of length 1") 
+  if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop2("'method' must be either  'pearson', 'kendall' or 'spearman'")
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
@@ -164,11 +164,16 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
     
     }) 
   
-   X <- do.call(rbind, X_list)
+   X2 <- do.call(rbind, X_list)
   
   # remove temporal columns
-  X$TEMP....sgnl <- NULL
+  X2$TEMP....sgnl <- NULL
   
+  # fix est
+  if (output == "est")
+    X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
+  
+
   # return data frame
   if (output == "data.frame") X <- as.data.frame(X)
   

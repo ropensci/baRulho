@@ -62,17 +62,17 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
-    stop("'X' must be and extended selection table")
+    stop2("'X' must be and extended selection table")
   
   # If parallel is not numeric
-  if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
+  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
   
   #check output
-  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
+  if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -82,7 +82,7 @@ tail_to_signal_ratio <- function(X, mar, parallel = 1, pb = TRUE,
   if (!(wl %% 2) == 0) wl <- wl + 1
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
   
   
   

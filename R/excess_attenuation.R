@@ -68,16 +68,16 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
-    stop("'X' must be and extended selection table")
+    stop2("'X' must be and extended selection table")
   
   # If parallel is not numeric
-  if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
+  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
   
   #check output
-  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
+  if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be 'est' or 'data.frame'")  
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -87,11 +87,11 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
   if (!(wl %% 2) == 0) wl <- wl + 1
   
   # If method is not numeric
-  if (!is.numeric(method)) stop("'method' must be a numeric vector of length 1") 
-  if (!any(method %in% 1:2)) stop("'method' must be either 1 or 2")
+  if (!is.numeric(method)) stop2("'method' must be a numeric vector of length 1") 
+  if (!any(method %in% 1:2)) stop2("'method' must be either 1 or 2")
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
@@ -217,7 +217,7 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
   rownames(X2) <-  rownames(X)
   
   # remove temporal column
-  X2$sigRMS <- X2$TEMP....sgnl <- NULL
+  X2$sigRMS <- X2$TEMP....sgnl <- X2$sig_env <- NULL
   
   # fix est
   if (output == "est")

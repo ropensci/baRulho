@@ -34,9 +34,9 @@
 ### NOT SURE IF ABSORPTION WORKS 
 atmospheric_attenuation <- function(f, temp, RH, p = 101325, formula = 1, spi = NULL, dist = NULL){
   
-  if (!is.null(spi) & is.null(dist)) stop("'dist' must also be supplied to calculate atmospheric absorption")
+  if (!is.null(spi) & is.null(dist)) stop2("'dist' must also be supplied to calculate atmospheric absorption")
 
-  if (is.null(spi) & !is.null(dist)) stop("'spi' must also be supplied to calculate atmospheric absorption")
+  if (is.null(spi) & !is.null(dist)) stop2("'spi' must also be supplied to calculate atmospheric absorption")
   
   Ta <- temp + 273.15      # convert to Kelvin
   Tr <- Ta / 293.15    # convert to relative air temperature (re 20 deg C)

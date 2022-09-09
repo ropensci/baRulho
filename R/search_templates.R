@@ -86,7 +86,7 @@
 
 search_templates <- function(X, template.rows, test.files, path = NULL, pb = TRUE, ...){
   
- if (length(template.rows) != 1 & length(test.files) != length(template.rows)) stop("'template.rows' must be 1 or the same length than 'test.files'")
+ if (length(template.rows) != 1 & length(test.files) != length(template.rows)) stop2("'template.rows' must be 1 or the same length than 'test.files'")
   
   # create a matrix that contains the selection/files to be cross-correlated
   if (length(template.rows) == 1) # in only 1 template, repeate it
@@ -99,7 +99,7 @@ search_templates <- function(X, template.rows, test.files, path = NULL, pb = TRU
   wi <- wi[wi$sound.files %in% unique(c(X$sound.files, test.files)), ]
   
   if (length(unique(wi$sample.rate)) > 1) 
-    stop("Not all sound files share the same sampling rate (check wave properties with warbleR::wav_info())")
+    stop2("Not all sound files share the same sampling rate (check wave properties with warbleR::wav_info())")
   
   # steps for warbleR message
   if (pb){

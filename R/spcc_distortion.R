@@ -51,21 +51,21 @@ spcc_distortion <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method =
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
-    stop("'X' must be and extended selection table")
+    stop2("'X' must be and extended selection table")
   
   # If parallel is not numeric
-  if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
+  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
 
   # must have the same sampling rate
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
-    stop("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
+    stop2("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
 
   #check output
-  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
+  if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -75,12 +75,12 @@ spcc_distortion <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method =
   if (!(wl %% 2) == 0) wl <- wl + 1
   
   # If method is not numeric
-  if (!is.character(cor.method)) stop("'cor.method' must be a character vector of length 1")
+  if (!is.character(cor.method)) stop2("'cor.method' must be a character vector of length 1")
   
-  if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop("'method' must be either  'pearson', 'kendall' or 'spearman'")
+  if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop2("'method' must be either  'pearson', 'kendall' or 'spearman'")
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
   
   #remove ambient if any from signal types
   sig.types <- setdiff(unique(X$signal.type), "ambient")

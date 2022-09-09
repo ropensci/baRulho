@@ -75,17 +75,17 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   
   # is extended sel tab
   if (!warbleR::is_extended_selection_table(X)) 
-    stop("'X' must be and extended selection table")
+    stop2("'X' must be and extended selection table")
   
   # If parallel is not numeric
-  if (!is.numeric(parallel)) stop("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop("'parallel' should be a positive integer")
+  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
+  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
   
   #check output
-  if (!any(output %in% c("est", "data.frame"))) stop("'output' must be 'est' or 'data.frame'")  
+  if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be 'est' or 'data.frame'")  
   
   # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop("'hop.size' must be a positive number") 
+  if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
@@ -95,18 +95,18 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   if (!(wl %% 2) == 0) wl <- wl + 1
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
   
   #check noise.ref
-  if (!any(noise.ref %in% c("custom", "adjacent"))) stop("'noise.ref' must be either 'custom' or 'adjacent'")  
+  if (!any(noise.ref %in% c("custom", "adjacent"))) stop2("'noise.ref' must be either 'custom' or 'adjacent'")  
   
   # check if 'ambient' is found in  signal.type column 
-  if (!any(X$signal.type %in% 'ambient') & noise.ref == "custom") stop("'ambient' selections must be contained in 'X' (and label in 'signal.type' column) when 'noise.ref == TRUE'")
+  if (!any(X$signal.type %in% 'ambient') & noise.ref == "custom") stop2("'ambient' selections must be contained in 'X' (and label in 'signal.type' column) when 'noise.ref == TRUE'")
   
   # check if 'ambient' is found in  signal.type column 
-  if (!any(X$signal.type %in% 'ambient') & noise.ref == "custom") stop("'ambient' selections must be contained in 'X' (and label in 'signal.type' column) when 'noise.ref == TRUE'")
+  if (!any(X$signal.type %in% 'ambient') & noise.ref == "custom") stop2("'ambient' selections must be contained in 'X' (and label in 'signal.type' column) when 'noise.ref == TRUE'")
   
-  if (noise.ref == "custom" & any(sapply(unique(X$sound.files), function(x) sum(X$sound.files == x & X$signal.type == "ambient")) == 0)) stop("Each sound file referenced in 'X' must have at least 1 'ambient' selection when 'noise.ref == custom'")
+  if (noise.ref == "custom" & any(sapply(unique(X$sound.files), function(x) sum(X$sound.files == x & X$signal.type == "ambient")) == 0)) stop2("Each sound file referenced in 'X' must have at least 1 'ambient' selection when 'noise.ref == custom'")
 
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & parallel > 1)
@@ -146,7 +146,7 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
       f <- r$sample.rate
       
       # set margin to half of signal duration
-      if (eq.dur) mar <- (X$end[y] - X$start[y]) else if(all(argus != "mar")) stop("'mar' must be provided when 'eq.dur = FALSE'")
+      if (eq.dur) mar <- (X$end[y] - X$start[y]) else if(all(argus != "mar")) stop2("'mar' must be provided when 'eq.dur = FALSE'")
       
       #reset time coordinates of signals if lower than 0 o higher than duration
       stn <- X$start[y] - mar

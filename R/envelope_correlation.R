@@ -175,7 +175,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   
 
   # return data frame
-  if (output == "data.frame") X <- as.data.frame(X)
+  if (output == "data.frame") X2 <- as.data.frame(X2)
   
-  return(X)
+  return(X2)
 }

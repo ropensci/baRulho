@@ -41,7 +41,7 @@ library(knitr)
 opts_chunk$set(tidy = TRUE, fig.align = "center", message = FALSE, warning = FALSE)
 
 source("~/Dropbox/R_package_testing/baRulho/R/spectrum_blur_ratio.R")
-source("~/Dropbox/R_package_testing/baRulho/R/prep_X_bRlo_int.R")
+source("~/Dropbox/R_package_testing/baRulho/R/internal_functions.R")
 source("~/Dropbox/R_package_testing/baRulho/R/spectrum_correlation.R")
 source("~/Dropbox/R_package_testing/baRulho/R/spcc_distortion.R")
 
@@ -68,6 +68,8 @@ install.packages("baRulho")
 library(baRulho)
 
 ```
+
+&nbsp;
 
 To install the latest developmental version from [github](https://github.com/) you will need the R package [remotes](https://cran.r-project.org/package=remote):
 
@@ -98,6 +100,8 @@ td <- tempdir()
 
 ```
 
+&nbsp;
+
 For this vignette we will also need a few more packages:
 
 ```{r load packages, eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
@@ -108,6 +112,7 @@ library(viridis)
 
 ```
 
+&nbsp;
 
 ### Inputting acoustic data and annotations
 
@@ -445,6 +450,7 @@ To find the location of the start marker on these (simulated) re-recorded sound 
 
 found.starts <- search_templates(X = master.sf, template.rows = which(master.sf$orig.sound.file == "start_marker"), test.files = c("example_test1.wav", "example_test2.wav"), path = td); pks
 
+found.starts
 ```
 
 ```{r, eval = FALSE, echo=FALSE}
@@ -509,9 +515,9 @@ By default the function returns an `extended_selection_table`  created 'by.song'
 
 ```{r, eval = FALSE}
 
-is_extended_selection_table(alg.est)
+is_extended_selection_table(alg.tests)
 
-alg.est
+alg.tests
 ```
 
 ```{r, eval = TRUE, echo = FALSE}
@@ -932,7 +938,7 @@ kbl
 
 ### Blur ratio
  
-Blur ratio quantifies the degradation of sound as a function of the change in signal energy in the time domain as described by Dabelsteen et al (1993). Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. Low values indicate low degradation of signals.  The function `blur_ratio()` measures the blur ratio of signals in which a reference playback has been re-recorded at different distances. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
+Blur ratio quantifies the degradation of sound as a function of the distortion of the amplitude envelope (time domain) while excluding changes due to energy attenuation. This measure was first described by Dabelsteen et al. (1993). Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. Low values indicate low degradation of signals.  The function `blur_ratio()` measures the blur ratio of signals in which a reference playback has been re-recorded at different distances. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
 Blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}
@@ -947,7 +953,7 @@ is_extended_selection_table(br)
 ```{r, eval = TRUE, echo = FALSE}
 
 # run blur ratio
-br <- blur_ratio(playback_est, method = 1, img = FALSE)
+br <- blur_ratio(playback_est, method = 1, img = FALSE, pb = FALSE)
 
 # check output class
 is_extended_selection_table(br)
@@ -988,7 +994,7 @@ br <- blur_ratio(playback_est, method = 1, img = TRUE, ssmooth = 300, dest.path 
 
 ```{r, eval = FALSE, echo = FALSE}
 
-sbr <- blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tempdir())
+sbr <- blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tempdir(), pb = FALSE)
 
 # make the gif here
 # https://ezgif.com
@@ -1007,7 +1013,7 @@ The function can also return the amplitude spectrum contours when the argument `
 
 ```{r}
 
-envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 300, img = FALSE)$envelopes
+envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 300, img = FALSE, pb = FALSE)$envelopes
 
 envs$distance <- as.factor(envs$distance)
 
@@ -1023,7 +1029,7 @@ Note than the `smooth` argument could change envelope shapes and related measure
 
 ```{r}
 
-envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 1000, img = FALSE)$envelopes
+envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 1000, img = FALSE, pb = FALSE)$envelopes
 
 envs$distance <- as.factor(envs$distance)
 
@@ -1056,7 +1062,7 @@ is_extended_selection_table(sbr)
 ```{r, eval = TRUE, echo = FALSE}
 
 # run Spectrum blur ratio
-sbr <- spectrum_blur_ratio(playback_est, method = 1)
+sbr <- spectrum_blur_ratio(playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(sbr)
@@ -1146,7 +1152,7 @@ With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude 
 ```{r, eval = TRUE}
 
 # run  envelope correlation
-ea <- excess_attenuation(playback_est, method = 1)
+ea <- excess_attenuation(playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(ea)
@@ -1186,7 +1192,7 @@ Amplitude envelope correlation measures the similarity of two signals in the tim
 ```{r, eval = TRUE}
 
 # run  envelope correlation
-ec <- envelope_correlation(playback_est, method = 1)
+ec <- envelope_correlation(playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(ec)
@@ -1226,7 +1232,7 @@ Spectrum correlation measures the similarity of two signals in the frequency dom
 ```{r, eval = TRUE}
 
 # run spectrum correlation
-sc <- spectrum_correlation(playback_est, method = 1)
+sc <- spectrum_correlation(playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(sc)
@@ -1346,7 +1352,7 @@ Finally, the function `spcc_distortion()` measures spectrogram cross-correlation
 ```{r, eval = TRUE}
 
 # run spcc
-spd <- spcc_distortion(X = playback_est, method = 1, wl = 512)
+spd <- spcc_distortion(X = playback_est, method = 1, wl = 512, pb = FALSE)
 
 # check output class
 is_extended_selection_table(spd)
@@ -1387,7 +1393,6 @@ The function `noise_profile()` allows to estimate the frequency spectrum of ambi
 # run noise profile
 np <- noise_profile(X = playback_est[playback_est$distance > 5, ], mar = 0.05)
 
-str(np)
 ```
 
 The output is a data frame with amplitude values for the frequency bins for each wave object in the extended selection table:

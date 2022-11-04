@@ -126,7 +126,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>tail_to_signal_ratio</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>mar</span>, parallel <span class='op'>=</span> <span class='fl'>1</span>, pb <span class='op'>=</span> <span class='cn'>TRUE</span>,  type <span class='op'>=</span> <span class='fl'>1</span>, 
-bp <span class='op'>=</span> <span class='st'>'freq.range'</span>, output <span class='op'>=</span> <span class='st'>"est"</span>, hop.size <span class='op'>=</span> <span class='fl'>1</span>, wl <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+bp <span class='op'>=</span> <span class='st'>'freq.range'</span>, output <span class='op'>=</span> <span class='st'>"est"</span>, hop.size <span class='op'>=</span> <span class='fl'>1</span>, wl <span class='op'>=</span> <span class='cn'>NULL</span>, ovlp <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +172,12 @@ the start and end points of selection over which to measure ambient noise.</p></
       <th>wl</th>
       <td><p>A numeric vector of length 1 specifying the window length of the spectrogram, default 
 is NULL. Ignored if <code>bp = NULL</code>. If supplied, 'hop.size' is ignored.
-Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.</p></td>
+Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.</p></td>
+    </tr>
+    <tr>
+      <th>ovlp</th>
+      <td><p>Numeric vector of length 1 specifying the percent overlap between two 
+consecutive windows, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro</a></code>. Default is 0. Only used for bandpass filtering.</p></td>
     </tr>
     </table>
 

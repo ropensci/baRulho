@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate atmospheric attenuation and absorption of sound — atmospheric_attenuation • baRulho</title>
+<title>Estimate atmospheric attenuation — atmospheric_attenuation • baRulho</title>
 
 
 <!-- jquery -->
@@ -41,7 +41,7 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Estimate atmospheric attenuation and absorption of sound — atmospheric_attenuation" />
+<meta property="og:title" content="Estimate atmospheric attenuation — atmospheric_attenuation" />
 <meta property="og:description" content="atmospheric_attenuation estimates atmospheric attenuation and atmospheric absorption." />
 
 
@@ -116,7 +116,7 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate atmospheric attenuation and absorption of sound</h1>
+    <h1>Estimate atmospheric attenuation</h1>
     <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/atmospheric_attenuation.R'><code>R/atmospheric_attenuation.R</code></a></small>
     <div class="hidden name"><code>atmospheric_attenuation.Rd</code></div>
     </div>
@@ -125,8 +125,7 @@
     <p><code>atmospheric_attenuation</code> estimates atmospheric attenuation and atmospheric absorption.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>atmospheric_attenuation</span><span class='op'>(</span><span class='va'>f</span>, <span class='va'>temp</span>, <span class='va'>RH</span>, p <span class='op'>=</span> <span class='fl'>101325</span>, 
-formula <span class='op'>=</span> <span class='fl'>1</span>, spi <span class='op'>=</span> <span class='cn'>NULL</span>, dist <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>atmospheric_attenuation</span><span class='op'>(</span><span class='va'>f</span>, <span class='va'>temp</span>, <span class='va'>RH</span>, p <span class='op'>=</span> <span class='fl'>101325</span>, formula <span class='op'>=</span> <span class='cn'>NULL</span>, spi <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>dist</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,27 +148,24 @@ formula <span class='op'>=</span> <span class='fl'>1</span>, spi <span class='op
     </tr>
     <tr>
       <th>formula</th>
-      <td><p>1 = Bazley 1976, 2 = Rossing 2007 (p. 116, see details).</p></td>
+      <td><p>DEPRECATED.</p></td>
     </tr>
     <tr>
       <th>spi</th>
-      <td><p>numeric vector of length 1 with the initial sound pressure in Pa. Required for calculating atmospheric absorption. Default is <code>NULL</code>.</p></td>
+      <td><p>numeric vector of length 1 with the initial sound pressure in Pa. Default is <code>NULL</code>. DEPRECATED.</p></td>
     </tr>
     <tr>
       <th>dist</th>
-      <td><p>numeric vector of length 1 with distance (m) over which a sound propagates. Required for calculating atmospheric absorption. Default is <code>NULL</code>.</p></td>
+      <td><p>numeric vector of length 1 with distance (m) over which a sound propagates.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Returns atmospheric attenuation (in dB/m) of sound based on supplied parameters. If 'spi' and 'dist' are supplied the function also returns atmospheric absorption (in dB).</p>
+    <p>Returns atmospheric attenuation (in dB) of sound based on supplied parameters.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency. The function can applied to formulae based on:</p><ul>
-<li><p><code>1</code>: default. As used by Bazley (1976), Sound absorption in air at frequencies up to 100 kHz. NPL acoustics report Ac 74.</p></li>
-<li><p><code>2</code>: as used by Rossing (2007), Handbook of Acoustics, Springer.</p></li>
-</ul><p>If 'spi' and 'dist' are supplied the function also returns the atmospheric absorption (in dB).</p>
+    <p>Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2</p>
@@ -180,11 +176,9 @@ formula <span class='op'>=</span> <span class='fl'>1</span>, spi <span class='op
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='op'>{</span>
 <span class='co'># measure atmospheric attenuation formula 1</span>
-<span class='fu'>atmospheric_attenuation</span><span class='op'>(</span>f <span class='op'>=</span> <span class='fl'>20000</span>, temp <span class='op'>=</span> <span class='fl'>20</span>, RH <span class='op'>=</span> <span class='fl'>90</span>, p <span class='op'>=</span> <span class='fl'>88000</span>, formula <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+<span class='fu'>atmospheric_attenuation</span><span class='op'>(</span>f <span class='op'>=</span> <span class='fl'>20000</span>, temp <span class='op'>=</span> <span class='fl'>20</span>, RH <span class='op'>=</span> <span class='fl'>90</span>, p <span class='op'>=</span> <span class='fl'>88000</span>, dist <span class='op'>=</span> <span class='fl'>30</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; $atmospheric.attenuation
-#&gt; [1] 0.3267505
-#&gt; </div><div class='input'>
+</div><div class='output co'>#&gt; [1] 10.57402</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

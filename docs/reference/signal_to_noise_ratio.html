@@ -127,7 +127,7 @@
 
     <pre class="usage"><span class='fu'>signal_to_noise_ratio</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>mar</span>, parallel <span class='op'>=</span> <span class='fl'>1</span>, pb <span class='op'>=</span> <span class='cn'>TRUE</span>, eq.dur <span class='op'>=</span> <span class='cn'>FALSE</span>,
 noise.ref <span class='op'>=</span> <span class='st'>"adjacent"</span>, type <span class='op'>=</span> <span class='fl'>1</span>, bp <span class='op'>=</span> <span class='st'>'freq.range'</span>, 
-output <span class='op'>=</span> <span class='st'>"est"</span>, hop.size <span class='op'>=</span> <span class='fl'>1</span>, wl <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+output <span class='op'>=</span> <span class='st'>"est"</span>, hop.size <span class='op'>=</span> <span class='fl'>1</span>, wl <span class='op'>=</span> <span class='cn'>NULL</span>, ovlp <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +172,7 @@ to that of the signal (if <code>TRUE</code>. Default is <code>FALSE</code>). If 
     </tr>
     <tr>
       <th>bp</th>
-      <td><p>Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), which will make the function use the 'bottom.freq' and 'top.freq' as the bandpass range.</p></td>
+      <td><p>Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.</p></td>
     </tr>
     <tr>
       <th>output</th>
@@ -186,7 +186,12 @@ to that of the signal (if <code>TRUE</code>. Default is <code>FALSE</code>). If 
       <th>wl</th>
       <td><p>A numeric vector of length 1 specifying the window length of the spectrogram, default 
 is NULL. Ignored if <code>bp = NULL</code>. If supplied, 'hop.size' is ignored.
-Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.</p></td>
+Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.</p></td>
+    </tr>
+    <tr>
+      <th>ovlp</th>
+      <td><p>Numeric vector of length 1 specifying the percent overlap between two 
+consecutive windows, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro</a></code>. Default is 0. Only used for bandpass filtering.</p></td>
     </tr>
     </table>
 
@@ -225,8 +230,7 @@ with the signal-to-noise ratio values.</p>
 </div><div class='output co'>#&gt;   |                                                  | 0 % ~calculating    |++                                                | 4 % ~00s            |++++                                              | 7 % ~00s            |++++++                                            | 11% ~00s            |++++++++                                          | 14% ~00s            |+++++++++                                         | 18% ~00s            |+++++++++++                                       | 21% ~00s            |+++++++++++++                                     | 25% ~00s            |+++++++++++++++                                   | 29% ~00s            |+++++++++++++++++                                 | 32% ~00s            |++++++++++++++++++                                | 36% ~00s            |++++++++++++++++++++                              | 39% ~00s            |++++++++++++++++++++++                            | 43% ~00s            |++++++++++++++++++++++++                          | 46% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |+++++++++++++++++++++++++++                       | 54% ~00s            |+++++++++++++++++++++++++++++                     | 57% ~00s            |+++++++++++++++++++++++++++++++                   | 61% ~00s            |+++++++++++++++++++++++++++++++++                 | 64% ~00s            |++++++++++++++++++++++++++++++++++                | 68% ~00s            |++++++++++++++++++++++++++++++++++++              | 71% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 79% ~00s            |++++++++++++++++++++++++++++++++++++++++++        | 82% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 86% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 89% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++   | 93% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++++++ | 96% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
 #&gt;   |                                                  | 0 % ~calculating    |+++                                               | 5 % ~01s            |+++++                                             | 10% ~01s            |++++++++                                          | 15% ~01s            |++++++++++                                        | 20% ~01s            |+++++++++++++                                     | 25% ~01s            |+++++++++++++++                                   | 30% ~01s            |++++++++++++++++++                                | 35% ~01s            |++++++++++++++++++++                              | 40% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++                    | 60% ~00s            |+++++++++++++++++++++++++++++++++                 | 65% ~00s            |+++++++++++++++++++++++++++++++++++               | 70% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++          | 80% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 85% ~00s            |+++++++++++++++++++++++++++++++++++++++++++++     | 90% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++  | 95% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=01s  </div><div class='output co'>#&gt; <span style='color: #000000;'>Object of class </span><span style='color: #000000; font-weight: bold;'>'extended_selection_table' 
 #&gt; </span><span style='color: #555555;'>* The output of the following call: 
-#&gt; </span><span style='color: #555555; font-style: italic;'>`[.extended_selection_table`(X = playback_est, i = playback_est$signal.type !=  
-#&gt; </span> <span style='color: #555555; font-style: italic;'>"ambient") 
+#&gt; </span><span style='color: #555555; font-style: italic;'>`[.extended_selection_table`(X = playback_est, i = playback_est$signal.type !=  "ambient") 
 #&gt; </span><span style='color: #555555; font-weight: bold;'>
 #&gt; Contains:</span><span style='color: #555555;'> 
 #&gt; *  A selection table data frame with 20 row(s) and 9 columns: 

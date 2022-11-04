@@ -61,8 +61,8 @@ spectrum_blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                        dest.path = NULL){
   
   # is extended sel tab
-  if (!warbleR::is_extended_selection_table(X)) 
-    stop2("'X' must be and extended selection table")
+  # if (!warbleR::is_extended_selection_table(X)) 
+    # stop2("'X' must be and extended selection table")
   
   # set dest.path if not provided
   if (is.null(dest.path)) 

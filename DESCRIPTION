@@ -19,9 +19,10 @@ Suggests:
     knitr,
     kableExtra,
     png,
-    testthat
+    testthat,
+    Sim.DiffProc
 VignetteBuilder: knitr
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Repository: CRANs
 Language: en-US
 Authors@R: person("Marcelo", "Araya-Salas", role = c("aut", "cre"), email = "marcelo.araya@ucr.ac.cr")

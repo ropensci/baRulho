@@ -1,3 +1,8 @@
+# *baRulho 1.0.8*
+
+* New function `attenuation()`
+* Data frames and selection tables can be used as input data
+
 # *baRulho 1.0.7*
 
 * `spectral_correlation()`, `spcc()` and `spectral_blur_ratio()` renamed to `spectrum_correlation()`, `spcc_distortion()` and `spectrum_blur_ratio()` respectively

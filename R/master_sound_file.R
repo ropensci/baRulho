@@ -52,8 +52,8 @@
 master_sound_file <- function(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1, gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14){
   
   # is extended sel tab
-  if (!warbleR::is_extended_selection_table(X)) 
-    stop2("'X' must be and extended selection table")
+  # if (!warbleR::is_extended_selection_table(X)) 
+    # stop2("'X' must be and extended selection table")
 
   # must have the same sampling rate
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 

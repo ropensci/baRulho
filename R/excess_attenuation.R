@@ -67,8 +67,8 @@ excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "D
                                output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, bp = "freq.range"){
   
   # is extended sel tab
-  if (!warbleR::is_extended_selection_table(X)) 
-    stop2("'X' must be and extended selection table")
+  # if (!warbleR::is_extended_selection_table(X)) 
+    # stop2("'X' must be and extended selection table")
   
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 

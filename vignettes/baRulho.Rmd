@@ -54,7 +54,7 @@ The main features of the package are:
 
  - The use of loops to apply tasks through acoustic signals referenced in a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR))
  - The production of image files with graphic representations of sound in time and/or frequency that let users verify acoustic analyses 
- - The use of extended selection tables (sensu [warbleR](https://cran.r-project.org/package=warbleR)) as the object format to input acoustic data and annotations (except for `atmospheric_attenuation()`) and to output results 
+ - The use of annotation tables as the object format to input acoustic data and annotations and to output results 
  - The use of parallelization to distribute tasks among several cores to improve computational efficiency
 
 The package can be install/load from CRAN as follows:
@@ -116,7 +116,7 @@ library(viridis)
 
 ### Inputting acoustic data and annotations
 
-The package requires the data to be input as extended selection tables. An extended selection table is an object class in R that contains both the annotations (locations of signals in time and frequency) and the corresponding acoustic data as wave objects. Therefore, these are **self-contained objects** since the original sound files are no longer needed to perform acoustic analyses. These objects are created by the `selection_table()` function from [warbleR](https://cran.r-project.org/package=warbleR). Take a look at the [intro to warbleR vignette](https://cran.r-project.org/package=warbleR/vignettes/Intro_to_warbleR.html) for more details.
+The package requires the annotation data to be input as a data frame, selection table or extended selection tables. If a data frame is used it must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique annotation identifier (within a sound file), 3) "start": start time and 4) "end": end time of annotation, 5) 'top.freq': top frequency and  6) 'bottom.freq' and bottom frequency of the annotation. A selection table is an objects class from the package [warbleR](https://cran.r-project.org/package=warbleR) that contain annotation data (i.e. time-frequency position of sounds in sound files) that has been previously double-checked. An extended selection table is an object class (also from [warbleR](https://cran.r-project.org/package=warbleR)) that contains both the annotations and the corresponding acoustic data as wave objects. Therefore, extended selection tables are **self-contained objects** since the original sound files are no longer needed to perform acoustic analyses. These objects are created by the `selection_table()` function from [warbleR](https://cran.r-project.org/package=warbleR). Take a look at the [intro to warbleR vignette](https://cran.r-project.org/package=warbleR/vignettes/Intro_to_warbleR.html) for more details.
 
 <div class="alert alert-info">
 
@@ -307,7 +307,7 @@ c("2020-01-09_17:00:50.wav")
 
 # Create master sound file for playback
 
-The function `master_sound_file()` creates a master sound file (as you probably guessed) for playback experiments. The function takes wave objects from an extended selection table containing the model signals and concatenates them in a single sound file (with some silence in between signals which length can be modified). `master_sound_file()` adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals, which streamlines quantification of acoustic degradation. 
+The function `master_sound_file()` creates a master sound file (as you probably guessed) for playback experiments. The function takes wave objects from an data frame or (extended) selection table containing the model signals and concatenates them in a single sound file (with some silence in between signals which length can be modified). `master_sound_file()` adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals, which streamlines quantification of acoustic degradation. 
 The following example shows how to create a master sound file using the synthetic sounds generated above. For the synthetic sounds we need to add a little space between the top and bottom frequency because `sim_songs()` make those values exactly the same for pure tones: 
 
 ```{r, eval = FALSE, echo = TRUE}
@@ -875,7 +875,7 @@ Most [baRulho](https://marce10.github.io/baRulho/) functions are design to quant
 
 ## Required data structure
 
-As mentioned above the data must be in `extended_selection_table` format. The data should also contain some additional information. [baRulho](https://marce10.github.io/baRulho/) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
+The input data should contain some additional information. [baRulho](https://marce10.github.io/baRulho/) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
 s
 ```{r,eval=FALSE}
 
@@ -938,7 +938,7 @@ kbl
 
 ### Blur ratio
  
-Blur ratio quantifies the degradation of sound as a function of the distortion of the amplitude envelope (time domain) while excluding changes due to energy attenuation. This measure was first described by Dabelsteen et al. (1993). Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. Low values indicate low degradation of signals.  The function `blur_ratio()` measures the blur ratio of signals in which a reference playback has been re-recorded at different distances. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
+Blur ratio quantifies the degradation of sound as a function of the distortion of the amplitude envelope (time domain) while excluding changes due to energy attenuation. This measure was first described by Dabelsteen et al. (1993). Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference signal and the re-recorded signal. Low values indicate low degradation of signals.  The function `blur_ratio()` measures the blur ratio of signals in which a reference playback has been re-recorded at different distances. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). All sound files (or wave objects in the extended selection table) must have the same sampling rate so the length of envelopes is comparable.
 Blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}

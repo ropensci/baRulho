@@ -70,12 +70,9 @@ signal_to_noise_ratio <- function(X, mar, parallel = 1, pb = TRUE, eq.dur = FALS
   #get call argument names
   argus <- names(as.list(base::match.call()))
   
-  
-  # 
-  
   # is extended sel tab
-  if (!warbleR::is_extended_selection_table(X)) 
-    stop2("'X' must be and extended selection table")
+  # if (!warbleR::is_extended_selection_table(X)) 
+    # stop2("'X' must be and extended selection table")
   
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 

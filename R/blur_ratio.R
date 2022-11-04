@@ -59,12 +59,9 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                        ssmooth = 200, msmooth = NULL, output = "est", 
                        img = FALSE, res = 150, hop.size = 11.6, wl = NULL, ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL){
   
-  
-  
-
   # is extended sel tab
-  if (!warbleR::is_extended_selection_table(X)) 
-    stop2("'X' must be and extended selection table")
+  # if (!warbleR::is_extended_selection_table(X)) 
+    # stop2("'X' must be and extended selection table")
   
   # set dest.path if not provided
   if (is.null(dest.path)) 

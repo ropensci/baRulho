@@ -68,8 +68,8 @@ noise_profile <- function(X = NULL, files = NULL, mar = NULL, noise.ref = "adjac
     files <- NULL
     
     # is extended sel tab
-    if (!warbleR::is_extended_selection_table(X)) 
-      stop2("'X' must be and extended selection table") 
+    # if (!warbleR::is_extended_selection_table(X)) 
+      # stop2("'X' must be and extended selection table") 
       
       # check signal.type column 
       if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")

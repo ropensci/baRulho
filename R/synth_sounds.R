@@ -1,0 +1,261 @@
+#' Create synthetic sounds
+#'
+#' \code{synth_sounds} create synthetic sounds
+#' @usage synth_sounds(steps = 10, am.amps = rep(c(1:4, 3:2), length.out = steps),
+#' replicates = 1, frequencies, durations, nharmonics = 1, fm = FALSE, am = FALSE, 
+#' mar = 0.05, seed = NULL, sig2 = 0.3, shuffle = FALSE,
+#' hrm.freqs = c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10),
+#' sampling.rate = 44.1)
+#' @param steps Numeric vector of length 1. Controls the number of frequency steps in which each sound is split. Default is 10.
+#' @param am.amps Numeric vector with the relative amplitude for each step (see 'step' argument) to simulate amplitude modulation (only applied to the fundamental frequency). Should have the same length as the number of steps. Default is 1 (no amplitude modulation). The default value (\code{rep(c(1:4, 3:2), length.out = steps)}) has to amplitude peaks.
+#' @param replicates Numeric vector of length 1 indicating the number of replicates for each treatment combination. Default is 1. Useful for measuring variation in transmission parameters. 
+#' @param frequencies Numeric vector with the different frequencies (in seconds) to synthesize.
+#' @param durations Numeric vector with the different durations (in seconds) to synthesize.
+#' @param nharmonics Numeric vector of length 1 specifying the number of harmonics to simulate. 1 indicates that only the fundamental
+#' frequency harmonic will be simulated.
+#' @param fm Logical to control if frequency modulated sounds are synthesize.
+#' @param am Logical to control if amplitude modulated sounds are synthesize.
+#' @param mar Numeric vector with the duration of margins of silence around sounds in seconds. Default is \code{0.05}.
+#' @param seed Numeric vector of length 1. This allows users to get the same results in different runs (using \code{\link[base:Random]{set.seed}} internally). Default is \code{NULL}.
+#' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
+#' @param sig2 Numeric vector of length 1 defining the sigma value of the brownian motion model (used for simulating frequency modulation). Default is 0.3.
+#' @param shuffle Logical to control if the position of sounds is randomized. Useful to avoid having sounds from the same treatments next to each other. Defaul is \code{FALSE}.
+#' @param hrm.freqs Numeric vector with the frequencies of the harmonics relative to the fundamental frequency. The default values are c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10).
+#' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
+#' @return A wave object containing the simulated songs. If 'selec.table' is \code{TRUE} the function saves the wave object as a '.wav' sound file in the working directory (or 'path') and returns a list including 1) a selection table with the start/end time, and bottom/top frequency of the sub-units and 2) the wave object.
+#' @seealso \code{\link{query_xc}} for for downloading bird vocalizations from an online repository.
+#' @export
+#' @name synth_sounds
+#' @details This functions uses a geometric (\code{diff.fun == "GBM"}) or Brownian bridge (\code{diff.fun == "BB"}) motion stochastic process to simulate modulation in animal vocalizations (i.e. frequency traces across time).
+#' The function can also simulate pure tones (\code{diff.fun == "pure.tone"}, 'sig2' is ignored).
+#' Several song subunits (e.g. elements) can be simulated as well as the corresponding harmonics.
+#' @examples
+#' \dontrun{
+#'  # simulate a song with 3 elements and no harmonics
+#'  sm_sng <- synth_sounds(n = 3, harms = 1)
+#'
+#'  # plot spectro
+#'  seewave::spectro(sm_sng)
+#'
+#'  # simulate a song with 5 elements and 2 extra harmonics
+#' sm_sng2 <- synth_sounds(n = 5, harms = 3)
+#'
+#'  # plot spectrogram
+#'  seewave::spectro(sm_sng2)
+#'
+#' # six pure tones with frequency ranging form 4 to 6 and returning selection table
+#' sm_sng <- synth_sounds(n = 6, harms = 1, seed = 1, diff.fun = "pure.tone",
+#'                   freqs = seq(4, 6, length.out = 6), selec.table = TRUE,
+#'                   path = tempdir())
+#'
+#' # plot spectro
+#' seewave::spectro(sm_sng$wave, flim = c(2, 8))
+#'
+#' # selection table
+#' sm_sng$selec.table
+#'}
+#'
+#' @references {
+#' Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.
+#' }
+#' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
+# last modification on feb-22-2018 (MAS)
+synth_sounds <-
+  function(steps = 10,
+           am.amps = rep(c(1:4, 3:2), length.out = steps),
+           replicates = 1,
+           frequencies,
+           durations,
+           nharmonics = 1,
+           fm = FALSE,
+           am = FALSE,
+           mar = 0.05,
+           seed = NULL,
+           sig2 = 0.3,
+           shuffle = FALSE,
+           hrm.freqs = c(1 / 2, 1 / 3, 2 / 3, 1 / 4, 3 / 4, 1 / 5, 1 / 6, 1 / 7, 1 /
+                           8, 1 / 9, 1 / 10),
+           sampling.rate = 44.1) {
+    # error message if Sim.DiffProc not installed
+    if (!requireNamespace("Sim.DiffProc", quietly = TRUE))
+      stop2("must install 'Sim.DiffProc' to use this function")
+    
+    if (length(am.amps) != steps)
+      stop("length of mod.aps should be the same as steps `(length(mod.aps) == steps)`")
+    
+    
+    # make all possible combinations
+    eg <- expand.grid(
+      duration = durations,
+      fm = c("no.fm", "fm"),
+      am = c("no.am", "am"),
+      harmonics = c("no.harmonics", "harmonics"),
+      stringsAsFactors = FALSE
+    )
+    
+    # remove levels when treatments not included
+    if (!fm)
+      eg <- eg[eg$fm == "no.fm", ]
+    
+    if (!am)
+      eg <- eg[eg$am == "no.am", ]
+    
+    if (nharmonics == 1)
+      eg <- eg[eg$harmonics == "no.harmonics", ]
+    
+    # create temporary directory
+    temp_dir <- tempfile()
+    dir.create(temp_dir)
+    
+    # simulate songs
+    sim.songs <-
+      warbleR:::pblapply_wrblr_int(1:nrow(eg), function(x) {
+        sm.sng <- warbleR::simulate_songs(
+          n = length(frequencies),
+          durs = eg$dur[x],
+          freqs = frequencies,
+          samp.rate = sampling.rate,
+          gaps = mar * 3 / 2,
+          am.amps = if (eg$am[x] == "no.am")
+            1
+          else
+            am.amps,
+          harms = if (eg$harm[x] == "no.harmonics")
+            1
+          else
+            nharmonics,
+          harm.amps = if (eg$harm[x] == "no.harmonics")
+            1
+          else
+            nharmonics:1,
+          diff.fun = if (eg$fm[x] == "fm")
+            "BB"
+          else
+            "pure.tone",
+          selec.table = TRUE,
+          sig2 = sig2,
+          steps = steps,
+          file.name = paste(eg[x, ], collapse = "_"),
+          bgn = 0,
+          seed = seed,
+          path = temp_dir,
+          hrm.freqs = hrm.freqs
+        )
+        
+        # add freq room if pure tone
+        if (eg$fm[x] == "no.fm") {
+          sm.sng$selec.table$bottom.freq <-
+            sm.sng$selec.table$bottom.freq - 0.2
+          sm.sng$selec.table$top.freq <-
+            sm.sng$selec.table$top.freq + 0.2
+        }
+        
+        sm.sng$selec.table$bottom.freq[sm.sng$selec.table$bottom.freq < 0] <-
+          0.1
+        
+        sm.sng$selec.table$sim.freq <- as.character(frequencies)
+        
+        return(sm.sng)
+        
+      })
+    
+    
+    # name with parameters
+    names(sim.songs) <-
+      sapply(1:nrow(eg), function(x)
+        paste(eg[x,],  collapse = "_"))
+    
+    # extract select tables
+    sim.song.sts <- lapply(sim.songs, function(X)
+      X$selec.table)
+    
+    sim.song.st <- do.call(rbind, sim.song.sts)
+    
+    if (shuffle)
+      sim.song.st <- sim.song.st[sample(1:nrow(sim.song.st)), ]
+    
+    # make a single extended selection table for simulation
+    sim_sounds_est <-
+      selection_table(
+        mar = mar,
+        X = sim.song.st,
+        extended = TRUE,
+        pb = FALSE,
+        confirm.extended = FALSE,
+        path = temp_dir,
+      )
+    
+    # clean column names
+    sim_sounds_est$frequency <- sim_sounds_est$sim.freq
+    sim_sounds_est$sim.freq <- NULL
+    
+    # add treatments
+    sim_sounds_est$duration <-
+      sim_sounds_est$end - sim_sounds_est$start
+    
+    if (fm)
+      sim_sounds_est$frequency.modulation <-
+      ifelse(grepl("no.fm", sim_sounds_est$sound.files), "no.fm", "fm")
+    
+    if (am)
+      sim_sounds_est$amplitude.modulation <-
+      ifelse(grepl("no.am", sim_sounds_est$sound.files), "no.am", "am")
+    
+    if (nharmonics > 1)
+      sim_sounds_est$harmonics <-
+      ifelse(grepl("no.harm", sim_sounds_est$sound.files),
+             "pure tone",
+             "harmonics")
+    
+    # replicate treatments
+    if (replicates > 1) {
+      rep_est_list <- lapply(1:replicates, function(x) {
+        Y <- sim_sounds_est
+        Y$selec <- x
+        attr(Y, "check.results")$selec <- x
+        return(Y)
+      })
+      
+      sim_sounds_est <- rep_est_list[[1]]
+      for (i in 2:replicates)
+        suppressMessages(sim_sounds_est <-
+                           rbind(sim_sounds_est, rep_est_list[[i]]))
+    }
+    
+    # rename sound files
+    sim_sounds_est <-
+      warbleR::rename_est_waves(X = sim_sounds_est,
+                                new.sound.files = paste0("synthetic_sound_", 1:length(unique(
+                                  sim_sounds_est$sound.files
+                                ))))
+    
+    sim_sounds_est$old.sound.file.name <- NULL
+    
+    # add single treatment column
+    dur_label <- if (length(durations) > 1)
+      paste0("dur=", sim_sounds_est$duration)
+    else
+      NULL
+    freq_label <- if (length(frequencies) > 1)
+      paste0("freq=", sim_sounds_est$frequency)
+    else
+      NULL
+    freq_dur_label <- paste(dur_label, freq_label, sep = ";")
+    
+    
+    sim_sounds_est$treatments <- if (ncol(sim_sounds_est) > 8)
+      sim_sounds_est$treatments <-
+      paste(freq_dur_label,
+            apply(sim_sounds_est[, 9:ncol(sim_sounds_est)], 1, paste, collapse = ';'),
+            sep = ";")
+    else
+      freq_dur_label
+    
+    sim_sounds_est$treatments <-
+      gsub("^;", "", sim_sounds_est$treatments)
+    
+    rownames(sim_sounds_est) <- 1:nrow(sim_sounds_est)
+    
+    return(sim_sounds_est)
+    
+  }

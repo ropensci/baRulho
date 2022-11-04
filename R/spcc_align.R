@@ -46,8 +46,8 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   }
   
   # is extended sel tab
-  if (!warbleR::is_extended_selection_table(X)) 
-    stop2("'X' must be and extended selection table")
+  # if (!warbleR::is_extended_selection_table(X)) 
+    # stop2("'X' must be and extended selection table")
   
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 

@@ -198,9 +198,14 @@ frequency harmonic will be simulated.</p></td>
     <p>A wave object containing the simulated songs. If 'selec.table' is <code>TRUE</code> the function saves the wave object as a '.wav' sound file in the working directory (or 'path') and returns a list including 1) a selection table with the start/end time, and bottom/top frequency of the sub-units and 2) the wave object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This functions uses a geometric (<code>diff.fun == "GBM"</code>) or Brownian bridge (<code>diff.fun == "BB"</code>) motion stochastic process to simulate modulation in animal vocalizations (i.e. frequency traces across time).
-The function can also simulate pure tones (<code>diff.fun == "pure.tone"</code>, 'sig2' is ignored).
-Several song subunits (e.g. elements) can be simulated as well as the corresponding harmonics.</p>
+    <p>This function creates synthetic sounds that can be used on playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions:</p><ul>
+<li><p><code>frequency</code>: continuous, argument 'frequencies'.</p></li>
+<li><p><code>duration</code>: continuous, argument 'durations'.</p></li>
+<li><p><code>harmonic structure</code>: binary (harmonics vs no-harmonics), arguments 'nharmonics' and 'hrm.freqs'.</p></li>
+<li><p><code>frequency modulation</code>: variation in fundamental frequency across time. Binary (modulated vs non-modulated), arguments 'fm' and 'sig2'.</p></li>
+<li><p><code>amplitude modulation</code>: variation in amplitude across time. Binary (modulated vs non-modulated), arguments 'am' and 'am.amps'.</p></li>
+</ul><p>Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into <code><a href='master_sound_file.html'>master_sound_file</a></code> to create the .wav file. The functions uses <code><a href='https://marce10.github.io/warbleR/reference/simulate_songs.html'>simulate_songs</a></code> internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (<code>diff.fun == "BB"</code>) is used to simulate frequency modulation.
+The function can also simulate pure tones (<code>diff.fun == "pure.tone"</code>, 'sig2' is ignored).</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Araya-Salas, M., &amp; Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.</p>

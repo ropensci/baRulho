@@ -5,7 +5,7 @@
 #' @param f numeric vector of length 1 with frequency (in Hertz).
 #' @param temp numeric vector of length 1 with frequency (in Celsius). Default is 20.
 #' @param RH numeric vector of length 1 with relative humidity (in percentage). Default is 60.
-#' @param pa numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default).
+#' @param pa numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default). Used for Atmospheric attenuation.
 #' @param dist numeric vector of length 1 with distance (m) over which a sound propagates. 
 #' @param dist0 numeric vector of length 1 with distance (m) for the reference SPL. 
 #' @param att.coef attenuation coefficient of the habitat (in dB/kHz/m).

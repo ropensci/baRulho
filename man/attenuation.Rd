@@ -13,7 +13,7 @@ attenuation(f, temp = 20, RH = 60, pa = 101325, dist0, dist, att.coef = 0.02)
 
 \item{RH}{numeric vector of length 1 with relative humidity (in percentage). Default is 60.}
 
-\item{pa}{numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default).}
+\item{pa}{numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default). Used for Atmospheric attenuation.}
 
 \item{dist0}{numeric vector of length 1 with distance (m) for the reference SPL.}
 

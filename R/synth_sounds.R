@@ -26,9 +26,16 @@
 #' @seealso \code{\link{query_xc}} for for downloading bird vocalizations from an online repository.
 #' @export
 #' @name synth_sounds
-#' @details This functions uses a geometric (\code{diff.fun == "GBM"}) or Brownian bridge (\code{diff.fun == "BB"}) motion stochastic process to simulate modulation in animal vocalizations (i.e. frequency traces across time).
+#' @details This function creates synthetic sounds that can be used on playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions: 
+#' \itemize{
+#'    \item \code{frequency}: continuous, argument 'frequencies'.
+#'    \item \code{duration}: continuous, argument 'durations'.
+#'    \item \code{harmonic structure}: binary (harmonics vs no-harmonics), arguments 'nharmonics' and 'hrm.freqs'.
+#'    \item \code{frequency modulation}: variation in fundamental frequency across time. Binary (modulated vs non-modulated), arguments 'fm' and 'sig2'. 
+#'    \item \code{amplitude modulation}: variation in amplitude across time. Binary (modulated vs non-modulated), arguments 'am' and 'am.amps'.
+#' }
+#' Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The functions uses \code{\link[warbleR]{simulate_songs}} internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation.
 #' The function can also simulate pure tones (\code{diff.fun == "pure.tone"}, 'sig2' is ignored).
-#' Several song subunits (e.g. elements) can be simulated as well as the corresponding harmonics.
 #' @examples
 #' \dontrun{
 #'  # simulate a song with 3 elements and no harmonics
@@ -83,6 +90,8 @@ synth_sounds <-
     if (length(am.amps) != steps)
       stop("length of mod.aps should be the same as steps `(length(mod.aps) == steps)`")
     
+    if (nharmonics < 2)
+      stop("when 'harmonics' is included as treatment 'nharmonics' should be higher than 1")
     
     # make all possible combinations
     eg <- expand.grid(
@@ -120,11 +129,11 @@ synth_sounds <-
             1
           else
             am.amps,
-          harms = if (eg$harm[x] == "no.harmonics")
+          harms = if (eg$harm[x] == "no.harm")
             1
           else
             nharmonics,
-          harm.amps = if (eg$harm[x] == "no.harmonics")
+          harm.amps = if (eg$harm[x] == "no.harm")
             1
           else
             nharmonics:1,
@@ -232,7 +241,7 @@ synth_sounds <-
     sim_sounds_est$old.sound.file.name <- NULL
     
     # add single treatment column
-    dur_label <- if (length(durations) > 1)
+    dur_label <- if (length(duration) > 1)
       paste0("dur=", sim_sounds_est$duration)
     else
       NULL

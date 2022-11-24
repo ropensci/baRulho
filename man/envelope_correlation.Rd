@@ -5,10 +5,11 @@
 \title{Measure amplitude envelope correlation}
 \usage{
 envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
-ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, wl = NULL, ovlp = 70)
+ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, 
+wl = NULL, ovlp = 70, path = NULL)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).}
 
 \item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 If \code{NULL} (default) then the current working directory is used.}
@@ -27,7 +28,7 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{msmooth}{Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame'). 'est' format only available if 'X' is itself an extended selection table.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
@@ -36,6 +37,8 @@ is NULL. If supplied, 'hop.size' is ignored.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
+
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
 Extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')

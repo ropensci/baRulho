@@ -2,8 +2,9 @@
 #' 
 #' \code{envelope_correlation} measures amplitude envelope correlation of signals referenced in an extended selection table.
 #' @usage envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
-#' ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, wl = NULL, ovlp = 70)
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
+#' ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, 
+#' wl = NULL, ovlp = 70, path = NULL)
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' If \code{NULL} (default) then the current working directory is used.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -15,12 +16,13 @@
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param ssmooth Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).
 #' @param msmooth Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame'). 'est' format only available if 'X' is itself an extended selection table.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is NULL. If supplied, 'hop.size' is ignored.
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
+#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return Extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')
 #' with the reference signal and the amplitude envelope correlation coefficients.
 #' @export
@@ -50,11 +52,22 @@
 #' }
 #last modification on nov-01-2019 (MAS)
 
-envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, wl = NULL, ovlp = 70){
+envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, wl = NULL, ovlp = 70, path = NULL){
   
-  # is extended sel tab
-  # if (!warbleR::is_extended_selection_table(X)) 
-    # stop2("'X' must be and extended selection table")
+  # set path if not provided
+  if (is.null(path)) 
+    path <- getwd() else 
+      if (!dir.exists(path)) 
+        stop2("'path' provided does not exist")
+  
+  # must have the same sampling rate
+  if (is_extended_selection_table(X)){
+    if (length(unique(attr(X, "check.results")$sample.rate)) > 1)
+      stop2(
+        "all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())"
+      )} else 
+        print("assuming all sound files have the same sampling rate")
+  
   
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
@@ -68,7 +81,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   
   # adjust wl based on hope.size
   if (is.null(wl))
-    wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
+    wl <- round(read_sound_file(X, index = 1, header = TRUE, path = path)$sample.rate * hop.size  / 1000, 0)
   
   # make wl even if odd
   if (!(wl %% 2) == 0) wl <- wl + 1
@@ -78,7 +91,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop2("'method' must be either  'pearson', 'kendall' or 'spearman'")
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must contain a 'signal.type' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
@@ -96,7 +109,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y)   {
     
     # get clip
-    clp <- warbleR::read_wave(X = X, index = y)
+    clp <- warbleR::read_sound_file(X = X, index = y, path = path)
     
     # define bandpass based on reference
     bp <- c(X$bottom.freq[X$TEMP....sgnl == X$reference[y]], X$top.freq[X$TEMP....sgnl == X$reference[y]])
@@ -170,7 +183,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   X2$TEMP....sgnl <- NULL
   
   # fix est
-  if (output == "est")
+  if (output == "est" & is_extended_selection_table(X))
     X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
   
 

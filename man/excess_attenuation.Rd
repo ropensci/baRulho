@@ -5,10 +5,11 @@
 \title{Measure excess attenuation}
 \usage{
 excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Dabelsteen",
- output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, bp = "freq.range")
+ output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, 
+bp = "freq.range", path = NULL)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).}
 
 \item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
@@ -27,7 +28,7 @@ excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Dabelsteen",
 }
 If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.}
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame'). 'est' format only available if 'X' is itself an extended selection table.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
@@ -41,6 +42,8 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only u
 \item{gain}{Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.}
+
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
 Extended selection table similar to input data, but also includes a new column (excess.attenuation)

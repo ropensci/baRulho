@@ -4,21 +4,21 @@
 \alias{noise_profile}
 \title{Measure full spectrum sound noise profiles}
 \usage{
-noise_profile(X = NULL, files = NULL, mar = NULL, 
+noise_profile(X = NULL, files = NULL, mar = NULL,
 noise.ref = "adjacent", parallel = 1, pb = TRUE, path = NULL,
 bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A", averaged = TRUE)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. Default is \code{NULL}.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.}
 
 \item{files}{Character vector with names of wave files to be analyzed. Files must be found in 'path' supplied (or in the working directory if 'path' is not supplied). Default is \code{NULL}.}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
 the start and end points of selection over which to measure ambient noise. Required if 'X' is supplied and ignored if not supplied. Default is \code{NULL}.}
 
-\item{noise.ref}{Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Ignored if 'X' is not supplied. Two options are available: 
+\item{noise.ref}{Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Ignored if 'X' is not supplied. Two options are available:
 \itemize{
-\item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments). 
+\item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments).
 \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'signal.type' column).
 }}
 
@@ -33,8 +33,8 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
-is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. 
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
+is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
 
 \item{PSD}{Logical to control whether the Probability Mass Function (the probability distribution of frequencies). See \code{\link[seewave]{meanspec}}. Default is \code{FALSE}.}
@@ -64,7 +64,7 @@ noise_profile(X = playback_est, mar = 0.01, pb = FALSE, noise.ref = "custom")
 
 # remove noise selections
 pe <- playback_est[playback_est$signal.type != "ambient", ]
- 
+
  noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent")
 }
 

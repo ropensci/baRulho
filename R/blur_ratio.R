@@ -3,8 +3,8 @@
 #' \code{blur_ratio} measures blur ratio in signals referenced in an extended selection table.
 #' @usage blur_ratio(X, parallel = 1, pb = TRUE, method = 1, ssmooth = 200, 
 #' msmooth = NULL, output = "est", img = FALSE, res = 150, hop.size = 11.6, wl = NULL, 
-#' ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL)
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
+#' ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL, path = NULL)
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
@@ -14,7 +14,7 @@
 #' }
 #' @param ssmooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200.
 #' @param msmooth Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}). 
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default), a data frame ('data.frame') or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting.
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default), a data frame ('data.frame') or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting. 'est' format only available if 'X' is itself an extended selection table.
 #' @param img Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding envelopes are produced. Default is no images ( \code{FALSE}).
 #' @param res Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
@@ -28,6 +28,7 @@
 #' @param dest.path Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.
 #' @return Data frame similar to input data, but also includes two new columns ('reference' and 'blur.ratio')
 #' with the reference signal and blur ratio values. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both signals and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference signal and also show vertical lines with the start and end of signals to allow users to visually check alignment. If \code{output = 'list'} the output would be a list including the data frame just described and a data frame with envelopes (amplitude values) for all signals.
+#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @export
 #' @name blur_ratio
 #' @details Blur ratio measures the degradation of sound as a change in signal energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of signals. The function measures the blur ratio on signals in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability mass functions) of the reference signal and the re-recorded signal. By converting envelopes to probability mass functions the effect of energy attenuation is removed, focusing the analysis on the modification of the envelope shape. The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). The 'signal.type' column must be used to tell the function to only compare signals belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
@@ -57,11 +58,13 @@
 
 blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
                        ssmooth = 200, msmooth = NULL, output = "est", 
-                       img = FALSE, res = 150, hop.size = 11.6, wl = NULL, ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL){
+                       img = FALSE, res = 150, hop.size = 11.6, wl = NULL, ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL, path = NULL){
   
-  # is extended sel tab
-  # if (!warbleR::is_extended_selection_table(X)) 
-    # stop2("'X' must be and extended selection table")
+  # set path if not provided
+  if (is.null(path)) 
+    path <- getwd() else 
+      if (!dir.exists(path)) 
+        stop2("'path' provided does not exist")
   
   # set dest.path if not provided
   if (is.null(dest.path)) 
@@ -69,14 +72,19 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
       if (!dir.exists(dest.path)) 
     stop2("'dest.path' provided does not exist")
   
+  # make path null if extendeed selection table
+  if (is_extended_selection_table(X))
+    path <- NULL
+  
   # hopsize  
   if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
   
   # adjust wl based on hope.size
   if (is.null(wl))
-    wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
+    wl <- round(read_sound_file(X, index = 1, header = TRUE, path = path)$sample.rate * hop.size  / 1000, 0)
   
-  # make wl even if odd
+  
+    # make wl even if odd
   if (!(wl %% 2) == 0) wl <- wl + 1
   
   # If parallel is not numeric
@@ -88,7 +96,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   if (!any(method %in% 1:2)) stop2("'method' must be either 1 or 2")
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must contain a 'signal.type' column")
   
   #check output
   if (!any(output %in% c("est", "data.frame", "list"))) stop2("'output' must be 'est', 'data.frame' or 'list'")  
@@ -118,7 +126,7 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
   envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, ssmth = ssmooth, msmth = msmooth, ov = ovlp)   {
     
     # load clip
-    clp <- warbleR::read_wave(X = X, index = y)
+    clp <- warbleR::read_sound_file(X = X, index = y, path = path)
     
     # define bandpass based on reference
     bp <- c(X$bottom.freq[X$TEMP....sgnl == X$reference[y]], X$top.freq[X$TEMP....sgnl == X$reference[y]])
@@ -158,7 +166,8 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
       if(length(rfrnc.env) > length(sgnl.env)) rfrnc.env <- rfrnc.env[1:length(sgnl.env)]
       
       # duration (any works as they all must have the same sampling rate)
-      dur <- length(sgnl.env) / (attr(X, "check.results")$sample.rate[1] * 1000)
+      # dur <- length(sgnl.env) / (attr(X, "check.results")$sample.rate[1] * 1000)
+      dur <- length(sgnl.env) / warbleR::read_sound_file(X = X, index = x, path = path, header = TRUE)$sample.rate
       
       # convert envelopes to PMF (probability mass function)
       rfrnc.pmf <- rfrnc.env / sum(rfrnc.env)
@@ -193,12 +202,11 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
         # close if open any screen
         invisible(close.screen(all.screens = TRUE))
         
-        
+        # split screen
         split.screen(ly.mat)
         
         # plot envelopes
         screen(3)
-        
         
         # set image margins
         par(mar = rep(4, 0, 4, 4))
@@ -236,8 +244,16 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
         # freq limit of reference
         flim <- c(X$bottom.freq[rf.indx], X$top.freq[rf.indx])
         
+        #####
+        # end for signal and reference
+        rf.info <- warbleR::read_sound_file(X = X, index = rf.indx, header = TRUE, path = path)
+        rf.dur <- rf.info$samples / rf.info$sample.rate
+        
+        sgnl.info <- warbleR::read_sound_file(X = X, index = x, header = TRUE, path = path)
+        sgnl.dur <- sgnl.info$samples / sgnl.info$sample.rate
+        
         # calculate margin for spectrogram, before and after
-        mar.rf.af <- mar.rf.bf <- attr(X, "check.results")$duration[rf.indx] / 4
+        mar.rf.af <- mar.rf.bf <- (X$end[rf.indx] - X$start[rf.indx]) / 4
         
         # start for signal and reference
         strt.sgnl <- X$start[x] - mar.rf.bf
@@ -245,18 +261,14 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
         strt.rf <- X$start[rf.indx] - mar.rf.bf
         if (strt.rf < 0) strt.rf <- 0
         
-        # end for signal and reference
-        rf.info <- warbleR::read_wave(X = X, index = rf.indx, header = TRUE)
-        rf.dur <- rf.info$samples / rf.info$sample.rate 
-        
         end.sgnl <- X$end[x] + mar.rf.af
-        if (end.sgnl > rf.dur) end.sgnl <- rf.dur
+        if (end.sgnl > sgnl.dur) end.sgnl <- sgnl.dur
         end.rf <- X$end[rf.indx] + mar.rf.af
         if (end.rf > rf.dur) end.rf <- rf.dur
         
         # extract clip reference and signal
-        clp.sgnl <- warbleR::read_wave(X = X, index = x, from = strt.sgnl, to = end.sgnl)
-        clp.rfnc <- warbleR::read_wave(X = X, index = rf.indx, from = strt.rf, to = end.rf)
+        clp.sgnl <- warbleR::read_sound_file(X = X, index = x, from = strt.sgnl, to = end.sgnl, path = path)
+        clp.rfnc <- warbleR::read_sound_file(X = X, index = rf.indx, from = strt.rf, to = end.rf, path = path)
         
         ## plot spectros
         # signal at bottom left

@@ -2,8 +2,9 @@
 #' 
 #' \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
 #' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Dabelsteen",
-#'  output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, bp = "freq.range")
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The data frame must include the following additional columns: 'distance', 'signal.type', 'bottom.freq' and 'top.freq'.
+#'  output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, 
+#' bp = "freq.range", path = NULL)
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring excess attenuation. Two methods are available:
@@ -17,7 +18,7 @@
 #' \item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference signals. Microphone gain is the microphone gain of the reference and re-recorded signals. 
 #' }
 #' If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame') is returned.
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame'). 'est' format only available if 'X' is itself an extended selection table.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
 #' is \code{NULL}. If supplied, 'hop.size' is ignored.
@@ -26,6 +27,7 @@
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering.
 #' @param gain Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.  
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.
+#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return Extended selection table similar to input data, but also includes a new column (excess.attenuation)
 #' with the excess attenuation values.
 #' @export
@@ -63,179 +65,256 @@
 #' }
 #last modification on jul-19-2021 (MAS)
 
-excess_attenuation <- function(X, parallel = 1, pb = TRUE, method = 1, type = "Dabelsteen", 
-                               output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, bp = "freq.range"){
-  
-  # is extended sel tab
-  # if (!warbleR::is_extended_selection_table(X)) 
-    # stop2("'X' must be and extended selection table")
-  
-  # If parallel is not numeric
-  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
-  
-  #check output
-  if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be 'est' or 'data.frame'")  
-  # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
-  
-  # adjust wl based on hope.size
-  if (is.null(wl))
-    wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
-  
-  # make wl even if odd
-  if (!(wl %% 2) == 0) wl <- wl + 1
-  
-  # If method is not numeric
-  if (!is.numeric(method)) stop2("'method' must be a numeric vector of length 1") 
-  if (!any(method %in% 1:2)) stop2("'method' must be either 1 or 2")
-  
-  # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
-  
-  # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-  if (pb) 
-    write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):")) 
-  X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
-  
-  # function to extract mean envelopes
-  meanenv_FUN <- function(y, wl, ovlp){
+excess_attenuation <-
+  function(X,
+           parallel = 1,
+           pb = TRUE,
+           method = 1,
+           type = "Dabelsteen",
+           output = "est",
+           hop.size = 1,
+           wl = NULL,
+           ovlp = 50,
+           gain = 0,
+           bp = "freq.range",
+           path = NULL) {
     
-    # read signal clip
-    clp <- warbleR::read_wave(X = X, index = y, from = 0, to = X$end[y])
+    # set path if not provided
+    if (is.null(path))
+      path <- getwd() else
+      if (!dir.exists(path))
+        stop2("'path' provided does not exist")
     
-    if (X$signal.type[y] != "ambient")
-      noise_clp <- warbleR::read_wave(X = X, index = y, from = 0, to = X$start[y]- 0.001)
+    # If parallel is not numeric
+    if (!is.numeric(parallel))
+      stop2("'parallel' must be a numeric vector of length 1")
+    if (any(!(parallel %% 1 == 0), parallel < 1))
+      stop2("'parallel' should be a positive integer")
     
-    # add band-pass frequency filter
-    if (!is.null(bp)) {
+    #check output
+    if (!any(output %in% c("est", "data.frame")))
+      stop2("'output' must be 'est' or 'data.frame'")
+    # hopsize
+    if (!is.numeric(hop.size) |
+        hop.size < 0)
+      stop2("'hop.size' must be a positive number")
+    
+    # must have the same sampling rate
+    if (is_extended_selection_table(X)){
+      if (length(unique(attr(X, "check.results")$sample.rate)) > 1)
+        stop2(
+          "all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())"
+        )
+      } else 
+          print("assuming all sound files have the same sampling rate")
+    
+    # adjust wl based on hope.size
+    if (is.null(wl))
+      wl <-
+        round(read_sound_file(
+          X,
+          index = 1,
+          header = TRUE,
+          path = path
+        )$sample.rate * hop.size  / 1000,
+        0)
+    
+    # make wl even if odd
+    if (!(wl %% 2) == 0)
+      wl <- wl + 1
+    
+    # If method is not numeric
+    if (!is.numeric(method))
+      stop2("'method' must be a numeric vector of length 1")
+    if (!any(method %in% 1:2))
+      stop2("'method' must be either 1 or 2")
+    
+    # check signal.type column
+    if (is.null(X$signal.type))
+      stop2("'X' must contain a 'signal.type' column")
+    
+    # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
+    if (pb)
+      write(file = "",
+            x = paste0("Preparing data for analysis (step 1 out of 3):"))
+    X <-
+      prep_X_bRlo_int(X,
+                      method = method,
+                      parallel = parallel,
+                      pb = pb)
+    
+    # function to extract mean envelopes
+    meanenv_FUN <- function(y, wl, ovlp) {
+      # read signal clip
+      clp <-
+        warbleR::read_sound_file(
+          X = X,
+          index = y,
+          from = 0,
+          to = X$end[y],
+          path = path
+        )
       
-      # filter to bottom and top freq range
-      if (bp == "freq.range") 
-        bp <- c(X$bottom.freq[y], X$top.freq[y])
-      
-      clp <- seewave::ffilter(clp, f = clp@samp.rate, from = bp[1] * 1000, ovlp = ovlp,
-                                 to = bp[2] * 1000, bandpass = TRUE, wl = wl, 
-                                 output = "Wave")
-
       if (X$signal.type[y] != "ambient")
-        noise_clp <- seewave::ffilter(noise_clp, f = noise_clp@samp.rate, from = bp[1] * 1000, ovlp = ovlp,
-                              to = bp[2] * 1000, bandpass = TRUE, wl = wl, 
-                              output = "Wave")
-      }
-    
-    # get mean envelopes
-    sig_env <- mean(seewave::env(clp, f = clp@samp.rate, envt = "hil", plot = FALSE))
-
-    return(data.frame((X[y, , drop = FALSE]), sig_env))
-  }
-  
-  # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & parallel > 1)
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
-  
-  if (pb) 
-    write(file = "", x = paste0("Calculating amplitude envelopes (step 2 out of 3):"))
-  
-  # run loop apply function
-  mean_envs <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(y)  meanenv_FUN(y, wl, ovlp))
-  
-  # put in a data frame
-  X2 <- do.call(rbind, mean_envs)
-  
-  # split by signal ID
-  sigtype_list <- split(X2, X2$signal.type)
-  
-  if (pb)
-    write(file = "", x = paste0("Calculating excess attenuation (step 3 out of 3):")) 
-
-  # calculate excess attenuation
-  X_list <- warbleR:::pblapply_wrblr_int(X = sigtype_list, pbar = pb, cl = cl, function(Y, meth = method, tp = type){
-    
-    if (Y$signal.type[1] == "ambient") Y$excess.attenuation <- NA else {
+        noise_clp <-
+          warbleR::read_sound_file(
+            X = X,
+            index = y,
+            from = 0,
+            to = X$start[y] - 0.001,
+            path = path
+          )
       
-      # method 1 compare to closest distance to source
-      if (meth == 1){
+      # add band-pass frequency filter
+      if (!is.null(bp)) {
+        # filter to bottom and top freq range
+        if (bp == "freq.range")
+          bp <- c(X$bottom.freq[y], X$top.freq[y])
         
-        # extract mean envelope of signals
-        sig_env_REF <- Y$sig_env[which.min(Y$distance)]
-        dist_REF <- Y$distance[which.min(Y$distance)]
+        clp <-
+          seewave::ffilter(
+            clp,
+            f = clp@samp.rate,
+            from = bp[1] * 1000,
+            ovlp = ovlp,
+            to = bp[2] * 1000,
+            bandpass = TRUE,
+            wl = wl,
+            output = "Wave"
+          )
         
-        ks <- Y$sig_env / sig_env_REF
-        
-        # type Dabelsteen
-        if (tp == "Dabelsteen")
-          ea <- (-20 * log(ks)) - (6 / (2 * (Y$distance - dist_REF))) + gain
-        
-        if (tp == "Darden") #EA = g - 20 log(d / 10) - 20 log(k)
-          ea <- gain -20 * log10(Y$distance / 10) -20 * log(ks)
-        
-        Y$excess.attenuation <- ea
-        Y$excess.attenuation[which.min(Y$distance)] <- NA
+        if (X$signal.type[y] != "ambient")
+          noise_clp <-
+          seewave::ffilter(
+            noise_clp,
+            f = noise_clp@samp.rate,
+            from = bp[1] * 1000,
+            ovlp = ovlp,
+            to = bp[2] * 1000,
+            bandpass = TRUE,
+            wl = wl,
+            output = "Wave"
+          )
       }
       
-      # compare to previous distance 
-      if (meth == 2){
-    
-        # save original order
-        Y$org....ord <- 1:nrow(Y)
-        
-        # sort by distance
-        Y <- Y[order(Y$distance), ]
-        
-        ks <- Y$sig_env[-1] / Y$sig_env[-nrow(Y)]     
-        
-        if (tp == "Dabelsteen")
-          ea <-  (-20 * log(ks)) - (6 / (2 * (Y$distance[-1] - Y$distance[1]))) + gain
-         
-        
-        # type Darden
-        if (tp == "Darden")    
-          ea <- gain -20 * log10(Y$distance[-1] / 10) -20 * log(ks)
-        
-        # add NA for first distance
-          ea <- c(NA, ea)  
-        
-        Y$excess.attenuation <- ea
-        
-        # reorder results
-        Y <- Y[order(Y$org....ord), ]
-        
-        Y$org....ord <- NULL
-      }
+      # get mean envelopes
+      sig_env <-
+        mean(seewave::env(
+          clp,
+          f = clp@samp.rate,
+          envt = "hil",
+          plot = FALSE
+        ))
+      
+      return(data.frame((X[y, , drop = FALSE]), sig_env))
     }
     
-    Y <- as.data.frame(Y)
-    return(Y)
+    # set clusters for windows OS
+    if (Sys.info()[1] == "Windows" & parallel > 1)
+      cl <-
+      parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else
+      cl <- parallel
     
-  })
-  
-  # put together in a data frame as X
-  X2 <- do.call(rbind, X_list)
-  
-  # fix row names 
-  rownames(X2) <-  rownames(X)
-  
-  # remove temporal column
-  X2$sigRMS <- X2$TEMP....sgnl <- X2$sig_env <- NULL
-  
-  # fix est
-  if (output == "est")
-    X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
-  
-  return(X2)
-}
-# 
-# ## internal function to subtract SPL from background noise
-# # signal = signal SPL
-# # noise = noise SPL
-# lessdB <- function(signal.noise, noise){
-#   
-#   puttative_SPLs <- seq(0.01, signal.noise, by = 0.01)
-#   
-#   sum_SPLs <-  20 * log10((10^(puttative_SPLs/20)) + (10^(noise/20)))
-#   
-#   signal_SPL <- puttative_SPLs[which.min(abs(sum_SPLs - signal.noise))]
-# 
-#   return(signal_SPL)
-#   }
+    if (pb)
+      write(file = "",
+            x = paste0("Calculating amplitude envelopes (step 2 out of 3):"))
+    
+    # run loop apply function
+    mean_envs <-
+      warbleR:::pblapply_wrblr_int(
+        X = 1:nrow(X),
+        pbar = pb,
+        cl = cl,
+        FUN = function(y)
+          meanenv_FUN(y, wl, ovlp)
+      )
+    
+    # put in a data frame
+    X2 <- do.call(rbind, mean_envs)
+    
+    # split by signal ID
+    sigtype_list <- split(X2, X2$signal.type)
+    
+    if (pb)
+      write(file = "",
+            x = paste0("Calculating excess attenuation (step 3 out of 3):"))
+    
+    # calculate excess attenuation
+    X_list <-
+      warbleR:::pblapply_wrblr_int(X = sigtype_list, pbar = pb, cl = cl, function(Y, meth = method, tp = type) {
+        if (Y$signal.type[1] == "ambient")
+          Y$excess.attenuation <- NA else {
+          # method 1 compare to closest distance to source
+          if (meth == 1) {
+            # extract mean envelope of signals
+            sig_env_REF <- Y$sig_env[which.min(Y$distance)]
+            dist_REF <- Y$distance[which.min(Y$distance)]
+            
+            ks <- Y$sig_env / sig_env_REF
+            
+            # type Dabelsteen
+            if (tp == "Dabelsteen")
+              ea <-
+              (-20 * log(ks)) - (6 / (2 * (Y$distance - dist_REF))) + gain
+            
+            if (tp == "Darden")
+              #EA = g - 20 log(d / 10) - 20 log(k)
+              ea <-
+              gain - 20 * log10(Y$distance / 10) - 20 * log(ks)
+            
+            Y$excess.attenuation <- ea
+            Y$excess.attenuation[which.min(Y$distance)] <- NA
+          }
+          
+          # compare to previous distance
+          if (meth == 2) {
+            # save original order
+            Y$org....ord <- 1:nrow(Y)
+            
+            # sort by distance
+            Y <- Y[order(Y$distance), ]
+            
+            ks <- Y$sig_env[-1] / Y$sig_env[-nrow(Y)]
+            
+            if (tp == "Dabelsteen")
+              ea <-
+              (-20 * log(ks)) - (6 / (2 * (Y$distance[-1] - Y$distance[1]))) + gain
+            
+            
+            # type Darden
+            if (tp == "Darden")
+              ea <-
+              gain - 20 * log10(Y$distance[-1] / 10) - 20 * log(ks)
+            
+            # add NA for first distance
+            ea <- c(NA, ea)
+            
+            Y$excess.attenuation <- ea
+            
+            # reorder results
+            Y <- Y[order(Y$org....ord), ]
+            
+            Y$org....ord <- NULL
+          }
+        }
+        
+        Y <- as.data.frame(Y)
+        return(Y)
+        
+      })
+    
+    # put together in a data frame as X
+    X2 <- do.call(rbind, X_list)
+    
+    # fix row names
+    rownames(X2) <-  rownames(X)
+    
+    # remove temporal column
+    X2$sigRMS <- X2$TEMP....sgnl <- X2$sig_env <- NULL
+    
+    # fix est
+    if (output == "est" & is_extended_selection_table(X))
+      X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
+    
+    return(X2)
+  }

@@ -4,11 +4,11 @@
 \alias{master_sound_file}
 \title{Create a master sound file}
 \usage{
-master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1, 
-gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14)
+master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1,
+gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14, path = NULL)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'bottom.freq' and 'top.freq'.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.}
 
 \item{file.name}{Character string indicating the name of the sound file.}
 
@@ -26,6 +26,8 @@ If \code{NULL} (default) then the current working directory will be used instead
 \item{flim}{Numeric vector of length 2 to control the frequency range in which the markers would be found. If \code{NULL} markers would be display across the whole frequency range. Default is c(0, 4).}
 
 \item{cex}{Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.}
+
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
 Extended selection table similar to input data, but includes a new column (cross.correlation)
@@ -40,7 +42,7 @@ The function is intended to simplify the creation of master sound files for play
 \examples{
 {
 # load example data from warbleR
-data(list = c("Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4", 
+data(list = c("Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4",
 "lbh_selec_table"))
 
 # save sound files to temporary folder
@@ -50,11 +52,11 @@ writeWave(Phae.long3, file.path(tempdir(), "Phae.long3.wav"))
 writeWave(Phae.long4, file.path(tempdir(), "Phae.long4.wav"))
 
 # make an extended selection table
-est <- selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE, 
+est <- selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
 path = tempdir())
 
 # create master sound file
-master.sel.tab <- master_sound_file(X = est, file.name = "example_master", 
+master.sel.tab <- master_sound_file(X = est, file.name = "example_master",
 dest.path = tempdir(), gap.duration = 0.3)
 
 # the following code exports the selection table to Raven using Rraven package

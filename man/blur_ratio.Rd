@@ -6,10 +6,10 @@
 \usage{
 blur_ratio(X, parallel = 1, pb = TRUE, method = 1, ssmooth = 200, 
 msmooth = NULL, output = "est", img = FALSE, res = 150, hop.size = 11.6, wl = NULL, 
-ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL)
+ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL, path = NULL)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).}
 
 \item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
@@ -25,7 +25,7 @@ ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL)
 
 \item{msmooth}{Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default), a data frame ('data.frame') or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting.}
+\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default), a data frame ('data.frame') or a list ("list") containing the extended selection table (first object in the list) and all (smoothed) wave envelopes (second object in the list) is returned. The envelope data can be used for plotting. 'est' format only available if 'X' is itself an extended selection table.}
 
 \item{img}{Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding envelopes are produced. Default is no images ( \code{FALSE}).}
 
@@ -45,6 +45,8 @@ plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viri
 \item{collevels}{Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.}
 
 \item{dest.path}{Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.}
+
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
 Data frame similar to input data, but also includes two new columns ('reference' and 'blur.ratio')

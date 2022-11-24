@@ -2,7 +2,7 @@
 #' 
 #' \code{search_templates} searches acoustic templates on test (re-recorded) sound files.
 #' @usage search_templates(X, template.rows, test.files, path = NULL, pb = TRUE, ...)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required. 
 #' @param template.rows Numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.
 #' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows').
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found.
@@ -11,7 +11,7 @@
 #' @return A data frame with the time, start, end, test file names, template name, maximum cross-correlation score and the time where it was detected.
 #' @export
 #' @name search_templates
-#' @details The function takes a master sound file's reference data ('X') and finds the position of acoustics templates included as selections in 'X'. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. Take a look at the package vignette for information on how to:: incorporate this into a sound degradation analysis workflow.
+#' @details The function takes a master sound file's reference data ('X') and finds the position of acoustics templates (included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder thatn the re-recorded sound files}.Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
 #' @seealso \code{\link{spcc_align}}; \code{\link{align_test_files}}
 #' @examples
 #' \dontrun{
@@ -84,7 +84,20 @@
 #' }
 #last modification on dec-26-2019 (MAS)
 
-search_templates <- function(X, template.rows, test.files, path = NULL, pb = TRUE, ...){
+search_templates <- function(X, template.rows, test.files = NULL, path = NULL, pb = TRUE, ...){
+  
+  # get sound files in path
+  files_in_path <- list.files(path = path, pattern = "\\.wav$", ignore.case = TRUE)
+  # check if there are files
+  if (length(files_in_path) == 0) stop2("No .wav files found in 'path'")
+  
+  # check for master sound file
+  if (!any(files_in_path %in% unique(X$sound.files))) stop2("sound file referenced in 'X' not found in 'path' (make sure you put the master sound file in the same folder than the re-recorded files)")
+  
+  # remove sound files
+  if (!is.null(test.files)) {
+    if (!all(test.files %in% files_in_path)) stop2("Not all 'test.files' were found in 'path'")
+  } else test.files <- files_in_path[!files_in_path %in% unique(X$sound.files)] # remove master sound file
   
  if (length(template.rows) != 1 & length(test.files) != length(template.rows)) stop2("'template.rows' must be 1 or the same length than 'test.files'")
   

@@ -8,7 +8,7 @@ align_test_files(X, Y, output = "est", path = NULL,
 by.song = TRUE, marker = "start", ...)
 }
 \arguments{
-\item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that used for aligning signals in \code{\link{search_templates}}.}
+\item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{search_templates}}.}
 
 \item{Y}{object of class 'data.frame' with the output of \code{\link{search_templates}}.}
 

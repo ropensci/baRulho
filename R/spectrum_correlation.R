@@ -3,11 +3,11 @@
 #' \code{spectrum_correlation} measures frequency spectrum correlation of signals referenced in an extended selection table.
 #' @usage spectrum_correlation(X, parallel = 1, pb = TRUE, method = 1, 
 #' cor.method = "pearson", output = "est", 
-#' hop.size = 11.6, wl = NULL, ovlp = 70)
+#' hop.size = 11.6, wl = NULL, ovlp = 70, path = NULL)
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').ion(X, parallel = 1, pb = TRUE, method = 1, 
 #' cor.method = "pearson", output = "est", 
 #' hop.size = 11.6, wl = NULL, ovlp = 70)
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' If \code{NULL} (default) then the current working directory is used.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -23,6 +23,7 @@
 #' is NULL. If supplied, 'hop.size' is ignored.
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
+#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return Extended selection table similar to input data, but also includes a new column ('spectrum.correlation')
 #' with the calculated frequency spectrum correlation coefficients.
 #' @export
@@ -52,15 +53,22 @@
 #' }
 #last modification on nov-01-2019 (MAS)
 
-spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 70){
+spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 70, path = NULL){
   
+  # set path if not provided
+  if (is.null(path)) 
+    path <- getwd() else 
+      if (!dir.exists(path)) 
+        stop2("'path' provided does not exist")
   
-  
-  
-  # is extended sel tab
-  # if (!warbleR::is_extended_selection_table(X)) 
-    # stop2("'X' must be and extended selection table")
-  
+  # must have the same sampling rate
+  if (is_extended_selection_table(X)){
+    if (length(unique(attr(X, "check.results")$sample.rate)) > 1)
+      stop2(
+        "all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())"
+      )} else 
+        print("assuming all sound files have the same sampling rate")
+
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
   if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
@@ -73,7 +81,7 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   
   # adjust wl based on hope.size
   if (is.null(wl))
-    wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
+    wl <- round(read_sound_file(X, index = 1, header = TRUE, path = path)$sample.rate * hop.size  / 1000, 0)
   
   # make wl even if odd
   if (!(wl %% 2) == 0) wl <- wl + 1
@@ -83,7 +91,7 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop2("'method' must be either  'pearson', 'kendall' or 'spearman'")
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must contain a 'signal.type' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
@@ -101,7 +109,7 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   spcs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y, wle = wl, ovl = ovlp){
    
     # load clip
-    clp <- warbleR::read_wave(X = X, index = y)
+    clp <- warbleR::read_sound_file(X = X, index = y, path = path)
     
     # mean spec
     mspc <- meanspec(wave = clp, f = clp@samp.rate, plot = FALSE, wl = wle, ovlp = ovl)  

@@ -7,7 +7,7 @@
 search_templates(X, template.rows, test.files, path = NULL, pb = TRUE, ...)
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.}
 
 \item{template.rows}{Numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.}
 
@@ -26,7 +26,7 @@ A data frame with the time, start, end, test file names, template name, maximum 
 \code{search_templates} searches acoustic templates on test (re-recorded) sound files.
 }
 \details{
-The function takes a master sound file's reference data ('X') and finds the position of acoustics templates included as selections in 'X'. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. Take a look at the package vignette for information on how to:: incorporate this into a sound degradation analysis workflow.
+The function takes a master sound file's reference data ('X') and finds the position of acoustics templates (included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder thatn the re-recorded sound files}.Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
 }
 \examples{
 \dontrun{

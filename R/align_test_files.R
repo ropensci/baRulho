@@ -3,7 +3,7 @@
 #' \code{align_test_files} aligns test (re-recorded) sound files.
 #' @usage align_test_files(X, Y, output = "est", path = NULL, 
 #' by.song = TRUE, marker = "start", ...)
-#' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that used for aligning signals in \code{\link{search_templates}}.
+#' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{search_templates}}.
 #' @param Y object of class 'data.frame' with the output of \code{\link{search_templates}}. 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data.frame ("data.frame").
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found. 
@@ -139,10 +139,11 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
     sync.sls <- sync.sls[sync.sls$start >= 0, ]
   }
   
-  # remove duration column
+  # remove duration column and template
   sync.sls$duration <- NULL
-  
-  
+  sync.sls$signal.type <- sync.sls$template
+  sync.sls$template <- NULL
+    
   if (output == "est")
   {
     if (by.song) # if by song add a numeric column to represent sound files

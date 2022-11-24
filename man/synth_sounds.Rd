@@ -17,16 +17,16 @@ sampling.rate = 44.1)
 
 \item{replicates}{Numeric vector of length 1 indicating the number of replicates for each treatment combination. Default is 1. Useful for measuring variation in transmission parameters.}
 
-\item{frequencies}{Numeric vector with the different frequencies (in seconds) to synthesize.}
+\item{frequencies}{Numeric vector with the different frequencies (in seconds) to synthesize. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation (see \code{\link[warbleR]{simulate_songs}}).}
 
 \item{durations}{Numeric vector with the different durations (in seconds) to synthesize.}
 
 \item{nharmonics}{Numeric vector of length 1 specifying the number of harmonics to simulate. 1 indicates that only the fundamental
 frequency harmonic will be simulated.}
 
-\item{fm}{Logical to control if frequency modulated sounds are synthesize.}
+\item{fm}{Logical to control if both frequency modulated sounds and pure tones (i.e. non-modulated sounds) are synthesize. If \code{FALSE} (default) only pure tones are synthesized.}
 
-\item{am}{Logical to control if amplitude modulated sounds are synthesize.}
+\item{am}{Logical to control if both amplitude modulated sounds and non-modulated sounds are synthesize. If \code{FALSE} (default) only non-modulated sounds are synthesized.}
 
 \item{mar}{Numeric vector with the duration of margins of silence around sounds in seconds. Default is \code{0.05}.}
 
@@ -56,32 +56,22 @@ This function creates synthetic sounds that can be used on playback experiments 
    \item \code{amplitude modulation}: variation in amplitude across time. Binary (modulated vs non-modulated), arguments 'am' and 'am.amps'.
 }
 Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The functions uses \code{\link[warbleR]{simulate_songs}} internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation.
-The function can also simulate pure tones (\code{diff.fun == "pure.tone"}, 'sig2' is ignored).
 }
 \examples{
 \dontrun{
- # simulate a song with 3 elements and no harmonics
- sm_sng <- synth_sounds(n = 3, harms = 1)
 
- # plot spectro
- seewave::spectro(sm_sng)
-
- # simulate a song with 5 elements and 2 extra harmonics
-sm_sng2 <- synth_sounds(n = 5, harms = 3)
-
- # plot spectrogram
- seewave::spectro(sm_sng2)
-
-# six pure tones with frequency ranging form 4 to 6 and returning selection table
-sm_sng <- synth_sounds(n = 6, harms = 1, seed = 1, diff.fun = "pure.tone",
-                  freqs = seq(4, 6, length.out = 6), selec.table = TRUE,
-                  path = tempdir())
-
-# plot spectro
-seewave::spectro(sm_sng$wave, flim = c(2, 8))
-
-# selection table
-sm_sng$selec.table
+synthetic_est <- synth_sounds(
+  mar = 0.01,
+  frequencies = c(1, 2, 3, 5),
+  steps = 10,
+  durations = 0.1,
+  fm = TRUE,
+  am = TRUE,
+  nharmonics = 4,
+ shuffle = TRUE,
+  am.amps = rep(c(1:4, 3:2), length.out = 10),
+  replicates = 3
+)
 }
 
 }

@@ -28,7 +28,7 @@ Returns atmospheric attenuation (in dB) of sound based on supplied parameters.
 \code{atmospheric_attenuation} estimates atmospheric attenuation and atmospheric absorption.
 }
 \details{
-Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency.
+Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency.It will be deprecated in future versions.
 }
 \examples{
 {

@@ -4,11 +4,12 @@
 \alias{tail_to_signal_ratio}
 \title{Measure reverberations as tail-to-signal ratio}
 \usage{
-tail_to_signal_ratio(X, mar, parallel = 1, pb = TRUE,  type = 1, 
-bp = 'freq.range', output = "est", hop.size = 1, wl = NULL, ovlp = 0)
+tail_to_signal_ratio(X, mar, parallel = 1, pb = TRUE,  type = 1,
+bp = 'freq.range', output = "est", hop.size = 1,
+wl = NULL, ovlp = 0, path = NULL)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
 the start and end points of selection over which to measure ambient noise.}
@@ -17,7 +18,7 @@ the start and end points of selection over which to measure ambient noise.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{type}{Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise): 
+\item{type}{Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 \itemize{
 \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
@@ -30,12 +31,14 @@ the start and end points of selection over which to measure ambient noise.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
+\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.}
+
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
 Extended selection table similar to input data, but also includes a new column (tail.to.signal.ratio)
@@ -54,10 +57,10 @@ data("playback_est")
 
  # remove noise selections
  pe <- playback_est[playback_est$signal.type != "ambient", ]
- 
+
  # using margin for noise of 0.01
  tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)
- 
+
  # tail-to-noise ratio (type 2)
  tail_to_signal_ratio(X = playback_est, mar = 0.01, type = 2)
 }

@@ -5,11 +5,11 @@
 \title{Measure attenuation as signal-to-noise ratio}
 \usage{
 signal_to_noise_ratio(X, mar, parallel = 1, pb = TRUE, eq.dur = FALSE,
-noise.ref = "adjacent", type = 1, bp = 'freq.range', 
-output = "est", hop.size = 1, wl = NULL, ovlp = 0)
+noise.ref = "adjacent", type = 1, bp = 'freq.range',
+output = "est", hop.size = 1, wl = NULL, ovlp = 0, path = NULL)
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals (only needed for "custom" noise reference, see "noise.ref" argument).}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
 the start and end points of selection over which to measure ambient noise.}
@@ -18,17 +18,17 @@ the start and end points of selection over which to measure ambient noise.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{eq.dur}{Logical. Controls whether the ambient noise segment that is measured has the same duration 
+\item{eq.dur}{Logical. Controls whether the ambient noise segment that is measured has the same duration
 to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.}
 
-\item{noise.ref}{Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available: 
+\item{noise.ref}{Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available:
 \itemize{
-\item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments). 
+\item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments).
 \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'signal.type' column). Those segments will be used to apply the same ambient noise reference to all signals in a sound file. Therefore, at least one 'ambient' selection for each sound file must be provided. If several 'ambient' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
 }}
 
 \item{type}{Numeric vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
-, N = background noise): 
+, N = background noise):
 \itemize{
 \item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
  (\code{20 * log10(rms(env(S))/rms(env(N)))}) as described by Darden (2008).
@@ -41,12 +41,14 @@ to that of the signal (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} 
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
+\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.}
+
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
 Extended selection table similar to input data, but also includes a new column (signal.to.noise.ratio)
@@ -63,7 +65,7 @@ Signal-to-noise ratio (SNR) measures signal amplitude level in relation to ambie
 # load example data
 data("playback_est")
 
-# using measure ambient noise reference selections 
+# using measure ambient noise reference selections
 signal_to_noise_ratio(X = playback_est, mar = 0.05, noise.ref = 'custom')
 
 # remove ambient selections

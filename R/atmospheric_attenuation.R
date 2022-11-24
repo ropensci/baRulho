@@ -12,7 +12,7 @@
 #' @return Returns atmospheric attenuation (in dB) of sound based on supplied parameters.   
 #' @export
 #' @name atmospheric_attenuation
-#' @details Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency.
+#' @details Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency.It will be deprecated in future versions.
 #' @examples
 #' {
 #' # measure atmospheric attenuation formula 1
@@ -26,7 +26,10 @@
 #last modification on oct-28-2021 (MAS)
 
 atmospheric_attenuation <- function(f, temp, RH, p = 101325, formula = NULL, spi = NULL, dist){
-  pr <- 101325
+
+  warning("this function will be deprecated. Please use 'attenuation()' instead")
+  
+    pr <- 101325
   To1 <- 273.16
   To <- 293.15
   t <- temp + 273.15

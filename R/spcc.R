@@ -3,8 +3,8 @@
 #' \code{spcc} measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table.
 #' @usage spcc(X, parallel = 1, pb = TRUE,  method = 1, 
 #' cor.method = "pearson", output = "est", 
-#' hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning')
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
+#' hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning', path = NULL)
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).
 #' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
@@ -20,7 +20,8 @@
 #' @param ovlp Numeric vector of length 1 specifying \% of overlap between two 
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp 
 #' slow down the function but produce more accurate results.
-#' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}. 
+#' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.
+#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return Extended selection table similar to input data, but includes a new column (cross.correlation)
 #' with the spectrogram cross-correlation coefficients.
 #' @export
@@ -47,20 +48,25 @@
 #' }
 # last modification on jan-06-2020 (MAS)
 
-spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
+spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning', path = NULL){
   
-  # is extended sel tab
-  # if (!warbleR::is_extended_selection_table(X)) 
-    # stop2("'X' must be and extended selection table")
+  # set path if not provided
+  if (is.null(path)) 
+    path <- getwd() else 
+      if (!dir.exists(path)) 
+        stop2("'path' provided does not exist")
   
   # If parallel is not numeric
   if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
   if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
 
   # must have the same sampling rate
-  if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
-    stop2("all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())")
-
+  if (is_extended_selection_table(X)){
+    if (length(unique(attr(X, "check.results")$sample.rate)) > 1)
+      stop2(
+        "all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())"
+      )} else 
+        print("assuming all sound files have the same sampling rate")
   #check output
   if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be 'est' or 'data.frame'")  
   
@@ -69,8 +75,8 @@ spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson",
   
   # adjust wl based on hope.size
   if (is.null(wl))
-    wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
-
+    wl <- round(read_sound_file(X, index = 1, header = TRUE, path = path)$sample.rate * hop.size  / 1000, 0)
+  
   # make wl even if odd
   if (!(wl %% 2) == 0) wl <- wl + 1
   
@@ -80,7 +86,7 @@ spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson",
   if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop2("'method' must be either  'pearson', 'kendall' or 'spearman'")
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must contain a 'signal.type' column")
   
   #remove ambient if any from signal types
   sig.types <- setdiff(unique(X$signal.type), "ambient")
@@ -118,7 +124,7 @@ spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson",
   warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = parallel, pb = pb, compare.matrix = comp_mat)
   
   # run spcc 
-  xcorrs <- warbleR::cross_correlation(X = X, cor.method = "pearson")$max.xcorr.matrix
+  xcorrs <- warbleR::cross_correlation(X = X, cor.method = "pearson", path = path)$max.xcorr.matrix
 
   # put results back into X
   X$reference <- NA

@@ -1,6 +1,6 @@
 #' Align start and end of signal using spectrographic cross-correlation  
 #' 
-#' \code{spcc_align} aligns start and end of signal in an extended selection table using spectrographic cross-correlation  
+#' \code{spcc_align} aligns start and end of signal in an extended selection table using spectrographic cross-correlation
 #' @usage spcc_align(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, 
 #' wn = 'hanning')
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
@@ -68,7 +68,7 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   if (!(wl %% 2) == 0) wl <- wl + 1
   
   # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must containe a 'signal.type' column")
+  if (is.null(X$signal.type)) stop2("'X' must contain a 'signal.type' column")
   
   #remove ambient if any from signal types
   sig.types <- setdiff(unique(X$signal.type), "ambient")
@@ -148,8 +148,6 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   X$end[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <- 
     X$start[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] + 
     peaks$end - peaks$start
-    # Y$end[paste(Y$sound.files, X$selec, sep = "-") %in% comp_mat[, 2]]  - 
-    # Y$start[paste(Y$sound.files, X$selec, sep = "-") %in% comp_mat[, 2]]
 
   attr(X, "check.results")$duration <- attr(X, "check.results")$end - attr(X, "check.results")$start
   

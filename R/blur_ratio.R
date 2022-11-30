@@ -347,7 +347,8 @@ blur_ratio <- function(X, parallel = 1, pb = TRUE, method = 1,
     }
   
   # return data frame
-  if (output == "data.frame") X <- as.data.frame(X)
+  if (output == "data.frame") X <- as.data.frame(X) else
+    attributes(X)$call <- base::match.call() # fix call attribute
   
   return(X)
 }

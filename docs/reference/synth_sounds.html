@@ -54,8 +54,8 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synth_sounds</span><span class="op">(</span>steps <span class="op">=</span> <span class="fl">10</span>, am.amps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="va">steps</span><span class="op">)</span>,</span>
-<span>replicates <span class="op">=</span> <span class="fl">1</span>, <span class="va">frequencies</span>, <span class="va">durations</span>, nharmonics <span class="op">=</span> <span class="fl">1</span>, fm <span class="op">=</span> <span class="cn">FALSE</span>, am <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synth_sounds</span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">1</span>, <span class="va">frequencies</span>, <span class="va">durations</span>, nharmonics <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>fm <span class="op">=</span> <span class="cn">FALSE</span>, am <span class="op">=</span> <span class="cn">FALSE</span>, am.amps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>, </span>
 <span>mar <span class="op">=</span> <span class="fl">0.05</span>, seed <span class="op">=</span> <span class="cn">NULL</span>, sig2 <span class="op">=</span> <span class="fl">0.3</span>, shuffle <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>hrm.freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">8</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span>,</span>
 <span>sampling.rate <span class="op">=</span> <span class="fl">44.1</span><span class="op">)</span></span></code></pre></div>
@@ -63,15 +63,7 @@
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>steps</dt>
-<dd><p>Numeric vector of length 1. Controls the number of frequency steps in which each sound is split. Default is 10.</p></dd>
-
-
-<dt>am.amps</dt>
-<dd><p>Numeric vector with the relative amplitude for each step (see 'step' argument) to simulate amplitude modulation (only applied to the fundamental frequency). Should have the same length as the number of steps. Default is 1 (no amplitude modulation). The default value (<code>rep(c(1:4, 3:2), length.out = steps)</code>) has to amplitude peaks.</p></dd>
-
-
-<dt>replicates</dt>
+    <dl><dt>replicates</dt>
 <dd><p>Numeric vector of length 1 indicating the number of replicates for each treatment combination. Default is 1. Useful for measuring variation in transmission parameters.</p></dd>
 
 
@@ -94,6 +86,10 @@ frequency harmonic will be simulated.</p></dd>
 
 <dt>am</dt>
 <dd><p>Logical to control if both amplitude modulated sounds and non-modulated sounds are synthesize. If <code>FALSE</code> (default) only non-modulated sounds are synthesized.</p></dd>
+
+
+<dt>am.amps</dt>
+<dd><p>Numeric vector with the relative amplitude for each time step to simulate amplitude modulation (only applied to the fundamental frequency). The default value (<code>rep(c(1:4, 3:2), length.out = 11)</code>) has 2 amplitude peaks (although only applied if 'am = TRUE')</p></dd>
 
 
 <dt>mar</dt>
@@ -128,7 +124,7 @@ frequency harmonic will be simulated.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>This function creates synthetic sounds that can be used on playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions:</p><ul><li><p><code>frequency</code>: continuous, argument 'frequencies'.</p></li>
+    <p>This function creates synthetic sounds that can be used for playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions:</p><ul><li><p><code>frequency</code>: continuous, argument 'frequencies'.</p></li>
 <li><p><code>duration</code>: continuous, argument 'durations'.</p></li>
 <li><p><code>harmonic structure</code>: binary (harmonics vs no-harmonics), arguments 'nharmonics' and 'hrm.freqs'.</p></li>
 <li><p><code>frequency modulation</code>: variation in fundamental frequency across time. Binary (modulated vs non-modulated), arguments 'fm' and 'sig2'.</p></li>
@@ -141,7 +137,7 @@ frequency harmonic will be simulated.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="https://marce10.github.io/warbleR/reference/query_xc.html" class="external-link">query_xc</a></code> for for downloading bird vocalizations from an online repository.</p></div>
+    <div class="dont-index"><p><code><a href="https://marce10.github.io/warbleR/reference/simulate_songs.html" class="external-link">simulate_songs</a></code> from the package warbleR.</p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -155,13 +151,11 @@ frequency harmonic will be simulated.</p></dd>
 <span class="r-in"><span><span class="va">synthetic_est</span> <span class="op">&lt;-</span> <span class="fu">synth_sounds</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  mar <span class="op">=</span> <span class="fl">0.01</span>,</span></span>
 <span class="r-in"><span>  frequencies <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">5</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  steps <span class="op">=</span> <span class="fl">10</span>,</span></span>
 <span class="r-in"><span>  durations <span class="op">=</span> <span class="fl">0.1</span>,</span></span>
 <span class="r-in"><span>  fm <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  am <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>  nharmonics <span class="op">=</span> <span class="fl">4</span>,</span></span>
 <span class="r-in"><span> shuffle <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>  am.amps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  replicates <span class="op">=</span> <span class="fl">3</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>

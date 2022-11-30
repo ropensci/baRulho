@@ -313,8 +313,11 @@ excess_attenuation <-
     X2$sigRMS <- X2$TEMP....sgnl <- X2$sig_env <- NULL
     
     # fix est
-    if (output == "est" & is_extended_selection_table(X))
+    if (output == "est" & is_extended_selection_table(X)){
       X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
-    
+      
+      # fix call attribute
+      attributes(X2)$call <- base::match.call() 
+      }
     return(X2)
   }

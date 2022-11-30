@@ -172,7 +172,8 @@ spectrum_correlation <- function(X, parallel = 1, pb = TRUE, method = 1, cor.met
   X$TEMP....sgnl <-NULL
   
   # return data frame
-  if (output == "data.frame") X <- as.data.frame(X)
+  if (output == "data.frame") X <- as.data.frame(X) else
+    attributes(X)$call <- base::match.call() # fix call attribute
   
   return(X)
 }

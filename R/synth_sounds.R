@@ -1,13 +1,11 @@
   #' Create synthetic sounds
 #'
 #' \code{synth_sounds} create synthetic sounds
-#' @usage synth_sounds(steps = 10, am.amps = rep(c(1:4, 3:2), length.out = steps),
-#' replicates = 1, frequencies, durations, nharmonics = 1, fm = FALSE, am = FALSE, 
+#' @usage synth_sounds(replicates = 1, frequencies, durations, nharmonics = 1, 
+#' fm = FALSE, am = FALSE, am.amps = rep(c(1:4, 3:2), length.out = 11), 
 #' mar = 0.05, seed = NULL, sig2 = 0.3, shuffle = FALSE,
 #' hrm.freqs = c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10),
 #' sampling.rate = 44.1)
-#' @param steps Numeric vector of length 1. Controls the number of frequency steps in which each sound is split. Default is 10.
-#' @param am.amps Numeric vector with the relative amplitude for each step (see 'step' argument) to simulate amplitude modulation (only applied to the fundamental frequency). Should have the same length as the number of steps. Default is 1 (no amplitude modulation). The default value (\code{rep(c(1:4, 3:2), length.out = steps)}) has to amplitude peaks.
 #' @param replicates Numeric vector of length 1 indicating the number of replicates for each treatment combination. Default is 1. Useful for measuring variation in transmission parameters. 
 #' @param frequencies Numeric vector with the different frequencies (in seconds) to synthesize. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation (see \code{\link[warbleR]{simulate_songs}}).
 #' @param durations Numeric vector with the different durations (in seconds) to synthesize.
@@ -15,6 +13,7 @@
 #' frequency harmonic will be simulated.
 #' @param fm Logical to control if both frequency modulated sounds and pure tones (i.e. non-modulated sounds) are synthesize. If \code{FALSE} (default) only pure tones are synthesized. 
 #' @param am Logical to control if both amplitude modulated sounds and non-modulated sounds are synthesize. If \code{FALSE} (default) only non-modulated sounds are synthesized. 
+#' @param am.amps Numeric vector with the relative amplitude for each time step to simulate amplitude modulation (only applied to the fundamental frequency). The default value (\code{rep(c(1:4, 3:2), length.out = 11)}) has 2 amplitude peaks (although only applied if 'am = TRUE')
 #' @param mar Numeric vector with the duration of margins of silence around sounds in seconds. Default is \code{0.05}.
 #' @param seed Numeric vector of length 1. This allows users to get the same results in different runs (using \code{\link[base:Random]{set.seed}} internally). Default is \code{NULL}.
 #' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
@@ -23,10 +22,10 @@
 #' @param hrm.freqs Numeric vector with the frequencies of the harmonics relative to the fundamental frequency. The default values are c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10).
 #' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
 #' @return A wave object containing the simulated songs. If 'selec.table' is \code{TRUE} the function saves the wave object as a '.wav' sound file in the working directory (or 'path') and returns a list including 1) a selection table with the start/end time, and bottom/top frequency of the sub-units and 2) the wave object.
-#' @seealso \code{\link{query_xc}} for for downloading bird vocalizations from an online repository.
+#' @seealso \code{\link[warbleR]{simulate_songs}} from the package warbleR. 
 #' @export
 #' @name synth_sounds
-#' @details This function creates synthetic sounds that can be used on playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions: 
+#' @details This function creates synthetic sounds that can be used for playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions: 
 #' \itemize{
 #'    \item \code{frequency}: continuous, argument 'frequencies'.
 #'    \item \code{duration}: continuous, argument 'durations'.
@@ -34,7 +33,7 @@
 #'    \item \code{frequency modulation}: variation in fundamental frequency across time. Binary (modulated vs non-modulated), arguments 'fm' and 'sig2'. 
 #'    \item \code{amplitude modulation}: variation in amplitude across time. Binary (modulated vs non-modulated), arguments 'am' and 'am.amps'.
 #' }
-#' Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The functions uses \code{\link[warbleR]{simulate_songs}} internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation.
+#' Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The functions uses \code{\link[warbleR]{simulate_songs}} internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation. 
 
 #' @examples
 #' \dontrun{
@@ -42,13 +41,11 @@
 #' synthetic_est <- synth_sounds(
 #'   mar = 0.01,
 #'   frequencies = c(1, 2, 3, 5),
-#'   steps = 10,
 #'   durations = 0.1,
 #'   fm = TRUE,
 #'   am = TRUE,
 #'   nharmonics = 4,
 #'  shuffle = TRUE,
-#'   am.amps = rep(c(1:4, 3:2), length.out = 10),
 #'   replicates = 3
 #' )
 #'}
@@ -59,14 +56,13 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 # last modification on feb-22-2018 (MAS)
 synth_sounds <-
-  function(steps = 10,
-           am.amps = rep(c(1:4, 3:2), length.out = steps),
-           replicates = 1,
+  function(replicates = 1,
            frequencies,
            durations,
            nharmonics = 1,
            fm = FALSE,
            am = FALSE,
+           am.amps = rep(c(1:4, 3:2), length.out = 11),
            mar = 0.05,
            seed = NULL,
            sig2 = 0.3,
@@ -74,15 +70,14 @@ synth_sounds <-
            hrm.freqs = c(1 / 2, 1 / 3, 2 / 3, 1 / 4, 3 / 4, 1 / 5, 1 / 6, 1 / 7, 1 /
                            8, 1 / 9, 1 / 10),
            sampling.rate = 44.1) {
-    # error message if Sim.DiffProc not installed
-    if (!requireNamespace("Sim.DiffProc", quietly = TRUE))
-      stop2("must install 'Sim.DiffProc' to use this function")
-    
-    if (length(am.amps) != steps)
-      stop("length of mod.aps should be the same as steps `(length(mod.aps) == steps)`")
-    
-    if (nharmonics < 2)
-      stop("when 'harmonics' is included as treatment 'nharmonics' should be higher than 1")
+  
+    if (am & length(am.amps) < 2)
+      stop2("if 'am = TRUE' 'am.amps' must have more than 1 value 'length(am.amps) > 1'")
+
+    # set number of steps (default is 10)
+    steps <- if (length(am.amps) > 2) length(am.amps) else
+        10
+      
     
     # make all possible combinations
     eg <- expand.grid(
@@ -165,7 +160,9 @@ synth_sounds <-
     sim.song.sts <- lapply(sim.songs, function(X)
       X$selec.table)
     
-    sim.song.st <- do.call(rbind, sim.song.sts)
+    rbind2 <- function(...) suppressWarnings(rbind(...))
+    
+    sim.song.st <- do.call(rbind2, sim.song.sts)
     
     if (shuffle)
       sim.song.st <- sim.song.st[sample(1:nrow(sim.song.st)), ]
@@ -179,6 +176,7 @@ synth_sounds <-
         pb = FALSE,
         confirm.extended = FALSE,
         path = temp_dir,
+        verbose = FALSE
       )
     
     # clean column names
@@ -200,7 +198,7 @@ synth_sounds <-
     if (nharmonics > 1)
       sim_sounds_est$harmonics <-
       ifelse(grepl("no.harm", sim_sounds_est$sound.files),
-             "pure tone",
+             "pure.tone",
              "harmonics")
     
     # replicate treatments
@@ -213,8 +211,9 @@ synth_sounds <-
       })
       
       sim_sounds_est <- rep_est_list[[1]]
+      
       for (i in 2:replicates)
-        suppressMessages(sim_sounds_est <-
+        suppressWarnings(sim_sounds_est <-
                            rbind(sim_sounds_est, rep_est_list[[i]]))
     }
     
@@ -228,7 +227,7 @@ synth_sounds <-
     sim_sounds_est$old.sound.file.name <- NULL
     
     # add single treatment column
-    dur_label <- if (length(duration) > 1)
+    dur_label <- if (length(durations) > 1)
       paste0("dur=", sim_sounds_est$duration) else
       NULL
     freq_label <- if (length(frequencies) > 1)
@@ -247,6 +246,9 @@ synth_sounds <-
       gsub("^;", "", sim_sounds_est$treatments)
     
     rownames(sim_sounds_est) <- 1:nrow(sim_sounds_est)
+    
+    # fix call attribute
+    attributes(sim_sounds_est)$call <- base::match.call()
     
     return(sim_sounds_est)
     

@@ -188,7 +188,9 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   
 
   # return data frame
-  if (output == "data.frame") X2 <- as.data.frame(X2)
+  if (output == "data.frame") X2 <- as.data.frame(X2) else
+      attributes(X2)$call <- base::match.call() # fix call attribute
+  
   
   return(X2)
 }

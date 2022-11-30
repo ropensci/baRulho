@@ -4,17 +4,13 @@
 \alias{synth_sounds}
 \title{Create synthetic sounds}
 \usage{
-synth_sounds(steps = 10, am.amps = rep(c(1:4, 3:2), length.out = steps),
-replicates = 1, frequencies, durations, nharmonics = 1, fm = FALSE, am = FALSE, 
+synth_sounds(replicates = 1, frequencies, durations, nharmonics = 1, 
+fm = FALSE, am = FALSE, am.amps = rep(c(1:4, 3:2), length.out = 11), 
 mar = 0.05, seed = NULL, sig2 = 0.3, shuffle = FALSE,
 hrm.freqs = c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10),
 sampling.rate = 44.1)
 }
 \arguments{
-\item{steps}{Numeric vector of length 1. Controls the number of frequency steps in which each sound is split. Default is 10.}
-
-\item{am.amps}{Numeric vector with the relative amplitude for each step (see 'step' argument) to simulate amplitude modulation (only applied to the fundamental frequency). Should have the same length as the number of steps. Default is 1 (no amplitude modulation). The default value (\code{rep(c(1:4, 3:2), length.out = steps)}) has to amplitude peaks.}
-
 \item{replicates}{Numeric vector of length 1 indicating the number of replicates for each treatment combination. Default is 1. Useful for measuring variation in transmission parameters.}
 
 \item{frequencies}{Numeric vector with the different frequencies (in seconds) to synthesize. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation (see \code{\link[warbleR]{simulate_songs}}).}
@@ -27,6 +23,8 @@ frequency harmonic will be simulated.}
 \item{fm}{Logical to control if both frequency modulated sounds and pure tones (i.e. non-modulated sounds) are synthesize. If \code{FALSE} (default) only pure tones are synthesized.}
 
 \item{am}{Logical to control if both amplitude modulated sounds and non-modulated sounds are synthesize. If \code{FALSE} (default) only non-modulated sounds are synthesized.}
+
+\item{am.amps}{Numeric vector with the relative amplitude for each time step to simulate amplitude modulation (only applied to the fundamental frequency). The default value (\code{rep(c(1:4, 3:2), length.out = 11)}) has 2 amplitude peaks (although only applied if 'am = TRUE')}
 
 \item{mar}{Numeric vector with the duration of margins of silence around sounds in seconds. Default is \code{0.05}.}
 
@@ -47,7 +45,7 @@ A wave object containing the simulated songs. If 'selec.table' is \code{TRUE} th
 \code{synth_sounds} create synthetic sounds
 }
 \details{
-This function creates synthetic sounds that can be used on playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions: 
+This function creates synthetic sounds that can be used for playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions: 
 \itemize{
    \item \code{frequency}: continuous, argument 'frequencies'.
    \item \code{duration}: continuous, argument 'durations'.
@@ -63,13 +61,11 @@ Sound for all possible combinations of the selected structure dimensions will be
 synthetic_est <- synth_sounds(
   mar = 0.01,
   frequencies = c(1, 2, 3, 5),
-  steps = 10,
   durations = 0.1,
   fm = TRUE,
   am = TRUE,
   nharmonics = 4,
  shuffle = TRUE,
-  am.amps = rep(c(1:4, 3:2), length.out = 10),
   replicates = 3
 )
 }
@@ -81,7 +77,7 @@ Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamlin
 }
 }
 \seealso{
-\code{\link{query_xc}} for for downloading bird vocalizations from an online repository.
+\code{\link[warbleR]{simulate_songs}} from the package warbleR.
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

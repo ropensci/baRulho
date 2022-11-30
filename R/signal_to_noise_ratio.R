@@ -339,7 +339,9 @@ signal_to_noise_ratio <-
       X$signal.type <- NULL
     
     if (output == "data.frame")
-      X <- as.data.frame(X)
+      X <- as.data.frame(X) else
+        attributes(X)$call <- base::match.call() # fix call attribute
+    
     
     return(X)
   }

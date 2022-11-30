@@ -154,6 +154,10 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
         by.song <- NULL # rewrite by song as null
         
     sync.sls <- selection_table(sync.sls, extended = TRUE, confirm.extended = FALSE, path = path, by.song = by.song, ...)
+    
+    # fix call attribute
+    attributes(sync.sls)$call <- base::match.call()
+    
     }
   
   return(sync.sls)

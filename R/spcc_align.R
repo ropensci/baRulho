@@ -151,5 +151,8 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
 
   attr(X, "check.results")$duration <- attr(X, "check.results")$end - attr(X, "check.results")$start
   
+  # fix call attribute
+    attributes(X)$call <- base::match.call() 
+  
   return(X)
 }

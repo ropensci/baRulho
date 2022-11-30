@@ -135,7 +135,8 @@ spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson",
   
   X$cross.correlation[match(xcorrs$X2, paste(X$sound.files, X$selec, sep = "-"))] <- xcorrs$score
   
-  if (output == "data.frame") X <- as.data.frame(X)
+  if (output == "data.frame") X <- as.data.frame(X) else
+    attributes(X)$call <- base::match.call() # fix call attribute
   
   return(X)
 }

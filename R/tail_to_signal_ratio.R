@@ -234,7 +234,8 @@ tail_to_signal_ratio <- function(X,
     })
   
   if (output == "data.frame")
-    X <- as.data.frame(X)
+    X <- as.data.frame(X) else
+      attributes(X)$call <- base::match.call() # fix call attribute
   
   # remove signal.type column
   if (X$signal.type[1] == "no.signal.type.column")

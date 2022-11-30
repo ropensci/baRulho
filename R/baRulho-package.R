@@ -19,6 +19,7 @@
 #' @import warbleR
 #' @import fftw
 #' @import viridis
+#' @import Sim.DiffProc 
 #' @importFrom stats cor aggregate approx ave
 #' @importFrom methods is
 #' 

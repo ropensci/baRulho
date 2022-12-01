@@ -4,7 +4,7 @@
 \alias{tail_to_signal_ratio}
 \title{Measure reverberations as tail-to-signal ratio}
 \usage{
-tail_to_signal_ratio(X, mar, parallel = 1, pb = TRUE,  type = 1,
+tail_to_signal_ratio(X, mar, parallel = 1, cores = 1, pb = TRUE,  type = 1,
 bp = 'freq.range', output = "est", hop.size = 1,
 wl = NULL, ovlp = 0, path = NULL)
 }
@@ -14,7 +14,9 @@ wl = NULL, ovlp = 0, path = NULL)
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
 the start and end points of selection over which to measure ambient noise.}
 
-\item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
+\item{parallel}{DEPRECATED. Use 'cores' instead.}
+
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
@@ -22,10 +24,10 @@ the start and end points of selection over which to measure ambient noise.}
 \itemize{
 \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
-\item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the signal. So type 2 actually measures tail-to-noise ratio.
+\item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the sound. So type 2 actually measures tail-to-noise ratio.
 }}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each signal as the bandpass range.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}
 
 \item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
 
@@ -45,10 +47,10 @@ Extended selection table similar to input data, but also includes a new column (
 with the tail-to-signal ratio values.
 }
 \description{
-\code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of signals referenced in an extended selection table.
+\code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of sounds referenced in an extended selection table.
 }
 \details{
-Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberations to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
+Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberations to energy in the sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
 }
 \examples{
 {
@@ -56,7 +58,7 @@ Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberation
 data("playback_est")
 
  # remove noise selections
- pe <- playback_est[playback_est$signal.type != "ambient", ]
+ pe <- playback_est[playback_est$sound.id != "ambient", ]
 
  # using margin for noise of 0.01
  tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)

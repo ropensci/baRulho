@@ -5,10 +5,10 @@
 \title{Align test sound files}
 \usage{
 align_test_files(X, Y, output = "est", path = NULL, 
-by.song = TRUE, marker = "start", ...)
+by.song = TRUE, marker = "start", cores = 1, pb = TRUE, ...)
 }
 \arguments{
-\item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{search_templates}}.}
+\item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{search_templates}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.}
 
 \item{Y}{object of class 'data.frame' with the output of \code{\link{search_templates}}.}
 
@@ -20,16 +20,20 @@ by.song = TRUE, marker = "start", ...)
 
 \item{marker}{Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is "start".}
 
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
+
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
+
 \item{...}{Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.}
 }
 \value{
-An extended selection table with the aligned signals from test (re-recorded) sound files.
+An extended selection table with the aligned sounds from test (re-recorded) sound files.
 }
 \description{
 \code{align_test_files} aligns test (re-recorded) sound files.
 }
 \details{
-The function aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
+The function aligns sounds found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
 }
 \examples{
 \dontrun{
@@ -87,7 +91,7 @@ found.templts <- search_templates(X = master.sf,
 template.rows = which(master.sf$orig.sound.file == "start_marker"), 
 test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 
-# align signals and output extended selection table
+# align sounds and output extended selection table
 alg.tests <- align_test_files(X =  master.sf, Y = found.templts, path = td, pb = FALSE)
 }
 

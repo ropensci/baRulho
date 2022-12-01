@@ -1,17 +1,19 @@
 #' Measure amplitude envelope correlation
 #' 
-#' \code{envelope_correlation} measures amplitude envelope correlation of signals referenced in an extended selection table.
-#' @usage envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
-#' ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, 
-#' wl = NULL, ovlp = 70, path = NULL)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).
-#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' \code{envelope_correlation} measures amplitude envelope correlation of sounds referenced in an extended selection table.
+#' @usage envelope_correlation(X, parallel = 1, cores = 1, pb = TRUE, method = 1, 
+#' cor.method = "pearson", ssmooth = NULL, msmooth = NULL, 
+#' output = "est", hop.size = 11.6, wl = NULL, ovlp = 70, 
+#' path = NULL)
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
+#' @param parallel DEPRECATED. Use 'cores' instead.
+#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' If \code{NULL} (default) then the current working directory is used.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' to measure amplitude envelope correlation. Two methods are available:
 #' \itemize{
-#' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
-#' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
+#' \item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
+#' \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 #' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param ssmooth Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).
@@ -24,10 +26,10 @@
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return Extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')
-#' with the reference signal and the amplitude envelope correlation coefficients.
+#' with the reference sound and the amplitude envelope correlation coefficients.
 #' @export
 #' @name envelope_correlation
-#' @details Amplitude envelope correlation measures the similarity of two signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means signals have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types).The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to extract envelopes. 
+#' @details Amplitude envelope correlation measures the similarity of two sounds in the time domain. The  function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and calculating the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to extract envelopes. 
 #' @seealso \code{\link{blur_ratio}}, \code{\link{spectrum_blur_ratio}}
 #' @examples
 #' {
@@ -35,7 +37,7 @@
 #' data("playback_est")
 #' 
 #' # remove ambient selections
-#' playback_est <- playback_est[playback_est$signal.type != "ambient", ]
+#' playback_est <- playback_est[playback_est$sound.id != "ambient", ]
 #' 
 #' # method 1
 #'envelope_correlation(X = playback_est)
@@ -52,7 +54,11 @@
 #' }
 #last modification on nov-01-2019 (MAS)
 
-envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, wl = NULL, ovlp = 70, path = NULL){
+envelope_correlation <- function(X, parallel = 1, cores = 1, pb = TRUE, method = 1,  cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, wl = NULL, ovlp = 70, path = NULL){
+  
+  # deprecated message
+  if (cores > 1) 
+    stop2("'parallel' has been deprecated, Use 'cores' instead")
   
   # set path if not provided
   if (is.null(path)) 
@@ -69,9 +75,9 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
         print("assuming all sound files have the same sampling rate")
   
   
-  # If parallel is not numeric
-  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
+  # If cores is not numeric
+  if (!is.numeric(cores)) stop2("'cores' must be a numeric vector of length 1") 
+  if (any(!(cores %% 1 == 0), cores < 1)) stop2("'cores' should be a positive integer")
   
   # hopsize  
   if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
@@ -90,18 +96,18 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   if (!is.character(cor.method)) stop2("'cor.method' must be a character vector of length 1") 
   if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop2("'method' must be either  'pearson', 'kendall' or 'spearman'")
   
-  # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must contain a 'signal.type' column")
+  # check sound.id column 
+  if (is.null(X$sound.id)) stop2("'X' must contain a 'sound.id' column")
   
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
   if (pb) 
     write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
   
-  X <- prep_X_bRlo_int(X, method = method, parallel = parallel, pb = pb)
+  X <- prep_X_bRlo_int(X, method = method, cores = cores, pb = pb)
 
   # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & parallel > 1)
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
+  if (Sys.info()[1] == "Windows" & cores > 1)
+    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
   
   if (pb) write(file = "", x = "Calculating amplitude envelopes (step 2 out of 3):")
   
@@ -129,13 +135,13 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
   names(envs) <- X$TEMP....sgnl
   
   # function to measure envelope correlation
-  # y and z are the sound.files+selec names of the signals and reference signal (model)
+  # y and z are the sound.files+selec names of the sounds and reference sound (model)
   env_cor_FUN <- function(y, z){
     
     # if names are the same return NA
     if (y == z) out <- NA else {
       
-      # extract envelope for signal and model 
+      # extract envelope for sound and model 
       sgnl.env <- envs[[which(names(envs) == y)]]
       mdl.env <- envs[[which(names(envs) == z)]]
       
@@ -151,7 +157,7 @@ envelope_correlation <- function(X, parallel = 1, pb = TRUE, method = 1,  cor.me
       # get length of shortest minus 1 (1 if same length so it runs a single correlation)
       shrt.lgth <- length(shrt.env) - 1
       
-      # steps for sliding one signal over the other  
+      # steps for sliding one sound over the other  
       stps <- length(lg.env) - shrt.lgth
       
       # calculate correlations at each step

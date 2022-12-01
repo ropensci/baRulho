@@ -1,22 +1,23 @@
 #' Measure reverberations as tail-to-signal ratio
 #'
-#' \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of signals referenced in an extended selection table.
-#' @usage tail_to_signal_ratio(X, mar, parallel = 1, pb = TRUE,  type = 1,
+#' \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of sounds referenced in an extended selection table.
+#' @usage tail_to_signal_ratio(X, mar, parallel = 1, cores = 1, pb = TRUE,  type = 1,
 #' bp = 'freq.range', output = "est", hop.size = 1,
 #' wl = NULL, ovlp = 0, path = NULL)
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure ambient noise.
-#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param parallel DEPRECATED. Use 'cores' instead.
+#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each signal as the bandpass range.
+#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param type Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 #' \itemize{
 #' \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
 #'  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
-#' \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the signal. So type 2 actually measures tail-to-noise ratio.
+#' \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the sound. So type 2 actually measures tail-to-noise ratio.
 #' }
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
@@ -28,14 +29,14 @@
 #' with the tail-to-signal ratio values.
 #' @export
 #' @name tail_to_signal_ratio
-#' @details Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberations to energy in the signal. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
+#' @details Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberations to energy in the sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
 #' @examples
 #' {
 #' # load example data
 #' data("playback_est")
 #'
 #'  # remove noise selections
-#'  pe <- playback_est[playback_est$signal.type != "ambient", ]
+#'  pe <- playback_est[playback_est$sound.id != "ambient", ]
 #'
 #'  # using margin for noise of 0.01
 #'  tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)
@@ -57,7 +58,8 @@
 
 tail_to_signal_ratio <- function(X,
                                  mar,
-                                 parallel = 1,
+                                 parallel = 1, 
+                                 cores = 1,
                                  pb = TRUE,
                                  type = 1,
                                  bp = 'freq.range',
@@ -78,11 +80,11 @@ tail_to_signal_ratio <- function(X,
   } else
     print("assuming all sound files have the same sampling rate")
   
-  # If parallel is not numeric
-  if (!is.numeric(parallel))
-    stop2("'parallel' must be a numeric vector of length 1")
-  if (any(!(parallel %% 1 == 0), parallel < 1))
-    stop2("'parallel' should be a positive integer")
+  # If cores is not numeric
+  if (!is.numeric(cores))
+    stop2("'cores' must be a numeric vector of length 1")
+  if (any(!(cores %% 1 == 0), cores < 1))
+    stop2("'cores' should be a positive integer")
   
   #check output
   if (!any(output %in% c("est", "data.frame")))
@@ -110,22 +112,22 @@ tail_to_signal_ratio <- function(X,
   if (!(wl %% 2) == 0)
     wl <- wl + 1
   
-  # check signal.type column
-  if (is.null(X$signal.type))
-    X$signal.type <- "no.signal.type.column"
+  # check sound.id column
+  if (is.null(X$sound.id))
+    X$sound.id <- "no.sound.id.column"
 
   # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & parallel > 1)
+  if (Sys.info()[1] == "Windows" & cores > 1)
     cl <-
-    parallel::makePSOCKcluster(getOption("cl.cores", parallel))
+    parallel::makePSOCKcluster(getOption("cl.cores", cores))
   else
-    cl <- parallel
+    cl <- cores
   
   # calculate STR
   X$tail.to.signal.ratio <-
     pbapply::pbsapply(1:nrow(X), cl = cl, function(y) {
     
-      if (X$signal.type[y] != "ambient") {
+      if (X$sound.id[y] != "ambient") {
         # Read sound files to get sample rate and length
         r <-
           warbleR::read_sound_file(
@@ -138,12 +140,12 @@ tail_to_signal_ratio <- function(X,
           )
         
         
-        #reset time coordinates of signals if higher than duration
+        #reset time coordinates of sounds if higher than duration
         enn <- X$end[y] + mar
         if (enn > r$samples / sampling_rate)
           enn <- r$samples / sampling_rate
         
-        # read signal and margin
+        # read sound and margin
         tail.wv <-
           warbleR::read_sound_file(
             X = X,
@@ -153,14 +155,14 @@ tail_to_signal_ratio <- function(X,
             path = path
           )
         
-        # read signal
+        # read sound
         if (type == 1)
           signal <-
           warbleR::read_sound_file(X = X,
                                    index = y,
                                    path = path)
         
-        # read background noise right before the signal
+        # read background noise right before the sound
         if (type == 2)
           signal <-
           warbleR::read_sound_file(
@@ -203,7 +205,7 @@ tail_to_signal_ratio <- function(X,
         }
         
         
-        # get RMS for signal (or noise if type 2)
+        # get RMS for sound (or noise if type 2)
         sig.env <-
           seewave::env(signal,
                        f = sampling_rate,
@@ -217,7 +219,7 @@ tail_to_signal_ratio <- function(X,
                        envt = "hil",
                        plot = FALSE)
         
-        # signal (or noise) RMS
+        # sound (or noise) RMS
         sig_RMS <- seewave::rms(sig.env)
         
         # get reference ambient noise RMS
@@ -237,9 +239,9 @@ tail_to_signal_ratio <- function(X,
     X <- as.data.frame(X) else
       attributes(X)$call <- base::match.call() # fix call attribute
   
-  # remove signal.type column
-  if (X$signal.type[1] == "no.signal.type.column")
-    X$signal.type <- NULL
+  # remove sound.id column
+  if (X$sound.id[1] == "no.sound.id.column")
+    X$sound.id <- NULL
   
   return(X)
 }

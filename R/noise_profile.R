@@ -2,18 +2,19 @@
 #'
 #' \code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.
 #' @usage noise_profile(X = NULL, files = NULL, mar = NULL,
-#' noise.ref = "adjacent", parallel = 1, pb = TRUE, path = NULL,
+#' noise.ref = "adjacent", parallel = 1, cores = 1, pb = TRUE, path = NULL,
 #' bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A", averaged = TRUE)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.
 #' @param files Character vector with names of wave files to be analyzed. Files must be found in 'path' supplied (or in the working directory if 'path' is not supplied). Default is \code{NULL}.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure ambient noise. Required if 'X' is supplied and ignored if not supplied. Default is \code{NULL}.
 #' @param noise.ref Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Ignored if 'X' is not supplied. Two options are available:
 #' \itemize{
-#' \item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments).
-#' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'signal.type' column).
+#' \item \code{adjacent}: measure ambient noise right before the sound (using argument 'mar' to define duration of ambient noise segments).
+#' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column).
 #' }
-#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param parallel DEPRECATED. Use 'cores' instead.
+#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param path Character string containing the directory path where the sound files are located.
 #' If \code{NULL} (default) then the current working directory is used.
@@ -29,7 +30,7 @@
 #' @return A list containing the the frequency spectra for each sound file or wave object (if 'X' is supplied).
 #' @export
 #' @name noise_profile
-#' @details The function `noise_profile()` allows to estimate full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
+#' @details The function `noise_profile()` allows to estimate full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on extended selection tables (using the segments containing no sound) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
 #' @examples
 #' {
 #' # load example data
@@ -39,7 +40,7 @@
 #' noise_profile(X = playback_est, mar = 0.01, pb = FALSE, noise.ref = "custom")
 #'
 #' # remove noise selections
-#' pe <- playback_est[playback_est$signal.type != "ambient", ]
+#' pe <- playback_est[playback_est$sound.id != "ambient", ]
 #'
 #'  noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent")
 #' }
@@ -57,7 +58,7 @@ noise_profile <-
            files = NULL,
            mar = NULL,
            noise.ref = "adjacent",
-           parallel = 1,
+           parallel = 1, cores = 1,
            pb = TRUE,
            path = NULL,
            bp = NULL,
@@ -85,18 +86,18 @@ noise_profile <-
       # set files to null
       files <- NULL
       
-      # check signal.type column
-      if (is.null(X$signal.type))
-        stop2("'X' must contain a 'signal.type' column")
+      # check sound.id column
+      if (is.null(X$sound.id))
+        stop2("'X' must contain a 'sound.id' column")
       
       # invert selections so gaps become selections instead if noise.ref != ambient
       if (noise.ref == "custom" &
-          !any(X$signal.type == "ambient"))
-        stop2("'noise.ref = custom' but no 'ambient' label found in 'signal.type' column ")
+          !any(X$sound.id == "ambient"))
+        stop2("'noise.ref = custom' but no 'ambient' label found in 'sound.id' column ")
       
       # keep only 'ambient' selections
       if (noise.ref == "custom")
-        X <- X[X$signal.type == "ambient",]
+        X <- X[X$sound.id == "ambient",]
       
       if (noise.ref == "adjacent" &
           is.null(mar))
@@ -135,19 +136,19 @@ noise_profile <-
       # filter sound files in files
       X <- X[X$sound.files %in% files,]
       
-      # add signal column
-      X$signal.type <- "ambient"
+      # add sound column
+      X$sound.id <- "ambient"
       
       # set noise.ref to ambient so the whole sound file is measured
       noise.ref <- "custom"
     }
     
-    # if parallel is not numeric
-    if (!is.numeric(parallel))
-      stop2("'parallel' must be a numeric vector of length 1")
+    # If cores is not numeric
+    if (!is.numeric(cores))
+      stop2("'cores' must be a numeric vector of length 1")
     
-    if (any(!(parallel %% 1 == 0), parallel < 1))
-      stop2("'parallel' should be a positive integer")
+    if (any(!(cores %% 1 == 0), cores < 1))
+      stop2("'cores' should be a positive integer")
     
     # hopsize
     if (!is.numeric(hop.size) |
@@ -170,10 +171,10 @@ noise_profile <-
       wl <- wl + 1
     
     # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" & parallel > 1)
+    if (Sys.info()[1] == "Windows" & cores > 1)
       cl <-
-        parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else
-      cl <- parallel
+        parallel::makePSOCKcluster(getOption("cl.cores", cores)) else
+      cl <- cores
     
     # calculate STR
     noise.profiles <-
@@ -191,7 +192,7 @@ noise_profile <-
         
         if (noise.ref == "adjacent")
         {
-          #reset time coordinates of signals if lower than 0 o higher than duration
+          #reset time coordinates of sounds if lower than 0 o higher than duration
           stn <- X$start[y] - mar
           
           if (stn < 0)

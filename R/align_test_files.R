@@ -2,18 +2,20 @@
 #' 
 #' \code{align_test_files} aligns test (re-recorded) sound files.
 #' @usage align_test_files(X, Y, output = "est", path = NULL, 
-#' by.song = TRUE, marker = "start", ...)
-#' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{search_templates}}.
+#' by.song = TRUE, marker = "start", cores = 1, pb = TRUE, ...)
+#' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{search_templates}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.
 #' @param Y object of class 'data.frame' with the output of \code{\link{search_templates}}. 
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data.frame ("data.frame").
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found. 
 #' @param by.song Logical argument to indicate if the extended selection table should be created by song (see 'by.song' \code{\link[warbleR]{selection_table}} argument). Default is \code{TRUE}.
 #' @param marker Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is "start".
+#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param ...	Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.
-#' @return An extended selection table with the aligned signals from test (re-recorded) sound files.
+#' @return An extended selection table with the aligned sounds from test (re-recorded) sound files.
 #' @export
 #' @name align_test_files
-#' @details The function aligns signals found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
+#' @details The function aligns sounds found in re-recorded sound files according to a master sound file referenced in 'X'. The function outputs a 'extended selection table'.
 #' @seealso \code{\link{spcc_align}}; \code{\link{search_templates}}
 #' @examples
 #' \dontrun{
@@ -71,7 +73,7 @@
 #' template.rows = which(master.sf$orig.sound.file == "start_marker"), 
 #' test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 #' 
-#' # align signals and output extended selection table
+#' # align sounds and output extended selection table
 #' alg.tests <- align_test_files(X =  master.sf, Y = found.templts, path = td, pb = FALSE)
 #' }
 #' 
@@ -81,13 +83,24 @@
 #' }
 #last modification on dec-26-2019 (MAS)
 
-align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, marker = "start", ...){
+align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, marker = "start", cores = 1, pb = TRUE, ...){
+  
+  # If cores is not numeric
+  if (!is.numeric(cores)) stop2("'cores' must be a numeric vector of length 1") 
+  if (any(!(cores %% 1 == 0), cores < 1)) stop2("'cores' should be a positive integer")
   
   #check output
   if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be either 'est' or 'data.frame'")  
   
+  # check sound.id column 
+  if (is.null(X$sound.id)) stop2("'X' must contain a 'sound.id' column")
+  
+  # set clusters for windows OS
+  if (Sys.info()[1] == "Windows" & cores > 1)
+    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
+    
   # align each file
- out <- lapply(1:nrow(Y), function(x) {
+ out <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(x) {
     
    if (marker == "start"){ 
      # start on new recording
@@ -107,9 +120,8 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
      end  <- start + durs   
      }
    
-   
     # make data frame
-    W <- data.frame(sound.files = Y$test.files[x], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq[1:length(start)], top.freq = X$top.freq[1:length(start)], template = X$orig.sound.file[1:length(start)])
+    W <- data.frame(sound.files = Y$test.files[x], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq[1:length(start)], top.freq = X$top.freq[1:length(start)], template = X$sound.id[1:length(start)])
     
     return(W)
   })
@@ -141,7 +153,7 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
   
   # remove duration column and template
   sync.sls$duration <- NULL
-  sync.sls$signal.type <- sync.sls$template
+  sync.sls$sound.id <- sync.sls$template
   sync.sls$template <- NULL
     
   if (output == "est")

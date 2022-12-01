@@ -4,22 +4,25 @@
 \alias{envelope_correlation}
 \title{Measure amplitude envelope correlation}
 \usage{
-envelope_correlation(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", 
-ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, 
-wl = NULL, ovlp = 70, path = NULL)
+envelope_correlation(X, parallel = 1, cores = 1, pb = TRUE, method = 1, 
+cor.method = "pearson", ssmooth = NULL, msmooth = NULL, 
+output = "est", hop.size = 11.6, wl = NULL, ovlp = 70, 
+path = NULL)
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}
 
-\item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+\item{parallel}{DEPRECATED. Use 'cores' instead.}
+
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 If \code{NULL} (default) then the current working directory is used.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
 \item{method}{Numeric vector of length 1 to indicate the 'experimental design' to measure amplitude envelope correlation. Two methods are available:
 \itemize{
-\item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
-\item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
+\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
+\item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 }}
 
 \item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
@@ -42,13 +45,13 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
 }
 \value{
 Extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')
-with the reference signal and the amplitude envelope correlation coefficients.
+with the reference sound and the amplitude envelope correlation coefficients.
 }
 \description{
-\code{envelope_correlation} measures amplitude envelope correlation of signals referenced in an extended selection table.
+\code{envelope_correlation} measures amplitude envelope correlation of sounds referenced in an extended selection table.
 }
 \details{
-Amplitude envelope correlation measures the similarity of two signals in the time domain. The  function measures the envelope correlation coefficients of signals in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means signals have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest signal along the largest one and calculating the correlation at each step. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types).The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to extract envelopes.
+Amplitude envelope correlation measures the similarity of two sounds in the time domain. The  function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and calculating the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to extract envelopes.
 }
 \examples{
 {
@@ -56,7 +59,7 @@ Amplitude envelope correlation measures the similarity of two signals in the tim
 data("playback_est")
 
 # remove ambient selections
-playback_est <- playback_est[playback_est$signal.type != "ambient", ]
+playback_est <- playback_est[playback_est$sound.id != "ambient", ]
 
 # method 1
 envelope_correlation(X = playback_est)

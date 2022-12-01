@@ -5,11 +5,11 @@
 \title{Measure full spectrum sound noise profiles}
 \usage{
 noise_profile(X = NULL, files = NULL, mar = NULL,
-noise.ref = "adjacent", parallel = 1, pb = TRUE, path = NULL,
+noise.ref = "adjacent", parallel = 1, cores = 1, pb = TRUE, path = NULL,
 bp = NULL, hop.size = 1, wl = NULL, PSD = FALSE, norm = TRUE, dB = "A", averaged = TRUE)
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.}
 
 \item{files}{Character vector with names of wave files to be analyzed. Files must be found in 'path' supplied (or in the working directory if 'path' is not supplied). Default is \code{NULL}.}
 
@@ -18,11 +18,13 @@ the start and end points of selection over which to measure ambient noise. Requi
 
 \item{noise.ref}{Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Ignored if 'X' is not supplied. Two options are available:
 \itemize{
-\item \code{adjacent}: measure ambient noise right before the signal (using argument 'mar' to define duration of ambient noise segments).
-\item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'signal.type' column).
+\item \code{adjacent}: measure ambient noise right before the sound (using argument 'mar' to define duration of ambient noise segments).
+\item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column).
 }}
 
-\item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
+\item{parallel}{DEPRECATED. Use 'cores' instead.}
+
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
@@ -52,7 +54,7 @@ A list containing the the frequency spectra for each sound file or wave object (
 \code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.
 }
 \details{
-The function `noise_profile()` allows to estimate full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on extended selection tables (using the segments containing no signal) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
+The function `noise_profile()` allows to estimate full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on extended selection tables (using the segments containing no sound) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
 }
 \examples{
 {
@@ -63,7 +65,7 @@ data("playback_est")
 noise_profile(X = playback_est, mar = 0.01, pb = FALSE, noise.ref = "custom")
 
 # remove noise selections
-pe <- playback_est[playback_est$signal.type != "ambient", ]
+pe <- playback_est[playback_est$sound.id != "ambient", ]
 
  noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent")
 }

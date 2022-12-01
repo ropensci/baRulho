@@ -78,7 +78,7 @@ acoustic signals</font> ¶ </center></h3>
 <a href="https://marceloarayasalas.weebly.com" class="external-link">Marcelo Araya-Salas,
 PhD</a> ¶ </center></h4>
             
-            <h4 data-toc-skip class="date"><center> ¶ “2022-11-23” ¶
+            <h4 data-toc-skip class="date"><center> ¶ “2022-12-01” ¶
 </center></h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/HEAD/vignettes/baRulho.Rmd" class="external-link"><code>vignettes/baRulho.Rmd</code></a></small>
@@ -109,8 +109,8 @@ functions and data formats from the <a href="https://cran.r-project.org/package=
 so some experience with these packages is advised.</p>
 <p>The main features of the package are:</p>
 <ul>
-<li>The use of loops to apply tasks through acoustic signals referenced
-in a selection table (sensu <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a>)</li>
+<li>The use of loops to apply tasks through sounds referenced in a
+selection table (sensu <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a>)</li>
 <li>The production of image files with graphic representations of sound
 in time and/or frequency that let users verify acoustic analyses</li>
 <li>The use of annotation tables as the object format to input acoustic
@@ -171,21 +171,22 @@ errors during analysis. Analysis on extended selection tables also run
 faster than in the other object classes.</p>
 <div class="alert alert-info">
 <p><font size="5">Glossary</font></p>
-<p>-<strong>Model signal</strong>: signal in which transmission
-properties will be studied, usually found in the original field
-recordings or synthetic sound files.</p>
-<p>-<strong>Reference signal</strong>: signal to use as a pattern to
-compare against. Usually created by re-recording a model signal
-broadcast at 1 m from the source (speaker).</p>
-<p>-<strong>Signal type</strong>: signal category. For instance song
-types (e.g. A, B, C), call types (alert, foraging, etc).</p>
+<p>-<strong>Model sound</strong>: sound in which transmission properties
+will be studied, usually found in the original field recordings or
+synthetic sound files.</p>
+<p>-<strong>Reference sound</strong>: sound to use as a pattern to
+compare against. Usually created by re-recording a model sound broadcast
+at 1 m from the source (speaker).</p>
+<p>-<strong>Sound ID</strong>: ID of sounds used to identify
+counterparts across distances. Each sound must have a unique ID within a
+distance.</p>
 <p>-<strong>Ambient noise</strong>: energy from background sounds in the
-recording, excluding signals of interest.</p>
-<p>-<strong>Test signal</strong>: signals re-recorded far from the
-source to test for transmission/degradation (also refer to as
-‘re-recorded’ signals).</p>
+recording, excluding sounds of interest.</p>
+<p>-<strong>Test sound</strong>: sounds re-recorded far from the source
+to test for transmission/degradation (also refer to as ‘re-recorded’
+sounds).</p>
 <p>-<strong>Degradation</strong>: term used to describe any changes in
-the structure of a signal when transmitted in a given habitat (note that
+the structure of a sound when transmitted in a given habitat (note that
 there is no agreement on this terminology in the scientific
 community).</p>
 </div>
@@ -196,7 +197,7 @@ community).</p>
 <h2 id="workflow-of-sound-processing-and-analysis">Workflow of sound processing and analysis<a class="anchor" aria-label="anchor" href="#workflow-of-sound-processing-and-analysis"></a>
 </h2>
 <p>A common sequence of steps to experimentally test hypotheses related
-to signal transmission is depicted in the following diagram:</p>
+to sound transmission is depicted in the following diagram:</p>
 <center>
 <img src="analysis_workflow.jpg" alt="analysis workflow" width="620">
 </center>
@@ -428,14 +429,14 @@ directory (in this example <code><a href="https://rdrr.io/r/base/tempfile.html" 
 <p>The function <code><a href="../reference/master_sound_file.html">master_sound_file()</a></code> creates a master sound
 file (as you probably guessed) for playback experiments. The function
 takes wave objects from an data frame or (extended) selection table
-containing the model signals and concatenates them in a single sound
-file (with some silence in between signals which length can be
-modified). <code><a href="../reference/master_sound_file.html">master_sound_file()</a></code> adds acoustic markers at the
-start and end of the playback that can be used to time-sync re-recorded
-signals, which streamlines quantification of acoustic degradation. The
-following example shows how to create a master sound file using the
-synthetic sounds generated above. For the synthetic sounds we need to
-add a little space between the top and bottom frequency because
+containing the model sounds and concatenates them in a single sound file
+(with some silence in between sounds which length can be modified).
+<code><a href="../reference/master_sound_file.html">master_sound_file()</a></code> adds acoustic markers at the start and
+end of the playback that can be used to time-sync re-recorded sounds,
+which streamlines quantification of acoustic degradation. The following
+example shows how to create a master sound file using the synthetic
+sounds generated above. For the synthetic sounds we need to add a little
+space between the top and bottom frequency because
 <code><a href="https://marce10.github.io/warbleR/reference/sim_songs.html" class="external-link">sim_songs()</a></code> make those values exactly the same for pure
 tones:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -455,8 +456,8 @@ tones:</p>
 <p> </p>
 <p>The function saves the master sound file as a wave file and returns a
 selection table in the R environment with the time and frequency
-‘coordinates’ of the signals in that file. We can look at the
-spectrogram of the output file using the <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a> function
+‘coordinates’ of the sounds in that file. We can look at the spectrogram
+of the output file using the <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a> function
 <code><a href="https://marce10.github.io/warbleR/reference/spectrograms.html" class="external-link">spectrograms()</a></code> as follows:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot spectro (saved in working directory)</span></span>
@@ -511,9 +512,9 @@ amplitudes so they are less affected by degradation. The frequency range
 of markers can be set with argument <code>flim</code>. The relative
 amplitude of markers can also be adjusted with the
 <code>amp.marker</code> argument. Amplitude of markers will be
-multiplied by the value supplied so markers will be louder than signals.
+multiplied by the value supplied so markers will be louder than sounds.
 These two features should increases the chances of being “detected” at
-further distances regardless of the amplitude of signals.</p>
+further distances regardless of the amplitude of sounds.</p>
 </div>
 <div class="section level2">
 <h2 id="time-sync-re-recorded-sounds">Time sync re-recorded sounds<a class="anchor" aria-label="anchor" href="#time-sync-re-recorded-sounds"></a>
@@ -521,10 +522,10 @@ further distances regardless of the amplitude of signals.</p>
 <p>Once we went to the field (or lab) and re-recorded the master sound
 files at different distances, we are ready to start with data analysis.
 The first step for getting the data ready for analysis involves finding
-signals within the re-recorded sound files. We only need to align the
+sounds within the re-recorded sound files. We only need to align the
 start marker between the master playback and the re-recorded sound
 files, based on the fact that the time difference between the marker and
-the signals should be the same in both cases:</p>
+the sounds should be the same in both cases:</p>
 <center>
 <img src="align-crop-optimize.gif" alt="Align recordings diagram" width="550">
 </center>
@@ -1302,9 +1303,9 @@ spectrograms:</p>
 <p> </p>
 <p><img src="example_test2.wav.jpeg" alt="test 2"></p>
 <p> </p>
-<p>Below are some examples from actual test signals that were
-re-recorded in the field at 1, 30, 65, and 100 m respectively, and were
-later aligned using the start marker:</p>
+<p>Below are some examples from actual test sounds that were re-recorded
+in the field at 1, 30, 65, and 100 m respectively, and were later
+aligned using the start marker:</p>
 <p><img src="tlalpan_playback.jpeg" alt="Re-recorded at Tlalpan"></p>
 <p> </p>
 <hr>
@@ -1314,22 +1315,22 @@ later aligned using the start marker:</p>
 <p>When this process is done manually (or when broadcasting devices add
 some short delays as the case of some bluetooth transmitters) there
 could be some small misalignment between the inferred versus the actual
-start time of re-recorded signals. This is problematic for quantifying
+start time of re-recorded sounds. This is problematic for quantifying
 degradation in <a href="https://marce10.github.io/baRulho/">baRulho</a>
-(and other sound analysis software) as precise alignment of signal is
-crucial for the accuracy of downstream measures of signal
+(and other sound analysis software) as precise alignment of sound is
+crucial for the accuracy of downstream measures of sound
 degradation.</p>
 <p>Misalignment can be fixed with the function
 <code><a href="../reference/spcc_align.html">spcc_align()</a></code>. This function uses spectrogram
-cross-correlation to sync the position in time of signals with regard to
-a reference signal. <code><a href="../reference/spcc_align.html">spcc_align()</a></code> takes the signal recorded
-at the closest distance to the source as the reference signal. The
-function calls <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a>’s
+cross-correlation to sync the position in time of sounds with regard to
+a reference sound. <code><a href="../reference/spcc_align.html">spcc_align()</a></code> takes the sound recorded at
+the closest distance to the source as the reference sound. The function
+calls <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a>’s
 <code><a href="https://marce10.github.io/warbleR/reference/cross_correlation.html" class="external-link">cross_correlation()</a></code> (just as we did above) internally to
-align signals using cross-correlation.</p>
+align sounds using cross-correlation.</p>
 <p><a href="https://marce10.github.io/baRulho/">baRulho</a> comes with
 an example data set called <code>playback_est_unaligned</code>, which
-contains signals in which the time position of signals is slightly
+contains sounds in which the time position of sounds is slightly
 unaligned. We can use this data to show how the function
 <code><a href="../reference/spcc_align.html">spcc_align()</a></code> works:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
@@ -1339,9 +1340,9 @@ unaligned. We can use this data to show how the function
 <span><span class="va">playback_est_aligned</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spcc_align.html">spcc_align</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">playback_est_unaligned</span><span class="op">)</span></span></code></pre></div>
 <p>The output extended selection table contains the new start and end
 values after alignment.</p>
-<p>This is how the signals look before and after being aligned:</p>
+<p>This is how the sounds look before and after being aligned:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># rename sound files so aligned and unaligned signals are intercalated</span></span>
+<code class="sourceCode R"><span><span class="co"># rename sound files so aligned and unaligned sounds are intercalated</span></span>
 <span><span class="va">unalg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/rename_waves_est.html" class="external-link">rename_waves_est</a></span><span class="op">(</span><span class="va">playback_est_unaligned</span>, <span class="va">playback_est_unaligned</span><span class="op">$</span><span class="va">sound.files</span>,</span>
 <span>    new.selec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">200</span>, by <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">playback_est_unaligned</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">alg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://marce10.github.io/warbleR/reference/rename_waves_est.html" class="external-link">rename_waves_est</a></span><span class="op">(</span><span class="va">playback_est_aligned</span>, <span class="va">playback_est_aligned</span><span class="op">$</span><span class="va">sound.files</span>, new.selec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">2</span>,</span>
@@ -1355,7 +1356,7 @@ values after alignment.</p>
 <span><span class="va">unalg.alg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">unalg</span>, <span class="va">alg</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create spectrograms</span></span>
-<span><span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html" class="external-link">spectrograms</a></span><span class="op">(</span><span class="va">unalg.alg</span><span class="op">[</span><span class="va">unalg.alg</span><span class="op">$</span><span class="va">signal.type</span> <span class="op">!=</span> <span class="st">"ambient"</span>, <span class="op">]</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span><span class="fu"><a href="https://marce10.github.io/warbleR/reference/spectrograms.html" class="external-link">spectrograms</a></span><span class="op">(</span><span class="va">unalg.alg</span><span class="op">[</span><span class="va">unalg.alg</span><span class="op">$</span><span class="va">sound.id</span> <span class="op">!=</span> <span class="st">"ambient"</span>, <span class="op">]</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    res <span class="op">=</span> <span class="fl">100</span>, wl <span class="op">=</span> <span class="fl">300</span>, title.labels <span class="op">=</span> <span class="st">"type"</span>, sel.labels <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
 <center>
 <img src="spcc_align_results.gif" alt="time sync with spcc_align">
@@ -1363,17 +1364,17 @@ values after alignment.</p>
 <p> </p>
 <p>In case this doesn’t work as expected there is a plan B. The function
 <code><a href="https://marce10.github.io/warbleR/reference/seltailor.html" class="external-link">seltailor()</a></code> from <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a> allows
-user to manually adjust the start and end of signals in a extended
+user to manually adjust the start and end of sounds in a extended
 selection table.</p>
 <p> </p>
 </div>
 </div>
 <div class="section level2">
-<h2 id="quantifying-signal-degradation">Quantifying signal degradation<a class="anchor" aria-label="anchor" href="#quantifying-signal-degradation"></a>
+<h2 id="quantifying-sound-degradation">Quantifying sound degradation<a class="anchor" aria-label="anchor" href="#quantifying-sound-degradation"></a>
 </h2>
 <p>Most <a href="https://marce10.github.io/baRulho/">baRulho</a>
-functions are design to quantify acoustic signal degradation. There are
-a few important things to keep in mind about functions for quantifying
+functions are design to quantify sound degradation. There are a few
+important things to keep in mind about functions for quantifying
 degradation:</p>
 <ul>
 <li>The package currently assumes that all recordings have been made
@@ -1381,16 +1382,16 @@ with the same equipment and recording volume. This will be modified in
 future versions to allow for amplitude calibration of recordings.</li>
 <li>Wave envelope and frequency spectrum calculations are made after
 applying a bandpass filter within the frequency range of the reference
-signal (‘bottom.freq’ and ‘top.freq’ columns)</li>
-<li>The package offers two methods to compare signals to the reference:
+sound (‘bottom.freq’ and ‘top.freq’ columns)</li>
+<li>The package offers two methods to compare sounds to the reference:
 <ol style="list-style-type: decimal">
-<li>Compare all signals with the counterpart that was recorded at the
-closest distance to source (e.g. compare a signal recorded at 5m, 10m
-and 15m with its counterpart recorded at 1m). This is the default
+<li>Compare all sounds with the counterpart that was recorded at the
+closest distance to source (e.g. compare a sound recorded at 5m, 10m and
+15m with its counterpart recorded at 1m). This is the default
 method.</li>
-<li>Compare all signals with the counterpart recorded at the distance
-immediately before (e.g. a signal recorded at 10m compared with the one
-recorded at 5m, then signal recorded at 15m compared with the one
+<li>Compare all sounds with the counterpart recorded at the distance
+immediately before (e.g. a sound recorded at 10m compared with the one
+recorded at 5m, then sound recorded at 15m compared with the one
 recorded at 10m and so on).</li>
 </ol>
 </li>
@@ -1427,10 +1428,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 </tr></thead>
 <tbody>
@@ -1454,10 +1455,10 @@ distance
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1
+CCE-F1
 </td>
 </tr>
 <tr>
@@ -1480,10 +1481,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-5
+CCE-F1
 </td>
 </tr>
 <tr>
@@ -1506,10 +1507,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-10
+CCE-F1
 </td>
 </tr>
 <tr>
@@ -1532,10 +1533,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-15
+CCE-F1
 </td>
 </tr>
 <tr>
@@ -1558,10 +1559,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1
+CCE-I2
 </td>
 </tr>
 <tr>
@@ -1584,10 +1585,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-5
+CCE-I2
 </td>
 </tr>
 <tr>
@@ -1610,10 +1611,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-10
+CCE-I2
 </td>
 </tr>
 <tr>
@@ -1636,10 +1637,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-15
+CCE-I2
 </td>
 </tr>
 <tr>
@@ -1662,10 +1663,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1
+CCL-K2
 </td>
 </tr>
 <tr>
@@ -1688,10 +1689,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-5
+CCL-K2
 </td>
 </tr>
 <tr>
@@ -1714,10 +1715,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-10
+CCL-K2
 </td>
 </tr>
 <tr>
@@ -1740,11 +1741,11 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
+15
+</td>
+<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 CCL-K2
 </td>
-<td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-15
-</td>
 </tr>
 <tr>
 <td style="text-align:center;">
@@ -1766,10 +1767,10 @@ CCL-K2
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-ambient
+1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1
+ambient
 </td>
 </tr>
 <tr>
@@ -1792,10 +1793,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-ambient
+5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-5
+ambient
 </td>
 </tr>
 <tr>
@@ -1818,10 +1819,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-ambient
+10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-10
+ambient
 </td>
 </tr>
 <tr>
@@ -1844,10 +1845,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-ambient
+15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-15
+ambient
 </td>
 </tr>
 <tr>
@@ -1870,10 +1871,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-ambient
+1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1
+ambient
 </td>
 </tr>
 <tr>
@@ -1896,10 +1897,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-ambient
+5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-5
+ambient
 </td>
 </tr>
 <tr>
@@ -1922,10 +1923,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-ambient
+10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-10
+ambient
 </td>
 </tr>
 <tr>
@@ -1948,10 +1949,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-ambient
+15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-15
+ambient
 </td>
 </tr>
 <tr>
@@ -1974,10 +1975,10 @@ ambient
 11.09414
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1
+SUR-A4
 </td>
 </tr>
 <tr>
@@ -2000,10 +2001,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-5
+SUR-A4
 </td>
 </tr>
 <tr>
@@ -2026,10 +2027,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-10
+SUR-A4
 </td>
 </tr>
 <tr>
@@ -2052,10 +2053,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-15
+SUR-A4
 </td>
 </tr>
 <tr>
@@ -2078,10 +2079,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-1
+SUR-K1
 </td>
 </tr>
 <tr>
@@ -2104,10 +2105,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-5
+SUR-K1
 </td>
 </tr>
 <tr>
@@ -2130,10 +2131,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-10
+SUR-K1
 </td>
 </tr>
 <tr>
@@ -2156,10 +2157,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
-15
+SUR-K1
 </td>
 </tr>
 </tbody>
@@ -2168,24 +2169,24 @@ SUR-K1
 <p> </p>
 <p>Note that besides the basic acoustic annotation information
 (e.g. sound file, time, frequency) the table also contains a
-<strong>‘signal.type’ column, which refers to the signal type from which
-each signal belongs to</strong>, and a <strong>‘distance’ column that
-refers to the distance from the source at which each signal was
-recorded</strong>. Signal type and distance are required for the
-comparison of signals. Also note that some selections are labeled as
-“ambient” in the ‘signal.type’. These selections refer to ambient
-(background) noise. Ambient noise can be used by some functions to
-correct for amplitude differences due to non-target sounds.</p>
+<strong>‘sound.id’ column, which contains the ID of sounds used to
+identify correspondent sounds across distances</strong>, and a
+<strong>‘distance’ column that refers to the distance from the source at
+which each sound was recorded</strong>. Sound ID and distance are
+required for the comparison of sounds. Also note that some selections
+are labeled as “ambient” in the ‘sound.id’. These selections refer to
+ambient (background) noise. Ambient noise can be used by some functions
+to correct for amplitude differences due to non-target sounds.</p>
 <p>In this example data there are 4 recordings at increasing distances:
 1m, 5m, 10m and 15m:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># count selection per recordings</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">sound.files</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] "01m_re-rec.wav" "05m_re-rec.wav" "10m_re-rec.wav" "15m_re-rec.wav"</span></span></code></pre>
-<p>The data contains selections for 5 signal types as well as 2 ambient
-noise selections at each distance/recording:</p>
+<p>The data contains selections for 5 sounds as well as 2 ambient noise
+selections at each distance/recording:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">signal.type</span>, <span class="va">playback_est</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">sound.id</span>, <span class="va">playback_est</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span></span></code></pre></div>
 <table class="table table table-striped" style="font-size: 12px; margin-left: auto; margin-right: auto;">
 <thead><tr>
 <th style="text-align:left;">
@@ -2320,17 +2321,17 @@ distortion of the amplitude envelope (time domain) while excluding
 changes due to energy attenuation. This measure was first described by
 Dabelsteen et al. (1993). Blur ratio is measured as the mismatch between
 amplitude envelopes (expressed as probability density functions) of the
-reference signal and the re-recorded signal. Low values indicate low
-degradation of signals. The function <code><a href="../reference/blur_ratio.html">blur_ratio()</a></code> measures
-the blur ratio of signals in which a reference playback has been
-re-recorded at different distances. The function compares each signal
-type to the corresponding reference signal within the supplied frequency
-range (e.g. bandpass) of the reference signal (‘bottom.freq’ and
-‘top.freq’ columns in ‘X’). The ‘signal.type’ column must be used to
-tell the function to only compare signals belonging to the same category
-(e.g. song-types). All sound files (or wave objects in the extended
-selection table) must have the same sampling rate so the length of
-envelopes is comparable. Blur ratio can be calculated as follows:</p>
+reference sound and the re-recorded sound. Low values indicate low
+degradation of sounds. The function <code><a href="../reference/blur_ratio.html">blur_ratio()</a></code> measures
+the blur ratio of sounds in which a reference playback has been
+re-recorded at different distances. The function compares each sound to
+the corresponding reference sound within the supplied frequency range
+(e.g. bandpass) of the reference sound (‘bottom.freq’ and ‘top.freq’
+columns in ‘X’). The ‘sound.id’ column must be used to tell the function
+to only compare sounds belonging to the same category (e.g. song-types).
+All sound files (or wave objects in the extended selection table) must
+have the same sampling rate so the length of envelopes is comparable.
+Blur ratio can be calculated as follows:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run blur ratio</span></span>
 <span><span class="va">br</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/blur_ratio.html">blur_ratio</a></span><span class="op">(</span><span class="va">playback_est</span>, method <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -2363,10 +2364,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 reference
@@ -2396,10 +2397,10 @@ blur.ratio
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -2428,10 +2429,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -2460,10 +2461,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -2492,10 +2493,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -2524,10 +2525,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -2556,10 +2557,10 @@ NA
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -2588,10 +2589,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -2620,10 +2621,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -2652,10 +2653,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;">
-1
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -2684,10 +2685,10 @@ NA
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;">
-5
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -2716,10 +2717,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;">
-10
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -2748,10 +2749,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+15
 </td>
 <td style="text-align:center;">
-15
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -2780,10 +2781,10 @@ CCL-K2
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -2812,10 +2813,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -2844,10 +2845,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -2876,10 +2877,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -2908,10 +2909,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -2940,10 +2941,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -2972,10 +2973,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -3004,10 +3005,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -3036,10 +3037,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -3068,10 +3069,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -3100,10 +3101,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -3132,10 +3133,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -3164,10 +3165,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -3196,10 +3197,10 @@ NA
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -3228,10 +3229,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -3260,10 +3261,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -3278,11 +3279,11 @@ SUR-K1
 <p> </p>
 <p>The output data frame is similar to input data, except that it
 includes two new columns (‘reference’ and ‘blur.ratio’) with the
-reference signal and blur ratio values. Note that <code>NAs</code> are
-returned for signals used as reference and ‘ambient’ noise
+reference sound and blur ratio values. Note that <code>NAs</code> are
+returned for sounds used as reference and ‘ambient’ noise
 selections.</p>
 <p>If <code>img = TRUE</code> it also returns 1 image file (in ‘jpeg’
-format) for each comparison showing spectrograms of both signals and the
+format) for each comparison showing spectrograms of both sounds and the
 overlaid amplitude envelopes (as probability mass functions (PMF)).</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run blur ratio</span></span>
@@ -3294,13 +3295,13 @@ ones:</p>
 </center>
 <p> </p>
 <p>The image shows the spectrogram for the reference and re-recorded
-signal, as well as the envelopes of both signals overlaid in a single
-graph. Colors indicate to which signal spectrograms and envelopes belong
+sound, as well as the envelopes of both sounds overlaid in a single
+graph. Colors indicate to which sound spectrograms and envelopes belong
 to. The blur ratio value is also displayed.</p>
 <p>The function can also return the amplitude spectrum contours when the
 argument <code>output = "list"</code>. The contours can be directly
 input into ggplot to visualize amplitude envelopes, and how they vary
-with distance and across signal types (and ambient noise if
+with distance and across sound types (and ambient noise if
 included):</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/blur_ratio.html">blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">playback_est</span>, output <span class="op">=</span> <span class="st">"list"</span>, ssmooth <span class="op">=</span> <span class="fl">300</span>, img <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -3308,7 +3309,7 @@ included):</p>
 <span></span>
 <span><span class="va">envs</span><span class="op">$</span><span class="va">distance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">envs</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">envs</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">amp</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">envs</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">amp</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">sound.id</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time (s)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="baRulho_files/figure-html/unnamed-chunk-40-1.png" width="560" style="display: block; margin: auto;"></p>
@@ -3321,7 +3322,7 @@ shapes and related measurements. The following code sets
 <span></span>
 <span><span class="va">envs</span><span class="op">$</span><span class="va">distance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">envs</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">envs</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">amp</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">envs</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">amp</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">sound.id</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time (s)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="baRulho_files/figure-html/unnamed-chunk-41-1.png" width="560" style="display: block; margin: auto;"></p>
@@ -3331,16 +3332,15 @@ shapes and related measurements. The following code sets
 <h4 id="spectrum-blur-ratio">Spectrum blur ratio<a class="anchor" aria-label="anchor" href="#spectrum-blur-ratio"></a>
 </h4>
 <p>Spectrum blur ratio (measured by <code><a href="../reference/spectrum_blur_ratio.html">spectrum_blur_ratio()</a></code>)
-quantifies the degradation of sound as a function of the change in
-signal energy across the frequency domain, analogous to the blur ratio
+quantifies the degradation of sound as a function of the change in sound
+energy across the frequency domain, analogous to the blur ratio
 described above for the time domain (and implemented in
 <code><a href="../reference/blur_ratio.html">blur_ratio()</a></code>). Low values also indicate low degradation of
-signals. Spectrum blur ratio is measured as the mismatch between power
+sounds. Spectrum blur ratio is measured as the mismatch between power
 spectra (expressed as probability density functions) of the reference
-signal and the re-recorded signal. It works in the same way than
-<code><a href="../reference/blur_ratio.html">blur_ratio()</a></code>, comparing each signal type to the
-corresponding reference signal, and the output and images are alike as
-well.</p>
+sound and the re-recorded sound. It works in the same way than
+<code><a href="../reference/blur_ratio.html">blur_ratio()</a></code>, comparing each sound to the corresponding
+reference sound, and the output and images are alike as well.</p>
 <p>Spectrum blur ratio can be calculated as follows:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run Spectrum blur ratio</span></span>
@@ -3374,10 +3374,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 reference
@@ -3407,10 +3407,10 @@ spectral.blur.ratio
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -3439,10 +3439,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -3471,10 +3471,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -3503,10 +3503,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -3535,10 +3535,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -3567,10 +3567,10 @@ NA
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -3599,10 +3599,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -3631,10 +3631,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -3663,10 +3663,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;">
-1
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -3695,10 +3695,10 @@ NA
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;">
-5
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -3727,10 +3727,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;">
-10
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -3759,10 +3759,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+15
 </td>
 <td style="text-align:center;">
-15
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -3791,10 +3791,10 @@ CCL-K2
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -3823,10 +3823,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -3855,10 +3855,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -3887,10 +3887,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -3919,10 +3919,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -3951,10 +3951,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -3983,10 +3983,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4015,10 +4015,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4047,10 +4047,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -4079,10 +4079,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -4111,10 +4111,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -4143,10 +4143,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -4175,10 +4175,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -4207,10 +4207,10 @@ NA
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -4239,10 +4239,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -4271,10 +4271,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -4304,18 +4304,18 @@ can also return the amplitude spectrum contours with the argument
 <span></span>
 <span><span class="va">spctr</span><span class="op">$</span><span class="va">distance</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">spctr</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">spctr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">spctr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">sound.id</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="baRulho_files/figure-html/unnamed-chunk-47-1.png" width="560" style="display: block; margin: auto;"></p>
-<p>We can also zoom in to the frequency range of the signals by
+<p>We can also zoom in to the frequency range of the sounds by
 subsetting the spectrum data:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get the frequencies higher than lowest bottom but lower than highest top freq</span></span>
 <span><span class="va">spctr</span> <span class="op">&lt;-</span> <span class="va">spctr</span><span class="op">[</span><span class="va">spctr</span><span class="op">$</span><span class="va">freq</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">bottom.freq</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">spctr</span><span class="op">$</span><span class="va">freq</span> <span class="op">&lt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">playback_est</span><span class="op">$</span><span class="va">top.freq</span><span class="op">)</span>,</span>
 <span>    <span class="op">]</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">spctr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">signal.type</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">spctr</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">distance</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">sound.id</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="baRulho_files/figure-html/unnamed-chunk-48-1.png" width="560" style="display: block; margin: auto;">
@@ -4331,11 +4331,11 @@ that expected to occur with distance via spherical spreading, due to
 atmospheric conditions or habitat (Wiley &amp; Richards, 1978). This
 degradation metric can be measured using the
 <code><a href="../reference/excess_attenuation.html">excess_attenuation()</a></code> function. Low values indicate little
-signal attenuation. The function will then compare each signal type to
-the corresponding reference signal within the frequency range
-(e.g. bandpass) of the reference signal (‘bottom.freq’ and ‘top.freq’
-columns in ‘X’). Two methods for calculating excess attenuation are
-provided (see ‘method’ argument).</p>
+sound attenuation. The function will then compare each sound to the
+corresponding reference sound within the frequency range (e.g. bandpass)
+of the reference sound (‘bottom.freq’ and ‘top.freq’ columns in ‘X’).
+Two methods for calculating excess attenuation are provided (see
+‘method’ argument).</p>
 <p><code><a href="../reference/excess_attenuation.html">excess_attenuation()</a></code> can be measured like this:</p>
 <div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run envelope correlation</span></span>
@@ -4346,7 +4346,7 @@ provided (see ‘method’ argument).</p>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <p>The output, similar to those of other functions, is an extended
 selection table with the input data, but also including two new columns
-(‘reference’ and ‘excess.attenuation’) with the reference signal and the
+(‘reference’ and ‘excess.attenuation’) with the reference sound and the
 excess attenuation:</p>
 <div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
@@ -4373,10 +4373,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 reference
@@ -4406,10 +4406,10 @@ excess.attenuation
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4438,10 +4438,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4470,10 +4470,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4502,10 +4502,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4534,10 +4534,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4566,10 +4566,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4598,10 +4598,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4630,10 +4630,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -4662,10 +4662,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -4694,10 +4694,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -4726,10 +4726,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -4758,10 +4758,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -4790,10 +4790,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -4822,10 +4822,10 @@ NA
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -4854,10 +4854,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -4886,10 +4886,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -4918,10 +4918,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;">
-1
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -4950,10 +4950,10 @@ NA
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;">
-5
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -4982,10 +4982,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;">
-10
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -5014,10 +5014,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+15
 </td>
 <td style="text-align:center;">
-15
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -5046,10 +5046,10 @@ CCL-K2
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -5078,10 +5078,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -5110,10 +5110,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -5142,10 +5142,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -5174,10 +5174,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -5206,10 +5206,10 @@ NA
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -5238,10 +5238,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -5270,10 +5270,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -5290,17 +5290,17 @@ SUR-K1
 <div class="section level4">
 <h4 id="envelope-correlation">Envelope correlation<a class="anchor" aria-label="anchor" href="#envelope-correlation"></a>
 </h4>
-<p>Amplitude envelope correlation measures the similarity of two signals
+<p>Amplitude envelope correlation measures the similarity of two sounds
 in the time domain. The <code><a href="../reference/envelope_correlation.html">envelope_correlation()</a></code> function
 measures the envelope correlation coefficients between reference
-playback and re-recorded signals. Values close to 1 means very similar
+playback and re-recorded sounds. Values close to 1 means very similar
 amplitude envelopes (i.e. little degradation has occurred). If envelopes
-have different lengths (that is when signals have different lengths)
+have different lengths (that is when sounds have different lengths)
 cross-correlation is applied and the maximum correlation coefficient is
-returned. Cross-correlation is achieved by sliding the shortest signal
+returned. Cross-correlation is achieved by sliding the shortest sound
 along the largest one and calculating the correlation at each step. As
-in the functions detailed above, ‘signal.type’ column must be used to
-instruct the function to only compare signals that belong to the same
+in the functions detailed above, ‘sound.id’ column must be used to
+instruct the function to only compare sounds that belong to the same
 category.</p>
 <p><code><a href="../reference/envelope_correlation.html">envelope_correlation()</a></code> can be run as follows:</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
@@ -5312,7 +5312,7 @@ category.</p>
 <pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
 <p>The output is also similar to those of other functions; an extended
 selection table similar to input data, but also includes two new columns
-(‘reference’ and ‘envelope.correlation’) with the reference signal and
+(‘reference’ and ‘envelope.correlation’) with the reference sound and
 the amplitude envelope correlation coefficients:</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
@@ -5339,10 +5339,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 reference
@@ -5372,10 +5372,10 @@ envelope.correlation
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -5404,10 +5404,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -5436,10 +5436,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -5468,10 +5468,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -5500,10 +5500,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -5532,10 +5532,10 @@ NA
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -5564,10 +5564,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -5596,10 +5596,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -5628,10 +5628,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;">
-1
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -5660,10 +5660,10 @@ NA
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;">
-5
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -5692,10 +5692,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;">
-10
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -5724,10 +5724,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+15
 </td>
 <td style="text-align:center;">
-15
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -5756,10 +5756,10 @@ CCL-K2
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -5788,10 +5788,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -5820,10 +5820,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -5852,10 +5852,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -5884,10 +5884,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -5916,10 +5916,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -5948,10 +5948,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -5980,10 +5980,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6012,10 +6012,10 @@ ambient
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -6044,10 +6044,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -6076,10 +6076,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -6108,10 +6108,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -6140,10 +6140,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -6172,10 +6172,10 @@ NA
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -6204,10 +6204,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -6236,10 +6236,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -6254,15 +6254,15 @@ SUR-K1
 <p> </p>
 <p>Note that this function doesn’t provide a graphical output. However,
 the graphs generated by <code><a href="../reference/blur_ratio.html">blur_ratio()</a></code> can be used to inspect
-the envelope shapes and the alignment of signals.</p>
+the envelope shapes and the alignment of sounds.</p>
 </div>
 <div class="section level4">
 <h4 id="spectrum-correlation">Spectrum correlation<a class="anchor" aria-label="anchor" href="#spectrum-correlation"></a>
 </h4>
-<p>Spectrum correlation measures the similarity of two signals in the
+<p>Spectrum correlation measures the similarity of two sounds in the
 frequency domain. This is similar to
 <code><a href="../reference/envelope_correlation.html">envelope_correlation()</a></code>, but in the frequency domain. Both
-signals are compared within the frequency range of the reference signal
+sounds are compared within the frequency range of the reference sound
 (so both spectra have the same length). Again, values near 1 indicate
 identical frequency spectrum (i.e. no degradation).</p>
 <div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
@@ -6299,10 +6299,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 reference
@@ -6332,10 +6332,10 @@ spectrum.correlation
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -6364,10 +6364,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -6396,10 +6396,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -6428,10 +6428,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -6460,10 +6460,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -6492,10 +6492,10 @@ NA
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -6524,10 +6524,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -6556,10 +6556,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -6588,10 +6588,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;">
-1
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -6620,10 +6620,10 @@ NA
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;">
-5
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -6652,10 +6652,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;">
-10
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -6684,10 +6684,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+15
 </td>
 <td style="text-align:center;">
-15
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -6716,10 +6716,10 @@ CCL-K2
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6748,10 +6748,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6780,10 +6780,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6812,10 +6812,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6844,10 +6844,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6876,10 +6876,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6908,10 +6908,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6940,10 +6940,10 @@ ambient
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-3
@@ -6972,10 +6972,10 @@ ambient
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -7004,10 +7004,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -7036,10 +7036,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -7068,10 +7068,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -7100,10 +7100,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -7132,10 +7132,10 @@ NA
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -7164,10 +7164,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -7196,10 +7196,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -7215,29 +7215,28 @@ SUR-K1
 <p>As in <code><a href="../reference/envelope_correlation.html">envelope_correlation()</a></code>,
 <code><a href="../reference/spectrum_correlation.html">spectrum_correlation()</a></code> doesn’t provide a graphical output.
 However, the graphs generated by <code><a href="../reference/spectrum_blur_ratio.html">spectrum_blur_ratio()</a></code> can
-also be used to inspect the spectrum shapes and the signal
-alignment.</p>
+also be used to inspect the spectrum shapes and the sound alignment.</p>
 </div>
 <div class="section level4">
 <h4 id="signal-to-noise-ratio">Signal-to-noise ratio<a class="anchor" aria-label="anchor" href="#signal-to-noise-ratio"></a>
 </h4>
-<p>Signal-to-noise ratio (SNR) quantifies signal amplitude level in
-relation to ambient noise as a metric of overall signal attenuation.
+<p>Signal-to-noise ratio (SNR) quantifies sound amplitude level in
+relation to ambient noise as a metric of overall sound attenuation.
 Therefore, attenuation refers to the loss of energy as described by
 Dabelsteen et al (1993). This method is implemented in the function
 <code><a href="../reference/signal_to_noise_ratio.html">signal_to_noise_ratio()</a></code>. The function requires a
 measurement of ambient noise, which could either be the noise right
-before each signal (<code>noise.ref = "adjacent"</code>) or one or more
+before each sound (<code>noise.ref = "adjacent"</code>) or one or more
 ambient noise measurements per recording
-(<code>noise.ref = "custom"</code>). For the latter, selections on
-signal parameters in which ambient noise will be measured must be
-specified. Alternatively, one or more selections of ambient noise can be
-used as reference (see ‘noise.ref’ argument). This can potentially
-provide a more accurate representation of ambient noise. When margins
-overlap with another acoustic signal nearby, SNR will be inaccurate, so
-margin length should be carefully considered. Any SNR less than or equal
-to one suggests background noise is equal to or overpowering the
-acoustic signal. SNR can be measured as follows:</p>
+(<code>noise.ref = "custom"</code>). For the latter, selections on sound
+parameters in which ambient noise will be measured must be specified.
+Alternatively, one or more selections of ambient noise can be used as
+reference (see ‘noise.ref’ argument). This can potentially provide a
+more accurate representation of ambient noise. When margins overlap with
+another acoustic signal nearby, SNR will be inaccurate, so margin length
+should be carefully considered. Any SNR less than or equal to one
+suggests background noise is equal to or overpowering the acoustic
+signal. SNR can be measured as follows:</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run signal to noise ratio</span></span>
 <span><span class="va">sa</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/signal_to_noise_ratio.html">signal_to_noise_ratio</a></span><span class="op">(</span><span class="va">playback_est</span>, pb <span class="op">=</span> <span class="cn">FALSE</span>, noise.ref <span class="op">=</span> <span class="st">"custom"</span><span class="op">)</span></span>
@@ -7271,10 +7270,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 signal.to.noise.ratio
@@ -7301,10 +7300,10 @@ signal.to.noise.ratio
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 34.343497
@@ -7330,10 +7329,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 28.332970
@@ -7359,10 +7358,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 24.728347
@@ -7388,10 +7387,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 14.762225
@@ -7417,10 +7416,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 39.764789
@@ -7446,10 +7445,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 35.788237
@@ -7475,10 +7474,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 32.690266
@@ -7504,10 +7503,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 22.691011
@@ -7533,10 +7532,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;">
-1
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 35.096738
@@ -7562,10 +7561,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;">
-5
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 26.538427
@@ -7591,10 +7590,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;">
-10
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 23.014474
@@ -7620,10 +7619,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+15
 </td>
 <td style="text-align:center;">
-15
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 13.010145
@@ -7649,10 +7648,10 @@ CCL-K2
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -7678,10 +7677,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -7707,10 +7706,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -7736,10 +7735,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -7765,10 +7764,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -7794,10 +7793,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -7823,10 +7822,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -7852,10 +7851,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -7881,10 +7880,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 40.125423
@@ -7910,10 +7909,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 36.963176
@@ -7939,10 +7938,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 33.690208
@@ -7968,10 +7967,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 23.812451
@@ -7997,10 +7996,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 37.198457
@@ -8026,10 +8025,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 23.650075
@@ -8055,10 +8054,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 21.331685
@@ -8084,10 +8083,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 8.625902
@@ -8097,7 +8096,7 @@ SUR-K1
 </table>
 </div>
 <p> </p>
-<p>Note that this function does not compare signals to references, so no
+<p>Note that this function does not compare sounds to references, so no
 reference column is added.</p>
 </div>
 <div class="section level4">
@@ -8105,10 +8104,10 @@ reference column is added.</p>
 </h4>
 <p>Tail-to-signal ratio (TSR) is used to quantify reverberations.
 Specifically TSR measures the ratio of energy in the reverberation tail
-(the time segment right after the signal) to energy in the signal. A
+(the time segment right after the sound) to energy in the sound. A
 general margin in which reverberation tail will be measured must be
 specified. The function will measure TSR within the supplied frequency
-range (e.g. bandpass) of the reference signal (‘bottom.freq’ and
+range (e.g. bandpass) of the reference sound (‘bottom.freq’ and
 ‘top.freq’ columns in ‘X’). Two methods for calculating reverberations
 are provided (see ‘type’ argument). <code>Type 1</code> is based on the
 original description of TSR in Dabelsteen et al. (1993) while
@@ -8150,10 +8149,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 tail.to.signal.ratio
@@ -8180,10 +8179,10 @@ tail.to.signal.ratio
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -39.4842839
@@ -8209,10 +8208,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -20.9629527
@@ -8238,10 +8237,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -17.1823585
@@ -8267,10 +8266,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -13.9337262
@@ -8296,10 +8295,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -1.4533727
@@ -8325,10 +8324,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -0.3693614
@@ -8354,10 +8353,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -0.3865225
@@ -8383,10 +8382,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -0.4162823
@@ -8412,10 +8411,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;">
-1
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -40.3175330
@@ -8441,10 +8440,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;">
-5
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -22.0379734
@@ -8470,10 +8469,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;">
-10
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -17.9619702
@@ -8499,10 +8498,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+15
 </td>
 <td style="text-align:center;">
-15
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -12.0284751
@@ -8528,10 +8527,10 @@ CCL-K2
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -8557,10 +8556,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -8586,10 +8585,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -8615,10 +8614,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -8644,10 +8643,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -8673,10 +8672,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -8702,10 +8701,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -8731,10 +8730,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -8760,10 +8759,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -1.8351846
@@ -8789,10 +8788,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -1.7960424
@@ -8818,10 +8817,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -1.5610394
@@ -8847,10 +8846,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -1.5093965
@@ -8876,10 +8875,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -42.8101802
@@ -8905,10 +8904,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -22.8951956
@@ -8934,10 +8933,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -19.4269441
@@ -8963,10 +8962,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 -9.0820217
@@ -8981,8 +8980,8 @@ SUR-K1
 <h4 id="spectrogram-distortion">Spectrogram distortion<a class="anchor" aria-label="anchor" href="#spectrogram-distortion"></a>
 </h4>
 <p>Finally, the function <code><a href="../reference/spcc.html">spcc()</a></code> measures spectrogram
-cross-correlation as a metric of signal distortion of signals. Values
-close to 1 means very similar spectrograms (i.e. little signal
+cross-correlation as a metric of sound distortion of sounds. Values
+close to 1 means very similar spectrograms (i.e. little sound
 distortion). The function is a wrapper on <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a>’s
 <code><a href="https://marce10.github.io/warbleR/reference/cross_correlation.html" class="external-link">cross_correlation()</a></code>. It can be run as follows:</p>
 <div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
@@ -9018,10 +9017,10 @@ bottom.freq
 top.freq
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-signal.type
+distance
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
-distance
+sound.id
 </th>
 <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;">
 reference
@@ -9051,10 +9050,10 @@ cross.correlation
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9083,10 +9082,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -9115,10 +9114,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -9147,10 +9146,10 @@ CCE-F1
 11.58918
 </td>
 <td style="text-align:center;">
-CCE-F1
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-F1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-1
@@ -9179,10 +9178,10 @@ CCE-F1
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+1
 </td>
 <td style="text-align:center;">
-1
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9211,10 +9210,10 @@ NA
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+5
 </td>
 <td style="text-align:center;">
-5
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -9243,10 +9242,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+10
 </td>
 <td style="text-align:center;">
-10
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -9275,10 +9274,10 @@ CCE-I2
 10.89459
 </td>
 <td style="text-align:center;">
-CCE-I2
+15
 </td>
 <td style="text-align:center;">
-15
+CCE-I2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-4
@@ -9307,10 +9306,10 @@ CCE-I2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+1
 </td>
 <td style="text-align:center;">
-1
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9339,10 +9338,10 @@ NA
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+5
 </td>
 <td style="text-align:center;">
-5
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -9371,10 +9370,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+10
 </td>
 <td style="text-align:center;">
-10
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -9403,10 +9402,10 @@ CCL-K2
 11.72750
 </td>
 <td style="text-align:center;">
-CCL-K2
+15
 </td>
 <td style="text-align:center;">
-15
+CCL-K2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-5
@@ -9435,10 +9434,10 @@ CCL-K2
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9467,10 +9466,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9499,10 +9498,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9531,10 +9530,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9563,10 +9562,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+1
 </td>
 <td style="text-align:center;">
-1
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9595,10 +9594,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+5
 </td>
 <td style="text-align:center;">
-5
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9627,10 +9626,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+10
 </td>
 <td style="text-align:center;">
-10
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9659,10 +9658,10 @@ NA
 11.58918
 </td>
 <td style="text-align:center;">
-ambient
+15
 </td>
 <td style="text-align:center;">
-15
+ambient
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9691,10 +9690,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9723,10 +9722,10 @@ NA
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -9755,10 +9754,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -9787,10 +9786,10 @@ SUR-A4
 11.09414
 </td>
 <td style="text-align:center;">
-SUR-A4
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-A4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-2
@@ -9819,10 +9818,10 @@ SUR-A4
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+1
 </td>
 <td style="text-align:center;">
-1
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 NA
@@ -9851,10 +9850,10 @@ NA
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+5
 </td>
 <td style="text-align:center;">
-5
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -9883,10 +9882,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+10
 </td>
 <td style="text-align:center;">
-10
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -9915,10 +9914,10 @@ SUR-K1
 11.38144
 </td>
 <td style="text-align:center;">
-SUR-K1
+15
 </td>
 <td style="text-align:center;">
-15
+SUR-K1
 </td>
 <td style="text-align:center;font-weight: bold;background-color: #ccebff !important;">
 01m_re-rec.wav-7
@@ -9941,7 +9940,7 @@ SUR-K1
 </h4>
 <p>The function <code><a href="../reference/noise_profile.html">noise_profile()</a></code> allows to estimate the
 frequency spectrum of ambient noise. This can be done on extended
-selection tables (using the segments containing no signal) or over
+selection tables (using the segments containing no sound) or over
 complete sound files in the working directory (or path supplied). The
 function uses internally to calculate frequency spectra. The following
 code measures the ambient noise profile for the recordings at distance
@@ -10296,22 +10295,23 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <span><span class="co">## </span></span>
 <span><span class="co">## loaded via a namespace (and not attached):</span></span>
 <span><span class="co">##  [1] Rcpp_1.0.9        svglite_2.1.0     fftw_1.0-7        rprojroot_2.0.3  </span></span>
-<span><span class="co">##  [5] digest_0.6.30     utf8_1.2.2        R6_2.5.1          signal_0.7-7     </span></span>
-<span><span class="co">##  [9] evaluate_0.17     highr_0.9         httr_1.4.4        pillar_1.8.1     </span></span>
-<span><span class="co">## [13] rlang_1.0.6       rstudioapi_0.14   jquerylib_0.1.4   rmarkdown_2.17   </span></span>
-<span><span class="co">## [17] pkgdown_2.0.6     labeling_0.4.2    textshaping_0.3.6 desc_1.4.2       </span></span>
-<span><span class="co">## [21] webshot_0.5.4     stringr_1.4.1     RCurl_1.98-1.9    munsell_0.5.0    </span></span>
-<span><span class="co">## [25] proxy_0.4-27      compiler_4.2.1    xfun_0.34         pkgconfig_2.0.3  </span></span>
-<span><span class="co">## [29] systemfonts_1.0.4 htmltools_0.5.3   tidyselect_1.2.0  tibble_3.1.8     </span></span>
-<span><span class="co">## [33] gridExtra_2.3     dtw_1.23-1        fansi_1.0.3       withr_2.5.0      </span></span>
-<span><span class="co">## [37] dplyr_1.0.10      MASS_7.3-58       bitops_1.0-7      grid_4.2.1       </span></span>
-<span><span class="co">## [41] jsonlite_1.8.3    gtable_0.3.1      lifecycle_1.0.3   magrittr_2.0.3   </span></span>
-<span><span class="co">## [45] formatR_1.12      scales_1.2.1      cli_3.4.1         stringi_1.7.8    </span></span>
-<span><span class="co">## [49] cachem_1.0.6      pbapply_1.5-0     farver_2.1.1      fs_1.5.2         </span></span>
-<span><span class="co">## [53] xml2_1.3.3        bslib_0.4.0       ragg_1.2.4        vctrs_0.5.0      </span></span>
-<span><span class="co">## [57] generics_0.1.3    rjson_0.2.21      tools_4.2.1       glue_1.6.2       </span></span>
-<span><span class="co">## [61] purrr_0.3.5       parallel_4.2.1    fastmap_1.1.0     yaml_2.3.6       </span></span>
-<span><span class="co">## [65] colorspace_2.0-3  rvest_1.0.3       memoise_2.0.1     sass_0.4.2</span></span></code></pre>
+<span><span class="co">##  [5] digest_0.6.30     utf8_1.2.2        R6_2.5.1          Sim.DiffProc_4.8 </span></span>
+<span><span class="co">##  [9] signal_0.7-7      evaluate_0.17     highr_0.9         httr_1.4.4       </span></span>
+<span><span class="co">## [13] pillar_1.8.1      rlang_1.0.6       rstudioapi_0.14   jquerylib_0.1.4  </span></span>
+<span><span class="co">## [17] rmarkdown_2.17    pkgdown_2.0.6     labeling_0.4.2    textshaping_0.3.6</span></span>
+<span><span class="co">## [21] desc_1.4.2        webshot_0.5.4     stringr_1.4.1     RCurl_1.98-1.9   </span></span>
+<span><span class="co">## [25] munsell_0.5.0     proxy_0.4-27      compiler_4.2.1    Deriv_4.1.3      </span></span>
+<span><span class="co">## [29] xfun_0.34         pkgconfig_2.0.3   systemfonts_1.0.4 htmltools_0.5.3  </span></span>
+<span><span class="co">## [33] tidyselect_1.2.0  tibble_3.1.8      gridExtra_2.3     dtw_1.23-1       </span></span>
+<span><span class="co">## [37] fansi_1.0.3       withr_2.5.0       dplyr_1.0.10      MASS_7.3-58      </span></span>
+<span><span class="co">## [41] bitops_1.0-7      grid_4.2.1        jsonlite_1.8.3    gtable_0.3.1     </span></span>
+<span><span class="co">## [45] lifecycle_1.0.3   magrittr_2.0.3    formatR_1.12      scales_1.2.1     </span></span>
+<span><span class="co">## [49] cli_3.4.1         stringi_1.7.8     cachem_1.0.6      pbapply_1.5-0    </span></span>
+<span><span class="co">## [53] farver_2.1.1      fs_1.5.2          xml2_1.3.3        bslib_0.4.0      </span></span>
+<span><span class="co">## [57] ragg_1.2.4        vctrs_0.5.0       generics_0.1.3    rjson_0.2.21     </span></span>
+<span><span class="co">## [61] tools_4.2.1       glue_1.6.2        purrr_0.3.5       parallel_4.2.1   </span></span>
+<span><span class="co">## [65] fastmap_1.1.0     yaml_2.3.6        colorspace_2.0-3  rvest_1.0.3      </span></span>
+<span><span class="co">## [69] memoise_2.0.1     sass_0.4.2</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

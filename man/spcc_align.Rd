@@ -2,15 +2,17 @@
 % Please edit documentation in R/spcc_align.R
 \name{spcc_align}
 \alias{spcc_align}
-\title{Align start and end of signal using spectrographic cross-correlation}
+\title{Align start and end of sound using spectrographic cross-correlation}
 \usage{
-spcc_align(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, 
+spcc_align(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, 
 wn = 'hanning')
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.}
+\item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.}
 
-\item{parallel}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
+\item{parallel}{DEPRECATED. Use 'cores' instead.}
+
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
@@ -26,13 +28,13 @@ slow down the function but produce more accurate results.}
 \item{wn}{A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.}
 }
 \value{
-Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference signal.
+Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
 }
 \description{
-\code{spcc_align} aligns start and end of signal in an extended selection table using spectrographic cross-correlation
+\code{spcc_align} aligns start and end of sound in an extended selection table using spectrographic cross-correlation
 }
 \details{
-This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment.
+This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment.
 }
 \examples{
 {

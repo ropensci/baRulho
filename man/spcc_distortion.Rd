@@ -7,6 +7,7 @@
 spcc_distortion(
   X,
   parallel = 1,
+  cores = 1,
   pb = TRUE,
   method = 1,
   cor.method = "pearson",

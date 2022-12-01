@@ -1,5 +1,6 @@
 # *baRulho 1.0.8*
 
+* 'parallel' argument deprecated and replaced by 'cores'
 * New function `attenuation()`
 * Data frames and selection tables can be used as input data
 

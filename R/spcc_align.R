@@ -1,10 +1,11 @@
-#' Align start and end of signal using spectrographic cross-correlation  
+#' Align start and end of sound using spectrographic cross-correlation  
 #' 
-#' \code{spcc_align} aligns start and end of signal in an extended selection table using spectrographic cross-correlation
-#' @usage spcc_align(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, 
+#' \code{spcc_align} aligns start and end of sound in an extended selection table using spectrographic cross-correlation
+#' @usage spcc_align(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, 
 #' wn = 'hanning')
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'signal.type', 'bottom.freq' and 'top.freq'.
-#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.
+#' @param parallel DEPRECATED. Use 'cores' instead.
+#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
@@ -13,10 +14,10 @@
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp 
 #' slow down the function but produce more accurate results.
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}. 
-#' @return Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference signal. 
+#' @return Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound. 
 #' @export
 #' @name spcc_align
-#' @details This function uses spectrographic cross-correlation to align the position in time of signals with regard to a reference signal. The signal recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of signal degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align signals using cross-correlation. The output extended selection table contains the new start and end values after alignment. 
+#' @details This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment. 
 #' @examples
 #' {
 #' # load example data
@@ -35,7 +36,7 @@
 #' }
 # last modification on nov-01-2019 (MAS)
 
-spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
+spcc_align <- function(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
   
   # set number of processes for printing message 
   if (pb){
@@ -49,9 +50,9 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   # if (!warbleR::is_extended_selection_table(X)) 
     # stop2("'X' must be and extended selection table")
   
-  # If parallel is not numeric
-  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
+  # If cores is not numeric
+  if (!is.numeric(cores)) stop2("'cores' must be a numeric vector of length 1") 
+  if (any(!(cores %% 1 == 0), cores < 1)) stop2("'cores' should be a positive integer")
   
   # must have the same sampling rate
   if (length(unique(attr(X, "check.results")$sample.rate)) > 1) 
@@ -67,17 +68,17 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   # make wl even if odd
   if (!(wl %% 2) == 0) wl <- wl + 1
   
-  # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must contain a 'signal.type' column")
+  # check sound.id column 
+  if (is.null(X$sound.id)) stop2("'X' must contain a 'sound.id' column")
   
-  #remove ambient if any from signal types
-  sig.types <- setdiff(unique(X$signal.type), "ambient")
+  #remove ambient if any from sound types
+  sig.types <- setdiff(unique(X$sound.id), "ambient")
   
   # create matrix containing pairwise comparisons of selections (2 columns)
   comp_mats <- lapply(sig.types, function(x){
     
-    # extract for single signal and order by distance
-    Y <- as.data.frame(X[X$signal.type == x, ])
+    # extract for single sound and order by distance
+    Y <- as.data.frame(X[X$sound.id == x, ])
     
     # create selec ID column (unique ID for each selection (row)) 
     Y$sf.selec <- paste(Y$sound.files, Y$selec, sep = "-")
@@ -95,7 +96,7 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   # resave X
   Y <- X
   
-  # get index of signals that would be align
+  # get index of sounds that would be align
   indx.algn <- which(paste(Y$sound.files, Y$selec, sep = "-") %in% comp_mat[, 1])
   
   # fix end to include half the duration of the selection at both sides
@@ -126,7 +127,7 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
   on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
   
   
-  warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = parallel, pb = pb, compare.matrix = comp_mat, X = Y)
+  warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = cores, pb = pb, compare.matrix = comp_mat, X = Y)
   
   # run spcc 
   xcorrs <- warbleR::cross_correlation(output = "list")
@@ -136,7 +137,7 @@ spcc_align <- function(X, parallel = 1, pb = TRUE, hop.size = 11.6, wl = NULL, o
     write(file = "", x = "finding peaks and aligning (step 2 out of 2)")
   
   # find peaks and lags
-  peaks <- find_peaks_bRlh_int(xc.output = xcorrs, parallel = parallel, max.peak = TRUE)
+  peaks <- find_peaks_bRlh_int(xc.output = xcorrs, cores = cores, max.peak = TRUE)
   
   # fix start and end in original data set and its attributes 
   # start

@@ -18,14 +18,14 @@
 #' @param seed Numeric vector of length 1. This allows users to get the same results in different runs (using \code{\link[base:Random]{set.seed}} internally). Default is \code{NULL}.
 #' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
 #' @param sig2 Numeric vector of length 1 defining the sigma value of the brownian motion model (used for simulating frequency modulation). Default is 0.3.
-#' @param shuffle Logical to control if the position of sounds is randomized. Useful to avoid having sounds from the same treatments next to each other. Defaul is \code{FALSE}.
+#' @param shuffle Logical to control if the position of sounds is randomized. Having all sounds from the same treatment in a sequence can be problematic if an environmental noise masks them. Hence 'shuffle' is useful to avoid having sounds from the same treatment next to each other. Default is \code{FALSE}.
 #' @param hrm.freqs Numeric vector with the frequencies of the harmonics relative to the fundamental frequency. The default values are c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10).
 #' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
-#' @return A wave object containing the simulated songs. If 'selec.table' is \code{TRUE} the function saves the wave object as a '.wav' sound file in the working directory (or 'path') and returns a list including 1) a selection table with the start/end time, and bottom/top frequency of the sub-units and 2) the wave object.
+#' @return An extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The table contains columns for each of the varying features and a 'treatment' column (useful to tell sound from the same combination of features when using replicates).
 #' @seealso \code{\link[warbleR]{simulate_songs}} from the package warbleR. 
 #' @export
 #' @name synth_sounds
-#' @details This function creates synthetic sounds that can be used for playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 dimensions: 
+#' @details This function creates synthetic sounds that can be used for playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 features: 
 #' \itemize{
 #'    \item \code{frequency}: continuous, argument 'frequencies'.
 #'    \item \code{duration}: continuous, argument 'durations'.
@@ -33,7 +33,7 @@
 #'    \item \code{frequency modulation}: variation in fundamental frequency across time. Binary (modulated vs non-modulated), arguments 'fm' and 'sig2'. 
 #'    \item \code{amplitude modulation}: variation in amplitude across time. Binary (modulated vs non-modulated), arguments 'am' and 'am.amps'.
 #' }
-#' Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The functions uses \code{\link[warbleR]{simulate_songs}} internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation. 
+#' Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The functions uses \code{\link[warbleR]{simulate_songs}} internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation. The output table contains columns for each of the varying features and a 'treatment' column (useful to tell sound from the same combination of features when using replicates).
 
 #' @examples
 #' \dontrun{
@@ -235,16 +235,21 @@ synth_sounds <-
       NULL
     freq_dur_label <- paste(dur_label, freq_label, sep = ";")
     
-    sim_sounds_est$treatments <- if (ncol(sim_sounds_est) > 8)
-      sim_sounds_est$treatments <-
+    sim_sounds_est$treatment <- if (ncol(sim_sounds_est) > 8)
+      sim_sounds_est$treatment <-
       paste(freq_dur_label,
             apply(sim_sounds_est[, 9:ncol(sim_sounds_est)], 1, paste, collapse = ';'),
             sep = ";") else
       freq_dur_label
     
-    sim_sounds_est$treatments <-
-      gsub("^;", "", sim_sounds_est$treatments)
+    # add treatment column
+    sim_sounds_est$treatment <-
+      gsub("^;", "", sim_sounds_est$treatment)
     
+    # add sound id column
+    sim_sounds_est$sound.id <- paste(sim_sounds_est$treatment, 1:nrow(sim_sounds_est), sep = "_")
+    
+    # reset row names
     rownames(sim_sounds_est) <- 1:nrow(sim_sounds_est)
     
     # fix call attribute

@@ -5,11 +5,11 @@ stop2 <- function (...)
   stop(..., call. = FALSE)
 }
 
-# internal baRulho function, not to be called by users. It prepares X for comparing signals
+# internal baRulho function, not to be called by users. It prepares X for comparing sounds
 # @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 # last modification on sep-2022 (MAS)
 
-prep_X_bRlo_int <- function(X, method = 1, parallel = 1, pb = TRUE) {
+prep_X_bRlo_int <- function(X, method = 1, cores = 1, pb = TRUE) {
   
   # set pb options 
   on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
@@ -21,17 +21,17 @@ prep_X_bRlo_int <- function(X, method = 1, parallel = 1, pb = TRUE) {
   X2 <- as.data.frame(X) 
   
   # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & parallel > 1)
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
+  if (Sys.info()[1] == "Windows" & cores > 1)
+    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
   
   # set pb options 
   pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
   
-  # add second column with names of the reference signals to be compared against
+  # add second column with names of the reference sounds to be compared against
   X$reference <- pbapply::pbsapply(1:nrow(X), cl = cl, function(x, meth = method){
     
-    # extract for single signal and order by distance
-    Y <- X2[X2$signal.type == X$signal.type[X2$TEMP....sgnl == X2$TEMP....sgnl[x]], , drop = FALSE]
+    # extract for single sound and order by distance
+    Y <- X2[X2$sound.id == X$sound.id[X2$TEMP....sgnl == X2$TEMP....sgnl[x]], , drop = FALSE]
     Y <- Y[order(Y$distance), ]
     
     # method 1 compare to closest distance to source
@@ -299,12 +299,12 @@ filled_contour_bRlo_int <- function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1,
 # Find cross-correlation peaks
 
 # last modification on jan-014-2021 (MAS)
-find_peaks_bRlh_int <- function(xc.output, parallel = 1, cutoff = 0.4, pb = TRUE, max.peak = FALSE, output = "data.frame") 
+find_peaks_bRlh_int <- function(xc.output, cores = 1, cutoff = 0.4, pb = TRUE, max.peak = FALSE, output = "data.frame") 
 {
   
   # set clusters for windows OS and no soz
-  if (Sys.info()[1] == "Windows" & parallel > 1)
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else cl <- parallel
+  if (Sys.info()[1] == "Windows" & cores > 1)
+    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
     
     # loop over scores of each dyad
     pks <- warbleR:::pblapply_wrblr_int(pbar = pb, X = unique(xc.output$scores$dyad), cl = cl, FUN = function(i) {
@@ -404,15 +404,15 @@ find_peaks_bRlh_int <- function(xc.output, parallel = 1, cutoff = 0.4, pb = TRUE
 
 #
 # ## internal function to subtract SPL from background noise
-# # signal = signal SPL
+# # sound = sound SPL
 # # noise = noise SPL
-# lessdB <- function(signal.noise, noise){
+# lessdB <- function(sound.noise, noise){
 #
-#   puttative_SPLs <- seq(0.01, signal.noise, by = 0.01)
+#   puttative_SPLs <- seq(0.01, sound.noise, by = 0.01)
 #
 #   sum_SPLs <-  20 * log10((10^(puttative_SPLs/20)) + (10^(noise/20)))
 #
-#   signal_SPL <- puttative_SPLs[which.min(abs(sum_SPLs - signal.noise))]
+#   sound_SPL <- puttative_SPLs[which.min(abs(sum_SPLs - sound.noise))]
 #
-#   return(signal_SPL)
+#   return(sound_SPL)
 #   }

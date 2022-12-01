@@ -1,21 +1,22 @@
 #' Measure excess attenuation
 #' 
-#' \code{excess_attenuation} measures excess attenuation in signals referenced in an extended selection table.
-#' @usage excess_attenuation(X, parallel = 1, pb = TRUE, method = 1, type = "Dabelsteen",
+#' \code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.
+#' @usage excess_attenuation(X, parallel = 1, cores = 1, pb = TRUE, method = 1, type = "Dabelsteen",
 #'  output = "est", hop.size = 1, wl = NULL, ovlp = 50, gain = 0, 
 #' bp = "freq.range", path = NULL)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).
-#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
+#' @param parallel DEPRECATED. Use 'cores' instead.
+#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring excess attenuation. Two methods are available:
 #' \itemize{
-#' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
-#' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
+#' \item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
+#' \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 #' }
 #' @param type Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
 #' \itemize{
-#' \item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference signals. This is the default method. 
-#' \item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference signals. Microphone gain is the microphone gain of the reference and re-recorded signals. 
+#' \item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. This is the default method. 
+#' \item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. Microphone gain is the microphone gain of the reference and re-recorded sounds. 
 #' }
 #' If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame'). 'est' format only available if 'X' is itself an extended selection table.
@@ -33,7 +34,7 @@
 #' @export
 #' @name excess_attenuation
 #' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents energy loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation. 
-#' The goal of the function is to measure the excess attenuation on signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate which signals belonging to the same category (e.g. song-types). The function will then compare each signal type to the corresponding reference signal. Two methods for calculating excess attenuation are provided (see 'method' argument). 
+#' The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two methods for calculating excess attenuation are provided (see 'method' argument). 
 #' @examples
 #' {
 #' # load example data
@@ -67,7 +68,7 @@
 
 excess_attenuation <-
   function(X,
-           parallel = 1,
+           parallel = 1, cores = 1,
            pb = TRUE,
            method = 1,
            type = "Dabelsteen",
@@ -85,11 +86,11 @@ excess_attenuation <-
       if (!dir.exists(path))
         stop2("'path' provided does not exist")
     
-    # If parallel is not numeric
-    if (!is.numeric(parallel))
-      stop2("'parallel' must be a numeric vector of length 1")
-    if (any(!(parallel %% 1 == 0), parallel < 1))
-      stop2("'parallel' should be a positive integer")
+    # If cores is not numeric
+    if (!is.numeric(cores))
+      stop2("'cores' must be a numeric vector of length 1")
+    if (any(!(cores %% 1 == 0), cores < 1))
+      stop2("'cores' should be a positive integer")
     
     #check output
     if (!any(output %in% c("est", "data.frame")))
@@ -129,9 +130,9 @@ excess_attenuation <-
     if (!any(method %in% 1:2))
       stop2("'method' must be either 1 or 2")
     
-    # check signal.type column
-    if (is.null(X$signal.type))
-      stop2("'X' must contain a 'signal.type' column")
+    # check sound.id column
+    if (is.null(X$sound.id))
+      stop2("'X' must contain a 'sound.id' column")
     
     # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
     if (pb)
@@ -140,12 +141,12 @@ excess_attenuation <-
     X <-
       prep_X_bRlo_int(X,
                       method = method,
-                      parallel = parallel,
+                      cores = cores,
                       pb = pb)
     
     # function to extract mean envelopes
     meanenv_FUN <- function(y, wl, ovlp) {
-      # read signal clip
+      # read sound clip
       clp <-
         warbleR::read_sound_file(
           X = X,
@@ -155,7 +156,7 @@ excess_attenuation <-
           path = path
         )
       
-      if (X$signal.type[y] != "ambient")
+      if (X$sound.id[y] != "ambient")
         noise_clp <-
           warbleR::read_sound_file(
             X = X,
@@ -183,7 +184,7 @@ excess_attenuation <-
             output = "Wave"
           )
         
-        if (X$signal.type[y] != "ambient")
+        if (X$sound.id[y] != "ambient")
           noise_clp <-
           seewave::ffilter(
             noise_clp,
@@ -210,10 +211,10 @@ excess_attenuation <-
     }
     
     # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" & parallel > 1)
+    if (Sys.info()[1] == "Windows" & cores > 1)
       cl <-
-      parallel::makePSOCKcluster(getOption("cl.cores", parallel)) else
-      cl <- parallel
+      parallel::makePSOCKcluster(getOption("cl.cores", cores)) else
+      cl <- cores
     
     if (pb)
       write(file = "",
@@ -232,8 +233,8 @@ excess_attenuation <-
     # put in a data frame
     X2 <- do.call(rbind, mean_envs)
     
-    # split by signal ID
-    sigtype_list <- split(X2, X2$signal.type)
+    # split by sound ID
+    sigtype_list <- split(X2, X2$sound.id)
     
     if (pb)
       write(file = "",
@@ -242,11 +243,11 @@ excess_attenuation <-
     # calculate excess attenuation
     X_list <-
       warbleR:::pblapply_wrblr_int(X = sigtype_list, pbar = pb, cl = cl, function(Y, meth = method, tp = type) {
-        if (Y$signal.type[1] == "ambient")
+        if (Y$sound.id[1] == "ambient")
           Y$excess.attenuation <- NA else {
           # method 1 compare to closest distance to source
           if (meth == 1) {
-            # extract mean envelope of signals
+            # extract mean envelope of sounds
             sig_env_REF <- Y$sig_env[which.min(Y$distance)]
             dist_REF <- Y$distance[which.min(Y$distance)]
             

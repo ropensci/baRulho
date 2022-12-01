@@ -10,8 +10,8 @@
 #' If \code{NULL} (default) then the current working directory will be used instead.
 #' @param overwrite Logical argument to determine if the function will overwrite any existing sound file with the same file name. Default is \code{FALSE}.
 #' @param delay Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning (and at the end) of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.
-#' @param gap.duration Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between signals. Default is 1 s.
-#' @param amp.marker Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of signals, so it is picked up at further distances. Default is 2.
+#' @param gap.duration Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between sounds. Default is 1 s.
+#' @param amp.marker Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of sounds, so it is picked up at further distances. Default is 2.
 #' @param flim Numeric vector of length 2 to control the frequency range in which the markers would be found. If \code{NULL} markers would be display across the whole frequency range. Default is c(0, 4).
 #' @param cex Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
@@ -19,7 +19,7 @@
 #' with the spectrogram cross-correlation coefficients.
 #' @export
 #' @name master_sound_file
-#' @details The function is intended to simplify the creation of master sound files for playback experiments in signal degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded signals to facilitate the streamlining of degradation quantification.
+#' @details The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds to facilitate the streamlining of degradation quantification.
 #' @examples
 #' {
 #' # load example data from warbleR

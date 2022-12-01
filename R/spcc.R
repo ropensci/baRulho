@@ -1,16 +1,17 @@
-#' Measure spectrographic cross-correlation as a measure of signal distortion
+#' Measure spectrographic cross-correlation as a measure of sound distortion
 #' 
-#' \code{spcc} measures spectrographic cross-correlation as a measure of signal distortion in signals referenced in an extended selection table.
-#' @usage spcc(X, parallel = 1, pb = TRUE,  method = 1, 
+#' \code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
+#' @usage spcc(X, parallel = 1, cores = 1, pb = TRUE,  method = 1, 
 #' cor.method = "pearson", output = "est", 
 #' hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning', path = NULL)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "signal.type": category ID of signals across test recordings (used to compared signals from the same category).
-#' @param parallel Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
+#' @param parallel DEPRECATED. Use 'cores' instead.
+#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
 #' \itemize{
-#' \item \code{1}: compare all signals with their counterpart that was recorded at the closest distance to source (e.g. compare a signal recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
-#' \item \code{2}: compare all signals with their counterpart recorded at the distance immediately before (e.g. a signal recorded at 10m compared with the same signal recorded at 5m, then signal recorded at 15m compared with same signal recorded at 10m and so on).
+#' \item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
+#' \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 #' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
@@ -26,7 +27,7 @@
 #' with the spectrogram cross-correlation coefficients.
 #' @export
 #' @name spcc
-#' @details Spectrographic cross-correlation measures frequency distortion of signals as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little signal distortion has occurred). Cross-correlation is measured of signals in which a reference playback has been re-recorded at increasing distances. The 'signal.type' column must be used to indicate the function to only compare signals belonging to the same category (e.g. song-types). The function compares each signal type to the corresponding reference signal within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{cross_correlation}} function.
+#' @details Spectrographic cross-correlation measures frequency distortion of sounds as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little sound distortion has occurred). Cross-correlation is measured of sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{cross_correlation}} function.
 #' @examples
 #' {
 #' # load example data
@@ -48,7 +49,7 @@
 #' }
 # last modification on jan-06-2020 (MAS)
 
-spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning', path = NULL){
+spcc <- function(X, parallel = 1, cores = 1, pb = TRUE, method = 1, cor.method = "pearson", output = "est", hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning', path = NULL){
   
   # set path if not provided
   if (is.null(path)) 
@@ -56,9 +57,9 @@ spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson",
       if (!dir.exists(path)) 
         stop2("'path' provided does not exist")
   
-  # If parallel is not numeric
-  if (!is.numeric(parallel)) stop2("'parallel' must be a numeric vector of length 1") 
-  if (any(!(parallel %% 1 == 0),parallel < 1)) stop2("'parallel' should be a positive integer")
+  # If cores is not numeric
+  if (!is.numeric(cores)) stop2("'cores' must be a numeric vector of length 1") 
+  if (any(!(cores %% 1 == 0), cores < 1)) stop2("'cores' should be a positive integer")
 
   # must have the same sampling rate
   if (is_extended_selection_table(X)){
@@ -85,17 +86,17 @@ spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson",
   
   if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop2("'method' must be either  'pearson', 'kendall' or 'spearman'")
   
-  # check signal.type column 
-  if (is.null(X$signal.type)) stop2("'X' must contain a 'signal.type' column")
+  # check sound.id column 
+  if (is.null(X$sound.id)) stop2("'X' must contain a 'sound.id' column")
   
-  #remove ambient if any from signal types
-  sig.types <- setdiff(unique(X$signal.type), "ambient")
+  #remove ambient if any from sound types
+  sig.types <- setdiff(unique(X$sound.id), "ambient")
 
   # create matrix containing pairwise comparisons of selections (2 columns)
   comp_mats <- lapply(sig.types, function(x){
     
-    # extract for single signal and order by distance
-    Y <- as.data.frame(X[X$signal.type == x, ])
+    # extract for single sound and order by distance
+    Y <- as.data.frame(X[X$sound.id == x, ])
     
     # create selec ID column (unique ID for each selection (row)) 
     Y$sf.selec <- paste(Y$sound.files, Y$selec, sep = "-")
@@ -121,7 +122,7 @@ spcc <- function(X, parallel = 1, pb = TRUE, method = 1, cor.method = "pearson",
   
   on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
   
-  warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = parallel, pb = pb, compare.matrix = comp_mat)
+  warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = cores, pb = pb, compare.matrix = comp_mat)
   
   # run spcc 
   xcorrs <- warbleR::cross_correlation(X = X, cor.method = "pearson", path = path)$max.xcorr.matrix

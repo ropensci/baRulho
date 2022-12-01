@@ -107,7 +107,7 @@ search_templates <- function(X, template.rows, test.files = NULL, path = NULL, p
     comp_mat <- matrix(c(rep(paste(X$sound.files[template.rows], X$selec[template.rows], sep = "-"), length(test.files)), rep((test.files), each = length(template.rows))), ncol = 2) 
   
   # patch to work on warbleR versions before 1.1.26
-  wi <- warbleR::info_sound_files(path = path, parallel = 1, cores = 1, pb = FALSE) 
+  wi <- warbleR::info_sound_files(path = path, parallel = 1, pb = FALSE) 
   
   wi <- wi[wi$sound.files %in% unique(c(X$sound.files, test.files)), ]
   

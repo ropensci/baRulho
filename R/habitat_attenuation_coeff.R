@@ -1,22 +1,32 @@
-#' Estimate habitat_attenuation of sound pressure level
+#' Estimate habitat attenuation coefficient
 #' 
-#' \code{habitat_attenuation} estimates atmospheric habitat_attenuation and atmospheric absorption.
-#' @usage habitat_attenuation(frequency, temp = 20, rh = 60, pa = 101325, dist0, dist, hab.att.coef = 0.02)
-#' @param frequency Numeric vector of length 1 with frequency (in Hertz).
+#' \code{habitat_attenuation_coeff} calculates the attenuation coefficient of the habitat.
+#' @usage habitat_attenuation_coeff(X, cores = 1, pb = TRUE, output = "est", 
+#' hop.size = 11.6, wl = NULL, path = NULL, temp = 20, rh = 60, 
+#' pa = 101325, subtract.bgn = TRUE, envelope = "abs", mar = NULL)
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
+#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
+#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
+#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
+#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
+#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
+#' is \code{NULL}. If supplied, 'hop.size' is ignored.
+#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @param temp Numeric vector of length 1 with frequency (in Celsius). Default is 20.
 #' @param rh Numeric vector of length 1 with relative humidity (in percentage). Default is 60.
 #' @param pa Numeric vector of length 1 with atmospheric (barometric) pressure in Pa (standard: 101325, default). Used for atmospheric habitat_attenuation.
-#' @param dist Numeric vector of length 1 with distance (m) over which a sound propagates. 
-#' @param dist0 Numeric vector of length 1 with distance (m) for the reference SPL. 
-#' @param hab.att.coef habitat_attenuation coefficient of the habitat (in dB/kHz/m).
-#' @return Returns the geometric, atmospheric and habitat habitat_attenuation (in dB) as well as the combined habitat_attenuation.   
+#' @param subtract.bgn Logical argument to control if SPL from background noise is excluded from the measured signal SPL. Default is \code{FALSE}.
+#' @param envelope Character string vector with the method to calculate amplitude envelopes (in which SPL is measured, used required if 'spl' is not supplied), as in \code{\link[seewave]{env}}. Must be either 'abs' (absolute envelope, default) or 'hil' (Hilbert transformation).
+#' @param mar numeric vector of length 1. Specifies the margins adjacent to
+#'   the start and end points of selection over which to measure background noise. This is required to subtract background noise sound pressure level (so only needed when 'subtract.bgn = TRUE').
+#' @return Returns the attenuation coefficient of the habitat (in dB/kHz/m).
 #' @export
 #' @name habitat_attenuation_coeff
-#' @details Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB.
+#' @details Calculate the attenuation coefficient of the habitat (in dB/kHz/m). 
 #' @examples
 #' {
 #' # measure habitat attenuation coefficient
-#' habitat_attenuation_coeff(f = 2000, dist = 50, dist0 = 1)
+#' habitat_attenuation_coeff(X = playback_est, mar = 0.05)
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr}) 
@@ -238,8 +248,7 @@ habitat_attenuation_coeff <-
       base::match.call() # fix call attribute
     
     return(X)
-}
+  }
 
-
-##### modified from http://forum.studiotips.com/viewtopic.php?t=158
-## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.habitat_attenuation_dB
+##### modified from  http://www.sengpielaudio.com
+## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB

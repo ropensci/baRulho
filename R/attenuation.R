@@ -60,5 +60,5 @@ attenuation <- function(frequency, temp = 20, rh = 60, pa = 101325, dist0, dist,
     return(outdf)
   }
 
-##### modifiedfrom http://forum.studiotips.com/viewtopic.php?t=158
+##### modified from  http://www.sengpielaudio.com
 ## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB

@@ -1,6 +1,6 @@
-#' Measure spectrographic cross-correlation as a measure of sound distortion
+#' Measure detection distance of sound
 #'
-#' \code{detection_distance} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
+#' \code{detection_distance} detection distance of sounds.
 #' @usage detection_distance(X, cores = 1, pb = TRUE, output = "est",
 #' hop.size = 11.6, wl = NULL, path = NULL, spl = NULL, spl.cutoff, temp = 20,
 #' rh = 60, pa = 101325, hab.att.coef = 0.02, max.distance = 1000,

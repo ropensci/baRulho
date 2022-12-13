@@ -2,10 +2,10 @@
 % Please edit documentation in R/detection_distance.R
 \name{detection_distance}
 \alias{detection_distance}
-\title{Measure spectrographic cross-correlation as a measure of sound distortion}
+\title{Measure detection distance of sound}
 \usage{
 detection_distance(X, cores = 1, pb = TRUE, output = "est",
-hop.size = 11.6, wl = NULL, path = NULL, spl = NULL, spl.cutoff, temp = 20, 
+hop.size = 11.6, wl = NULL, path = NULL, spl = NULL, spl.cutoff, temp = 20,
 rh = 60, pa = 101325, hab.att.coef = 0.02, max.distance = 1000,
  resolution = 0.1, subtract.bgn = TRUE, envelope = "abs", mar = NULL)
 }
@@ -54,10 +54,10 @@ Returns the geometric, atmospheric and habitat attenuation (in dB) as well as th
 A data frame, or extended selection table similar to input data (depending on argument 'output'), but including two new columns (reference and detection.distance).
 }
 \description{
-\code{detection_distance} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
+\code{detection_distance} detection distance of sounds.
 }
 \details{
-The function computes the maximum distance at which a sound would be detected, which is calculated as the distance in which the sound pressure level (SPL) goes below the specified SPL cutoff ('spl.cutoff')). The function uses internally \code{\link{attenuation}} to estimate SPL at increasing values until it reaches the defined cutoff. The peak frequency (caculated on the power spectrum of the reference sound) of the reference sound for each sound ID is used as the carrier frequency for distance estimation. \strong{This function assumes that all recordings have been made at the same recording volume}.
+The function computes the maximum distance at which a sound would be detected, which is calculated as the distance in which the sound pressure level (SPL) goes below the specified SPL cutoff ('spl.cutoff')). The function uses internally \code{\link{attenuation}} to estimate SPL at increasing values until it reaches the defined cutoff. The peak frequency (calculated on the power spectrum of the reference sound) of the reference sound for each sound ID is used as the carrier frequency for distance estimation. The sound recorded at the lowest distance is used as reference. \strong{This function assumes that all recordings have been made at the same recording volume}.
 }
 \examples{
 {

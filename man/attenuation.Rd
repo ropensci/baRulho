@@ -13,7 +13,7 @@ attenuation(frequency, temp = 20, rh = 60, pa = 101325, dist0, dist, hab.att.coe
 
 \item{rh}{Numeric vector of length 1 with relative humidity (in percentage). Default is 60.}
 
-\item{pa}{Numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default). Used for Atmospheric attenuation.}
+\item{pa}{Numeric vector of length 1 with atmospheric (barometric) pressure in Pa (standard: 101325, default). Used for atmospheric attenuation.}
 
 \item{dist0}{Numeric vector of length 1 with distance (m) for the reference SPL.}
 
@@ -28,7 +28,7 @@ Returns the geometric, atmospheric and habitat attenuation (in dB) as well as th
 \code{attenuation} estimates atmospheric attenuation and atmospheric absorption.
 }
 \details{
-Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency.
+Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB.
 }
 \examples{
 {

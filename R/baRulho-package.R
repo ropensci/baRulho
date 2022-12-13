@@ -20,6 +20,7 @@
 #' @import fftw
 #' @import viridis
 #' @import Sim.DiffProc 
+#' @import png
 #' @importFrom stats cor aggregate approx ave
 #' @importFrom methods is
 #' 

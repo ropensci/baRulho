@@ -30,7 +30,7 @@ If \code{NULL} (default) then the current working directory will be used instead
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-Extended selection table similar to input data, but includes a new column (cross.correlation)
+A data frame, or extended selection table similar to input data (depending on argument 'output'), but includes a new column (cross.correlation)
 with the spectrogram cross-correlation coefficients.
 }
 \description{

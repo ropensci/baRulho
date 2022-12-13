@@ -14,7 +14,7 @@
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp 
 #' slow down the function but produce more accurate results.
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}. 
-#' @return Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound. 
+#' @return A data frame, or extended selection table similar to input data (depending on argument 'output') in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound. 
 #' @export
 #' @name spcc_align
 #' @details This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment. 

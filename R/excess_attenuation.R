@@ -29,7 +29,7 @@
 #' @param gain Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.  
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return Extended selection table similar to input data, but also includes a new column (excess.attenuation)
+#' @return A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column (excess.attenuation)
 #' with the excess attenuation values.
 #' @export
 #' @name excess_attenuation

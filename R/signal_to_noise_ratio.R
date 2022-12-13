@@ -33,7 +33,7 @@
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return Extended selection table similar to input data, but also includes a new column (signal.to.noise.ratio)
+#' @return A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column (signal.to.noise.ratio)
 #' with the signal-to-noise ratio values.
 #' @export
 #' @name signal_to_noise_ratio

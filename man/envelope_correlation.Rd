@@ -44,7 +44,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-Extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')
+A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes two new columns ('reference' and  'envelope.correlation')
 with the reference sound and the amplitude envelope correlation coefficients.
 }
 \description{

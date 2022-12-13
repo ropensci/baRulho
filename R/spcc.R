@@ -23,7 +23,7 @@
 #' slow down the function but produce more accurate results.
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return Extended selection table similar to input data, but includes a new column (cross.correlation)
+#' @return A data frame, or extended selection table similar to input data (depending on argument 'output'), but includes a new column (cross.correlation)
 #' with the spectrogram cross-correlation coefficients.
 #' @export
 #' @name spcc

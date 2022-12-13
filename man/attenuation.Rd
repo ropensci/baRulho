@@ -4,22 +4,22 @@
 \alias{attenuation}
 \title{Estimate attenuation of sound pressure level}
 \usage{
-attenuation(f, temp = 20, RH = 60, pa = 101325, dist0, dist, att.coef = 0.02)
+attenuation(frequency, temp = 20, rh = 60, pa = 101325, dist0, dist, hab.att.coef = 0.02)
 }
 \arguments{
-\item{f}{numeric vector of length 1 with frequency (in Hertz).}
+\item{frequency}{Numeric vector of length 1 with frequency (in Hertz).}
 
-\item{temp}{numeric vector of length 1 with frequency (in Celsius). Default is 20.}
+\item{temp}{Numeric vector of length 1 with frequency (in Celsius). Default is 20.}
 
-\item{RH}{numeric vector of length 1 with relative humidity (in percentage). Default is 60.}
+\item{rh}{Numeric vector of length 1 with relative humidity (in percentage). Default is 60.}
 
-\item{pa}{numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default). Used for Atmospheric attenuation.}
+\item{pa}{Numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default). Used for Atmospheric attenuation.}
 
-\item{dist0}{numeric vector of length 1 with distance (m) for the reference SPL.}
+\item{dist0}{Numeric vector of length 1 with distance (m) for the reference SPL.}
 
-\item{dist}{numeric vector of length 1 with distance (m) over which a sound propagates.}
+\item{dist}{Numeric vector of length 1 with distance (m) over which a sound propagates.}
 
-\item{att.coef}{attenuation coefficient of the habitat (in dB/kHz/m).}
+\item{hab.att.coef}{Attenuation coefficient of the habitat (in dB/kHz/m).}
 }
 \value{
 Returns the geometric, atmospheric and habitat attenuation (in dB) as well as the combined attenuation.

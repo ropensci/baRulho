@@ -48,7 +48,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only u
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-Extended selection table similar to input data, but also includes a new column (excess.attenuation)
+A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column (excess.attenuation)
 with the excess attenuation values.
 }
 \description{

@@ -15,7 +15,7 @@
 #' @param flim Numeric vector of length 2 to control the frequency range in which the markers would be found. If \code{NULL} markers would be display across the whole frequency range. Default is c(0, 4).
 #' @param cex Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return Extended selection table similar to input data, but includes a new column (cross.correlation)
+#' @return A data frame, or extended selection table similar to input data (depending on argument 'output'), but includes a new column (cross.correlation)
 #' with the spectrogram cross-correlation coefficients.
 #' @export
 #' @name master_sound_file
@@ -115,7 +115,7 @@ master_sound_file <-
     
     # save image of start marker in temporary directory
     if (!nzchar(gsexe))
-      png(filename = file.path(tempdir(), "strt_mrkr-img.png"),
+      grDevices::png(filename = file.path(tempdir(), "strt_mrkr-img.png"),
           pointsize = 10)
     
     # remove margins in graphic device
@@ -142,7 +142,7 @@ master_sound_file <-
     
     # save image of start marker in temporary directory
     if (nzchar(gsexe))
-      dev2bitmap(file.path(tempdir(), "strt_mrkr-img.png"),
+      grDevices::dev2bitmap(file.path(tempdir(), "strt_mrkr-img.png"),
                  type = "pngmono",
                  res = 30)
     
@@ -163,7 +163,7 @@ master_sound_file <-
     
     # save image of end marker in temporary directory
     if (!nzchar(gsexe))
-      png(filename = file.path(tempdir(), "end_mrkr-img.png"),
+      grDevices::png(filename = file.path(tempdir(), "end_mrkr-img.png"),
           pointsize = 10)
     
     # remove margins in graphic device

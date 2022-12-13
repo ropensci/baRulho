@@ -28,7 +28,7 @@ slow down the function but produce more accurate results.}
 \item{wn}{A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.}
 }
 \value{
-Extended selection table similar to input data in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
+A data frame, or extended selection table similar to input data (depending on argument 'output') in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
 }
 \description{
 \code{spcc_align} aligns start and end of sound in an extended selection table using spectrographic cross-correlation

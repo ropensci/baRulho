@@ -54,11 +54,11 @@
 #' 
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' }
-#last modification on dec-27-2019 (MAS)
 
 spectrum_blur_ratio <-
   function(X,
-           parallel = 1, cores = 1,
+           parallel = 1, 
+           cores = 1,
            pb = TRUE,
            method = 1,
            ssmooth = 50,

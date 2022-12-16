@@ -51,7 +51,7 @@ attenuation <- function(frequency, temp = 20, rh = 60, pa = 101325, dist0, dist,
     
     geom_att <- -20*log10(dist0/dist)
     
-    hab_att <- hab.att.coef * (frequency/1000) * (dist-dist0)
+    hab_att <- hab.att.coef * frequency * (1/1000) * (dist- dist0)
     
     total_att <- geom_att + atm_att + hab_att
     

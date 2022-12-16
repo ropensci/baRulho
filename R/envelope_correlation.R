@@ -57,7 +57,7 @@
 envelope_correlation <- function(X, parallel = 1, cores = 1, pb = TRUE, method = 1,  cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est", hop.size = 11.6, wl = NULL, ovlp = 70, path = NULL){
   
   # deprecated message
-  if (cores > 1) 
+  if (parallel > 1) 
     stop2("'parallel' has been deprecated, Use 'cores' instead")
   
   # set path if not provided

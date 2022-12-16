@@ -62,7 +62,7 @@ blur_ratio <- function(X, parallel = 1, cores = 1, pb = TRUE, method = 1,
                        img = FALSE, res = 150, hop.size = 11.6, wl = NULL, ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL, path = NULL){
   
   # deprecated message
-  if (cores > 1) 
+  if (parallel > 1) 
     stop2("'parallel' has been deprecated, Use 'cores' instead")
   
   # set path if not provided

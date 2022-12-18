@@ -1,13 +1,11 @@
-# *baRulho 1.0.8*
-
-* 'parallel' argument deprecated and replaced by 'cores'
-* New function `attenuation()`
-* Data frames and selection tables can be used as input data
-
 # *baRulho 1.0.7*
 
-* `spectral_correlation()`, `spcc()` and `spectral_blur_ratio()` renamed to `spectrum_correlation()`, `spcc_distortion()` and `spectrum_blur_ratio()` respectively
-* Fix bug in `spcc_distortion()` and `excess_attenuation()`
+* 'parallel' argument deprecated and replaced by 'cores'
+* New functions `attenuation()` and 
+* Data frames and selection tables can be used as input data
+* Added new methods to `blur_ratio()` and `excess_atenuation()`
+* `spectral_correlation()` and `spectral_blur_ratio()` renamed to `spectrum_correlation()`,  and `spectrum_blur_ratio()` respectively
+* Fix bug in `spcc()` and `excess_attenuation()`
 
 # *baRulho 1.0.6*
 

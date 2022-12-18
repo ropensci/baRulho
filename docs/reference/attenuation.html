@@ -125,38 +125,38 @@
     <p><code>attenuation</code> estimates atmospheric attenuation and atmospheric absorption.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>attenuation</span><span class='op'>(</span><span class='va'>f</span>, temp <span class='op'>=</span> <span class='fl'>20</span>, RH <span class='op'>=</span> <span class='fl'>60</span>, pa <span class='op'>=</span> <span class='fl'>101325</span>, <span class='va'>dist0</span>, <span class='va'>dist</span>, att.coef <span class='op'>=</span> <span class='fl'>0.02</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>attenuation</span><span class='op'>(</span><span class='va'>frequency</span>, temp <span class='op'>=</span> <span class='fl'>20</span>, rh <span class='op'>=</span> <span class='fl'>60</span>, pa <span class='op'>=</span> <span class='fl'>101325</span>, <span class='va'>dist0</span>, <span class='va'>dist</span>, hab.att.coef <span class='op'>=</span> <span class='fl'>0.02</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>f</th>
-      <td><p>numeric vector of length 1 with frequency (in Hertz).</p></td>
+      <th>frequency</th>
+      <td><p>Numeric vector of length 1 with frequency (in Hertz).</p></td>
     </tr>
     <tr>
       <th>temp</th>
-      <td><p>numeric vector of length 1 with frequency (in Celsius). Default is 20.</p></td>
+      <td><p>Numeric vector of length 1 with frequency (in Celsius). Default is 20.</p></td>
     </tr>
     <tr>
-      <th>RH</th>
-      <td><p>numeric vector of length 1 with relative humidity (in percentage). Default is 60.</p></td>
+      <th>rh</th>
+      <td><p>Numeric vector of length 1 with relative humidity (in percentage). Default is 60.</p></td>
     </tr>
     <tr>
       <th>pa</th>
-      <td><p>numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default). Used for Atmospheric attenuation.</p></td>
+      <td><p>Numeric vector of length 1 with atmospheric (barometric) pressure in Pa (standard: 101325, default). Used for atmospheric attenuation.</p></td>
     </tr>
     <tr>
       <th>dist0</th>
-      <td><p>numeric vector of length 1 with distance (m) for the reference SPL.</p></td>
+      <td><p>Numeric vector of length 1 with distance (m) for the reference SPL.</p></td>
     </tr>
     <tr>
       <th>dist</th>
-      <td><p>numeric vector of length 1 with distance (m) over which a sound propagates.</p></td>
+      <td><p>Numeric vector of length 1 with distance (m) over which a sound propagates.</p></td>
     </tr>
     <tr>
-      <th>att.coef</th>
-      <td><p>attenuation coefficient of the habitat (in dB/kHz/m).</p></td>
+      <th>hab.att.coef</th>
+      <td><p>Attenuation coefficient of the habitat (in dB/kHz/m).</p></td>
     </tr>
     </table>
 
@@ -165,7 +165,7 @@
     <p>Returns the geometric, atmospheric and habitat attenuation (in dB) as well as the combined attenuation.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Calculate the atmospheric attenuation based on temperature, relative humidity, pressure and sound frequency.</p>
+    <p>Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2</p>

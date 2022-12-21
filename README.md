@@ -1,5 +1,4 @@
-baRulho: quantifying habitat-induced degradation of (animal) acoustic
-signals
+baRulho: quantifying habitat-induced degradation of (animal) sounds
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,19 +12,22 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![packageversion](https://img.shields.io/badge/Package%20version-1.0.7-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2022--12--18-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2022--12--20-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
 
-`baRulho` is intended to facilitate acoustic analysis of (animal) sound
-transmission experiments, which typically aim to quantify changes in
-signal structure when transmitted in a given habitat by broadcasting and
-re-recording animal sounds at increasing distances. The package offers a
-workflow with functions to prepare the data set for analysis as well as
-to calculate and visualize several degradation metrics, including blur
-ratio, signal-to-noise ratio, excess attenuation and envelope
-correlation among others (Dabelsteen et al 1993).
+<img src="vignettes/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
+
+[baRulho](https://cran.r-project.org/package=baRulho) is intended to
+facilitate acoustic analysis of (animal) sound transmission experiments,
+which typically aim to quantify changes in signal structure when
+transmitted in a given habitat by broadcasting and re-recording animal
+sounds at increasing distances. The package offers a workflow with
+functions to prepare the data set for analysis as well as to calculate
+and visualize several degradation metrics, including blur ratio,
+signal-to-noise ratio, excess attenuation and envelope correlation among
+others (Dabelsteen et al 1993).
 
 Install/load the package from CRAN as follows:
 

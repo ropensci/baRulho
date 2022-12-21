@@ -1,7 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://marce10.github.io/baRulho/404.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/articles/Intro_to_baRulho.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/articles/baRulho.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/articles/baRulho_quantifying_sound_degradation.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/authors.html</loc>
+  </url>
+  <url>
     <loc>https://marce10.github.io/baRulho/index.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/news/index.html</loc>
   </url>
   <url>
     <loc>https://marce10.github.io/baRulho/reference/align_test_files.html</loc>
@@ -19,13 +40,25 @@
     <loc>https://marce10.github.io/baRulho/reference/blur_ratio.html</loc>
   </url>
   <url>
+    <loc>https://marce10.github.io/baRulho/reference/blur_ratio_spectrum.html</loc>
+  </url>
+  <url>
     <loc>https://marce10.github.io/baRulho/reference/detection_distance.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/reference/env_cor.html</loc>
   </url>
   <url>
     <loc>https://marce10.github.io/baRulho/reference/envelope_correlation.html</loc>
   </url>
   <url>
+    <loc>https://marce10.github.io/baRulho/reference/excess_att.html</loc>
+  </url>
+  <url>
     <loc>https://marce10.github.io/baRulho/reference/excess_attenuation.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/reference/index.html</loc>
   </url>
   <url>
     <loc>https://marce10.github.io/baRulho/reference/master_sound_file.html</loc>
@@ -46,6 +79,12 @@
     <loc>https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.html</loc>
   </url>
   <url>
+    <loc>https://marce10.github.io/baRulho/reference/snr.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/reference/snr_attenuation.html</loc>
+  </url>
+  <url>
     <loc>https://marce10.github.io/baRulho/reference/spcc.html</loc>
   </url>
   <url>
@@ -53,6 +92,12 @@
   </url>
   <url>
     <loc>https://marce10.github.io/baRulho/reference/spcc_distortion.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/reference/spectral_blur_ratio.html</loc>
+  </url>
+  <url>
+    <loc>https://marce10.github.io/baRulho/reference/spectral_correlation.html</loc>
   </url>
   <url>
     <loc>https://marce10.github.io/baRulho/reference/spectrum_blur_ratio.html</loc>
@@ -67,6 +112,6 @@
     <loc>https://marce10.github.io/baRulho/reference/tail_to_signal_ratio.html</loc>
   </url>
   <url>
-    <loc>https://marce10.github.io/baRulho/articles/baRulho.html</loc>
+    <loc>https://marce10.github.io/baRulho/reference/xcorr_distortion.html</loc>
   </url>
 </urlset>

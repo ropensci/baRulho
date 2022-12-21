@@ -1,10 +1,10 @@
 ---
-title: <center><font size="7"><b>baRulho</b></font></center>
-subtitle: <center><font size="5">Quantifying habitat-induced degradation of (animal) acoustic signals</font></center>
+title: <center><font size="7"><b>baRulho</b></font>
+subtitle: <font size="5">Quantifying habitat-induced degradation of (animal) acoustic signals</font>
 pagetitle: baRulho quantifying sound degradation
 author: 
-- <center><a href="https://marceloarayasalas.weebly.com">Marcelo Araya-Salas, PhD</a></center>
-date:  <center>"`r Sys.Date()`"</center>
+- <a href="https://marceloarayasalas.weebly.com">Marcelo Araya-Salas, PhD</a>
+date:  "`r Sys.Date()`"
 output:
   rmarkdown::html_document:
     self_contained: yes
@@ -32,6 +32,7 @@ editor_options:
 
 
 <!-- <center>![warbleR logo](logo.png)</center> -->
+</center>
 
 &nbsp; 
 
@@ -42,6 +43,7 @@ opts_chunk$set(tidy = TRUE, fig.align = "center", message = FALSE, warning = FAL
 
 ```
 
+<img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
 The [baRulho](https://cran.r-project.org/package=baRulho) package is intended to facilitate acoustic analysis of (animal) sound transmission experiments. Such studies typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. We will refer to these changes in signal structure 'degradation' for the sake of simplicity. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics. [baRulho](https://marce10.github.io/baRulho/) builds upon functions and data formats from the [warbleR](https://cran.r-project.org/package=warbleR) and [seewave](https://cran.r-project.org/package=seewave) packages, so some experience with these packages is advised.
 

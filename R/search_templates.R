@@ -1,10 +1,10 @@
 #' Search acoustic templates on test sound files
 #' 
 #' \code{search_templates} searches acoustic templates on test (re-recorded) sound files.
-#' @usage search_templates(X, template.rows, test.files, path = NULL, pb = TRUE, ...)
+#' @usage search_templates(X, template.rows, test.files = NULL, path = NULL, pb = TRUE, ...)
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required. 
 #' @param template.rows Numeric vector with the index of the rows from 'X' to be used as templates. If only 1 is supplied the same template will be run over all 'test.files'. Otherwise, 'template.rows' must be the same length as 'test.files'. Required.
-#' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows').
+#' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s) (see argument 'template.rows'). If not supplied all sound files in 'path' are used instead.
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param ...	Additional arguments to be passed to \code{\link[warbleR]{cross_correlation}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).
@@ -107,7 +107,7 @@ search_templates <- function(X, template.rows, test.files = NULL, path = NULL, p
     comp_mat <- matrix(c(rep(paste(X$sound.files[template.rows], X$selec[template.rows], sep = "-"), length(test.files)), rep((test.files), each = length(template.rows))), ncol = 2) 
   
   # patch to work on warbleR versions before 1.1.26
-  wi <- warbleR::info_sound_files(path = path, parallel = 1, pb = FALSE) 
+  wi <- warbleR::info_sound_files(path = path, parallel = 1, pb = FALSE, skip.error = TRUE, files = c(test.files, unique(X$sound.files))) 
   
   wi <- wi[wi$sound.files %in% unique(c(X$sound.files, test.files)), ]
   

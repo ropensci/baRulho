@@ -1,12 +1,14 @@
-# *baRulho 1.0.7*
+# *baRulho 1.1.0*
 
+* 'markers' argument deprecated in `align_test_files()`
+* fix bug in `spcc_align()`
 * 'template.rows' argument deprecated in `find_markers()`
 * `search_templates()` renamed `find_markers()`
 * 'parallel' argument deprecated and replaced by 'cores'
 * New functions `attenuation()` and 
 * Data frames and selection tables can be used as input data
 * Added new methods to `blur_ratio()` and `excess_atenuation()`
-* `spectral_correlation()` and `spectral_blur_ratio()` renamed to `spectrum_correlation()`,  and `spectrum_blur_ratio()` respectively
+* `spectral_correlation()` and `spectral_blur_ratio()` renamed to `spectrum_correlation()`, and `spectrum_blur_ratio()` respectively
 * Fix bug in `spcc()` and `excess_attenuation()`
 
 # *baRulho 1.0.6*

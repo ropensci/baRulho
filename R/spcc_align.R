@@ -46,10 +46,6 @@ spcc_align <- function(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, w
     options(warbleR.steps = 3)
   }
   
-  # is extended sel tab
-  # if (!warbleR::is_extended_selection_table(X)) 
-    # stop2("'X' must be and extended selection table")
-  
   # If cores is not numeric
   if (!is.numeric(cores)) stop2("'cores' must be a numeric vector of length 1") 
   if (any(!(cores %% 1 == 0), cores < 1)) stop2("'cores' should be a positive integer")
@@ -126,7 +122,6 @@ spcc_align <- function(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, w
   
   on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
   
-  
   warbleR_options(wl = wl, ovlp = ovlp, wn = wn, parallel = cores, pb = pb, compare.matrix = comp_mat, X = Y)
   
   # run spcc 
@@ -142,13 +137,13 @@ spcc_align <- function(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, w
   # fix start and end in original data set and its attributes 
   # start
   attr(X, "check.results")$start[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <- X$start[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <- 
-    peaks$start + Y$start[paste(Y$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]]
+    peaks$start
   
   # end
   attr(X, "check.results")$end[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <- 
   X$end[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <- 
     X$start[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] + 
-    peaks$end - peaks$start
+    (peaks$end - peaks$start)
 
   attr(X, "check.results")$duration <- attr(X, "check.results")$end - attr(X, "check.results")$start
   

@@ -4,7 +4,16 @@
 \alias{search_templates}
 \title{alternative name for \code{\link{find_markers}}}
 \usage{
-search_templates(X, test.files = NULL, path = NULL, pb = TRUE, cores = 1, ...)
+search_templates(
+  X,
+  template.rows = NULL,
+  markers = c("start_marker", "end_marker"),
+  test.files = NULL,
+  path = NULL,
+  pb = TRUE,
+  cores = 1,
+  ...
+)
 }
 \description{
 alternative name for \code{\link{find_markers}}

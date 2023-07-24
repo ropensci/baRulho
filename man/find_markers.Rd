@@ -2,12 +2,17 @@
 % Please edit documentation in R/find_markers.R
 \name{find_markers}
 \alias{find_markers}
-\title{Search acoustic templates on test sound files}
+\title{Find acoustic markers on test sound files}
 \usage{
-find_markers(X, template.rows, test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
+find_markers(X, template.rows = NULL, markers = c("start_marker", "end_marker"),
+test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file to be used as templates. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.}
+
+\item{template.rows}{Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.}
+
+\item{markers}{Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one template is recomended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).}
 
 \item{test.files}{Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s). If not supplied all sound files in 'path' are used instead.}
 
@@ -18,17 +23,15 @@ find_markers(X, template.rows, test.files = NULL, path = NULL, pb = TRUE, cores 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{...}{Additional arguments to be passed to \code{\link[ohun]{template_correlator}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).}
-
-\item{template.rows}{Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.}
 }
 \value{
-A data frame with the time, start, end, test file names, template name, maximum cross-correlation score and the time where it was detected.
+A data frame with test file names, template name, maximum cross-correlation score for each tamplate and the start and end where it was detected. If two or more templates are used the function computes an additional column, 'time.match', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0.
 }
 \description{
-\code{find_markers} searches acoustic templates on test (re-recorded) sound files.
+\code{find_markers} find acoustic markers on test (re-recorded) sound files using spectrographic cross-correlation.
 }
 \details{
-The function takes a master sound file's reference data ('X') and finds the position of acoustics templates (included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder than the re-recorded sound files}.Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
+The function takes a master sound file's reference data ('X') and finds the position of acoustics templates ('templates' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the templates is determined as the highest spectrogram cross-correlation value for each template using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
 }
 \examples{
 \dontrun{
@@ -36,14 +39,11 @@ The function takes a master sound file's reference data ('X') and finds the posi
 td <- tempdir()  
 
 # load example data from warbleR
-data(list = c("Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4", 
-"lbh_selec_table"))
+data(list = c("Phae.long1", "Phae.long2", "lbh_selec_table"))
 
 # save sound files to temporary folder
 writeWave(Phae.long1, file.path(td, "Phae.long1.wav"))
 writeWave(Phae.long2, file.path(td, "Phae.long2.wav"))
-writeWave(Phae.long3, file.path(td, "Phae.long3.wav"))
-writeWave(Phae.long4, file.path(td, "Phae.long4.wav"))
 
 # make an extended selection table
 est <- selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE, 
@@ -83,7 +83,8 @@ find_markers(X = master.sf[which(master.sf$orig.sound.file == "start_marker"),],
 test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 
 # search using end marker as template
-find_markers(X = master.sf[which(master.sf$orig.sound.file == "end_marker"),], test.files = c("example_test1.wav", "example_test2.wav"), 
+find_markers(X = master.sf[which(master.sf$orig.sound.file == "end_marker"),], 
+test.files = c("example_test1.wav", "example_test2.wav"), 
 path = td, pb = FALSE)
 
 # search using both start and end markers as template

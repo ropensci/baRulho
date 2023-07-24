@@ -1,7 +1,10 @@
 # *baRulho 1.1.0*
 
+* `align_test_files()` now can take several markers as input and select that with the highest correlation score for aligining test files
 * 'markers' argument deprecated in `align_test_files()`
 * fix bug in `spcc_align()`
+* `find_markers()` compares the time difference between markers to that in the master sound file as a measure of precision
+* `find_markers()` can run several markers as templates on the same files
 * 'template.rows' argument deprecated in `find_markers()`
 * `search_templates()` renamed `find_markers()`
 * 'parallel' argument deprecated and replaced by 'cores'

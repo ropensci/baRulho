@@ -82,59 +82,100 @@
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' }
 
-find_markers <- function(X, test.files = NULL, path = NULL, pb = TRUE, cores = 1, ...){
-  
-  # deprecated message
-  if (exists("template.rows")) 
-    stop2("'template.rows' has been deprecated")
-  
-  # get sound files in path
-  files_in_path <- list.files(path = path, pattern = "\\.wav$", ignore.case = TRUE)
-  # check if there are files
-  if (length(files_in_path) == 0) stop2("No .wav files found in 'path'")
-  
-  # check for master sound file
-  if (!any(files_in_path %in% unique(X$sound.files))) stop2("sound file referenced in 'X' not found in 'path' (make sure you put the master sound file in the same folder than the re-recorded files)")
-  
-  # remove sound files
-  if (!is.null(test.files)) {
-    if (!all(test.files %in% files_in_path)) stop2("Not all 'test.files' were found in 'path'")
-  } else test.files <- files_in_path[!files_in_path %in% unique(X$sound.files)] # remove master sound file
-  
-  # get metadata of sound files to get sampling rates
-  wi <- warbleR::info_sound_files(path = path, parallel = 1, pb = FALSE, skip.error = TRUE, files = c(test.files, unique(X$sound.files))) 
-  
-  if (length(unique(wi$sample.rate)) > 1) 
-    stop2("Not all sound files share the same sampling rate (check wave properties with warbleR::info_sound_files())")
-
-  # run cross correlation
-  if (pb) 
-    write(file = "", x = paste0("running cross-correlation (step 1 out of 2):")) 
-  templ_corrs <- template_correlator(templates = X, files = test.files, path = path, cores = cores, pb = pb)
-  
-  
-  print(test.files)  
-  # find peaks
-  if (pb) 
-    write(file = "", x = paste0("running peak detection (step 2 out of 2):"))
-  
-  pks <- as.data.frame(ohun::template_detector(template.correlations = templ_corrs, cores = cores, threshold = 0.00001, pb = pb))
-  
-  pks <- pks[stats::ave(x = -pks$scores, as.factor(pks$sound.files), as.factor(pks$template), FUN = rank) <= 1, ]
-  
-  pks$time <- vapply(seq_len(nrow(pks)), function(x) mean(c(pks$end[x], pks$start[x])), FUN.VALUE = numeric(1))
-  
-  # if(length(template.rows) > 1)
-  # pks <- pks[stats::ave(x = -pks$score, as.factor(pks$sound.files), as.factor(pks$template), FUN = rank) <= 1, ]
-  
-  # rename sound file column
-  try(names(pks)[names(pks) == "sound.files"] <- "test.files")
-  return(pks)
-
+find_markers <-
+  function(X,
+           test.files = NULL,
+           path = NULL,
+           pb = TRUE,
+           cores = 1,
+           ...) {
+    # deprecated message
+    if (exists("template.rows"))
+      stop2("'template.rows' has been deprecated")
+    
+    # get sound files in path
+    files_in_path <-
+      list.files(path = path,
+                 pattern = "\\.wav$",
+                 ignore.case = TRUE)
+    # check if there are files
+    if (length(files_in_path) == 0)
+      stop2("No .wav files found in 'path'")
+    
+    # check for master sound file
+    if (!any(files_in_path %in% unique(X$sound.files)))
+      stop2(
+        "sound file referenced in 'X' not found in 'path' (make sure you put the master sound file in the same folder than the re-recorded files)"
+      )
+    
+    # remove sound files
+    if (!is.null(test.files)) {
+      if (!all(test.files %in% files_in_path))
+        stop2("Not all 'test.files' were found in 'path'")
+    } else
+      test.files <-
+      files_in_path[!files_in_path %in% unique(X$sound.files)] # remove master sound file
+    
+    # get metadata of sound files to get sampling rates
+    wi <-
+      warbleR::info_sound_files(
+        path = path,
+        parallel = 1,
+        pb = FALSE,
+        skip.error = TRUE,
+        files = c(test.files, unique(X$sound.files))
+      )
+    
+    if (length(unique(wi$sample.rate)) > 1)
+      stop2(
+        "Not all sound files share the same sampling rate (check wave properties with warbleR::info_sound_files())"
+      )
+    
+    # run cross correlation
+    if (pb)
+      write(file = "",
+            x = paste0("running cross-correlation (step 1 out of 2):"))
+    templ_corrs <-
+      template_correlator(
+        templates = X,
+        files = test.files,
+        path = path,
+        cores = cores,
+        pb = pb
+      )
+    
+    # find peaks
+    if (pb)
+      write(file = "",
+            x = paste0("running peak detection (step 2 out of 2):"))
+    
+    pks <-
+      as.data.frame(
+        ohun::template_detector(
+          template.correlations = templ_corrs,
+          cores = cores,
+          threshold = 0.00001,
+          pb = pb
+        )
+      )
+    
+    pks <-
+      pks[stats::ave(
+        x = -pks$scores,
+        as.factor(pks$sound.files),
+        as.factor(pks$template),
+        FUN = rank
+      ) <= 1,]
+    
+    pks$time <-
+      vapply(seq_len(nrow(pks)), function(x)
+        mean(c(pks$end[x], pks$start[x])), FUN.VALUE = numeric(1))
+    
+    # rename sound file column
+    try(names(pks)[names(pks) == "sound.files"] <- "test.files")
+    return(pks)
+    
   }
-
-
-
 
 ##############################################################################################################
 #' alternative name for \code{\link{find_markers}}

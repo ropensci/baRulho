@@ -1,5 +1,7 @@
 # *baRulho 1.0.7*
 
+* 'template.rows' argument deprecated in `find_markers()`
+* `search_templates()` renamed `find_markers()`
 * 'parallel' argument deprecated and replaced by 'cores'
 * New functions `attenuation()` and 
 * Data frames and selection tables can be used as input data

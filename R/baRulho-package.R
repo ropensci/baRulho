@@ -23,6 +23,7 @@
 #' @import png
 #' @importFrom stats cor aggregate approx ave
 #' @importFrom methods is
+#' @importFrom ohun template_detector template_correlator
 #' 
 #' @author Marcelo Araya-Salas
 #'   

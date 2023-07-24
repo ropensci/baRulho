@@ -1,7 +1,7 @@
 #' Search acoustic templates on test sound files
 #' 
 #' \code{find_markers} searches acoustic templates on test (re-recorded) sound files.
-#' @usage find_markers(X, template.rows, test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
+#' @usage find_markers(X, template.rows = NULL, test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file to be used as templates. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required. 
 #' @param template.rows Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.
 #' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s). If not supplied all sound files in 'path' are used instead.
@@ -84,13 +84,14 @@
 
 find_markers <-
   function(X,
+           template.rows = NULL,
            test.files = NULL,
            path = NULL,
            pb = TRUE,
            cores = 1,
            ...) {
     # deprecated message
-    if (exists("template.rows"))
+    if (!is.null(template.rows))
       stop2("'template.rows' has been deprecated")
     
     # get sound files in path
@@ -136,7 +137,7 @@ find_markers <-
       write(file = "",
             x = paste0("running cross-correlation (step 1 out of 2):"))
     templ_corrs <-
-      template_correlator(
+      ohun::template_correlator(
         templates = X,
         files = test.files,
         path = path,
@@ -151,10 +152,10 @@ find_markers <-
     
     pks <-
       as.data.frame(
-        ohun::template_detector(
+        template_detector(
           template.correlations = templ_corrs,
           cores = cores,
-          threshold = 0.00001,
+          threshold = 0.0001,
           pb = pb
         )
       )

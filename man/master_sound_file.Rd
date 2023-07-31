@@ -30,14 +30,13 @@ If \code{NULL} (default) then the current working directory will be used instead
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A data frame, or extended selection table similar to input data (depending on argument 'output'), but includes a new column (cross.correlation)
-with the spectrogram cross-correlation coefficients.
+A .wav file in  'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file.
 }
 \description{
 \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
 }
 \details{
-The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds to facilitate the streamlining of degradation quantification.
+The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds to facilitate the streamlining of degradation quantification.
 }
 \examples{
 {

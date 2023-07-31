@@ -12,7 +12,7 @@ wl = NULL, ovlp = 0, path = NULL)
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
-the start and end points of selection over which to measure ambient noise.}
+end of the sound over which to measure tail power.}
 
 \item{parallel}{DEPRECATED. Use 'cores' instead.}
 
@@ -50,7 +50,7 @@ with the tail-to-signal ratio values.
 \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of sounds referenced in an extended selection table.
 }
 \details{
-Tail-to-signal ratio (TSR) measures ratio of energy in the tail of reverberations to energy in the sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
+Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
 }
 \examples{
 {

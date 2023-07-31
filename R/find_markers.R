@@ -3,7 +3,7 @@
 #' \code{find_markers} find acoustic markers on test (re-recorded) sound files using spectrographic cross-correlation.
 #' @usage find_markers(X, template.rows = NULL, markers = c("start_marker", "end_marker"),
 #' test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required. 
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. The markers added by  Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required. 
 #' @param template.rows Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.
 #' @param markers Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one template is recomended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).
 #' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s). If not supplied all sound files in 'path' are used instead.
@@ -15,7 +15,7 @@
 #' @export
 #' @name find_markers
 #' @details The function takes a master sound file's reference data ('X') and finds the position of acoustics templates ('templates' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the templates is determined as the highest spectrogram cross-correlation value for each template using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
-#' @seealso \code{\link{spcc_align}}; \code{\link{align_test_files}}
+#' @seealso \code{\link{realign_test_sounds}}; \code{\link{align_test_files}}; \code{\link{master_sound_file}}
 #' @examples
 #' \dontrun{
 #' # use a temporary directory

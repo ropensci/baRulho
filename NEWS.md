@@ -1,11 +1,13 @@
 # *baRulho 1.1.0*
 
+* `atmospheric_attenuation()` is no longer available (use `attenuation()` instead)
 * `align_test_files()` now can take several markers as input and select that with the highest correlation score for aligining test files
 * 'markers' argument deprecated in `align_test_files()`
-* fix bug in `spcc_align()`
+* fix bug in `realign_test_sounds()`
 * `find_markers()` compares the time difference between markers to that in the master sound file as a measure of precision
 * `find_markers()` can run several markers as templates on the same files
 * 'template.rows' argument deprecated in `find_markers()`
+* `spcc_align()` renamed `realign_test_sounds()`
 * `search_templates()` renamed `find_markers()`
 * 'parallel' argument deprecated and replaced by 'cores'
 * New functions `attenuation()` and 

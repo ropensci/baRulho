@@ -102,7 +102,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 }
 }
 \seealso{
-\code{\link{spcc_align}}; \code{\link{find_markers}}
+\code{\link{realign_test_sounds}}; \code{\link{find_markers}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

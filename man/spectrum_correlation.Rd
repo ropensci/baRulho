@@ -2,7 +2,7 @@
 % Please edit documentation in R/spectrum_correlation.R
 \name{spectrum_correlation}
 \alias{spectrum_correlation}
-\title{Measure frequency spectral correlation}
+\title{Measure frequency spectrum correlation}
 \usage{
 spectrum_correlation(X, parallel = 1, cores = 1, pb = TRUE, method = 1,
 cor.method = "pearson", output = "est",

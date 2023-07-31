@@ -1,8 +1,8 @@
-#' Align start and end of sound using spectrographic cross-correlation  
+#' Fix misaligned start and end of test sounds  
 #' 
-#' \code{spcc_align} aligns start and end of sound in an extended selection table using spectrographic cross-correlation
-#' @usage spcc_align(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, 
-#' wn = 'hanning')
+#' \code{realign_test_sounds} fixes misaligned start and end of test sounds in an extended selection table using spectrographic cross-correlation
+#' @usage realign_test_sounds(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL,
+#' ovlp = 90, wn = 'hanning')
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
@@ -16,7 +16,7 @@
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}. 
 #' @return A data frame, or extended selection table similar to input data (depending on argument 'output') in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound. 
 #' @export
-#' @name spcc_align
+#' @name realign_test_sounds
 #' @details This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment. 
 #' @examples
 #' {
@@ -24,7 +24,7 @@
 #' data("playback_est_unaligned")
 #' 
 #' # method 1
-#'spcc_align(X = playback_est_unaligned)
+#'realign_test_sounds(X = playback_est_unaligned)
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -36,7 +36,7 @@
 #' }
 # last modification on nov-01-2019 (MAS)
 
-spcc_align <- function(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
+realign_test_sounds <- function(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
   
   # set number of processes for printing message 
   if (pb){
@@ -152,3 +152,12 @@ spcc_align <- function(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, w
   
   return(X)
 }
+
+##############################################################################################################
+#' alternative name for \code{\link{realign_test_sounds}}
+#'
+#' @keywords internal
+#' @details see \code{\link{realign_test_sounds}} for documentation. \code{\link{spcc_align}} will be deprecated in future versions.
+#' @export
+
+spcc_align <- realign_test_sounds

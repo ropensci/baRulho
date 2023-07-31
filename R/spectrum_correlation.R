@@ -1,4 +1,4 @@
-#' Measure frequency spectral correlation
+#' Measure frequency spectrum correlation
 #'
 #' \code{spectrum_correlation} measures frequency spectrum correlation of sounds referenced in an extended selection table.
 #' @usage spectrum_correlation(X, parallel = 1, cores = 1, pb = TRUE, method = 1,

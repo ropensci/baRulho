@@ -12,7 +12,8 @@
 #' @return Returns the geometric, atmospheric and habitat attenuation (in dB) as well as the combined attenuation.   
 #' @export
 #' @name attenuation
-#' @details Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB.
+#' @details Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. Modified from http://www.sengpielaudio.com
+## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB.
 #' @examples
 #' {
 #' # measure attenuation

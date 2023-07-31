@@ -28,7 +28,7 @@ Returns the geometric, atmospheric and habitat attenuation (in dB) as well as th
 \code{attenuation} estimates atmospheric attenuation and atmospheric absorption.
 }
 \details{
-Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB.
+Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. Modified from http://www.sengpielaudio.com
 }
 \examples{
 {

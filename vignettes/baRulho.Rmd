@@ -445,7 +445,7 @@ To find the location of the start marker on these (simulated) re-recorded sound 
 
 ```{r, eval = FALSE}
 
-found.starts <- search_templates(X = master.sf, template.rows = which(master.sf$orig.sound.file == "start_marker"), test.files = c("example_test1.wav", "example_test2.wav"), path = td); pks
+found.starts <- search_templates(X = master.sf, test.files = c("example_test1.wav", "example_test2.wav"), path = td)
 
 found.starts
 ```
@@ -816,15 +816,15 @@ Below are some examples from actual test sounds that were re-recorded in the fie
 
 When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded sounds. This is problematic for quantifying degradation in [baRulho](https://marce10.github.io/baRulho/) (and other sound analysis software) as precise alignment of sound is crucial for the accuracy of downstream measures of sound degradation. 
 
-Misalignment can be fixed with the function `spcc_align()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `spcc_align()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation. 
+Misalignment can be fixed with the function `realign_test_sounds()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `realign_test_sounds()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation. 
 
-[baRulho](https://marce10.github.io/baRulho/) comes with an example data set called  `playback_est_unaligned`, which contains sounds in which the time position of sounds is slightly unaligned. We can use this data to show how the function `spcc_align()` works: 
+[baRulho](https://marce10.github.io/baRulho/) comes with an example data set called  `playback_est_unaligned`, which contains sounds in which the time position of sounds is slightly unaligned. We can use this data to show how the function `realign_test_sounds()` works: 
 
 ```{r, eval = FALSE}
  data("playback_est_unaligned")
  
  # method 1
-playback_est_aligned <- spcc_align(X = playback_est_unaligned)
+playback_est_aligned <- realign_test_sounds(X = playback_est_unaligned)
 
 ```
 
@@ -851,7 +851,7 @@ spectrograms(unalg.alg[unalg.alg$sound.id != "ambient", ], dest.path = tempdir()
 ```
 
 
-<center><img src="spcc_align_results.gif" alt="time sync with spcc_align"></center>
+<center><img src="realign_test_sounds_results.gif" alt="time sync with realign_test_sounds"></center>
 
 &nbsp;
 
@@ -1000,7 +1000,7 @@ sbr <- blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tempdir(), p
 
 Output image files (in the working directory) look like these ones:
 
-<center><img src="blur_ratio_example.gif" alt="time sync with spcc_align"></center>
+<center><img src="blur_ratio_example.gif" alt="time sync with realign_test_sounds"></center>
 
 &nbsp;
 

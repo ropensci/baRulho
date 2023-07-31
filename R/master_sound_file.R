@@ -15,11 +15,10 @@
 #' @param flim Numeric vector of length 2 to control the frequency range in which the markers would be found. If \code{NULL} markers would be display across the whole frequency range. Default is c(0, 4).
 #' @param cex Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return A data frame, or extended selection table similar to input data (depending on argument 'output'), but includes a new column (cross.correlation)
-#' with the spectrogram cross-correlation coefficients.
+#' @return A .wav file in  'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file.
 #' @export
 #' @name master_sound_file
-#' @details The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds to facilitate the streamlining of degradation quantification.
+#' @details The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds to facilitate the streamlining of degradation quantification.
 #' @examples
 #' {
 #' # load example data from warbleR

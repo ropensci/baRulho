@@ -41,7 +41,7 @@
 #' }
 #' 
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @seealso \code{\link{blur_ratio}}, \code{\link{spcc_align}}, \code{\link[warbleR]{cross_correlation}}
+#' @seealso \code{\link{blur_ratio}}, \code{\link{realign_test_sounds}}, \code{\link[warbleR]{cross_correlation}}
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' 

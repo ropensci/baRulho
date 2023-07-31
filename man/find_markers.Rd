@@ -8,7 +8,7 @@ find_markers(X, template.rows = NULL, markers = c("start_marker", "end_marker"),
 test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. The markers added by  Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.}
 
 \item{template.rows}{Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.}
 
@@ -101,7 +101,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 }
 }
 \seealso{
-\code{\link{spcc_align}}; \code{\link{align_test_files}}
+\code{\link{realign_test_sounds}}; \code{\link{align_test_files}}; \code{\link{master_sound_file}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

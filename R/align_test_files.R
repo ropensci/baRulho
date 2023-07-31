@@ -16,7 +16,7 @@
 #' @export
 #' @name align_test_files
 #' @details The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table'by default.
-#' @seealso \code{\link{spcc_align}}; \code{\link{find_markers}}
+#' @seealso \code{\link{realign_test_sounds}}; \code{\link{find_markers}}
 #' @examples
 #' \dontrun{
 #' # set temporary directory
@@ -153,7 +153,7 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
     sync.sls <- sync.sls[sync.sls$start >= 0, ]
   }
   
-  on.exit(options(Rraven = unique(problematic_files)))
+  on.exit(options(baRulho = list(files_to_check_align_test_files = unique(problematic_files))))
   
   # remove duration column and template
   sync.sls$duration <- NULL

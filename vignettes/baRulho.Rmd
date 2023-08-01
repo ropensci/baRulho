@@ -172,6 +172,13 @@ seewave::spectro(synth.l$wave, scale = FALSE, palette = viridis,
 
 ```
 
+```{r, eval=TRUE, echo=FALSE}
+# synthesize
+synth.l <- sim_songs(n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0.15, 
+                     diff.fun = "pure.tone", selec.table = TRUE, path = td)
+```
+
+
  <img src="spectro_synth_song.png" alt="spectrogram syntehtic sounds" width="750">
 
 
@@ -179,28 +186,16 @@ seewave::spectro(synth.l$wave, scale = FALSE, palette = viridis,
 
 The function returns a list in which the first element is the selection table and the second one the wave object:
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 
 class(synth.l) 
 
 
 ```
 
-```{r, eval = TRUE, echo=FALSE}
-
-c("list")
-
-```
-
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 
 names(synth.l)
-
-```
-
-```{r, eval = TRUE, echo=FALSE}
-
-c("selec.table", "wave")
 
 ```
 
@@ -210,77 +205,15 @@ synth.l$selec.table
 
 ```
 
-```{r, eval = FALSE, echo = FALSE}
+```{r, eval = TRUE, echo = FALSE, results='asis'}
 
-kbl <- kable(synth.l$selec_table, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(synth.l$selec.table, align = "c", row.names = F,  format = "html", escape = F)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
-kbl
+print(kbl)
 
 ```
-<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:center;"> sound.files </th>
-   <th style="text-align:center;"> selec </th>
-   <th style="text-align:center;"> start </th>
-   <th style="text-align:center;"> end </th>
-   <th style="text-align:center;"> bottom.freq </th>
-   <th style="text-align:center;"> top.freq </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:center;"> 2020-01-09_17:00:50.wav </td>
-   <td style="text-align:center;"> 1 </td>
-   <td style="text-align:center;"> 0.15 </td>
-   <td style="text-align:center;"> 0.25 </td>
-   <td style="text-align:center;"> 0.5 </td>
-   <td style="text-align:center;"> 0.5 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> 2020-01-09_17:00:50.wav </td>
-   <td style="text-align:center;"> 2 </td>
-   <td style="text-align:center;"> 0.40 </td>
-   <td style="text-align:center;"> 0.50 </td>
-   <td style="text-align:center;"> 1.0 </td>
-   <td style="text-align:center;"> 1.0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> 2020-01-09_17:00:50.wav </td>
-   <td style="text-align:center;"> 3 </td>
-   <td style="text-align:center;"> 0.65 </td>
-   <td style="text-align:center;"> 0.75 </td>
-   <td style="text-align:center;"> 2.0 </td>
-   <td style="text-align:center;"> 2.0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> 2020-01-09_17:00:50.wav </td>
-   <td style="text-align:center;"> 4 </td>
-   <td style="text-align:center;"> 0.90 </td>
-   <td style="text-align:center;"> 1.00 </td>
-   <td style="text-align:center;"> 3.0 </td>
-   <td style="text-align:center;"> 3.0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> 2020-01-09_17:00:50.wav </td>
-   <td style="text-align:center;"> 5 </td>
-   <td style="text-align:center;"> 1.15 </td>
-   <td style="text-align:center;"> 1.25 </td>
-   <td style="text-align:center;"> 4.0 </td>
-   <td style="text-align:center;"> 4.0 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> 2020-01-09_17:00:50.wav </td>
-   <td style="text-align:center;"> 6 </td>
-   <td style="text-align:center;"> 1.40 </td>
-   <td style="text-align:center;"> 1.50 </td>
-   <td style="text-align:center;"> 5.0 </td>
-   <td style="text-align:center;"> 5.0 </td>
-  </tr>
-</tbody>
-</table>
 
 &nbsp;
 
@@ -291,14 +224,6 @@ The function also saves the associated '.wav' file in the working directory (in 
 list.files(path = td, pattern = "\\.wav$")
 
 ```
-
-
-```{r, eval = TRUE, echo=FALSE}
-
-c("2020-01-09_17:00:50.wav")
-
-```
-
 
 &nbsp;
 
@@ -321,7 +246,7 @@ synth.est <- selection_table(X = st, extended = TRUE,
                              confirm.extended = FALSE, path = td)
 
 # create master sound file
-synth.master.sf <- master_sound_file(X = synth.est, file.name = "synthetic_master", 
+synth_master_annotations <- master_sound_file(X = synth.est, file.name = "synthetic_master", 
 dest.path = td, gap.duration = 0.15)
 
 ```
@@ -333,7 +258,7 @@ The function saves the master sound file as a wave file and returns a selection 
 ```{r, eval=FALSE, echo=TRUE}
 
 # plot spectro (saved in working directory)
-spectrograms(synth.master.sf, path = td, by.song = "sound.files", 
+spectrograms(synth_master_annotations, path = td, by.song = "sound.files", 
            xl = 3, collevels = seq(-60, 0, 5), osci = TRUE)
 
 ```
@@ -359,7 +284,7 @@ est <- selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = 
 path = td)
 
 # create master sound file
-master.sf <- master_sound_file(X = est, file.name = "example_master", 
+master_annotations <- master_sound_file(X = est, file.name = "example_master", 
 dest.path = td, gap.duration = 0.3)
 
 ```
@@ -370,7 +295,7 @@ Again, we can look at the spectrogram of the output file:
 
 ```{r, eval=FALSE, echo=TRUE}
 
-spectrograms(master.sf, path = td, by.song = "sound.files", 
+spectrograms(master_annotations, path = td, by.song = "sound.files", 
            xl = 3, collevels = seq(-60, 0, 5), osci = TRUE)
 
 ```
@@ -383,7 +308,7 @@ Note that the output could also be exported to [Raven sound analysis software](h
 
 ```{r, eval = FALSE}
  
-Rraven::exp_raven(master.sf, path = td, file.name = "example_master_selection_table")
+Rraven::exp_raven(master_annotations, path = td, file.name = "example_master_selection_table")
 
 ```
 
@@ -408,9 +333,36 @@ Once we went to the field (or lab) and re-recorded the master sound files at dif
 
 &nbsp;
 
-To simulate re-recorded sound files we will make two copies of the master sound file, add some silence at the beginning (1 and 2 seconds) and add noise:    
+Wwe will use example files from a degradation experiment that are hosted in [this repository](). The following code download a zip file with all the data (sound files + annotations) into a temporary working directory and unzip it into a folder called "degrad_exp_files":    
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
+
+download.file(
+  "https://figshare.com/ndownloader/files/41778951",
+  destfile = file.path(tempdir(), "degrad_exp_files.zip"),
+  method = "wget"
+)
+
+# folder to save files (you can change it to you preference)
+td <- file.path(tempdir(), "degrad_exp_files")
+
+unzip(file.path(tempdir(), "degrad_exp_files.zip"),
+      exdir = td)
+
+```
+
+
+These are the files contained in the data set:
+
+```{r}
+list.files(td)
+```
+
+&nbsp;
+
+Their names are self-explanatory: a master sound file ("master.wav") and its annotations ("master_annotations.csv"), a reference sound file ("reference_1m.wav") and two test files ("test_10m.wav" and "test_20m.wav") re-recorded at 10 and 20 m respectively.
+
+```{r DELETE, eval = FALSE, echo = FALSE}
 
 # read master
 exmp.master <- readWave(file.path(td, "example_master.wav"))
@@ -441,18 +393,25 @@ writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), ex
 
 &nbsp;
 
-To find the location of the start marker on these (simulated) re-recorded sound files we use the functions `search_templates()` to run a cross-correlation of one or  more markers across the test (re-recorded) files to determine the exact time in which each marker is found: 
+To find the location of the start marker on the test sound files we use the functions `find_markers()` to run a cross-correlation of one or more markers across the test files in order to determine the exact time in which each marker is found: 
 
 ```{r, eval = FALSE}
 
-found.starts <- search_templates(X = master.sf, test.files = c("example_test1.wav", "example_test2.wav"), path = td)
+master_annotations <-
+  read.csv(file.path(td, "master_annotations.csv"))
 
-found.starts
+markers_position <- find_markers(X = master_annotations, path = td)
+
+markers_position
 ```
 
-```{r, eval = FALSE, echo=FALSE}
+```{r, eval = TRUE, echo=FALSE, results='asis'}
 
-kbl <- kable(found.starts, align = "c", row.names = F,  format = "html", escape = F)
+master_annotations <- read.csv(file.path(td, "master_annotations.csv"))
+
+markers_position <- find_markers(X = master_annotations, path = td)
+
+kbl <- kable(markers_position, align = "c", row.names = F,  format = "html", escape = F)
 
 kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
@@ -462,47 +421,18 @@ kbl
 
 &nbsp;
 
-<table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:center;"> test.files </th>
-   <th style="text-align:center;"> selec </th>
-   <th style="text-align:center;"> start </th>
-   <th style="text-align:center;"> end </th>
-   <th style="text-align:center;"> template </th>
-   <th style="text-align:center;"> time </th>
-   <th style="text-align:center;"> score </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav </td>
-   <td style="text-align:center;"> 1 </td>
-   <td style="text-align:center;"> 2.00062 </td>
-   <td style="text-align:center;"> 2.99928 </td>
-   <td style="text-align:center;"> example_master.wav-1 </td>
-   <td style="text-align:center;"> 2.49995 </td>
-   <td style="text-align:center;"> 0.882420 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav </td>
-   <td style="text-align:center;"> 1 </td>
-   <td style="text-align:center;"> 3.00084 </td>
-   <td style="text-align:center;"> 3.99950 </td>
-   <td style="text-align:center;"> example_master.wav-1 </td>
-   <td style="text-align:center;"> 3.50017 </td>
-   <td style="text-align:center;"> 0.879969 </td>
-  </tr>
-</tbody>
-</table>
+The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions `template_correlator()` and `template_detector` from the package [ohun](https://CRAN.R-project.org/package=ohun). If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0. With the time location of acoustic markers we can infer the position of all other sounds in the new recordings. A selection table from re-recorded files can be generated using the function `align_test_files()`:
 
-We could also use the end marker as template in case the start marker was masked by other sounds.
+```{r, eval = TRUE}
 
-The output of `search_templates()` indicates that the start markers are found starting at ~2 s and ~3 s (2.00062 s and 3.00084 s), which was expected as `master_sound_file()` inserts a 1 second silence at the beginning of the master sound files and we added 1 s and 2 s to each simulated file respectively. With this information we can infer the position of all other selections in the new recordings. A selection table from re-recorded files can be generated using the function `align_test_files()`:
 
-```{r, eval = FALSE}
-
-alg.tests <- align_test_files(X =  master.sf, Y = found.starts, path = td, by.song = TRUE)
+aligned_tests <-
+  align_test_files(
+    X =  master_annotations,
+    Y = markers_position,
+    path = td,
+    by.song = TRUE
+  )
 
 ```
 
@@ -510,11 +440,11 @@ alg.tests <- align_test_files(X =  master.sf, Y = found.starts, path = td, by.so
 
 By default the function returns an `extended_selection_table`  created 'by.song' (see '?selection_table()'), which is the data format that pretty much all [baRulho](https://marce10.github.io/baRulho/) functions take.  
 
-```{r, eval = FALSE}
+```{r, eval = TRUE}
 
-is_extended_selection_table(alg.tests)
+is_extended_selection_table(aligned_tests)
 
-alg.tests
+aligned_tests
 ```
 
 ```{r, eval = TRUE, echo = FALSE}
@@ -523,9 +453,9 @@ print(TRUE)
 
 ```
 
-```{r, eval = FALSE,  echo = FALSE}
+```{r, eval = TRUE, echo = FALSE, results='asis'}
 
-kbl <- kable(alg.tests, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(aligned_tests, align = "c", row.names = F,  format = "html", escape = F)
 
 kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
@@ -533,264 +463,13 @@ kbl <- scroll_box(kbl, width = "800px", height = "300px")
 kbl
 
 ```
-
-<div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:800px; "><table class="table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
- <thead>
-  <tr>
-   <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;"> sound.files </th>
-   <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;"> selec </th>
-   <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;"> start </th>
-   <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;"> end </th>
-   <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;"> bottom.freq </th>
-   <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;"> top.freq </th>
-   <th style="text-align:center;position: sticky; top:0; background-color: #FFFFFF;"> template </th>
-  </tr>
- </thead>
-<tbody>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 1 </td>
-   <td style="text-align:center;"> 0.10000 </td>
-   <td style="text-align:center;"> 1.09867 </td>
-   <td style="text-align:center;"> 1.33333 </td>
-   <td style="text-align:center;"> 2.66667 </td>
-   <td style="text-align:center;"> start_marker </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 2 </td>
-   <td style="text-align:center;"> 1.39867 </td>
-   <td style="text-align:center;"> 1.57173 </td>
-   <td style="text-align:center;"> 2.22011 </td>
-   <td style="text-align:center;"> 8.60438 </td>
-   <td style="text-align:center;"> Phae.long1.wav_1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 3 </td>
-   <td style="text-align:center;"> 1.87173 </td>
-   <td style="text-align:center;"> 2.03484 </td>
-   <td style="text-align:center;"> 2.16944 </td>
-   <td style="text-align:center;"> 8.80705 </td>
-   <td style="text-align:center;"> Phae.long1.wav_2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 4 </td>
-   <td style="text-align:center;"> 2.33484 </td>
-   <td style="text-align:center;"> 2.50982 </td>
-   <td style="text-align:center;"> 2.21829 </td>
-   <td style="text-align:center;"> 8.75660 </td>
-   <td style="text-align:center;"> Phae.long1.wav_3 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 5 </td>
-   <td style="text-align:center;"> 2.80982 </td>
-   <td style="text-align:center;"> 2.94244 </td>
-   <td style="text-align:center;"> 2.31686 </td>
-   <td style="text-align:center;"> 8.82232 </td>
-   <td style="text-align:center;"> Phae.long2.wav_1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 6 </td>
-   <td style="text-align:center;"> 3.24244 </td>
-   <td style="text-align:center;"> 3.36862 </td>
-   <td style="text-align:center;"> 2.28401 </td>
-   <td style="text-align:center;"> 8.88803 </td>
-   <td style="text-align:center;"> Phae.long2.wav_2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 7 </td>
-   <td style="text-align:center;"> 3.66862 </td>
-   <td style="text-align:center;"> 3.79987 </td>
-   <td style="text-align:center;"> 3.00683 </td>
-   <td style="text-align:center;"> 8.82232 </td>
-   <td style="text-align:center;"> Phae.long3.wav_1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 8 </td>
-   <td style="text-align:center;"> 4.09987 </td>
-   <td style="text-align:center;"> 4.23009 </td>
-   <td style="text-align:center;"> 2.77684 </td>
-   <td style="text-align:center;"> 8.88803 </td>
-   <td style="text-align:center;"> Phae.long3.wav_2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 9 </td>
-   <td style="text-align:center;"> 4.53009 </td>
-   <td style="text-align:center;"> 4.66133 </td>
-   <td style="text-align:center;"> 2.31686 </td>
-   <td style="text-align:center;"> 9.31515 </td>
-   <td style="text-align:center;"> Phae.long3.wav_3 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 10 </td>
-   <td style="text-align:center;"> 4.96133 </td>
-   <td style="text-align:center;"> 5.10680 </td>
-   <td style="text-align:center;"> 2.51400 </td>
-   <td style="text-align:center;"> 9.21659 </td>
-   <td style="text-align:center;"> Phae.long4.wav_1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 11 </td>
-   <td style="text-align:center;"> 5.40680 </td>
-   <td style="text-align:center;"> 5.55102 </td>
-   <td style="text-align:center;"> 2.57971 </td>
-   <td style="text-align:center;"> 10.23512 </td>
-   <td style="text-align:center;"> Phae.long4.wav_2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 12 </td>
-   <td style="text-align:center;"> 5.85102 </td>
-   <td style="text-align:center;"> 5.99618 </td>
-   <td style="text-align:center;"> 2.57971 </td>
-   <td style="text-align:center;"> 9.74228 </td>
-   <td style="text-align:center;"> Phae.long4.wav_3 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test1.wav-song_example_test1.wav </td>
-   <td style="text-align:center;"> 13 </td>
-   <td style="text-align:center;"> 6.29618 </td>
-   <td style="text-align:center;"> 7.29484 </td>
-   <td style="text-align:center;"> 1.33333 </td>
-   <td style="text-align:center;"> 2.66667 </td>
-   <td style="text-align:center;"> end_marker </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 1 </td>
-   <td style="text-align:center;"> 0.10000 </td>
-   <td style="text-align:center;"> 1.09867 </td>
-   <td style="text-align:center;"> 1.33333 </td>
-   <td style="text-align:center;"> 2.66667 </td>
-   <td style="text-align:center;"> start_marker </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 2 </td>
-   <td style="text-align:center;"> 1.39867 </td>
-   <td style="text-align:center;"> 1.57173 </td>
-   <td style="text-align:center;"> 2.22011 </td>
-   <td style="text-align:center;"> 8.60438 </td>
-   <td style="text-align:center;"> Phae.long1.wav_1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 3 </td>
-   <td style="text-align:center;"> 1.87173 </td>
-   <td style="text-align:center;"> 2.03484 </td>
-   <td style="text-align:center;"> 2.16944 </td>
-   <td style="text-align:center;"> 8.80705 </td>
-   <td style="text-align:center;"> Phae.long1.wav_2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 4 </td>
-   <td style="text-align:center;"> 2.33484 </td>
-   <td style="text-align:center;"> 2.50982 </td>
-   <td style="text-align:center;"> 2.21829 </td>
-   <td style="text-align:center;"> 8.75660 </td>
-   <td style="text-align:center;"> Phae.long1.wav_3 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 5 </td>
-   <td style="text-align:center;"> 2.80982 </td>
-   <td style="text-align:center;"> 2.94244 </td>
-   <td style="text-align:center;"> 2.31686 </td>
-   <td style="text-align:center;"> 8.82232 </td>
-   <td style="text-align:center;"> Phae.long2.wav_1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 6 </td>
-   <td style="text-align:center;"> 3.24244 </td>
-   <td style="text-align:center;"> 3.36862 </td>
-   <td style="text-align:center;"> 2.28401 </td>
-   <td style="text-align:center;"> 8.88803 </td>
-   <td style="text-align:center;"> Phae.long2.wav_2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 7 </td>
-   <td style="text-align:center;"> 3.66862 </td>
-   <td style="text-align:center;"> 3.79987 </td>
-   <td style="text-align:center;"> 3.00683 </td>
-   <td style="text-align:center;"> 8.82232 </td>
-   <td style="text-align:center;"> Phae.long3.wav_1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 8 </td>
-   <td style="text-align:center;"> 4.09987 </td>
-   <td style="text-align:center;"> 4.23009 </td>
-   <td style="text-align:center;"> 2.77684 </td>
-   <td style="text-align:center;"> 8.88803 </td>
-   <td style="text-align:center;"> Phae.long3.wav_2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 9 </td>
-   <td style="text-align:center;"> 4.53009 </td>
-   <td style="text-align:center;"> 4.66133 </td>
-   <td style="text-align:center;"> 2.31686 </td>
-   <td style="text-align:center;"> 9.31515 </td>
-   <td style="text-align:center;"> Phae.long3.wav_3 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 10 </td>
-   <td style="text-align:center;"> 4.96133 </td>
-   <td style="text-align:center;"> 5.10680 </td>
-   <td style="text-align:center;"> 2.51400 </td>
-   <td style="text-align:center;"> 9.21659 </td>
-   <td style="text-align:center;"> Phae.long4.wav_1 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 11 </td>
-   <td style="text-align:center;"> 5.40680 </td>
-   <td style="text-align:center;"> 5.55102 </td>
-   <td style="text-align:center;"> 2.57971 </td>
-   <td style="text-align:center;"> 10.23512 </td>
-   <td style="text-align:center;"> Phae.long4.wav_2 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 12 </td>
-   <td style="text-align:center;"> 5.85102 </td>
-   <td style="text-align:center;"> 5.99618 </td>
-   <td style="text-align:center;"> 2.57971 </td>
-   <td style="text-align:center;"> 9.74228 </td>
-   <td style="text-align:center;"> Phae.long4.wav_3 </td>
-  </tr>
-  <tr>
-   <td style="text-align:center;"> example_test2.wav-song_example_test2.wav </td>
-   <td style="text-align:center;"> 13 </td>
-   <td style="text-align:center;"> 6.29618 </td>
-   <td style="text-align:center;"> 7.29484 </td>
-   <td style="text-align:center;"> 1.33333 </td>
-   <td style="text-align:center;"> 2.66667 </td>
-   <td style="text-align:center;"> end_marker </td>
-  </tr>
-</tbody>
-</table></div>
-
 &nbsp;
 
-We can check the precision of the alignment by looking at the spectrograms:
+We can also check the precision of the alignment by looking at the spectrograms:
 
 ```{r, eval = FALSE}
 
-spectrograms(alg.tests, by.song = "sound.files", xl = 3, collevels = seq(-60, 0, 5), dest.path = td, osci = TRUE)
+spectrograms(aligned_tests, by.song = "sound.files", xl = 3, collevels = seq(-60, 0, 5), dest.path = td, osci = TRUE)
 
 ```
 

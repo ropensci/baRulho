@@ -12,9 +12,9 @@ test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
 
 \item{template.rows}{Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.}
 
-\item{markers}{Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one template is recomended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).}
+\item{markers}{Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one marker is recomended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).}
 
-\item{test.files}{Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s). If not supplied all sound files in 'path' are used instead.}
+\item{test.files}{Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the marker(s). If not supplied all sound files in 'path' are used instead.}
 
 \item{path}{Character string containing the directory path where test (re-recorded) sound files are found.}
 
@@ -25,13 +25,13 @@ test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
 \item{...}{Additional arguments to be passed to \code{\link[ohun]{template_correlator}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).}
 }
 \value{
-A data frame with test file names, template name, maximum cross-correlation score for each tamplate and the start and end where it was detected. If two or more templates are used the function computes an additional column, 'time.match', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0.
+A data frame with test file names, marker name, maximum cross-correlation score for each tamplate and the start and end where it was detected. If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0.
 }
 \description{
 \code{find_markers} find acoustic markers on test (re-recorded) sound files using spectrographic cross-correlation.
 }
 \details{
-The function takes a master sound file's reference data ('X') and finds the position of acoustics templates ('templates' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the templates is determined as the highest spectrogram cross-correlation value for each template using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
+The function takes a master sound file's reference data ('X') and finds the position of acoustics markers ('markers' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
 }
 \examples{
 \dontrun{

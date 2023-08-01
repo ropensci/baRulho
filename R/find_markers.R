@@ -5,16 +5,16 @@
 #' test.files = NULL, path = NULL, pb = TRUE, cores = 1,...)
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. The markers added by  Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required. 
 #' @param template.rows Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.
-#' @param markers Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one template is recomended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).
-#' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the template(s). If not supplied all sound files in 'path' are used instead.
+#' @param markers Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one marker is recomended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).
+#' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the marker(s). If not supplied all sound files in 'path' are used instead.
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param ...	Additional arguments to be passed to \code{\link[ohun]{template_correlator}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).
-#' @return A data frame with test file names, template name, maximum cross-correlation score for each tamplate and the start and end where it was detected. If two or more templates are used the function computes an additional column, 'time.match', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0.
+#' @return A data frame with test file names, marker name, maximum cross-correlation score for each tamplate and the start and end where it was detected. If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0.
 #' @export
 #' @name find_markers
-#' @details The function takes a master sound file's reference data ('X') and finds the position of acoustics templates ('templates' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the templates is determined as the highest spectrogram cross-correlation value for each template using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
+#' @details The function takes a master sound file's reference data ('X') and finds the position of acoustics markers ('markers' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
 #' @seealso \code{\link{realign_test_sounds}}; \code{\link{align_test_files}}; \code{\link{master_sound_file}}
 #' @examples
 #' \dontrun{
@@ -185,7 +185,7 @@ find_markers <-
     try(names(pks)[names(pks) == "sound.files"] <- "test.files")
     
     # rename markers
-    pks$template <- vapply(pks$template, function(x) as.character(X$sound.id[paste(X$sound.files, X$selec, sep = "-") == x]), FUN.VALUE = character(length = 1))
+    pks$marker <- vapply(pks$template, function(x) as.character(X$sound.id[paste(X$sound.files, X$selec, sep = "-") == x]), FUN.VALUE = character(length = 1))
     
     # fix row labels and selec labels
     pks$selec <- rownames(pks) <- seq_len(nrow(pks))
@@ -193,14 +193,17 @@ find_markers <-
     
     # check that the distance between  markers is similar in re-recorded files compare to the master
     if (!is_extended_selection_table(X) & length(markers) > 1){
-      time_dist_markers <- vapply(test.files, function(x) pks$end[pks$template == markers[2] & pks$test.files == x] - pks$start[pks$template == markers[1] & pks$test.files == x], FUN.VALUE = numeric(length = 1L))
+      time_dist_markers <- vapply(test.files, function(x) pks$end[pks$marker == markers[2] & pks$test.files == x] - pks$start[pks$marker == markers[1] & pks$test.files == x], FUN.VALUE = numeric(length = 1L))
       
       # subtract duration in master sound file
       time_dist_markers <- time_dist_markers - (X$end[X$sound.id == markers[2]] - X$start[X$sound.id == markers[1]])
       
+      # remove template column
+      pks$template <- NULL
+      
       # add results 
-      pks$time.match <- NA
-      pks$time.match[pks$template == markers[1]] <- time_dist_markers
+      pks$time.mismatch <- NA
+      pks$time.mismatch[pks$marker == markers[1]] <- time_dist_markers
     }
     
     return(pks)

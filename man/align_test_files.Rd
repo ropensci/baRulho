@@ -88,7 +88,6 @@ extensible = FALSE)
 
 # find  tempaltes
 found.templts <- find_markers(X = master.sf, 
-template.rows = which(master.sf$orig.sound.file == "start_marker"), 
 test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 
 # align sounds and output extended selection table

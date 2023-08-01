@@ -70,7 +70,6 @@
 #' 
 #' # find  tempaltes
 #' found.templts <- find_markers(X = master.sf, 
-#' template.rows = which(master.sf$orig.sound.file == "start_marker"), 
 #' test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
 #' 
 #' # align sounds and output extended selection table
@@ -111,12 +110,12 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
   # align each file
  out <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(Y), cl = cl, FUN = function(y) {
 
-   # compute start and end as the difference in relation to the template position in the master sound file 
-   start <- X$start + (Y$start[y] - X$start[X$sound.id == Y$template[y]])
-   end <- X$end + (Y$start[y] - X$start[X$sound.id == Y$template[y]])
+   # compute start and end as the difference in relation to the marker position in the master sound file 
+   start <- X$start + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
+   end <- X$end + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
    
     # make data frame
-    W <- data.frame(sound.files = Y$test.files[y], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, template = Y$template[y])
+    W <- data.frame(sound.files = Y$test.files[y], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, marker = Y$marker[y])
     
     return(W)
   })
@@ -155,10 +154,10 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
   
   on.exit(options(baRulho = list(files_to_check_align_test_files = unique(problematic_files))))
   
-  # remove duration column and template
+  # remove duration column and marker
   sync.sls$duration <- NULL
-  # sync.sls$sound.id <- sync.sls$template
-  # sync.sls$template <- NULL
+  # sync.sls$sound.id <- sync.sls$marker
+  # sync.sls$marker <- NULL
     
   if (output == "est")
   {

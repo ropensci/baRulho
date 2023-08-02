@@ -100,8 +100,8 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
   
   
   # if more than one marker per test files then keep only the marker with the highest score
-  if (any(table(Y$test.files) > 1))
-    Y <- Y[stats::ave(x = -Y$scores, as.factor(Y$test.files), FUN = rank) <= 1, ]
+  if (any(table(Y$sound.files) > 1))
+    Y <- Y[stats::ave(x = -Y$scores, as.factor(Y$sound.files), FUN = rank) <= 1, ]
   
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & cores > 1)
@@ -115,7 +115,7 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
    end <- X$end + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
    
     # make data frame
-    W <- data.frame(sound.files = Y$test.files[y], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, marker = Y$marker[y])
+    W <- data.frame(sound.files = Y$sound.files[y], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, marker = Y$marker[y])
     
     return(W)
   })

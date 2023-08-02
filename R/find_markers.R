@@ -177,13 +177,6 @@ find_markers <-
         FUN = rank
       ) <= 1,]
     
-    # pks$time <-
-    #   vapply(seq_len(nrow(pks)), function(x)
-    #     mean(c(pks$end[x], pks$start[x])), FUN.VALUE = numeric(1))
-    
-    # rename sound file column
-    try(names(pks)[names(pks) == "sound.files"] <- "test.files")
-    
     # rename markers
     pks$marker <- vapply(pks$template, function(x) as.character(X$sound.id[paste(X$sound.files, X$selec, sep = "-") == x]), FUN.VALUE = character(length = 1))
     
@@ -193,7 +186,7 @@ find_markers <-
     
     # check that the distance between  markers is similar in re-recorded files compare to the master
     if (!is_extended_selection_table(X) & length(markers) > 1){
-      time_dist_markers <- vapply(test.files, function(x) pks$end[pks$marker == markers[2] & pks$test.files == x] - pks$start[pks$marker == markers[1] & pks$test.files == x], FUN.VALUE = numeric(length = 1L))
+      time_dist_markers <- vapply(test.files, function(x) pks$end[pks$marker == markers[2] & pks$sound.files == x] - pks$start[pks$marker == markers[1] & pks$sound.files == x], FUN.VALUE = numeric(length = 1L))
       
       # subtract duration in master sound file
       time_dist_markers <- time_dist_markers - (X$end[X$sound.id == markers[2]] - X$start[X$sound.id == markers[1]])

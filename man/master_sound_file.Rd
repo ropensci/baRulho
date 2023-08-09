@@ -5,10 +5,11 @@
 \title{Create a master sound file}
 \usage{
 master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1,
-gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14, path = NULL)
+gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14, 
+path = getOption("sound.files.path", "."))
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass. An optional 'sound.id' column can be included to use a custom label for each sound in the output. This column must contain a unique id for each sound (labels cannot repeated). If not supplied the function will make it by combining the sound file and selection columns.}
 
 \item{file.name}{Character string indicating the name of the sound file.}
 
@@ -30,13 +31,13 @@ If \code{NULL} (default) then the current working directory will be used instead
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A .wav file in  'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file.
+A .wav file in  'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.
 }
 \description{
 \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
 }
 \details{
-The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds to facilitate the streamlining of degradation quantification.
+The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync test (re-recorded) sounds to facilitate the streamlining of degradation quantification.
 }
 \examples{
 {

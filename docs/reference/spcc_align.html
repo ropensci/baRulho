@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Align start and end of sound using spectrographic cross-correlation — spcc_align • baRulho</title>
+<title>alternative name for realign_test_sounds — spcc_align • baRulho</title>
 
 
 <!-- jquery -->
@@ -41,8 +41,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Align start and end of sound using spectrographic cross-correlation — spcc_align" />
-<meta property="og:description" content="spcc_align aligns start and end of sound in an extended selection table using spectrographic cross-correlation" />
+<meta property="og:title" content="alternative name for realign_test_sounds — spcc_align" />
+<meta property="og:description" content="alternative name for realign_test_sounds" />
 
 
 
@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -116,111 +116,31 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Align start and end of sound using spectrographic cross-correlation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/spcc_align.R'><code>R/spcc_align.R</code></a></small>
+    <h1>alternative name for <code><a href='realign_test_sounds.html'>realign_test_sounds</a></code></h1>
+    <small class="dont-index">Source: <a href='https://github.com/maRce10/baRulho/blob/master/R/realign_test_sounds.R'><code>R/realign_test_sounds.R</code></a></small>
     <div class="hidden name"><code>spcc_align.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p><code>spcc_align</code> aligns start and end of sound in an extended selection table using spectrographic cross-correlation</p>
+    <p>alternative name for <code><a href='realign_test_sounds.html'>realign_test_sounds</a></code></p>
     </div>
 
-    <pre class="usage"><span class='fu'>spcc_align</span><span class='op'>(</span><span class='va'>X</span>, parallel <span class='op'>=</span> <span class='fl'>1</span>, cores <span class='op'>=</span> <span class='fl'>1</span>, pb <span class='op'>=</span> <span class='cn'>TRUE</span>, hop.size <span class='op'>=</span> <span class='fl'>11.6</span>, wl <span class='op'>=</span> <span class='cn'>NULL</span>, ovlp <span class='op'>=</span> <span class='fl'>90</span>, 
-wn <span class='op'>=</span> <span class='st'>'hanning'</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>spcc_align</span><span class='op'>(</span>
+  <span class='va'>X</span>,
+  parallel <span class='op'>=</span> <span class='fl'>1</span>,
+  cores <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"mc.cores"</span>, <span class='fl'>1</span><span class='op'>)</span>,
+  pb <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"pb"</span>, <span class='cn'>TRUE</span><span class='op'>)</span>,
+  hop.size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"hop.size"</span>, <span class='fl'>11.6</span><span class='op'>)</span>,
+  wl <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"wl"</span>, <span class='cn'>NULL</span><span class='op'>)</span>,
+  ovlp <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"ovlp"</span>, <span class='fl'>90</span><span class='op'>)</span>,
+  wn <span class='op'>=</span> <span class='st'>"hanning"</span>
+<span class='op'>)</span></pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>X</th>
-      <td><p>object of class 'extended_selection_table' created by the function <code><a href='https://marce10.github.io/warbleR/reference/selection_table.html'>selection_table</a></code> from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.</p></td>
-    </tr>
-    <tr>
-      <th>parallel</th>
-      <td><p>DEPRECATED. Use 'cores' instead.</p></td>
-    </tr>
-    <tr>
-      <th>cores</th>
-      <td><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).</p></td>
-    </tr>
-    <tr>
-      <th>pb</th>
-      <td><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>hop.size</th>
-      <td><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.</p></td>
-    </tr>
-    <tr>
-      <th>wl</th>
-      <td><p>A numeric vector of length 1 specifying the window length of the spectrogram, default 
-is NULL. If supplied, 'hop.size' is ignored.</p></td>
-    </tr>
-    <tr>
-      <th>ovlp</th>
-      <td><p>Numeric vector of length 1 specifying % of overlap between two 
-consecutive windows, as in <code><a href='https://rdrr.io/pkg/seewave/man/spectro.html'>spectro</a></code>. Default is 90. High values of ovlp 
-slow down the function but produce more accurate results.</p></td>
-    </tr>
-    <tr>
-      <th>wn</th>
-      <td><p>A character vector of length 1 specifying the window name as in <code><a href='https://rdrr.io/pkg/seewave/man/ftwindow.html'>ftwindow</a></code>.</p></td>
-    </tr>
-    </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A data frame, or extended selection table similar to input data (depending on argument 'output') in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's <code><a href='https://marce10.github.io/warbleR/reference/cross_correlation.html'>cross_correlation</a></code> internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment.</p>
-    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+    <p>see <code><a href='realign_test_sounds.html'>realign_test_sounds</a></code> for documentation. <code>spcc_align</code> will be deprecated in future versions.</p>
 
-    <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='blur_ratio.html'>blur_ratio</a></code>, <code><a href='https://marce10.github.io/warbleR/reference/cross_correlation.html'>cross_correlation</a></code></p></div>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Marcelo Araya-Salas (<a href='mailto:marcelo.araya@ucr.ac.cr'>marcelo.araya@ucr.ac.cr</a>)</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='op'>{</span>
-<span class='co'># load example data</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='st'>"playback_est_unaligned"</span><span class='op'>)</span>
-
-<span class='co'># method 1</span>
-<span class='fu'>spcc_align</span><span class='op'>(</span>X <span class='op'>=</span> <span class='va'>playback_est_unaligned</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; running cross-correlation (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++++++++                                         | 17% ~00s            |+++++++++++++++++                                 | 33% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |++++++++++++++++++++++++++++++++++++++++++        | 83% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; finding peaks and aligning (step 2 out of 2)
-#&gt;   |                                                  | 0 % ~calculating    |+++++++++                                         | 17% ~00s            |+++++++++++++++++                                 | 33% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++++++++                | 67% ~00s            |++++++++++++++++++++++++++++++++++++++++++        | 83% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; <span style='color: #000000;'>Object of class </span><span style='color: #000000; font-weight: bold;'>'extended_selection_table' 
-#&gt; </span><span style='color: #555555;'>* The output of the following call: 
-#&gt; </span><span style='color: #555555; font-style: italic;'>spcc_align(X = playback_est_unaligned) 
-#&gt; </span><span style='color: #555555; font-weight: bold;'>
-#&gt; Contains:</span><span style='color: #555555;'> 
-#&gt; *  A selection table data frame with 8 row(s) and 8 columns: 
-#&gt; |   |sound.files    | selec|  start|    end| bottom.freq| top.freq|
-#&gt; |:--|:--------------|-----:|------:|------:|-----------:|--------:|
-#&gt; |5  |01m_re-rec.wav |     4| 1.0500| 1.2445|      1.5441|  10.8946|
-#&gt; |6  |05m_re-rec.wav |     4| 1.9615| 2.1560|      1.5441|  10.8946|
-#&gt; |7  |10m_re-rec.wav |     4| 1.9557| 2.1502|      1.5441|  10.8946|
-#&gt; |8  |15m_re-rec.wav |     4| 1.9557| 2.1502|      1.5441|  10.8946|
-#&gt; |21 |01m_re-rec.wav |     2| 0.5500| 0.7001|      1.7436|  11.0500|
-#&gt; |22 |05m_re-rec.wav |     2| 0.9915| 1.1415|      1.7436|  11.0500|
-#&gt; ... 2 more column(s) (distance, sound.id) and 2 more row(s) 
-#&gt; 
-#&gt; * 4 wave object(s) (as attributes): 01m_re-rec.wav</span> <span style='color: #555555;'>05m_re-rec.wav</span> <span style='color: #555555;'>10m_re-rec.wav</span> <span style='color: #555555;'>15m_re-rec.wav</span>
-#&gt;  <span style='color: #555555;'>
-#&gt; * A data frame (check.results) generated by check_sels() (as attribute) 
-#&gt; </span><span style='color: #555555; font-weight: bold;'>
-#&gt; Additional information:</span><span style='color: #555555;'>
-#&gt; * The selection table was created</span><span style='color: #555555; font-weight: bold; font-style: italic;'> by song </span><span style='color: #555555;'>(see 'class_extended_selection_table') 
-#&gt; * 1 sampling rate(s) (in kHz): </span><span style='color: #555555; font-weight: bold;'>22.1</span><span style='color: #555555;'> 
-#&gt; * 1 bit depth(s): </span><span style='color: #555555; font-weight: bold;'>8</span><span style='color: #555555;'> 
-#&gt; * Created by warbleR &lt; 1.1.21</span></div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

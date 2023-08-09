@@ -7,11 +7,11 @@
 spcc_align(
   X,
   parallel = 1,
-  cores = 1,
-  pb = TRUE,
-  hop.size = 11.6,
-  wl = NULL,
-  ovlp = 90,
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  hop.size = getOption("hop.size", 11.6),
+  wl = getOption("wl", NULL),
+  ovlp = getOption("ovlp", 90),
   wn = "hanning"
 )
 }

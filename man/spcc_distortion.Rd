@@ -7,16 +7,16 @@
 spcc_distortion(
   X,
   parallel = 1,
-  cores = 1,
-  pb = TRUE,
-  method = 1,
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  method = getOption("method", 1),
   cor.method = "pearson",
   output = "est",
-  hop.size = 11.6,
-  wl = NULL,
-  ovlp = 90,
+  hop.size = getOption("hop.size", 11.6),
+  wl = getOption("wl", NULL),
+  ovlp = getOption("ovlp", 90),
   wn = "hanning",
-  path = NULL
+  path = getOption("sound.files.path", ".")
 )
 }
 \description{

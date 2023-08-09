@@ -2,9 +2,9 @@
 #'
 #' \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
 #' @usage master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1,
-#' gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14, path = NULL)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.
-
+#' gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14, 
+#' path = getOption("sound.files.path", "."))
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass. An optional 'sound.id' column can be included to use a custom label for each sound in the output. This column must contain a unique id for each sound (labels cannot repeated). If not supplied the function will make it by combining the sound file and selection columns. 
 #' @param file.name Character string indicating the name of the sound file.
 #' @param dest.path Character string containing the directory path where the sound file will be saved.
 #' If \code{NULL} (default) then the current working directory will be used instead.
@@ -15,10 +15,10 @@
 #' @param flim Numeric vector of length 2 to control the frequency range in which the markers would be found. If \code{NULL} markers would be display across the whole frequency range. Default is c(0, 4).
 #' @param cex Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return A .wav file in  'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file.
+#' @return A .wav file in  'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.
 #' @export
 #' @name master_sound_file
-#' @details The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds to facilitate the streamlining of degradation quantification.
+#' @details The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync test (re-recorded) sounds to facilitate the streamlining of degradation quantification.
 #' @examples
 #' {
 #' # load example data from warbleR
@@ -60,7 +60,7 @@ master_sound_file <-
            amp.marker = 2,
            flim = c(0, 4),
            cex = 14,
-           path = NULL) {
+           path = getOption("sound.files.path", ".")) {
     
     # set path if not provided
     if (is.null(path))
@@ -87,6 +87,13 @@ master_sound_file <-
         )} else 
           print("assuming all sound files have the same sampling rate")
           
+    
+      # check sound.id column has unique values
+      if (!is.null(X$sound.id)) 
+        if (!all(table(X$sound.id) == 1))
+          ohun:::stop2("Repeated IDs in 'sound.id' column are not allowed")
+        
+        
     # get sampling rate
     sampling_rate <- warbleR::read_sound_file(X = X, index = 1, path = path, header = TRUE)$sample.rate
     
@@ -97,7 +104,7 @@ master_sound_file <-
     # warning if ghostscript not found
     if (!nzchar(gsexe))
       warning(
-        "GhostScript was not found. It produces clearer start and end marker. You can download it from 'https://ghostscript.com/'. using 'png()' instead."
+        "GhostScript was not found. It produces clearer start and end marker. You can download it from 'https://ghostscript.com/'. Using 'png()' instead."
       )
     
     # set frequency range for markers
@@ -357,9 +364,12 @@ master_sound_file <-
         end_mrkr_freq$top.freq)
     
     # add start & end markers
-    sel.tab$orig.sound.file <-
-      c("start_marker", X$sound.files, "end_marker")
-    
+    sel.tab$sound.id <-  if (!is.null(X$sound.id)) 
+      c("start_marker", X$sound.id, "end_marker") else
+      if (is_extended_selection_table(X))  
+    c("start_marker", X$sound.files, "end_marker") else
+      c("start_marker", paste(X$sound.files, X$selec, sep = "-"), "end_marker")
+      
     # add delay at the end
     if (delay > 0)
       plbck <-
@@ -373,6 +383,9 @@ master_sound_file <-
     
     # save master playback
     tuneR::writeWave(plbck, file.path(dest.path, file.name), extensible = FALSE)
+    
+    # message to let know users the file has been saved
+    ohun:::message2(paste0("The file ", file.name, " has been saved in the directory path '", normalizePath(dest.path), "'"))
     
     return(sel.tab)
     

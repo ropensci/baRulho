@@ -21,7 +21,7 @@
 #' @param shuffle Logical to control if the position of sounds is randomized. Having all sounds from the same treatment in a sequence can be problematic if an environmental noise masks them. Hence 'shuffle' is useful to avoid having sounds from the same treatment next to each other. Default is \code{FALSE}.
 #' @param hrm.freqs Numeric vector with the frequencies of the harmonics relative to the fundamental frequency. The default values are c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10).
 #' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
-#' @return An extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The table contains columns for each of the varying features and a 'treatment' column (useful to tell sound from the same combination of features when using replicates).
+#' @return An extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The table contains columns for each of the varying features a 'treatment' column (useful to tell the acoustic features of each sound) and a 'replicate' column indicating the replicates for each 'treatment'.
 #' @seealso \code{\link[warbleR]{simulate_songs}} from the package warbleR. 
 #' @export
 #' @name synth_sounds
@@ -189,11 +189,11 @@ synth_sounds <-
     
     if (fm)
       sim_sounds_est$frequency.modulation <-
-      ifelse(grepl("no.fm", sim_sounds_est$sound.files), "no.fm", "fm")
+      ifelse(grepl("no.fm", sim_sounds_est$sound.files), "tonal", "fm")
     
     if (am)
       sim_sounds_est$amplitude.modulation <-
-      ifelse(grepl("no.am", sim_sounds_est$sound.files), "no.am", "am")
+      ifelse(grepl("no.am", sim_sounds_est$sound.files), "flat", "am")
     
     if (nharmonics > 1)
       sim_sounds_est$harmonics <-
@@ -228,10 +228,10 @@ synth_sounds <-
     
     # add single treatment column
     dur_label <- if (length(durations) > 1)
-      paste0("dur=", sim_sounds_est$duration) else
+      paste0("dur:", sim_sounds_est$duration) else
       NULL
     freq_label <- if (length(frequencies) > 1)
-      paste0("freq=", sim_sounds_est$frequency) else
+      paste0("freq:", sim_sounds_est$frequency) else
       NULL
     freq_dur_label <- paste(dur_label, freq_label, sep = ";")
     
@@ -246,9 +246,14 @@ synth_sounds <-
     sim_sounds_est$treatment <-
       gsub("^;", "", sim_sounds_est$treatment)
     
-    # add sound id column
-    sim_sounds_est$sound.id <- paste(sim_sounds_est$treatment, 1:nrow(sim_sounds_est), sep = "_")
+    # add sound id column (a unique identifier for each sound)
+    sim_sounds_est$replicate <- 1
     
+    for(i in 2:nrow(sim_sounds_est))
+      sim_sounds_est$replicate[i] <- sum(sim_sounds_est$treatment[1:i] == sim_sounds_est$treatment[i])
+    
+    sim_sounds_est$sound.id <- paste(sim_sounds_est$treatment, sim_sounds_est$replicate, sep = "_")
+
     # reset row names
     rownames(sim_sounds_est) <- 1:nrow(sim_sounds_est)
     

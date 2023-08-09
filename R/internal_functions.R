@@ -9,7 +9,7 @@ stop2 <- function (...)
 # @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 # last modification on sep-2022 (MAS)
 
-prep_X_bRlo_int <- function(X, method = 1, cores = 1, pb = TRUE) {
+prep_X_bRlo_int <- function(X, method = getOption("method", 1), cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE)) {
   
   # set pb options 
   on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
@@ -52,7 +52,7 @@ prep_X_bRlo_int <- function(X, method = 1, cores = 1, pb = TRUE) {
 # author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 # copied from warbleR::img_wrlbr_int()
-img_bRlo_int <- function(filename, path = NULL, res = 160, units = "in", width = 8.5, height = 11, horizontal = FALSE){
+img_bRlo_int <- function(filename, path = getOption("sound.files.path", "."), res = 160, units = "in", width = 8.5, height = 11, horizontal = FALSE){
   
   if (horizontal & missing(width)) {
     width <- 11
@@ -299,7 +299,7 @@ filled_contour_bRlo_int <- function (x = seq(0, 1, len = nrow(z)), y = seq(0, 1,
 # Find cross-correlation peaks
 
 # last modification on jan-014-2021 (MAS)
-find_peaks_bRlh_int <- function(xc.output, cores = 1, cutoff = 0.4, pb = TRUE, max.peak = FALSE, output = "data.frame") 
+find_peaks_bRlh_int <- function(xc.output, cores = getOption("mc.cores", 1), cutoff = 0.4, pb = getOption("pb", TRUE), max.peak = FALSE, output = "data.frame") 
 {
   
   # set clusters for windows OS and no soz

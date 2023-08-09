@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -126,14 +126,15 @@
     </div>
 
     <pre class="usage"><span class='fu'>master_sound_file</span><span class='op'>(</span><span class='va'>X</span>, <span class='va'>file.name</span>, dest.path <span class='op'>=</span> <span class='cn'>NULL</span>, overwrite <span class='op'>=</span> <span class='cn'>FALSE</span>, delay <span class='op'>=</span> <span class='fl'>1</span>,
-gap.duration <span class='op'>=</span> <span class='fl'>1</span>, amp.marker <span class='op'>=</span> <span class='fl'>2</span>, flim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span><span class='op'>)</span>, cex <span class='op'>=</span> <span class='fl'>14</span>, path <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+gap.duration <span class='op'>=</span> <span class='fl'>1</span>, amp.marker <span class='op'>=</span> <span class='fl'>2</span>, flim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span><span class='op'>)</span>, cex <span class='op'>=</span> <span class='fl'>14</span>, 
+path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"sound.files.path"</span>, <span class='st'>"."</span><span class='op'>)</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>X</th>
-      <td><p>Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function <code><a href='https://marce10.github.io/warbleR/reference/selection_table.html'>selection_table</a></code> from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.</p></td>
+      <td><p>Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function <code><a href='https://marce10.github.io/warbleR/reference/selection_table.html'>selection_table</a></code> from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass. An optional 'sound.id' column can be included to use a custom label for each sound in the output. This column must contain a unique id for each sound (labels cannot repeated). If not supplied the function will make it by combining the sound file and selection columns.</p></td>
     </tr>
     <tr>
       <th>file.name</th>
@@ -176,11 +177,10 @@ If <code>NULL</code> (default) then the current working directory will be used i
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame, or extended selection table similar to input data (depending on argument 'output'), but includes a new column (cross.correlation)
-with the spectrogram cross-correlation coefficients.</p>
+    <p>A .wav file in  'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function takes the wave objects from extended selection tables and concatenate them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds to facilitate the streamlining of degradation quantification.</p>
+    <p>The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync test (re-recorded) sounds to facilitate the streamlining of degradation quantification.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2</p>
@@ -214,10 +214,7 @@ dest.path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/
 <span class='co'># the following code exports the selection table to Raven using Rraven package</span>
 <span class='co'># Rraven::exp_raven(master.sel.tab, path = tempdir(), file.name = "example_master_selection_table")</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; checking selections (step 1 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++++++++++++                                     | 25% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
-#&gt; saving wave objects into extended selection table (step 2 of 2):
-#&gt;   |                                                  | 0 % ~calculating    |+++++                                             | 9 % ~00s            |++++++++++                                        | 18% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++++                               | 36% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++++                  | 64% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |+++++++++++++++++++++++++++++++++++++++++         | 82% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++    | 91% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'><span style='color: #000000;'>checking selections (step 1 of 2):</span></span></div><div class='output co'>#&gt;   |                                                  | 0 % ~calculating    |+++++++++++++                                     | 25% ~00s            |+++++++++++++++++++++++++                         | 50% ~00s            |++++++++++++++++++++++++++++++++++++++            | 75% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; <span class='message'><span style='color: #000000;'>saving wave objects into extended selection table (step 2 of 2):</span></span></div><div class='output co'>#&gt;   |                                                  | 0 % ~calculating    |+++++                                             | 9 % ~00s            |++++++++++                                        | 18% ~00s            |++++++++++++++                                    | 27% ~00s            |+++++++++++++++++++                               | 36% ~00s            |+++++++++++++++++++++++                           | 45% ~00s            |++++++++++++++++++++++++++++                      | 55% ~00s            |++++++++++++++++++++++++++++++++                  | 64% ~00s            |+++++++++++++++++++++++++++++++++++++             | 73% ~00s            |+++++++++++++++++++++++++++++++++++++++++         | 82% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++    | 91% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; <span class='message'><span style='color: #000000;'>The file example_master.wav has been saved in the directory path '/tmp/RtmpTtCIEC'</span></span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

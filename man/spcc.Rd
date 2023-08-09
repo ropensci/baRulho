@@ -4,9 +4,10 @@
 \alias{spcc}
 \title{Measure spectrographic cross-correlation as a measure of sound distortion}
 \usage{
-spcc(X, parallel = 1, cores = 1, pb = TRUE,  method = 1, 
-cor.method = "pearson", output = "est", 
-hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning', path = NULL)
+spcc(X, parallel = 1, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), 
+method = getOption("method", 1), cor.method = "pearson", output = "est", 
+hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), 
+ovlp = getOption("ovlp", 90), wn = 'hanning', path = getOption("sound.files.path", "."))
 }
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}
@@ -56,7 +57,7 @@ Spectrographic cross-correlation measures frequency distortion of sounds as a si
 data("playback_est")
 
 # method 1
-spcc(X = playback_est, method = 1)
+spcc(X = playback_est, method = getOption("method", 1))
 
 # method 2
 spcc(X = playback_est, method = 2)

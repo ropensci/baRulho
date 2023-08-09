@@ -4,9 +4,12 @@
 \alias{blur_ratio}
 \title{Measure blur ratio in the time domain}
 \usage{
-blur_ratio(X, parallel = 1, cores = 1, pb = TRUE, method = 1, ssmooth = 200, 
-msmooth = NULL, output = "est", img = FALSE, res = 150, hop.size = 11.6, wl = NULL, 
-ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL, path = NULL)
+blur_ratio(X, parallel = 1, cores = getOption("mc.cores", 1), 
+pb = getOption("pb", TRUE), method = getOption("method", 1), ssmooth = 200, 
+msmooth = NULL, output = "est", img = FALSE, res = 150, 
+hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), 
+ovlp = getOption("ovlp", 70), pal = viridis, collevels = seq(-120, 0, 5), 
+dest.path = NULL, path = getOption("sound.files.path", "."))
 }
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}

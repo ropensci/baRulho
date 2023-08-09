@@ -1,9 +1,12 @@
 #' Measure blur ratio in the frequency domain 
 #' 
 #' \code{spectrum_blur_ratio} measures blur ratio of frequency spectra from sounds referenced in an extended selection table.
-#' @usage spectrum_blur_ratio(X, parallel = 1, cores = 1, pb = TRUE, method = 1, ssmooth = 50, 
-#' output = "est", img = FALSE, res = 150, hop.size = 11.6, wl = NULL, 
-#' ovlp = 70, pal = viridis, collevels = seq(-120, 0, 5), dest.path = NULL, path = NULL)
+#' @usage spectrum_blur_ratio(X, parallel = 1, cores = getOption("mc.cores", 1), 
+#' pb = getOption("pb", TRUE), method = getOption("method", 1), ssmooth = 50, 
+#' output = "est", img = FALSE, res = 150, hop.size = getOption("hop.size", 11.6), 
+#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 70), pal = viridis, 
+#' collevels = seq(-120, 0, 5), dest.path = NULL, 
+#' path = getOption("sound.files.path", "."))
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
@@ -58,20 +61,24 @@
 spectrum_blur_ratio <-
   function(X,
            parallel = 1, 
-           cores = 1,
-           pb = TRUE,
-           method = 1,
+           cores = getOption("mc.cores", 1),
+           pb = getOption("pb", TRUE),
+           method = getOption("method", 1),
            ssmooth = 50,
            output = "est",
            img = FALSE,
            res = 150,
-           hop.size = 11.6,
-           wl = NULL,
-           ovlp = 70,
+           hop.size = getOption("hop.size", 11.6),
+           wl = getOption("wl", NULL),
+           ovlp = getOption("ovlp", 70),
            pal = viridis,
            collevels = seq(-120, 0, 5),
            dest.path = NULL,
-           path = NULL) {
+           path = getOption("sound.files.path", ".")) {
+    
+    # deprecated message
+    if (parallel > 1) 
+      stop2("'parallel' has been deprecated, Use 'cores' instead")
     
     # set dest.path if not provided
     if (is.null(dest.path))

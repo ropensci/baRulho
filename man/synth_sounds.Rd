@@ -39,7 +39,7 @@ frequency harmonic will be simulated.}
 \item{sampling.rate}{Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.}
 }
 \value{
-An extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The table contains columns for each of the varying features and a 'treatment' column (useful to tell sound from the same combination of features when using replicates).
+An extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The table contains columns for each of the varying features a 'treatment' column (useful to tell the acoustic features of each sound) and a 'replicate' column indicating the replicates for each 'treatment'.
 }
 \description{
 \code{synth_sounds} create synthetic sounds

@@ -1,8 +1,9 @@
 #' Fix misaligned start and end of test sounds  
 #' 
 #' \code{realign_test_sounds} fixes misaligned start and end of test sounds in an extended selection table using spectrographic cross-correlation
-#' @usage realign_test_sounds(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL,
-#' ovlp = 90, wn = 'hanning')
+#' @usage realign_test_sounds(X, parallel = 1, cores = getOption("mc.cores", 1), 
+#' pb = getOption("pb", TRUE), hop.size = getOption("hop.size", 11.6), 
+#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 90), wn = 'hanning')
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
@@ -36,7 +37,11 @@
 #' }
 # last modification on nov-01-2019 (MAS)
 
-realign_test_sounds <- function(X, parallel = 1, cores = 1, pb = TRUE, hop.size = 11.6, wl = NULL, ovlp = 90, wn = 'hanning'){
+realign_test_sounds <- function(X, parallel = 1, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), ovlp = getOption("ovlp", 90), wn = 'hanning'){
+  
+  # deprecated message
+  if (parallel > 1) 
+    stop2("'parallel' has been deprecated, Use 'cores' instead")
   
   # set number of processes for printing message 
   if (pb){

@@ -1,9 +1,10 @@
 #' Measure reverberations as tail-to-signal ratio
 #'
 #' \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of sounds referenced in an extended selection table.
-#' @usage tail_to_signal_ratio(X, mar, parallel = 1, cores = 1, pb = TRUE,  type = 1,
-#' bp = 'freq.range', output = "est", hop.size = 1,
-#' wl = NULL, ovlp = 0, path = NULL)
+#' @usage tail_to_signal_ratio(X, mar, parallel = 1, cores = getOption("mc.cores", 1), 
+#' pb = getOption("pb", TRUE),  type = 1, bp = 'freq.range', output = "est", 
+#' hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL), 
+#' ovlp = getOption("ovlp", 0), path = getOption("sound.files.path", "."))
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   end of the sound over which to measure tail power.
@@ -59,15 +60,20 @@
 tail_to_signal_ratio <- function(X,
                                  mar,
                                  parallel = 1, 
-                                 cores = 1,
-                                 pb = TRUE,
+                                 cores = getOption("mc.cores", 1),
+                                 pb = getOption("pb", TRUE),
                                  type = 1,
                                  bp = 'freq.range',
                                  output = "est",
-                                 hop.size = 1,
-                                 wl = NULL,
-                                 ovlp = 0,
-                                 path = NULL) {
+                                 hop.size = getOption("hop.size", 1),
+                                 wl = getOption("wl", NULL),
+                                 ovlp = getOption("ovlp", 0),
+                                 path = getOption("sound.files.path", ".")) {
+
+    # deprecated message
+  if (parallel > 1) 
+    stop2("'parallel' has been deprecated, Use 'cores' instead")
+  
   # get call argument names
   argus <- names(as.list(base::match.call()))
   

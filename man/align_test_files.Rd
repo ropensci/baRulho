@@ -4,8 +4,9 @@
 \alias{align_test_files}
 \title{Align test sound files}
 \usage{
-align_test_files(X, Y, output = "est", path = NULL, 
-by.song = TRUE, marker = NULL, cores = 1, pb = TRUE, ...)
+align_test_files(X, Y, output = "est", path = getOption("sound.files.path", "."), 
+by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1), 
+pb = getOption("pb", TRUE), remove.markers = TRUE, ...)
 }
 \arguments{
 \item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.}
@@ -23,6 +24,8 @@ by.song = TRUE, marker = NULL, cores = 1, pb = TRUE, ...)
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
+
+\item{remove.markers}{Logical to control if acoustic markers are removed in the output (default).}
 
 \item{...}{Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.}
 }

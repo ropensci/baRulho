@@ -9,9 +9,9 @@ search_templates(
   template.rows = NULL,
   markers = c("start_marker", "end_marker"),
   test.files = NULL,
-  path = NULL,
-  pb = TRUE,
-  cores = 1,
+  path = getOption("sound.files.path", "."),
+  pb = getOption("pb", TRUE),
+  cores = getOption("mc.cores", 1),
   ...
 )
 }

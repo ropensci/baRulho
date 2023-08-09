@@ -4,10 +4,12 @@
 \alias{detection_distance}
 \title{Measure detection distance of sound}
 \usage{
-detection_distance(X, cores = 1, pb = TRUE, output = "est",
-hop.size = 11.6, wl = NULL, path = NULL, spl = NULL, spl.cutoff, temp = 20,
+detection_distance(X, cores = getOption("mc.cores", 1), 
+pb = getOption("pb", TRUE), output = "est", 
+hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), 
+path = getOption("sound.files.path", "."), spl = NULL, spl.cutoff, temp = 20, 
 rh = 60, pa = 101325, hab.att.coef = 0.02, max.distance = 1000,
- resolution = 0.1, subtract.bgn = TRUE, envelope = "abs", mar = NULL)
+resolution = 0.1, subtract.bgn = TRUE, envelope = "abs", mar = NULL)
 }
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}

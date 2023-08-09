@@ -1,9 +1,11 @@
 #' Measure attenuation as signal-to-noise ratio
 #'
 #' \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.
-#' @usage signal_to_noise_ratio(X, mar, parallel = 1, cores = 1, pb = TRUE, eq.dur = FALSE,
-#' noise.ref = "adjacent", type = 1, bp = 'freq.range',
-#' output = "est", hop.size = 1, wl = NULL, ovlp = 0, path = NULL)
+#' @usage signal_to_noise_ratio(X, mar, parallel = 1, cores = getOption("mc.cores", 1), 
+#' pb = getOption("pb", TRUE), eq.dur = FALSE, noise.ref = "adjacent", type = 1, 
+#' bp = 'freq.range', output = "est", hop.size = getOption("hop.size", 1), 
+#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0), 
+#' path = getOption("sound.files.path", "."))
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure ambient noise.
@@ -37,7 +39,7 @@
 #' with the signal-to-noise ratio values.
 #' @export
 #' @name signal_to_noise_ratio
-#' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
+#' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise inmediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
 #' @examples
 #' {
 #' # load example data
@@ -68,17 +70,22 @@
 signal_to_noise_ratio <-
   function(X,
            mar,
-           parallel = 1, cores = 1,
-           pb = TRUE,
+           parallel = 1, 
+           cores = getOption("mc.cores", 1),
+           pb = getOption("pb", TRUE),
            eq.dur = FALSE,
            noise.ref = "adjacent",
            type = 1,
            bp = "freq.range",
            output = "est",
-           hop.size = 1,
-           wl = NULL,
-           ovlp = 0,
-           path = NULL) {
+           hop.size = getOption("hop.size", 1),
+           wl = getOption("wl", NULL),
+           ovlp = getOption("ovlp", 0),
+           path = getOption("sound.files.path", ".")) {
+    
+    # deprecated message
+    if (parallel > 1) 
+      stop2("'parallel' has been deprecated, Use 'cores' instead")
     
     #get call argument names
     argus <- names(as.list(base::match.call()))

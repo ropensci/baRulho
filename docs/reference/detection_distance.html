@@ -74,7 +74,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">baRulho</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.7</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -125,10 +125,12 @@
     <p><code>detection_distance</code> detection distance of sounds.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>detection_distance</span><span class='op'>(</span><span class='va'>X</span>, cores <span class='op'>=</span> <span class='fl'>1</span>, pb <span class='op'>=</span> <span class='cn'>TRUE</span>, output <span class='op'>=</span> <span class='st'>"est"</span>,
-hop.size <span class='op'>=</span> <span class='fl'>11.6</span>, wl <span class='op'>=</span> <span class='cn'>NULL</span>, path <span class='op'>=</span> <span class='cn'>NULL</span>, spl <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>spl.cutoff</span>, temp <span class='op'>=</span> <span class='fl'>20</span>,
+    <pre class="usage"><span class='fu'>detection_distance</span><span class='op'>(</span><span class='va'>X</span>, cores <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"mc.cores"</span>, <span class='fl'>1</span><span class='op'>)</span>, 
+pb <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"pb"</span>, <span class='cn'>TRUE</span><span class='op'>)</span>, output <span class='op'>=</span> <span class='st'>"est"</span>, 
+hop.size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"hop.size"</span>, <span class='fl'>11.6</span><span class='op'>)</span>, wl <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"wl"</span>, <span class='cn'>NULL</span><span class='op'>)</span>, 
+path <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/options.html'>getOption</a></span><span class='op'>(</span><span class='st'>"sound.files.path"</span>, <span class='st'>"."</span><span class='op'>)</span>, spl <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>spl.cutoff</span>, temp <span class='op'>=</span> <span class='fl'>20</span>, 
 rh <span class='op'>=</span> <span class='fl'>60</span>, pa <span class='op'>=</span> <span class='fl'>101325</span>, hab.att.coef <span class='op'>=</span> <span class='fl'>0.02</span>, max.distance <span class='op'>=</span> <span class='fl'>1000</span>,
- resolution <span class='op'>=</span> <span class='fl'>0.1</span>, subtract.bgn <span class='op'>=</span> <span class='cn'>TRUE</span>, envelope <span class='op'>=</span> <span class='st'>"abs"</span>, mar <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
+resolution <span class='op'>=</span> <span class='fl'>0.1</span>, subtract.bgn <span class='op'>=</span> <span class='cn'>TRUE</span>, envelope <span class='op'>=</span> <span class='st'>"abs"</span>, mar <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -238,31 +240,13 @@ the start and end points of selection over which to measure background noise. Th
 #&gt; Computing sound pressure level and peak frequency (step 2 out of 3):
 #&gt;   |                                                  | 0 % ~calculating    |++++++++                                          | 14% ~00s            |+++++++++++++++                                   | 29% ~00s            |++++++++++++++++++++++                            | 43% ~00s            |+++++++++++++++++++++++++++++                     | 57% ~00s            |++++++++++++++++++++++++++++++++++++              | 71% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 86% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  
 #&gt; Computing detection distance (step 3 out of 3):
-#&gt;   |                                                  | 0 % ~calculating    |++++++++                                          | 14% ~00s            |+++++++++++++++                                   | 29% ~00s            |++++++++++++++++++++++                            | 43% ~00s            |+++++++++++++++++++++++++++++                     | 57% ~00s            |++++++++++++++++++++++++++++++++++++              | 71% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 86% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; <span style='color: #000000;'>Object of class </span><span style='color: #000000; font-weight: bold;'>'extended_selection_table' 
-#&gt; </span><span style='color: #555555;'>* The output of the following call: 
-#&gt; </span><span style='color: #555555; font-style: italic;'>detection_distance(X = playback_est[playback_est$distance ==  1, ], spl.cutoff = 5, mar = 0.05) 
-#&gt; </span><span style='color: #555555; font-weight: bold;'>
-#&gt; Contains:</span><span style='color: #555555;'> 
-#&gt; *  A selection table data frame with 7 row(s) and 10 columns: 
-#&gt; |   |sound.files    | selec| start|    end| bottom.freq| top.freq|
-#&gt; |:--|:--------------|-----:|-----:|------:|-----------:|--------:|
-#&gt; |1  |01m_re-rec.wav |     1| 0.050| 0.2073|      2.2387|  11.5892|
-#&gt; |5  |01m_re-rec.wav |     4| 1.050| 1.2445|      1.5441|  10.8946|
-#&gt; |9  |01m_re-rec.wav |     5| 1.550| 1.6815|      2.3770|  11.7275|
-#&gt; |13 |01m_re-rec.wav |     3| 0.798| 0.9553|      2.2387|  11.5892|
-#&gt; |17 |01m_re-rec.wav |     6| 1.765| 1.9223|      2.2387|  11.5892|
-#&gt; |21 |01m_re-rec.wav |     2| 0.550| 0.7001|      1.7436|  11.0941|
-#&gt; ... 4 more column(s) (distance, sound.id, reference, detection.distance) and 1 more row(s) 
-#&gt; 
-#&gt; * 1 wave object(s) (as attributes): 01m_re-rec.wav</span>
-#&gt;  <span style='color: #555555;'>
-#&gt; * A data frame (check.results) generated by check_sels() (as attribute) 
-#&gt; </span><span style='color: #555555; font-weight: bold;'>
-#&gt; Additional information:</span><span style='color: #555555;'>
-#&gt; * The selection table was created</span><span style='color: #555555; font-weight: bold; font-style: italic;'> by song </span><span style='color: #555555;'>(see 'class_extended_selection_table') 
-#&gt; * 1 sampling rate(s) (in kHz): </span><span style='color: #555555; font-weight: bold;'>44.1</span><span style='color: #555555;'> 
-#&gt; * 1 bit depth(s): </span><span style='color: #555555; font-weight: bold;'>8</span><span style='color: #555555;'> 
-#&gt; * Created by warbleR &lt; 1.1.21</span></div><div class='input'>
+#&gt;   |                                                  | 0 % ~calculating    |++++++++                                          | 14% ~00s            |+++++++++++++++                                   | 29% ~00s            |++++++++++++++++++++++                            | 43% ~00s            |+++++++++++++++++++++++++++++                     | 57% ~00s            |++++++++++++++++++++++++++++++++++++              | 71% ~00s            |+++++++++++++++++++++++++++++++++++++++++++       | 86% ~00s            |++++++++++++++++++++++++++++++++++++++++++++++++++| 100% elapsed=00s  </div><div class='output co'>#&gt; <span class='message'><span style='color: #000000;'>Object of class </span><span style='color: #000000; font-weight: bold;'>'extended_selection_table'</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>* The output of the following call:</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555; font-style: italic;'>detection_distance(X = playback_est[playback_est$distance ==  1, ], spl.cutoff = 5, mar = 0.05)</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555; font-weight: bold;'></span>
+#&gt; <span class='message'>Contains:</span><span style='color: #555555;'> </span>
+#&gt; <span class='message'>*  A selection table data frame with 7 row(s) and 10 columns:</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>|   |sound.files    | selec| start|    end| bottom.freq| top.freq|</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>|:--|:--------------|-----:|-----:|------:|-----------:|--------:|</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>|1  |01m_re-rec.wav |     1| 0.050| 0.2073|      2.2387|  11.5892|</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>|5  |01m_re-rec.wav |     4| 1.050| 1.2445|      1.5441|  10.8946|</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>|9  |01m_re-rec.wav |     5| 1.550| 1.6815|      2.3770|  11.7275|</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>|13 |01m_re-rec.wav |     3| 0.798| 0.9553|      2.2387|  11.5892|</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>|17 |01m_re-rec.wav |     6| 1.765| 1.9223|      2.2387|  11.5892|</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>|21 |01m_re-rec.wav |     2| 0.550| 0.7001|      1.7436|  11.0941|</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>... 4 more column(s) (distance, sound.id, reference, detection.distance)</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'> and 1 more row(s)</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'></span>
+#&gt; <span class='message'>* 1 wave object(s) (as attributes): </span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>01m_re-rec.wav</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'></span>
+#&gt; <span class='message'>* A data frame (check.results) generated by check_sels() (as attribute)</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555; font-weight: bold;'></span>
+#&gt; <span class='message'>Additional information:</span><span style='color: #555555;'></span>
+#&gt; <span class='message'>* The selection table was created</span><span style='color: #555555; font-weight: bold; font-style: italic;'> by song </span><span style='color: #555555;'>(see 'class_extended_selection_table')</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>* 1 sampling rate(s) (in kHz): </span><span style='color: #555555; font-weight: bold;'>44.1</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>* 1 bit depth(s): </span><span style='color: #555555; font-weight: bold;'>8</span></span></div><div class='output co'>#&gt; <span class='message'><span style='color: #555555;'>* Created by warbleR &lt; 1.1.21</span></span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

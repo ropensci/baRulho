@@ -1,8 +1,9 @@
 #' Align test sound files
 #' 
 #' \code{align_test_files} aligns test (re-recorded) sound files.
-#' @usage align_test_files(X, Y, output = "est", path = NULL, 
-#' by.song = TRUE, marker = NULL, cores = 1, pb = TRUE, ...)
+#' @usage align_test_files(X, Y, output = "est", path = getOption("sound.files.path", "."), 
+#' by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1), 
+#' pb = getOption("pb", TRUE), remove.markers = TRUE, ...)
 #' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.
 #' @param Y object of class 'data.frame' with the output of \code{\link{find_markers}}. This object contains the position of markers in the re-recorded sound files. If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used.
 #' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data.frame ("data.frame").
@@ -11,6 +12,7 @@
 #' @param marker Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is \code{NULL}. DEPRECATED.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
+#' @param remove.markers Logical to control if acoustic markers are removed in the output (default).
 #' @param ...	Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.
 #' @return An extended selection table with the aligned sounds from test (re-recorded) sound files.
 #' @export
@@ -82,12 +84,12 @@
 #' }
 #last modification on dec-26-2019 (MAS)
 
-align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, marker = NULL, cores = 1, pb = TRUE, ...){
+align_test_files <- function(X, Y, output = "est", path = getOption("sound.files.path", "."), by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), remove.markers = TRUE, ...){
   
   # deprecated message
   if (!is.null(marker))
     stop2("'marker' has been deprecated")
-
+  
   # If cores is not numeric
   if (!is.numeric(cores)) stop2("'cores' must be a numeric vector of length 1") 
   if (any(!(cores %% 1 == 0), cores < 1)) stop2("'cores' should be a positive integer")
@@ -107,73 +109,82 @@ align_test_files <- function(X, Y, output = "est", path = NULL, by.song = TRUE, 
   if (Sys.info()[1] == "Windows" & cores > 1)
     cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
     
-  # align each file
- out <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(Y), cl = cl, FUN = function(y) {
-
-   # compute start and end as the difference in relation to the marker position in the master sound file 
-   start <- X$start + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
-   end <- X$end + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
-   
-    # make data frame
-    W <- data.frame(sound.files = Y$sound.files[y], selec = 1:length(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, marker = Y$marker[y])
+    # align each file
+    out <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(Y), cl = cl, FUN = function(y) {
+      
+      # compute start and end as the difference in relation to the marker position in the master sound file 
+      start <- X$start + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
+      end <- X$end + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
+      
+      # make data frame
+      W <- data.frame(sound.files = Y$sound.files[y], selec = seq_along(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, marker = Y$marker[y])
+      
+      # remove markers 
+      if (remove.markers){
+        W <- W[!W$sound.id %in% c("start_marker", "end_marker"), ]
+        
+        # re set selec labels
+        W$selec <- seq_len(nrow(W))
+      }
+      
+      return(W)
+    })
     
-    return(W)
-  })
-  
-  # put data frames togheter
-  sync.sls <- do.call(rbind, out)
-  
-  # check if any selection exceeds length of recordings
-  #if(exists("wav_dur"))
+    # put data frames togheter
+    sync.sls <- do.call(rbind, out)
+    
+    
+    # check if any selection exceeds length of recordings
+    #if(exists("wav_dur"))
     wvdr <- wavdur(path = path, files = unique(sync.sls$sound.files)) #else
-  #wvdr <- warbleR::duration_wavs(path = path)
-  
-  # add duration to data frame
-  sync.sls <- merge(sync.sls, wvdr)
-  
-  # start empty vector to add name of problematic files
-  problematic_files <- character()
-  
-  if (any(sync.sls$end > sync.sls$duration)) {
-    write(file = "", x = paste(sum(sync.sls$end > sync.sls$duration), "selection(s) exceeded sound file length and were removed (run .Options$baRulho to see which test files were involved)"))
+    #wvdr <- warbleR::duration_wavs(path = path)
     
-    problematic_files <- append(problematic_files, unique(sync.sls$sound.files[sync.sls$end > sync.sls$duration]))
+    # add duration to data frame
+    sync.sls <- merge(sync.sls, wvdr)
     
-    # remove exceeding selections
-    sync.sls <- sync.sls[!sync.sls$end > sync.sls$duration, ]
-  }
-
-  if (any(sync.sls$start < 0)) {
-    write(file = "", x = paste(sum(sync.sls$start < 0), "selection(s) were absent at the start of the files (negative start values) and were removed"))
+    # start empty vector to add name of problematic files
+    problematic_files <- character()
     
-    problematic_files <- append(problematic_files, unique(sync.sls$sound.files[sync.sls$start >= 0]))
+    if (any(sync.sls$end > sync.sls$duration)) {
+      ohun:::warning2(x = paste(sum(sync.sls$end > sync.sls$duration), "selection(s) exceeded sound file length and were removed (run getOption('baRulho')$files_to_check_align_test_files to see which test files were involved)"))
+      
+      problematic_files <- append(problematic_files, unique(sync.sls$sound.files[sync.sls$end > sync.sls$duration]))
+      
+      # remove exceeding selections
+      sync.sls <- sync.sls[!sync.sls$end > sync.sls$duration, ]
+    }
     
-    # remove exceeding selections
-    sync.sls <- sync.sls[sync.sls$start >= 0, ]
-  }
-  
-  on.exit(options(baRulho = list(files_to_check_align_test_files = unique(problematic_files))))
-  
-  # remove duration column and marker
-  sync.sls$duration <- NULL
-  # sync.sls$sound.id <- sync.sls$marker
-  # sync.sls$marker <- NULL
+    if (any(sync.sls$start < 0)) {
+      ohun:::warning2(x = paste(sum(sync.sls$start < 0), "selection(s) were absent at the start of the files (negative start values) and were removed (run getOption('baRulho')$files_to_check_align_test_files to see which test files were involved)"))
+      
+      problematic_files <- append(problematic_files, unique(sync.sls$sound.files[sync.sls$start < 0]))
+      
+      # remove exceeding selections
+      sync.sls <- sync.sls[sync.sls$start >= 0, ]
+    }
     
-  if (output == "est")
-  {
-    if (by.song) # if by song add a numeric column to represent sound files
+    on.exit(options(baRulho = list(files_to_check_align_test_files = unique(problematic_files))))
+    
+    # remove duration column and marker
+    sync.sls$duration <- NULL
+    # sync.sls$sound.id <- sync.sls$marker
+    # sync.sls$marker <- NULL
+    
+    if (output == "est")
     {
-      sync.sls$song <- as.numeric(as.factor(sync.sls$sound.files))
-      by.song <- "song"
+      if (by.song) # if by song add a numeric column to represent sound files
+      {
+        sync.sls$song <- as.numeric(as.factor(sync.sls$sound.files))
+        by.song <- "song"
       } else 
         by.song <- NULL # rewrite by song as null
-        
-    sync.sls <- selection_table(sync.sls, extended = TRUE, confirm.extended = FALSE, path = path, by.song = by.song, pb = pb, verbose = pb, ...)
-    
-    # fix call attribute
-    attributes(sync.sls)$call <- base::match.call()
-    
+      
+      sync.sls <- selection_table(sync.sls, extended = TRUE, confirm.extended = FALSE, path = path, by.song = by.song, pb = pb, verbose = pb, ...)
+      
+      # fix call attribute
+      attributes(sync.sls)$call <- base::match.call()
+      
     }
-  
-  return(sync.sls)
+    
+    return(sync.sls)
 }

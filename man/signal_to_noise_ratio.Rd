@@ -4,10 +4,10 @@
 \alias{signal_to_noise_ratio}
 \title{Measure attenuation as signal-to-noise ratio}
 \usage{
-signal_to_noise_ratio(X, mar, parallel = 1, cores = getOption("mc.cores", 1), 
-pb = getOption("pb", TRUE), eq.dur = FALSE, noise.ref = "adjacent", type = 1, 
-bp = 'freq.range', output = "est", hop.size = getOption("hop.size", 1), 
-wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0), 
+signal_to_noise_ratio(X, mar, parallel = NULL, cores = getOption("mc.cores", 1),
+pb = getOption("pb", TRUE), eq.dur = FALSE, noise.ref = "adjacent", type = 1,
+bp = 'freq.range', output = NULL, hop.size = getOption("hop.size", 1),
+wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0),
 path = getOption("sound.files.path", "."))
 }
 \arguments{
@@ -41,13 +41,12 @@ to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} t
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
+\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
-is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
+is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.}
@@ -55,29 +54,31 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only us
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column (signal.to.noise.ratio)
+Object 'X' with an additional column, 'signal.to.noise.ratio',
 with the signal-to-noise ratio values.
 }
 \description{
 \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.
 }
 \details{
-Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
+Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise immediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
 }
 \examples{
 {
-# load example data
-data("playback_est")
+  # load example data
+  data("degradation_est")
 
-# using measure ambient noise reference selections
-signal_to_noise_ratio(X = playback_est, mar = 0.05, noise.ref = 'custom')
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-# remove ambient selections
-playback_est <- playback_est[playback_est$sound.id != "ambient", ]
+  # using measure ambient noise reference selections
+  signal_to_noise_ratio(X = rerecorded_est, mar = 0.05, noise.ref = "custom")
 
-# using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
-signal_to_noise_ratio(X = playback_est, mar = 0.05, noise.ref = 'adjacent')
+  # remove ambient selections
+  rerecorded_est <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
 
+  # using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
+  signal_to_noise_ratio(X = rerecorded_est, mar = 0.05, noise.ref = "adjacent")
 }
 
 }

@@ -5,7 +5,7 @@
 \title{Create a master sound file}
 \usage{
 master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1,
-gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14, 
+gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14,
 path = getOption("sound.files.path", "."))
 }
 \arguments{
@@ -31,7 +31,7 @@ If \code{NULL} (default) then the current working directory will be used instead
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A .wav file in  'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.
+A .wav file in 'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.
 }
 \description{
 \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
@@ -41,26 +41,36 @@ The function is intended to simplify the creation of master sound files for play
 }
 \examples{
 {
-# load example data from warbleR
-data(list = c("Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4",
-"lbh_selec_table"))
+  # load example data from warbleR
+  data(list = c(
+    "Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4",
+    "lbh_selec_table"
+  ))
 
-# save sound files to temporary folder
-writeWave(Phae.long1, file.path(tempdir(), "Phae.long1.wav"))
-writeWave(Phae.long2, file.path(tempdir(), "Phae.long2.wav"))
-writeWave(Phae.long3, file.path(tempdir(), "Phae.long3.wav"))
-writeWave(Phae.long4, file.path(tempdir(), "Phae.long4.wav"))
+  # save sound files to temporary folder
+  writeWave(Phae.long1, file.path(tempdir(), "Phae.long1.wav"))
+  writeWave(Phae.long2, file.path(tempdir(), "Phae.long2.wav"))
+  writeWave(Phae.long3, file.path(tempdir(), "Phae.long3.wav"))
+  writeWave(Phae.long4, file.path(tempdir(), "Phae.long4.wav"))
 
-# make an extended selection table
-est <- selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
-path = tempdir())
+  # make an extended selection table
+  est <- selection_table(
+    X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
+    path = tempdir()
+  )
 
-# create master sound file
-master.sel.tab <- master_sound_file(X = est, file.name = "example_master",
-dest.path = tempdir(), gap.duration = 0.3)
+  # create master sound file
+  master.sel.tab <- master_sound_file(
+    X = est, file.name = "example_master",
+    dest.path = tempdir(), gap.duration = 0.3
+  )
 
-# the following code exports the selection table to Raven using Rraven package
-# Rraven::exp_raven(master.sel.tab, path = tempdir(), file.name = "example_master_selection_table")
+\dontrun{
+  # the following code exports the selection table to Raven
+  # using the Rraven package
+  Rraven::exp_raven(master.sel.tab, path = tempdir(),
+  file.name = "example_master_selection_table")
+  }
 }
 
 }

@@ -2,6 +2,7 @@ baRulho: quantifying habitat-induced degradation of (animal) sounds
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+<!-- badges: start -->
 
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![Dependencies](https://tinyverse.netlify.com/badge/baRulho)](https://cran.r-project.org/package=baRulho)
@@ -11,11 +12,12 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
-[![packageversion](https://img.shields.io/badge/Package%20version-1.0.7-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2022--12--22-yellowgreen.svg)](/commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-1.1.0-orange.svg?style=flat-square)](commits/develop)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--08--13-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
+<!-- badges: end -->
 
 <img src="vignettes/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
@@ -33,9 +35,9 @@ Install/load the package from CRAN as follows:
 
 ``` r
 # From CRAN would be
-#install.packages("baRulho")
+# install.packages("baRulho")
 
-#load package
+# load package
 library(baRulho)
 ```
 
@@ -47,7 +49,7 @@ To install the latest developmental version from
 # From github
 remotes::install_github("maRce10/baRulho")
 
-#load package
+# load package
 library(baRulho)
 ```
 

@@ -32,8 +32,8 @@ Calculate the geometric, atmospheric and habitat attenuation and the overall exp
 }
 \examples{
 {
-# measure attenuation
-attenuation(f = 2000, dist = 50, dist0 = 1)
+  # measure attenuation
+  attenuation(f = 2000, dist = 50, dist0 = 1)
 }
 
 }

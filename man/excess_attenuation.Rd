@@ -4,10 +4,10 @@
 \alias{excess_attenuation}
 \title{Measure excess attenuation}
 \usage{
-excess_attenuation(X, parallel = 1, cores = getOption("mc.cores", 1), 
+excess_attenuation(X, parallel = NULL, cores = getOption("mc.cores", 1),
 pb = getOption("pb", TRUE), method = getOption("method", 1), type = "Dabelsteen",
- output = "est", hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL), 
- ovlp = getOption("ovlp", 50), gain = 0, bp = "freq.range", 
+ output = NULL, hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL),
+ ovlp = getOption("ovlp", 50), gain = 0, bp = "freq.range",
  path = getOption("sound.files.path", "."))
 }
 \arguments{
@@ -21,26 +21,26 @@ pb = getOption("pb", TRUE), method = getOption("method", 1), type = "Dabelsteen"
 
 \item{method}{Numeric vector of length 1 to indicate the 'experimental design' for measuring excess attenuation. Two methods are available:
 \itemize{
-\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
+\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
 \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 }}
 
 \item{type}{Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
 \itemize{
-\item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. This is the default method. 
-\item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. Microphone gain is the microphone gain of the reference and re-recorded sounds. 
+\item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. This is the default method.
+\item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. Microphone gain is the microphone gain of the reference and re-recorded sounds.
 }
 If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame'). 'est' format only available if 'X' is itself an extended selection table.}
+\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is \code{NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
+\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering.}
 
 \item{gain}{Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.}
@@ -50,26 +50,28 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only u
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column (excess.attenuation)
-with the excess attenuation values.
+Object 'X' with two additional columns, 'reference' and 'excess.attenuation', containing the id of the sound used as reference and the computed excess attenuation values, respectively.
 }
 \description{
 \code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.
 }
 \details{
-Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents energy loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation. 
+Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents energy loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation.
 The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two methods for calculating excess attenuation are provided (see 'method' argument).
 }
 \examples{
 {
-# load example data
-data("playback_est")
+  # load example data
+  data("degradation_est")
 
-# using method 1
-excess_attenuation(X = playback_est)
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-# using method 2
-excess_attenuation(X = playback_est, method = 2)
+  # using method 1
+  excess_attenuation(X = rerecorded_est)
+
+  # using method 2
+  # excess_attenuation(X = rerecorded_est, method = 2)
 }
 
 }

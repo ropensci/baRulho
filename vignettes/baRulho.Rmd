@@ -1,5 +1,5 @@
 ---
-title: <center><font size="7"><b>baRulho</b></font>
+title: baRulho
 subtitle: <font size="5">Quantifying habitat-induced degradation of (animal) acoustic signals</font>
 pagetitle: baRulho quantifying sound degradation
 author: 
@@ -40,7 +40,6 @@ editor_options:
 
 library(knitr)
 opts_chunk$set(tidy = TRUE, fig.align = "center", message = FALSE, warning = FALSE)
-
 ```
 
 <img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
@@ -61,9 +60,8 @@ The package can be install/load from CRAN as follows:
 # From CRAN would be
 install.packages("baRulho")
 
-#load package
+# load package
 library(baRulho)
-
 ```
 
 &nbsp;
@@ -75,12 +73,11 @@ To install the latest developmental version from [github](https://github.com/) y
 # From github
 remotes::install_github("maRce10/baRulho")
 
-#load package
+# load package
 library(baRulho)
 
 # also set a working directory, for this example we will use a temporary directory
 td <- tempdir()
-
 ```
 
 ```{r, eval = TRUE, echo = FALSE, message=FALSE}
@@ -88,13 +85,12 @@ td <- tempdir()
 # global option chunks
 knitr::opts_chunk$set(dpi = 70, fig.width = 8, fig.height = 6)
 
-#load package
+# load package
 library(baRulho)
 library(kableExtra)
 
 # also set a working directory, for this example we will use a temporary directory
 td <- tempdir()
-
 ```
 
 &nbsp;
@@ -106,7 +102,6 @@ For this vignette we will also need a few more packages:
 library(warbleR)
 library(ggplot2)
 library(viridis)
-
 ```
 
 &nbsp;
@@ -163,19 +158,24 @@ We can synthesize the same pure tones using the function `sim_songs()` from the 
 ```{r, eval = FALSE}
 
 # synthesize
-synth.l <- sim_songs(n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0.15, 
-                     diff.fun = "pure.tone", selec.table = TRUE, path = td)
+synth.l <- sim_songs(
+  n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0.15,
+  diff.fun = "pure.tone", selec.table = TRUE, path = td
+)
 
 # plot spectro
-seewave::spectro(synth.l$wave, scale = FALSE, palette = viridis, 
-        grid = FALSE, flim = c(0,6), collevels = seq(-20, 0, 1))
-
+seewave::spectro(synth.l$wave,
+  scale = FALSE, palette = viridis,
+  grid = FALSE, flim = c(0, 6), collevels = seq(-20, 0, 1)
+)
 ```
 
 ```{r, eval=TRUE, echo=FALSE}
 # synthesize
-synth.l <- sim_songs(n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0.15, 
-                     diff.fun = "pure.tone", selec.table = TRUE, path = td)
+synth.l <- sim_songs(
+  n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0.15,
+  diff.fun = "pure.tone", selec.table = TRUE, path = td
+)
 ```
 
 
@@ -188,31 +188,26 @@ The function returns a list in which the first element is the selection table an
 
 ```{r, eval = TRUE}
 
-class(synth.l) 
-
-
+class(synth.l)
 ```
 
 ```{r, eval = TRUE}
 
 names(synth.l)
-
 ```
 
 ```{r, eval = FALSE}
 
-synth.l$selec.table  
-
+synth.l$selec.table
 ```
 
 ```{r, eval = TRUE, echo = FALSE, results='asis'}
 
-kbl <- kable(synth.l$selec.table, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(synth.l$selec.table, align = "c", row.names = F, format = "html", escape = F)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 print(kbl)
-
 ```
 
 &nbsp;
@@ -222,7 +217,6 @@ The function also saves the associated '.wav' file in the working directory (in 
 ```{r}
 
 list.files(path = td, pattern = "\\.wav$")
-
 ```
 
 &nbsp;
@@ -235,20 +229,23 @@ The following example shows how to create a master sound file using the syntheti
 ```{r, eval = FALSE, echo = TRUE}
 
 # extract selection table
-st <- synth.l$selec.table 
+st <- synth.l$selec.table
 
 # add freq range (0.5 kHz)
 st$bottom.freq <- st$bottom.freq - 0.25
 st$top.freq <- st$top.freq + 0.25
 
 # make an extended selection table
-synth.est <- selection_table(X = st, extended = TRUE,
-                             confirm.extended = FALSE, path = td)
+synth.est <- selection_table(
+  X = st, extended = TRUE,
+  confirm.extended = FALSE, path = td
+)
 
 # create master sound file
-synth_master_annotations <- master_sound_file(X = synth.est, file.name = "synthetic_master", 
-dest.path = td, gap.duration = 0.15)
-
+synth_master_annotations <- master_sound_file(
+  X = synth.est, file.name = "synthetic_master",
+  dest.path = td, gap.duration = 0.15
+)
 ```
 
 &nbsp;
@@ -258,9 +255,10 @@ The function saves the master sound file as a wave file and returns a selection 
 ```{r, eval=FALSE, echo=TRUE}
 
 # plot spectro (saved in working directory)
-spectrograms(synth_master_annotations, path = td, by.song = "sound.files", 
-           xl = 3, collevels = seq(-60, 0, 5), osci = TRUE)
-
+spectrograms(synth_master_annotations,
+  path = td, by.song = "sound.files",
+  xl = 3, collevels = seq(-60, 0, 5), osci = TRUE
+)
 ```
 
  <img src="synthetic_master.wav.jpeg" alt="spectrogram of master file">
@@ -270,8 +268,10 @@ The function can also create a master sound file from sounds from different soun
 ```{r, eval = FALSE, echo = TRUE}
 
 # load example data from warbleR
-data(list = c("Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4", 
-"lbh_selec_table"))
+data(list = c(
+  "Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4",
+  "lbh_selec_table"
+))
 
 # save sound files to temporary folder
 writeWave(Phae.long1, file.path(td, "Phae.long1.wav"))
@@ -280,13 +280,16 @@ writeWave(Phae.long3, file.path(td, "Phae.long3.wav"))
 writeWave(Phae.long4, file.path(td, "Phae.long4.wav"))
 
 # make an extended selection table
-est <- selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE, 
-path = td)
+est <- selection_table(
+  X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
+  path = td
+)
 
 # create master sound file
-master_annotations <- master_sound_file(X = est, file.name = "example_master", 
-dest.path = td, gap.duration = 0.3)
-
+master_annotations <- master_sound_file(
+  X = est, file.name = "example_master",
+  dest.path = td, gap.duration = 0.3
+)
 ```
 
 &nbsp;
@@ -295,9 +298,10 @@ Again, we can look at the spectrogram of the output file:
 
 ```{r, eval=FALSE, echo=TRUE}
 
-spectrograms(master_annotations, path = td, by.song = "sound.files", 
-           xl = 3, collevels = seq(-60, 0, 5), osci = TRUE)
-
+spectrograms(master_annotations,
+  path = td, by.song = "sound.files",
+  xl = 3, collevels = seq(-60, 0, 5), osci = TRUE
+)
 ```
 
 
@@ -307,9 +311,8 @@ Note that the output could also be exported to [Raven sound analysis software](h
  
 
 ```{r, eval = FALSE}
- 
-Rraven::exp_raven(master_annotations, path = td, file.name = "example_master_selection_table")
 
+Rraven::exp_raven(master_annotations, path = td, file.name = "example_master_selection_table")
 ```
 
 &nbsp;
@@ -333,7 +336,7 @@ Once we went to the field (or lab) and re-recorded the master sound files at dif
 
 &nbsp;
 
-Wwe will use example files from a degradation experiment that are hosted in [this repository](). The following code download a zip file with all the data (sound files + annotations) into a temporary working directory and unzip it into a folder called "degrad_exp_files":    
+We will use example files from a degradation experiment that are hosted in [this repository](). The following code download a zip file with all the data (sound files + annotations) into a temporary working directory and unzip it into a folder called "degrad_exp_files":    
 
 ```{r, eval = TRUE}
 
@@ -347,8 +350,8 @@ download.file(
 td <- file.path(tempdir(), "degrad_exp_files")
 
 unzip(file.path(tempdir(), "degrad_exp_files.zip"),
-      exdir = td)
-
+  exdir = td
+)
 ```
 
 
@@ -388,7 +391,6 @@ exmp.test2 <- normalize(exmp.test2, unit = "16")
 writeWave(object = exmp.test1, filename = file.path(td, "example_test1.wav"), extensible = FALSE)
 
 writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), extensible = FALSE)
-
 ```
 
 &nbsp;
@@ -411,12 +413,11 @@ master_annotations <- read.csv(file.path(td, "master_annotations.csv"))
 
 markers_position <- find_markers(X = master_annotations, path = td)
 
-kbl <- kable(markers_position, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(markers_position, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
-
 ```
 
 &nbsp;
@@ -428,12 +429,11 @@ The position of the markers is determined as the highest spectrogram cross-corre
 
 aligned_tests <-
   align_test_files(
-    X =  master_annotations,
+    X = master_annotations,
     Y = markers_position,
     path = td,
     by.song = TRUE
   )
-
 ```
 
 &nbsp;
@@ -450,18 +450,16 @@ aligned_tests
 ```{r, eval = TRUE, echo = FALSE}
 
 print(TRUE)
-
 ```
 
 ```{r, eval = TRUE, echo = FALSE, results='asis'}
 
-kbl <- kable(aligned_tests, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(aligned_tests, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl <- scroll_box(kbl, width = "800px", height = "300px")
 kbl
-
 ```
 &nbsp;
 
@@ -470,7 +468,6 @@ We can also check the precision of the alignment by looking at the spectrograms:
 ```{r, eval = FALSE}
 
 spectrograms(aligned_tests, by.song = "sound.files", xl = 3, collevels = seq(-60, 0, 5), dest.path = td, osci = TRUE)
-
 ```
 
 
@@ -500,11 +497,10 @@ Misalignment can be fixed with the function `realign_test_sounds()`. This functi
 [baRulho](https://marce10.github.io/baRulho/) comes with an example data set called  `playback_est_unaligned`, which contains sounds in which the time position of sounds is slightly unaligned. We can use this data to show how the function `realign_test_sounds()` works: 
 
 ```{r, eval = FALSE}
- data("playback_est_unaligned")
- 
- # method 1
-playback_est_aligned <- realign_test_sounds(X = playback_est_unaligned)
+data("playback_est_unaligned")
 
+# method 1
+playback_est_aligned <- realign_test_sounds(X = playback_est_unaligned)
 ```
 
 The output extended selection table contains the new start and end values after alignment. 
@@ -517,7 +513,7 @@ This is how the sounds look before and after being aligned:
 unalg <- rename_waves_est(playback_est_unaligned, playback_est_unaligned$sound.files, new.selec = seq(1, 200, by = 2)[1:nrow(playback_est_unaligned)])
 alg <- rename_waves_est(playback_est_aligned, playback_est_aligned$sound.files, new.selec = seq(2, 200, by = 2)[1:nrow(playback_est_aligned)])
 
-# add label 
+# add label
 unalg$type <- "Before aligning"
 alg$type <- "After aligning"
 
@@ -526,7 +522,6 @@ unalg.alg <- rbind(unalg, alg)
 
 # create spectrograms
 spectrograms(unalg.alg[unalg.alg$sound.id != "ambient", ], dest.path = tempdir(), res = 100, wl = 300, title.labels = "type", sel.labels = NULL)
-
 ```
 
 
@@ -565,16 +560,15 @@ playback_est
 
 data("playback_est")
 
-kbl <- kable(playback_est, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(playback_est, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 7:8, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 7:8, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 12)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 12)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 &nbsp;
  
@@ -586,7 +580,6 @@ In this example data there are 4 recordings at increasing distances: 1m, 5m, 10m
 
 # count selection per recordings
 unique(playback_est$sound.files)
-
 ```
 
 The data contains selections for 5 sounds as well as 2 ambient noise selections at each distance/recording:
@@ -594,19 +587,17 @@ The data contains selections for 5 sounds as well as 2 ambient noise selections 
 ```{r, eval = FALSE}
 
 table(playback_est$sound.id, playback_est$distance)
-
 ```
 
 ```{r, eval = TRUE, echo=FALSE}
 
 tb <- table(playback_est$sound.id, playback_est$distance)
 
-kbl <- kable(tb, align = "c", row.names = TRUE,  format = "html", escape = F)
+kbl <- kable(tb, align = "c", row.names = TRUE, format = "html", escape = F)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 12)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 12)
 
 kbl
-
 ```
 
 
@@ -639,21 +630,19 @@ is_extended_selection_table(br)
 
 # see output
 br
-
 ```
 
 ```{r, echo = FALSE}
 
-kbl <- kable(br, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(br, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 &nbsp;
 
@@ -665,7 +654,6 @@ If `img = TRUE` it also returns 1 image file (in 'jpeg' format) for each compari
 
 # run blur ratio
 br <- blur_ratio(playback_est, method = 1, img = TRUE, ssmooth = 300, dest.path = td)
-
 ```
 
 ```{r, eval = FALSE, echo = FALSE}
@@ -674,7 +662,6 @@ sbr <- blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tempdir(), p
 
 # make the gif here
 # https://ezgif.com
-
 ```
 
 Output image files (in the working directory) look like these ones:
@@ -685,37 +672,42 @@ Output image files (in the working directory) look like these ones:
 
 The image shows the spectrogram for the reference and re-recorded sound, as well as the envelopes of both sounds overlaid in a single graph. Colors indicate to which sound spectrograms and envelopes belong to. The blur ratio value is also displayed.
 
-The function can also return the amplitude spectrum contours when the argument `output = "list"`. The contours can be directly input into ggplot to visualize amplitude envelopes, and how they vary with distance and across sound types (and ambient noise if included):
+The function can also return the amplitude spectrum contours when the argument `envelopes = TRUE`. The contours can be directly input into ggplot to visualize amplitude envelopes, and how they vary with distance and across sound types (and ambient noise if included):
 
 ```{r}
 
-envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 300, img = FALSE, pb = FALSE)$envelopes
+# get envelopes
+br <- blur_ratio(X = playback_est, envelopes = TRUE)
+envs <- attributes(br)$envelopes
 
+# make distance a factor for plotting
 envs$distance <- as.factor(envs$distance)
 
+# plot
 ggplot(envs, aes(x= time, y = amp, col = distance)) +
-    geom_line() +
-    facet_wrap(~ sound.id) + 
-    scale_color_viridis_d(alpha = 0.7) +  
-    labs(x = "Time (s)", y = "Amplitude (PMF)") +
-    theme_classic()
+geom_line() + facet_wrap(~ sound.id) +
+scale_color_manual(values = viridis::viridis(4)) +
+labs(x = "Time (s)", y = "Amplitude (PMF)") +
+theme_classic()
+
 ```
 
 Note than the `smooth` argument could change envelope shapes and related measurements. The following code sets `smooth = 800`:
 
 ```{r}
 
-envs <- blur_ratio(X = playback_est, output = "list", ssmooth = 1000, img = FALSE, pb = FALSE)$envelopes
+# get envelopes
+br <- blur_ratio(X = playback_est, envelopes = TRUE)
+envs <- attributes(br)$envelopes
 
 envs$distance <- as.factor(envs$distance)
 
-ggplot(envs, aes(x= time, y = amp, col = distance)) +
-    geom_line() +
-    facet_wrap(~ sound.id) + 
-    scale_color_viridis_d(alpha = 0.7) +  
-    labs(x = "Time (s)", y = "Amplitude (PMF)") +
-    theme_classic()
-
+ggplot(envs, aes(x = time, y = amp, col = distance)) +
+  geom_line() +
+  facet_wrap(~sound.id) +
+  scale_color_viridis_d(alpha = 0.7) +
+  labs(x = "Time (s)", y = "Amplitude (PMF)") +
+  theme_classic()
 ```
 
 &nbsp;
@@ -742,7 +734,6 @@ sbr <- spectrum_blur_ratio(playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(sbr)
-
 ```
 
 ```{r, eval = FALSE, echo = FALSE}
@@ -751,7 +742,6 @@ sbr <- spectrum_blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tem
 
 # make the gif here
 # https://ezgif.com
-
 ```
 
 
@@ -759,21 +749,19 @@ sbr <- spectrum_blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tem
 
 # see output
 sbr
-
 ```
 
 ```{r, echo = FALSE}
 
-kbl <- kable(sbr, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(sbr, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 &nbsp;
 
@@ -781,20 +769,19 @@ kbl
 
 &nbsp;
 
-As in `blur_ratio()`, `spectrum_blur_ratio()` can also return the amplitude spectrum contours with the argument `output = "list"`:
+As in `blur_ratio()`, `spectrum_blur_ratio()` can also return the amplitude spectrum contours with the argument `spectra = TRUE`:
 
 ```{r}
+sbr <- spectrum_blur_ratio(X = playback_est, spectra = TRUE)
 
-sbr <- spectrum_blur_ratio(X = playback_est, output = "list")
-
-spctr <- sbr$spectra
+spctr <- attributes(sbr)$spectra
 
 spctr$distance <- as.factor(spctr$distance)
 
-ggplot(spctr, aes(y = amp, x = freq, col = distance)) +
+ggplot(spctr[spctr$freq > 0.3, ], aes(y = amp, x = freq, col = distance)) +
   geom_line() +
-  facet_wrap(~ sound.id) + 
-  scale_color_viridis_d(alpha = 0.7) +  
+  facet_wrap(~sound.id) +
+  scale_color_viridis_d(alpha = 0.7) +
   labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
   coord_flip() +
   theme_classic()
@@ -810,12 +797,11 @@ spctr <- spctr[spctr$freq > min(playback_est$bottom.freq) & spctr$freq < max(pla
 
 ggplot(spctr, aes(y = amp, x = freq, col = distance)) +
   geom_line() +
-  facet_wrap(~ sound.id) + 
-  scale_color_viridis_d(alpha = 0.7) +  
+  facet_wrap(~sound.id) +
+  scale_color_viridis_d(alpha = 0.7) +
   labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
   coord_flip() +
   theme_classic()
-
 ```
 &nbsp;
 
@@ -832,7 +818,6 @@ ea <- excess_attenuation(playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(ea)
-
 ```
 
 
@@ -845,16 +830,15 @@ ea
 
 ```{r, echo = FALSE}
 
-kbl <- kable(ea, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(ea, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 
 &nbsp;
@@ -872,7 +856,6 @@ ec <- envelope_correlation(playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(ec)
-
 ```
 
 The output is also similar to those of other functions; an extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')
@@ -885,16 +868,15 @@ ec
 
 ```{r, echo = FALSE}
 
-kbl <- kable(ec, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(ec, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 
 &nbsp;
@@ -912,7 +894,6 @@ sc <- spectrum_correlation(playback_est, method = 1, pb = FALSE)
 
 # check output class
 is_extended_selection_table(sc)
-
 ```
 
 The output is also similar to that of `envelope_correlation()`:
@@ -924,16 +905,15 @@ sc
 
 ```{r, echo = FALSE}
 
-kbl <- kable(sc, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(sc, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 
 &nbsp;
@@ -947,11 +927,10 @@ Signal-to-noise ratio (SNR) quantifies sound amplitude level in relation to ambi
 ```{r, eval = TRUE}
 
 # run signal to noise ratio
-sa <- signal_to_noise_ratio(playback_est,  pb = FALSE, noise.ref = "custom")
+sa <- signal_to_noise_ratio(playback_est, pb = FALSE, noise.ref = "custom")
 
 # check output class
 is_extended_selection_table(sa)
-
 ```
 
 The output is also similar to the other functions:
@@ -964,16 +943,15 @@ sa
 ```{r, echo = FALSE}
 
 
-kbl <- kable(sa, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(sa, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 9, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 9, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 
 &nbsp;
@@ -987,12 +965,13 @@ Tail-to-signal ratio (TSR) is used to quantify reverberations. Specifically TSR 
 ```{r, eval = TRUE}
 
 # run tail to signal ratio
-tsr <- tail_to_signal_ratio(playback_est,  pb = FALSE, 
-                           type = 1, mar = 0.05)
+tsr <- tail_to_signal_ratio(playback_est,
+  pb = FALSE,
+  type = 1, mar = 0.05
+)
 
 # check output class
 is_extended_selection_table(tsr)
-
 ```
 
 Again, the output is similar to other functions:
@@ -1001,22 +980,20 @@ Again, the output is similar to other functions:
 # print output
 
 tsr
-
 ```
 
 ```{r, echo = FALSE}
 
 
-kbl <- kable(tsr, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(tsr, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 9, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 9, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 
 &nbsp;
@@ -1032,7 +1009,6 @@ spd <- spcc(X = playback_est, method = 1, wl = 512, pb = FALSE)
 
 # check output class
 is_extended_selection_table(spd)
-
 ```
 
 And again, the output is similar to other functions:
@@ -1044,16 +1020,15 @@ spd
 
 ```{r, echo = FALSE}
 
-kbl <- kable(spd, align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(spd, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 
 &nbsp;
@@ -1068,7 +1043,6 @@ The function `noise_profile()` allows to estimate the frequency spectrum of ambi
 
 # run noise profile
 np <- noise_profile(X = playback_est[playback_est$distance > 5, ], mar = 0.05)
-
 ```
 
 The output is a data frame with amplitude values for the frequency bins for each wave object in the extended selection table:
@@ -1076,21 +1050,19 @@ The output is a data frame with amplitude values for the frequency bins for each
 ```{r, eval = FALSE}
 # print output
 head(np, 20)
-
 ```
 
 ```{r, echo = FALSE}
 
-kbl <- kable(np[1:20, ], align = "c", row.names = F,  format = "html", escape = F)
+kbl <- kable(np[1:20, ], align = "c", row.names = F, format = "html", escape = F)
 
-kbl <-  column_spec(kbl, 2:3, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 2:3, background = "#ccebff", bold = TRUE)
 
-kbl <-  kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
 kbl <- scroll_box(kbl, height = "400px")
 
 kbl
-
 ```
 
 This can be graphically represented as follows:
@@ -1099,30 +1071,30 @@ This can be graphically represented as follows:
 
 ggplot(np, aes(y = amp, x = freq, col = sound.files)) +
   geom_line(linewidth = 1.4) +
-   scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +  
- labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
+  scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +
+  labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
   coord_flip() +
   theme_classic()
-
 ```
 
 The output data is actually an average of several frequency spectra for each sound file. We can obtain the original spectra by setting the argument `averaged = FALSE`: 
 
 ```{r, eval = TRUE, warning = FALSE}
 
-np <- noise_profile(X = playback_est[playback_est$distance > 5, ], 
-      mar = 0.1, averaged = FALSE)
+np <- noise_profile(
+  X = playback_est[playback_est$distance > 5, ],
+  mar = 0.1, averaged = FALSE
+)
 
 # make a column containing sound file and selection
 np$sf.sl <- paste(np$sound.files, np$selec)
 
 ggplot(np, aes(y = amp, x = freq, col = sound.files, group = sf.sl)) +
   geom_line(linewidth = 1.4) +
-    scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +  
- labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
+  scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +
+  labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
   coord_flip() +
   theme_classic()
-
 ```
 
 Note that we can limit the frequency range by using a bandpass filter ('bp' argument). In addition, the argument 'hop.size', which control the size of the time windows, affects the precision in the frequency domain. We can get a better precision by increasing 'hop.size' (or 'wl'):
@@ -1130,20 +1102,21 @@ Note that we can limit the frequency range by using a bandpass filter ('bp' argu
 
 ```{r, eval = TRUE}
 
-np <- noise_profile(X = playback_est[playback_est$distance > 5, ], 
-      mar = 0.05, bp = c(0, 10), 
-      averaged = FALSE, hop.size = 3)
+np <- noise_profile(
+  X = playback_est[playback_est$distance > 5, ],
+  mar = 0.05, bp = c(0, 10),
+  averaged = FALSE, hop.size = 3
+)
 
 # make a column containing sound file and selection
 np$sf.sl <- paste(np$sound.files, np$selec)
 
 ggplot(np, aes(y = amp, x = freq, col = sound.files, group = sf.sl)) +
   geom_line(linewidth = 1.4) +
-  scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +  
+  scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +
   labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
   coord_flip() +
   theme_classic()
-
 ```
 
 
@@ -1182,5 +1155,4 @@ Araya-Salas, M. (2020), *baRulho: quantifying habitat-induced degradation of (an
 ```{r session info, echo=F}
 
 sessionInfo()
-
 ```

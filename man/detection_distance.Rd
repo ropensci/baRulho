@@ -4,10 +4,10 @@
 \alias{detection_distance}
 \title{Measure detection distance of sound}
 \usage{
-detection_distance(X, cores = getOption("mc.cores", 1), 
-pb = getOption("pb", TRUE), output = "est", 
-hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), 
-path = getOption("sound.files.path", "."), spl = NULL, spl.cutoff, temp = 20, 
+detection_distance(X, cores = getOption("mc.cores", 1),
+pb = getOption("pb", TRUE), output = NULL,
+hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
+path = getOption("sound.files.path", "."), spl = NULL, spl.cutoff = NULL, temp = 20,
 rh = 60, pa = 101325, hab.att.coef = 0.02, max.distance = 1000,
 resolution = 0.1, subtract.bgn = TRUE, envelope = "abs", mar = NULL)
 }
@@ -18,7 +18,7 @@ resolution = 0.1, subtract.bgn = TRUE, envelope = "abs", mar = NULL)
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
+\item{output}{Character vector of length 1 to determine if an extended selection table (DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
@@ -41,7 +41,7 @@ is \code{NULL}. If supplied, 'hop.size' is ignored.}
 
 \item{max.distance}{Numeric vector of length 1 with the maximum distance (in m) at which detection would be evaluated. Note that the function calculates the expected sound pressure level values along a vector of distances to find the distance at which the expected sound pressure level equates 'spl.cutoff'. Default is 1000 m.}
 
-\item{resolution}{NUmeric vector of length 1 with the distance resolution (in m) for estimated detection distance. Higher resolutions take longer to estimate. Default is 0.1 m.}
+\item{resolution}{Numeric vector of length 1 with the distance resolution (in m) for estimated detection distance. Higher resolutions take longer to estimate. Default is 0.1 m.}
 
 \item{subtract.bgn}{Logical argument to control if SPL from background noise is excluded from the measured signal SPL. Default is \code{FALSE}.}
 
@@ -51,9 +51,8 @@ is \code{NULL}. If supplied, 'hop.size' is ignored.}
 the start and end points of selection over which to measure background noise. This is required to subtract background noise sound pressure level (so only needed when 'subtract.bgn = TRUE').}
 }
 \value{
-Returns the geometric, atmospheric and habitat attenuation (in dB) as well as the combined attenuation.
-
-A data frame, or extended selection table similar to input data (depending on argument 'output'), but including two new columns (reference and detection.distance).
+Object 'X' with two additional columns, 'reference' and 'detection.distance',
+containing the id of the sound used as reference and the computed detection distances, respectively.
 }
 \description{
 \code{detection_distance} detection distance of sounds.
@@ -63,10 +62,13 @@ The function computes the maximum distance at which a sound would be detected, w
 }
 \examples{
 {
-# load example data
-data("playback_est")
+  # load example data
+  data("degradation_est")
 
-detection_distance(X = playback_est[playback_est$distance == 1,], spl.cutoff = 5, mar = 0.05)
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+
+  detection_distance(X = rerecorded_est[rerecorded_est$distance == 1, ], spl.cutoff = 5, mar = 0.05)
 }
 
 }

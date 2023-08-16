@@ -4,8 +4,8 @@
 \alias{synth_sounds}
 \title{Create synthetic sounds}
 \usage{
-synth_sounds(replicates = 1, frequencies, durations, nharmonics = 1, 
-fm = FALSE, am = FALSE, am.amps = rep(c(1:4, 3:2), length.out = 11), 
+synth_sounds(replicates = 1, frequencies, durations, nharmonics = 1,
+fm = FALSE, am = FALSE, am.amps = rep(c(1:4, 3:2), length.out = 11),
 mar = 0.05, seed = NULL, sig2 = 0.3, shuffle = FALSE,
 hrm.freqs = c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10),
 sampling.rate = 44.1)
@@ -45,12 +45,12 @@ An extended selection table, which can be input into \code{\link{master_sound_fi
 \code{synth_sounds} create synthetic sounds
 }
 \details{
-This function creates synthetic sounds that can be used for playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 features: 
+This function creates synthetic sounds that can be used for playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 features:
 \itemize{
    \item \code{frequency}: continuous, argument 'frequencies'.
    \item \code{duration}: continuous, argument 'durations'.
    \item \code{harmonic structure}: binary (harmonics vs no-harmonics), arguments 'nharmonics' and 'hrm.freqs'.
-   \item \code{frequency modulation}: variation in fundamental frequency across time. Binary (modulated vs non-modulated), arguments 'fm' and 'sig2'. 
+   \item \code{frequency modulation}: variation in fundamental frequency across time. Binary (modulated vs non-modulated), arguments 'fm' and 'sig2'.
    \item \code{amplitude modulation}: variation in amplitude across time. Binary (modulated vs non-modulated), arguments 'am' and 'am.amps'.
 }
 Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The functions uses \code{\link[warbleR]{simulate_songs}} internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation. The output table contains columns for each of the varying features and a 'treatment' column (useful to tell sound from the same combination of features when using replicates).
@@ -65,7 +65,7 @@ synthetic_est <- synth_sounds(
   fm = TRUE,
   am = TRUE,
   nharmonics = 4,
- shuffle = TRUE,
+  shuffle = TRUE,
   replicates = 3
 )
 }

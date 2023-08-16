@@ -4,9 +4,9 @@
 \alias{spcc}
 \title{Measure spectrographic cross-correlation as a measure of sound distortion}
 \usage{
-spcc(X, parallel = 1, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), 
-method = getOption("method", 1), cor.method = "pearson", output = "est", 
-hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), 
+spcc(X, parallel = NULL, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE),
+method = getOption("method", 1), cor.method = "pearson", output = NULL,
+hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
 ovlp = getOption("ovlp", 90), wn = 'hanning', path = getOption("sound.files.path", "."))
 }
 \arguments{
@@ -20,21 +20,21 @@ ovlp = getOption("ovlp", 90), wn = 'hanning', path = getOption("sound.files.path
 
 \item{method}{Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
 \itemize{
-\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
+\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
 \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 }}
 
 \item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
+\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is \code{NULL}. If supplied, 'hop.size' is ignored.}
 
-\item{ovlp}{Numeric vector of length 1 specifying \% of overlap between two 
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp 
+\item{ovlp}{Numeric vector of length 1 specifying \% of overlap between two
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
 slow down the function but produce more accurate results.}
 
 \item{wn}{A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.}
@@ -42,8 +42,7 @@ slow down the function but produce more accurate results.}
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A data frame, or extended selection table similar to input data (depending on argument 'output'), but includes a new column (cross.correlation)
-with the spectrogram cross-correlation coefficients.
+Object 'X' with two additional columns, 'reference' and 'cross.correlation', containing the id of the sound used as reference and the computed spectrogram cross-correlation coefficients, respectively.
 }
 \description{
 \code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
@@ -53,14 +52,17 @@ Spectrographic cross-correlation measures frequency distortion of sounds as a si
 }
 \examples{
 {
-# load example data
-data("playback_est")
+  # load example data
+  data("degradation_est")
 
-# method 1
-spcc(X = playback_est, method = getOption("method", 1))
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-# method 2
-spcc(X = playback_est, method = 2)
+  # method 1
+  spcc(X = rerecorded_est, method = getOption("method", 1))
+
+  # method 2
+  # spcc(X = rerecorded_est, method = 2)
 }
 
 }
@@ -68,7 +70,7 @@ spcc(X = playback_est, method = 2)
 {
 Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 
-Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115. 
+Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
 }
 }
 \seealso{

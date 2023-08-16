@@ -4,8 +4,8 @@
 \alias{align_test_files}
 \title{Align test sound files}
 \usage{
-align_test_files(X, Y, output = "est", path = getOption("sound.files.path", "."), 
-by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1), 
+align_test_files(X, Y, output = NULL, path = getOption("sound.files.path", "."),
+by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1),
 pb = getOption("pb", TRUE), remove.markers = TRUE, ...)
 }
 \arguments{
@@ -13,7 +13,7 @@ pb = getOption("pb", TRUE), remove.markers = TRUE, ...)
 
 \item{Y}{object of class 'data.frame' with the output of \code{\link{find_markers}}. This object contains the position of markers in the re-recorded sound files. If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data.frame ("data.frame").}
+\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{path}{Character string containing the directory path where test (re-recorded) sound files are found.}
 
@@ -30,18 +30,18 @@ pb = getOption("pb", TRUE), remove.markers = TRUE, ...)
 \item{...}{Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.}
 }
 \value{
-An extended selection table with the aligned sounds from test (re-recorded) sound files.
+An object of the same class than 'X' with the aligned sounds from test (re-recorded) sound files.
 }
 \description{
 \code{align_test_files} aligns test (re-recorded) sound files.
 }
 \details{
-The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table'by default.
+The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table' by default.
 }
 \examples{
 \dontrun{
 # set temporary directory
-td <- tempdir()  
+td <- tempdir()
 
 # load example data from warbleR
 data(list = c("Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4", "lbh_selec_table"))
@@ -53,26 +53,36 @@ writeWave(Phae.long3, file.path(td, "Phae.long3.wav"))
 writeWave(Phae.long4, file.path(td, "Phae.long4.wav"))
 
 # make an extended selection table
-est <- warbleR::selection_table(X = lbh_selec_table, extended = TRUE, 
-confirm.extended = FALSE, path = td, pb = FALSE)
+est <- warbleR::selection_table(
+  X = lbh_selec_table, extended = TRUE,
+  confirm.extended = FALSE, path = td, pb = FALSE
+)
 
 # create master sound file
-master.sf <- master_sound_file(X = est, file.name = "example_master", 
-dest.path = td, gap.duration = 0.3)
+master.sf <- master_sound_file(
+  X = est, file.name = "example_master",
+  dest.path = td, gap.duration = 0.3
+)
 
 # read master
 exmp.master <- readWave(file.path(td, "example_master.wav"))
 
 # add 1 s silence
-exmp.test1 <- addsilw(wave = exmp.master, at = "start", d = 1, output = "Wave", 
-f = exmp.master@samp.rate)
+exmp.test1 <- addsilw(
+  wave = exmp.master, at = "start", d = 1, output = "Wave",
+  f = exmp.master@samp.rate
+)
 
-exmp.test2 <- addsilw(wave = exmp.master, at = "start", d = 2, output = "Wave", 
-f = exmp.master@samp.rate)
+exmp.test2 <- addsilw(
+  wave = exmp.master, at = "start", d = 2, output = "Wave",
+  f = exmp.master@samp.rate
+)
 
 # create noise
-ns <- noisew(f = exmp.master@samp.rate, d = duration(exmp.test2) + 1, 
-output = "Wave")
+ns <- noisew(
+  f = exmp.master@samp.rate, d = duration(exmp.test2) + 1,
+  output = "Wave"
+)
 
 # make noise exactly the same length and add noise to 2 examples
 exmp.test1@left <- exmp.test1@left + (ns@left[1:length(exmp.test1@left)] * 500)
@@ -83,18 +93,24 @@ exmp.test1 <- normalize(exmp.test1, unit = "16")
 exmp.test2 <- normalize(exmp.test2, unit = "16")
 
 # save examples
-writeWave(object = exmp.test1, filename = file.path(td, "example_test1.wav"), 
-extensible = FALSE)
+writeWave(
+  object = exmp.test1, filename = file.path(td, "example_test1.wav"),
+  extensible = FALSE
+)
 
-writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), 
-extensible = FALSE)
+writeWave(
+  object = exmp.test2, filename = file.path(td, "example_test2.wav"),
+  extensible = FALSE
+)
 
 # find  tempaltes
-found.templts <- find_markers(X = master.sf, 
-test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
+found.templts <- find_markers(
+  X = master.sf,
+  test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE
+)
 
 # align sounds and output extended selection table
-alg.tests <- align_test_files(X =  master.sf, Y = found.templts, path = td, pb = FALSE)
+alg.tests <- align_test_files(X = master.sf, Y = found.templts, path = td, pb = FALSE)
 }
 
 }
@@ -104,7 +120,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 }
 }
 \seealso{
-\code{\link{realign_test_sounds}}; \code{\link{find_markers}}
+\code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{plot_align_sounds}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -5,9 +5,9 @@
 \title{Measure full spectrum sound noise profiles}
 \usage{
 noise_profile(X = NULL, files = NULL, mar = NULL,
-noise.ref = "adjacent", parallel = 1, cores = getOption("mc.cores", 1), 
-pb = getOption("pb", TRUE), path = getOption("sound.files.path", "."), 
-bp = NULL, hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL), 
+noise.ref = "adjacent", parallel = NULL, cores = getOption("mc.cores", 1),
+pb = getOption("pb", TRUE), path = getOption("sound.files.path", "."),
+bp = NULL, hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL),
 PSD = FALSE, norm = TRUE, dB = "A", averaged = TRUE)
 }
 \arguments{
@@ -50,26 +50,29 @@ Note that lower values will increase time resolution, which is more important fo
 \item{averaged}{Logical to control if frequency spectra are averaged within a sound file. Default is \code{TRUE}.}
 }
 \value{
-A list containing the the frequency spectra for each sound file or wave object (if 'X' is supplied).
+A list containing the frequency spectra for each sound file or wave object (if 'X' is supplied and is of class 'extended.selection.table').
 }
 \description{
 \code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.
 }
 \details{
-The function `noise_profile()` allows to estimate full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on extended selection tables (using the segments containing no sound) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
+The function estimates full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on data frames/(extended) selection tables (using the segments containing no target sound or the 'ambient' sound id) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
 }
 \examples{
 {
-# load example data
-data("playback_est")
+  # load example data
+  data("degradation_est")
 
-# custom noise reference
-noise_profile(X = playback_est, mar = 0.01, pb = FALSE, noise.ref = "custom")
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-# remove noise selections
-pe <- playback_est[playback_est$sound.id != "ambient", ]
+  # measure on custom noise reference
+  noise_profile(X = rerecorded_est, mar = 0.01, pb = FALSE, noise.ref = "custom")
 
- noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent")
+  # remove noise selections so noise is measured right before the signals
+  pe <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
+
+  noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent")
 }
 
 }

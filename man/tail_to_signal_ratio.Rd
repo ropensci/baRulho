@@ -4,9 +4,9 @@
 \alias{tail_to_signal_ratio}
 \title{Measure reverberations as tail-to-signal ratio}
 \usage{
-tail_to_signal_ratio(X, mar, parallel = 1, cores = getOption("mc.cores", 1), 
-pb = getOption("pb", TRUE),  type = 1, bp = 'freq.range', output = "est", 
-hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL), 
+tail_to_signal_ratio(X, mar, parallel = NULL, cores = getOption("mc.cores", 1),
+pb = getOption("pb", TRUE),  type = 1, bp = 'freq.range', output = NULL,
+hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL),
 ovlp = getOption("ovlp", 0), path = getOption("sound.files.path", "."))
 }
 \arguments{
@@ -30,7 +30,7 @@ end of the sound over which to measure tail power.}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
+\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
@@ -44,7 +44,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only us
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column (tail.to.signal.ratio)
+Object 'X' with an additional column, 'tail.to.signal.ratio',
 with the tail-to-signal ratio values.
 }
 \description{
@@ -55,17 +55,20 @@ Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberat
 }
 \examples{
 {
-# load example data
-data("playback_est")
+  # load example data
+  data("degradation_est")
 
- # remove noise selections
- pe <- playback_est[playback_est$sound.id != "ambient", ]
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
- # using margin for noise of 0.01
- tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)
+  # remove noise selections
+  pe <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
 
- # tail-to-noise ratio (type 2)
- tail_to_signal_ratio(X = playback_est, mar = 0.01, type = 2)
+  # using margin for noise of 0.01
+  tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)
+
+  # tail-to-noise ratio (type 2)
+  tail_to_signal_ratio(X = rerecorded_est, mar = 0.01, type = 2)
 }
 
 }

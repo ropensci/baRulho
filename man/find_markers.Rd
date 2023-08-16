@@ -5,15 +5,15 @@
 \title{Find acoustic markers on test sound files}
 \usage{
 find_markers(X, template.rows = NULL, markers = c("start_marker", "end_marker"),
-test.files = NULL, path = getOption("sound.files.path", "."), pb = getOption("pb", TRUE), 
+test.files = NULL, path = getOption("sound.files.path", "."), pb = getOption("pb", TRUE),
 cores = getOption("mc.cores", 1),...)
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. The markers added by  Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. Required.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. Required.}
 
 \item{template.rows}{Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.}
 
-\item{markers}{Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one marker is recomended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).}
+\item{markers}{Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one marker is recommended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).}
 
 \item{test.files}{Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the marker(s). If not supplied all sound files in 'path' are used instead.}
 
@@ -26,18 +26,18 @@ cores = getOption("mc.cores", 1),...)
 \item{...}{Additional arguments to be passed to \code{\link[ohun]{template_correlator}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).}
 }
 \value{
-A data frame with test file names, marker name, maximum cross-correlation score for each tamplate and the start and end where it was detected. If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0.
+A data frame with test file names, marker id, maximum cross-correlation score for each marker and the start and end where it was detected. If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two markers in the test-files against that in the master sound file. In a perfect detection the value must be 0.
 }
 \description{
 \code{find_markers} find acoustic markers on test (re-recorded) sound files using spectrographic cross-correlation.
 }
 \details{
-The function takes a master sound file's reference data ('X') and finds the position of acoustics markers ('markers' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that refered to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow.
+The function takes a master sound file's reference data ('X') and finds the position of acoustics markers ('markers' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that referred to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow. In cases in which markers are not correctly detected editing test sound files to remove audio segments with no target sounds (before the start marker and after the end marker) can improve performance. Using a low 'hop.size' or window length 'wl' (used internally by \code{\link[ohun]{template_correlator}}) can help to improve precision Other spectrogram types (argument 'type' in \code{\link[ohun]{template_correlator}}) can sometimes show better performance when markers are highly degraded.
 }
 \examples{
 \dontrun{
 # use a temporary directory
-td <- tempdir()  
+td <- tempdir()
 
 # load example data from warbleR
 data(list = c("Phae.long1", "Phae.long2", "lbh_selec_table"))
@@ -47,26 +47,36 @@ writeWave(Phae.long1, file.path(td, "Phae.long1.wav"))
 writeWave(Phae.long2, file.path(td, "Phae.long2.wav"))
 
 # make an extended selection table
-est <- selection_table(X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE, 
-path = td, pb = FALSE)
+est <- selection_table(
+  X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
+  path = td, pb = FALSE
+)
 
 # create master sound file
-master.sf <- master_sound_file(X = est, file.name = "example_master", 
-dest.path = td, gap.duration = 0.3)
+master.sf <- master_sound_file(
+  X = est, file.name = "example_master",
+  dest.path = td, gap.duration = 0.3
+)
 
 # read master
 exmp.master <- readWave(file.path(td, "example_master.wav"))
 
 # add 1 s silence
-exmp.test1 <- addsilw(wave = exmp.master, at = "start", d = 1,
-output = "Wave", f = exmp.master@samp.rate)
+exmp.test1 <- addsilw(
+  wave = exmp.master, at = "start", d = 1,
+  output = "Wave", f = exmp.master@samp.rate
+)
 
-exmp.test2 <- addsilw(wave = exmp.master, at = "start", d = 2, 
-output = "Wave", f = exmp.master@samp.rate)
+exmp.test2 <- addsilw(
+  wave = exmp.master, at = "start", d = 2,
+  output = "Wave", f = exmp.master@samp.rate
+)
 
 # create noise
-ns <- noisew(f = exmp.master@samp.rate, d = duration(exmp.test2) + 1, 
-output = "Wave")
+ns <- noisew(
+  f = exmp.master@samp.rate, d = duration(exmp.test2) + 1,
+  output = "Wave"
+)
 
 # make noise exactly the same length and add noise to 2 examples
 exmp.test1@left <- exmp.test1@left + (ns@left[1:length(exmp.test1@left)] * 500)
@@ -79,21 +89,24 @@ exmp.test2 <- tuneR::normalize(exmp.test2, unit = "16")
 writeWave(object = exmp.test1, filename = file.path(td, "example_test1.wav"), extensible = FALSE)
 writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), extensible = FALSE)
 
-# search using start marker as template
-find_markers(X = master.sf[which(master.sf$orig.sound.file == "start_marker"),],
-test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE)
+# search using start and end marker (default)
+find_markers(
+  X = master.sf,
+  test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE
+)
 
-# search using end marker as template
-find_markers(X = master.sf[which(master.sf$orig.sound.file == "end_marker"),], 
-test.files = c("example_test1.wav", "example_test2.wav"), 
-path = td, pb = FALSE)
-
-# search using both start and end markers as template
-find_markers(X = master.sf, 
-template.rows = which(master.sf$orig.sound.file == "start_marker" | 
-master.sf$orig.sound.file == "end_marker"), 
-test.files = c("example_test1.wav", "example_test2.wav"), 
-path = td, pb = FALSE)
+# search using start marker
+find_markers(
+  X = master.sf,
+  test.files = c("example_test1.wav", "example_test2.wav"),
+  path = td, pb = FALSE, marker = "start_marker"
+)
+# search using end marker
+find_markers(
+  X = master.sf,
+  test.files = c("example_test1.wav", "example_test2.wav"),
+  path = td, pb = FALSE, marker = "end_marker"
+)
 }
 }
 \references{

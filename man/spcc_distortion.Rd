@@ -6,12 +6,12 @@
 \usage{
 spcc_distortion(
   X,
-  parallel = 1,
+  parallel = NULL,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   method = getOption("method", 1),
   cor.method = "pearson",
-  output = "est",
+  output = NULL,
   hop.size = getOption("hop.size", 11.6),
   wl = getOption("wl", NULL),
   ovlp = getOption("ovlp", 90),

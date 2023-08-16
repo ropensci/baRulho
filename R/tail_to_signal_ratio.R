@@ -1,9 +1,9 @@
 #' Measure reverberations as tail-to-signal ratio
 #'
 #' \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of sounds referenced in an extended selection table.
-#' @usage tail_to_signal_ratio(X, mar, parallel = 1, cores = getOption("mc.cores", 1), 
-#' pb = getOption("pb", TRUE),  type = 1, bp = 'freq.range', output = "est", 
-#' hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL), 
+#' @usage tail_to_signal_ratio(X, mar, parallel = NULL, cores = getOption("mc.cores", 1),
+#' pb = getOption("pb", TRUE),  type = 1, bp = 'freq.range', output = NULL,
+#' hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL),
 #' ovlp = getOption("ovlp", 0), path = getOption("sound.files.path", "."))
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
@@ -12,7 +12,7 @@
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
+#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param type Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 #' \itemize{
@@ -26,24 +26,27 @@
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column (tail.to.signal.ratio)
+#' @return Object 'X' with an additional column, 'tail.to.signal.ratio',
 #' with the tail-to-signal ratio values.
 #' @export
 #' @name tail_to_signal_ratio
 #' @details Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
 #' @examples
 #' {
-#' # load example data
-#' data("playback_est")
+#'   # load example data
+#'   data("degradation_est")
 #'
-#'  # remove noise selections
-#'  pe <- playback_est[playback_est$sound.id != "ambient", ]
+#'   # create subset of data with only re-recorded files
+#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
-#'  # using margin for noise of 0.01
-#'  tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)
+#'   # remove noise selections
+#'   pe <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
 #'
-#'  # tail-to-noise ratio (type 2)
-#'  tail_to_signal_ratio(X = playback_est, mar = 0.01, type = 2)
+#'   # using margin for noise of 0.01
+#'   tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)
+#'
+#'   # tail-to-noise ratio (type 2)
+#'   tail_to_signal_ratio(X = rerecorded_est, mar = 0.01, type = 2)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -55,52 +58,34 @@
 #'
 #' Mathevon, N., Dabelsteen, T., & Blumenrath, S. H. (2005). Are high perches in the blackcap Sylvia atricapilla song or listening posts? A sound transmission study. The Journal of the Acoustical Society of America, 117(1), 442-449.
 #' }
-#last modification on nov-01-2019 (MAS)
+# last modification on nov-01-2019 (MAS)
 
 tail_to_signal_ratio <- function(X,
                                  mar,
-                                 parallel = 1, 
+                                 parallel = NULL,
                                  cores = getOption("mc.cores", 1),
                                  pb = getOption("pb", TRUE),
                                  type = 1,
-                                 bp = 'freq.range',
-                                 output = "est",
+                                 bp = "freq.range",
+                                 output = NULL,
                                  hop.size = getOption("hop.size", 1),
                                  wl = getOption("wl", NULL),
                                  ovlp = getOption("ovlp", 0),
                                  path = getOption("sound.files.path", ".")) {
+  # check arguments
+  arguments <- as.list(base::match.call())
 
-    # deprecated message
-  if (parallel > 1) 
-    stop2("'parallel' has been deprecated, Use 'cores' instead")
-  
-  # get call argument names
-  argus <- names(as.list(base::match.call()))
-  
-  # must have the same sampling rate
-  if (is_extended_selection_table(X)) {
-    if (length(unique(attr(X, "check.results")$sample.rate)) > 1)
-      stop2(
-        "all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())"
-      )
-  } else
-    print("assuming all sound files have the same sampling rate")
-  
-  # If cores is not numeric
-  if (!is.numeric(cores))
-    stop2("'cores' must be a numeric vector of length 1")
-  if (any(!(cores %% 1 == 0), cores < 1))
-    stop2("'cores' should be a positive integer")
-  
-  #check output
-  if (!any(output %in% c("est", "data.frame")))
-    stop2("'output' must be 'est' or 'data.frame'")
-  
-  # hopsize
-  if (!is.numeric(hop.size) |
-      hop.size < 0)
-    stop2("'hop.size' must be a positive number")
-  
+  # add objects to argument names
+  for (i in names(arguments)[-1]) {
+    arguments[[i]] <- get(i)
+  }
+
+  # check each arguments
+  check_results <- check_arguments(fun = arguments[[1]], args = arguments)
+
+  # report errors
+  checkmate::reportAssertions(check_results)
+
   # get sampling rate
   sampling_rate <-
     warbleR::read_sound_file(
@@ -109,30 +94,28 @@ tail_to_signal_ratio <- function(X,
       path = path,
       header = TRUE
     )$sample.rate
-  
+
   # adjust wl based on hope.size
-  if (is.null(wl))
-    wl <- round(sampling_rate * hop.size  / 1000, 0)
-  
+  if (is.null(wl)) {
+    wl <- round(sampling_rate * hop.size / 1000, 0)
+  }
+
   # make wl even if odd
-  if (!(wl %% 2) == 0)
+  if (!(wl %% 2) == 0) {
     wl <- wl + 1
-  
-  # check sound.id column
-  if (is.null(X$sound.id))
-    X$sound.id <- "no.sound.id.column"
+  }
 
   # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & cores > 1)
+  if (Sys.info()[1] == "Windows" & cores > 1) {
     cl <-
-    parallel::makePSOCKcluster(getOption("cl.cores", cores))
-  else
+      parallel::makePSOCKcluster(getOption("cl.cores", cores))
+  } else {
     cl <- cores
-  
+  }
+
   # calculate STR
   X$tail.to.signal.ratio <-
-    pbapply::pbsapply(1:nrow(X), cl = cl, function(y) {
-    
+    pbapply::pbsapply(seq_len(nrow(X)), cl = cl, function(y) {
       if (X$sound.id[y] != "ambient") {
         # Read sound files to get sample rate and length
         r <-
@@ -144,13 +127,14 @@ tail_to_signal_ratio <- function(X,
             header = TRUE,
             path = path
           )
-        
-        
-        #reset time coordinates of sounds if higher than duration
+
+
+        # reset time coordinates of sounds if higher than duration
         enn <- X$end[y] + mar
-        if (enn > r$samples / sampling_rate)
+        if (enn > r$samples / sampling_rate) {
           enn <- r$samples / sampling_rate
-        
+        }
+
         # read sound and margin
         tail.wv <-
           warbleR::read_sound_file(
@@ -160,31 +144,36 @@ tail_to_signal_ratio <- function(X,
             to = enn,
             path = path
           )
-        
+
         # read sound
-        if (type == 1)
+        if (type == 1) {
           signal <-
-          warbleR::read_sound_file(X = X,
-                                   index = y,
-                                   path = path)
-        
+            warbleR::read_sound_file(
+              X = X,
+              index = y,
+              path = path
+            )
+        }
+
         # read background noise right before the sound
-        if (type == 2)
+        if (type == 2) {
           signal <-
-          warbleR::read_sound_file(
-            X = X,
-            index = y,
-            from = X$start[y] - mar,
-            to = X$start[y],
-            path = path
-          )
-        
+            warbleR::read_sound_file(
+              X = X,
+              index = y,
+              from = X$start[y] - mar,
+              to = X$start[y],
+              path = path
+            )
+        }
+
         # add band-pass frequency filter
         if (!is.null(bp)) {
           # filter to bottom and top freq range
-          if (bp == "freq.range")
+          if (bp == "freq.range") {
             bp <- c(X$bottom.freq[y], X$top.freq[y])
-          
+          }
+
           signal <-
             seewave::ffilter(
               signal,
@@ -196,7 +185,7 @@ tail_to_signal_ratio <- function(X,
               wl = wl,
               output = "Wave"
             )
-          
+
           tail.wv <-
             seewave::ffilter(
               tail.wv,
@@ -209,45 +198,51 @@ tail_to_signal_ratio <- function(X,
               output = "Wave"
             )
         }
-        
-        
+
+
         # get RMS for sound (or noise if type 2)
         sig.env <-
           seewave::env(signal,
-                       f = sampling_rate,
-                       envt = "hil",
-                       plot = FALSE)
-        
+            f = sampling_rate,
+            envt = "hil",
+            plot = FALSE
+          )
+
         # get RMS for background noise
         tail.env <-
           seewave::env(tail.wv,
-                       f = sampling_rate,
-                       envt = "hil",
-                       plot = FALSE)
-        
+            f = sampling_rate,
+            envt = "hil",
+            plot = FALSE
+          )
+
         # sound (or noise) RMS
         sig_RMS <- seewave::rms(sig.env)
-        
+
         # get reference ambient noise RMS
         tail_RMS <- seewave::rms(tail.env)
-        
+
         # Calculate tail.to.signal ratio
         str <- tail_RMS / sig_RMS
-        
+
         str <- 10 * log(str)
-      } else
+      } else {
         str <- NA
-      
+      }
+
       return(str)
     })
-  
-  if (output == "data.frame")
-    X <- as.data.frame(X) else
-      attributes(X)$call <- base::match.call() # fix call attribute
-  
-  # remove sound.id column
-  if (X$sound.id[1] == "no.sound.id.column")
+
+  # fix call if not a data frame
+  if (!is.data.frame(X)) {
+    attributes(X)$call <-
+      base::match.call()
+  } # fix call attribute
+
+  # remove sound.id column if was not  found in X
+  if (X$sound.id[1] == "no.sound.id.column") {
     X$sound.id <- NULL
-  
+  }
+
   return(X)
 }

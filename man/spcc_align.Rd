@@ -6,7 +6,7 @@
 \usage{
 spcc_align(
   X,
-  parallel = 1,
+  parallel = NULL,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   hop.size = getOption("hop.size", 11.6),

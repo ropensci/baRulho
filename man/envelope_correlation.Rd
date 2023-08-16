@@ -4,10 +4,10 @@
 \alias{envelope_correlation}
 \title{Measure amplitude envelope correlation}
 \usage{
-envelope_correlation(X, parallel = 1, cores = getOption("mc.cores", 1), 
-pb = getOption("pb", TRUE), method = getOption("method", 1), 
-cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est", 
-hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), 
+envelope_correlation(X, parallel = NULL, cores = getOption("mc.cores", 1),
+pb = getOption("pb", TRUE), method = getOption("method", 1),
+cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = NULL,
+hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
 ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."))
 }
 \arguments{
@@ -22,7 +22,7 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{method}{Numeric vector of length 1 to indicate the 'experimental design' to measure amplitude envelope correlation. Two methods are available:
 \itemize{
-\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
+\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
 \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 }}
 
@@ -32,41 +32,43 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{msmooth}{Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame'). 'est' format only available if 'X' is itself an extended selection table.}
+\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is NULL. If supplied, 'hop.size' is ignored.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two 
+\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
 
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes two new columns ('reference' and  'envelope.correlation')
-with the reference sound and the amplitude envelope correlation coefficients.
+Object 'X' with two additional columns, 'reference' and 'envelope.correlation', containing the id of the sound used as reference and the computed envelope correlation coefficients, respectively.
 }
 \description{
 \code{envelope_correlation} measures amplitude envelope correlation of sounds referenced in an extended selection table.
 }
 \details{
-Amplitude envelope correlation measures the similarity of two sounds in the time domain. The  function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and calculating the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to create envelopes graphs.
+Amplitude envelope correlation measures the similarity of two sounds in the time domain. The function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and calculating the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to create envelopes graphs.
 }
 \examples{
 {
-# load example data
-data("playback_est")
+  # load example data
+  data("degradation_est")
 
-# remove ambient selections
-playback_est <- playback_est[playback_est$sound.id != "ambient", ]
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-# method 1
-envelope_correlation(X = playback_est)
+  # remove ambient selections
+  rerecorded_est <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
 
-# method 2
-envelope_correlation(X = playback_est, method = 2)
+  # method 1
+  envelope_correlation(X = rerecorded_est)
+
+  # method 2
+  # envelope_correlation(X = rerecorded_est, method = 2)
 }
 
 }

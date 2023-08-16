@@ -11,7 +11,7 @@
 The main features of the package are:
   \itemize{
   \item Loops to apply tasks through sounds referenced in an extended selection table
-  \item The comparison of playback sounds re-recorded at different distances 
+  \item The comparison of playback sounds re-recorded at different distances
   }
 Most functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency.
 
@@ -19,6 +19,6 @@ License: GPL (>= 2)
 }
 \author{
 Marcelo Araya-Salas
-  
+
   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }

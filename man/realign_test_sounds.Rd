@@ -4,8 +4,8 @@
 \alias{realign_test_sounds}
 \title{Fix misaligned start and end of test sounds}
 \usage{
-realign_test_sounds(X, parallel = 1, cores = getOption("mc.cores", 1), 
-pb = getOption("pb", TRUE), hop.size = getOption("hop.size", 11.6), 
+realign_test_sounds(X, parallel = NULL, cores = getOption("mc.cores", 1),
+pb = getOption("pb", TRUE), hop.size = getOption("hop.size", 11.6),
 wl = getOption("wl", NULL), ovlp = getOption("ovlp", 90), wn = 'hanning')
 }
 \arguments{
@@ -19,17 +19,17 @@ wl = getOption("wl", NULL), ovlp = getOption("ovlp", 90), wn = 'hanning')
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default 
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is NULL. If supplied, 'hop.size' is ignored.}
 
-\item{ovlp}{Numeric vector of length 1 specifying \% of overlap between two 
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp 
+\item{ovlp}{Numeric vector of length 1 specifying \% of overlap between two
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
 slow down the function but produce more accurate results.}
 
 \item{wn}{A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.}
 }
 \value{
-A data frame, or extended selection table similar to input data (depending on argument 'output') in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
+Object 'X' in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
 }
 \description{
 \code{realign_test_sounds} fixes misaligned start and end of test sounds in an extended selection table using spectrographic cross-correlation
@@ -39,11 +39,26 @@ This function uses spectrographic cross-correlation to align the position in tim
 }
 \examples{
 {
-# load example data
-data("playback_est_unaligned")
+  # load example data
+  data("degradation_est")
 
-# method 1
-realign_test_sounds(X = playback_est_unaligned)
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+
+  # create "unaligned_rerecorded_est" by adding noise to "rerecorded_est" start and end
+  unaligned_rerecorded_est <- rerecorded_est
+  set.seed(123)
+  noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
+    nrow(unaligned_rerecorded_est),
+    replace = TRUE
+  )
+  attr(unaligned_rerecorded_est, "check.res")$start <-
+    unaligned_rerecorded_est$start <- unaligned_rerecorded_est$start + noise_time
+  attr(unaligned_rerecorded_est, "check.res")$end <- unaligned_rerecorded_est$end <-
+    unaligned_rerecorded_est$end + noise_time
+
+  # re align
+  realign_test_sounds(X = unaligned_rerecorded_est)
 }
 
 }
@@ -51,7 +66,7 @@ realign_test_sounds(X = playback_est_unaligned)
 {
 Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 
-Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115. 
+Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
 }
 }
 \seealso{

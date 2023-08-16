@@ -4,10 +4,10 @@
 \alias{spectrum_correlation}
 \title{Measure frequency spectrum correlation}
 \usage{
-spectrum_correlation(X, parallel = 1, cores = getOption("mc.cores", 1), 
-pb = getOption("pb", TRUE), method = getOption("method", 1), cor.method = "pearson", 
-output = "est", hop.size = getOption("hop.size", 11.6), 
-wl = getOption("wl", NULL), ovlp = getOption("ovlp", 70), 
+spectrum_correlation(X, parallel = NULL, cores = getOption("mc.cores", 1),
+pb = getOption("pb", TRUE), method = getOption("method", 1), cor.method = "pearson",
+output = NULL, hop.size = getOption("hop.size", 11.6),
+wl = getOption("wl", NULL), ovlp = getOption("ovlp", 70),
 path = getOption("sound.files.path", "."))
 }
 \arguments{
@@ -28,7 +28,7 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
 
-\item{output}{Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').}
+\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
@@ -41,8 +41,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column ('spectrum.correlation')
-with the calculated frequency spectrum correlation coefficients.
+Object 'X' with two additional columns, 'reference' and 'spectrum.correlation', containing the id of the sound used as reference and the computed frequency spectrum correlation coefficients, respectively.
 }
 \description{
 \code{spectrum_correlation} measures frequency spectrum correlation of sounds referenced in an extended selection table.
@@ -52,17 +51,17 @@ spectral correlation measures the similarity of two sounds in the frequency doma
 }
 \examples{
 {
-# load example data
-data("playback_est")
+  # load example data
+  data("degradation_est")
 
-# remove ambient selections
-pe <- playback_est[playback_est$sound.id != "ambient", ]
+  # create subset of data with only re-recorded files
+  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-# method 1
-spectrum_correlation(X = pe)
+  # method 1
+  spectrum_correlation(X = rerecorded_est)
 
-# method 2
-spectrum_correlation(X = pe, method = 2)
+  # method 2
+  # spectrum_correlation(X = rerecorded_est, method = 2)
 }
 
 }

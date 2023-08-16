@@ -1,10 +1,10 @@
 #' Measure attenuation as signal-to-noise ratio
 #'
 #' \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.
-#' @usage signal_to_noise_ratio(X, mar, parallel = 1, cores = getOption("mc.cores", 1), 
-#' pb = getOption("pb", TRUE), eq.dur = FALSE, noise.ref = "adjacent", type = 1, 
-#' bp = 'freq.range', output = "est", hop.size = getOption("hop.size", 1), 
-#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0), 
+#' @usage signal_to_noise_ratio(X, mar, parallel = NULL, cores = getOption("mc.cores", 1),
+#' pb = getOption("pb", TRUE), eq.dur = FALSE, noise.ref = "adjacent", type = 1,
+#' bp = 'freq.range', output = NULL, hop.size = getOption("hop.size", 1),
+#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0),
 #' path = getOption("sound.files.path", "."))
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
@@ -27,33 +27,34 @@
 #' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
 #' }
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame').
+#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
-#' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-#' Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.
+#' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes a new column (signal.to.noise.ratio)
+#' @return Object 'X' with an additional column, 'signal.to.noise.ratio',
 #' with the signal-to-noise ratio values.
 #' @export
 #' @name signal_to_noise_ratio
-#' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise inmediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
+#' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise immediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
 #' @examples
 #' {
-#' # load example data
-#' data("playback_est")
+#'   # load example data
+#'   data("degradation_est")
 #'
-#' # using measure ambient noise reference selections
-#' signal_to_noise_ratio(X = playback_est, mar = 0.05, noise.ref = 'custom')
+#'   # create subset of data with only re-recorded files
+#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
-#' # remove ambient selections
-#' playback_est <- playback_est[playback_est$sound.id != "ambient", ]
+#'   # using measure ambient noise reference selections
+#'   signal_to_noise_ratio(X = rerecorded_est, mar = 0.05, noise.ref = "custom")
 #'
-#' # using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
-#'signal_to_noise_ratio(X = playback_est, mar = 0.05, noise.ref = 'adjacent')
+#'   # remove ambient selections
+#'   rerecorded_est <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
 #'
+#'   # using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
+#'   signal_to_noise_ratio(X = rerecorded_est, mar = 0.05, noise.ref = "adjacent")
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -65,124 +66,106 @@
 #'
 #' Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
 #' }
-#last modification on nov-01-2019 (MAS)
+# last modification on nov-01-2019 (MAS)
 
 signal_to_noise_ratio <-
   function(X,
-           mar,
-           parallel = 1, 
+           mar = NULL,
+           parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            eq.dur = FALSE,
            noise.ref = "adjacent",
            type = 1,
            bp = "freq.range",
-           output = "est",
+           output = NULL,
            hop.size = getOption("hop.size", 1),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 0),
            path = getOption("sound.files.path", ".")) {
-    
-    # deprecated message
-    if (parallel > 1) 
-      stop2("'parallel' has been deprecated, Use 'cores' instead")
-    
-    #get call argument names
-    argus <- names(as.list(base::match.call()))
-  
-    # If cores is not numeric
-    if (!is.numeric(cores))
-      stop2("'cores' must be a numeric vector of length 1")
-    if (any(!(cores %% 1 == 0), cores < 1))
-      stop2("'cores' should be a positive integer")
-    
-    #check output
-    if (!any(output %in% c("est", "data.frame")))
-      stop2("'output' must be 'est' or 'data.frame'")
-    
-    # hopsize
-    if (!is.numeric(hop.size) |
-        hop.size < 0)
-      stop2("'hop.size' must be a positive number")
-    
-    # must have the same sampling rate
-    if (is_extended_selection_table(X)){
-      if (length(unique(attr(X, "check.results")$sample.rate)) > 1)
-        stop2(
-          "all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())"
-        )} else 
-          print("assuming all sound files have the same sampling rate")
-    
+    # check arguments
+    arguments <- as.list(base::match.call())
+
+    # add objects to argument names
+    for (i in names(arguments)[-1]) {
+      arguments[[i]] <- get(i)
+    }
+
+    # check each arguments
+    check_results <- check_arguments(fun = arguments[[1]], args = arguments)
+
+    # report errors
+    checkmate::reportAssertions(check_results)
+
     # get sampling rate
     sampling_rate <- warbleR::read_sound_file(X = X, index = 1, path = path, header = TRUE)$sample.rate
-    
+
     # adjust wl based on hope.size
-    if (is.null(wl))
-      wl <- round(sampling_rate * hop.size  / 1000,
-        0)        
+    if (is.null(wl)) {
+      wl <- round(
+        sampling_rate * hop.size / 1000,
+        0
+      )
+    }
 
     # make wl even if odd
-    if (!(wl %% 2) == 0)
+    if (!(wl %% 2) == 0) {
       wl <- wl + 1
-    
-    #check noise.ref
-    if (!any(noise.ref %in% c("custom", "adjacent")))
-      stop2("'noise.ref' must be either 'custom' or 'adjacent'")
-    
+    }
+
     # check sound.id column
-    if (is.null(X$sound.id)){
-    
-      if (noise.ref == "custom")
+    if (is.null(X$sound.id)) {
+      if (noise.ref == "custom") {
         stop2("'sound.id' required when 'noise.ref == 'custom''")
+      }
 
       X$sound.id <- "no.sound.id.column"
     }
-    
+
     # check if 'ambient' is found in  sound.id column
-    if (!any(X$sound.id %in% 'ambient') &
-        noise.ref == "custom")
+    if (!any(X$sound.id %in% "ambient") &
+      noise.ref == "custom") {
       stop2(
-        "'ambient' selections must be contained in 'X' (and label in 'sound.id' column) when 'noise.ref == 'custom''"
+        "'ambient' selections must be contained in 'X' and labeled in a 'sound.id' column as 'ambient' when 'noise.ref = 'custom'"
       )
-    
-    # check if 'ambient' is found in  sound.id column
-    if (!any(X$sound.id %in% 'ambient') &
-        noise.ref == "custom")
-      stop2(
-        "'ambient' selections must be contained in 'X' (and label in 'sound.id' column) when 'noise.ref == TRUE'"
-      )
-    
+    }
+
     if (noise.ref == "custom" &
-        any(sapply(unique(X$sound.files), function(x)
-          sum(X$sound.files == x &
-              X$sound.id == "ambient")) == 0))
+      any(sapply(unique(X$sound.files), function(x) {
+        sum(X$sound.files == x &
+          X$sound.id == "ambient")
+      }) == 0)) {
       stop2(
-        "Each sound file referenced in 'X' must have at least 1 'ambient' selection when 'noise.ref == custom'"
+        "Each sound file referenced in 'X' must have at least 1 'ambient' selection when 'noise.ref = 'custom'"
       )
-    
+    }
+
     # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" & cores > 1)
+    if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
-        parallel::makePSOCKcluster(getOption("cl.cores", cores)) else
+        parallel::makePSOCKcluster(getOption("cl.cores", cores))
+    } else {
       cl <- cores
-    
+    }
+
     # calculate all envelops with a apply function
     envs <-
       warbleR:::pblapply_wrblr_int(
-        X = 1:nrow(X),
+        X = seq_len(nrow(X)),
         pbar = pb,
         cl = cl,
         FUN = function(y) {
           if (noise.ref == "custom") {
             # read sound clip
             signal <- warbleR::read_sound_file(X = X, index = y, path = path)
-            
+
             # add band-pass frequency filter
             if (!is.null(bp)) {
               # filter to bottom and top freq range
-              if (bp[1] == "freq.range")
+              if (bp[1] == "freq.range") {
                 bp <- c(X$bottom.freq[y], X$top.freq[y])
-              
+              }
+
               signal <-
                 seewave::ffilter(
                   signal,
@@ -195,25 +178,27 @@ signal_to_noise_ratio <-
                   output = "Wave"
                 )
             }
-            
+
             # get RMS for signal
             sig.env <-
               seewave::env(signal,
-                           f = sampling_rate,
-                           envt = "abs",
-                           plot = FALSE)
-            
+                f = sampling_rate,
+                envt = "abs",
+                plot = FALSE
+              )
+
             bg.env <- NA
           }
-          
+
           if (noise.ref == "adjacent") {
-         
             # set margin to half of signal duration
-            if (eq.dur)
+            if (eq.dur) {
               mar <-
-              (X$end[y] - X$start[y]) else if (all(argus != "mar"))
+                (X$end[y] - X$start[y])
+            } else if (is.null(mar)) {
               stop2("'mar' must be provided when 'eq.dur = FALSE'")
-         
+            }
+
             # Read sound files to get sample rate and length
             r <-
               warbleR::read_sound_file(
@@ -224,22 +209,23 @@ signal_to_noise_ratio <-
                 header = TRUE,
                 path = path
               )
-            
-            #reset time coordinates of sounds if lower than 0 o higher than duration
+
+            # reset time coordinates of sounds if lower than 0 o higher than duration
             stn <- X$start[y] - mar
             enn <- X$end[y] + mar
             mar1 <- mar
-            
+
             if (stn < 0) {
-              mar1 <- mar1  + stn
+              mar1 <- mar1 + stn
               stn <- 0
             }
-            
+
             mar2 <- mar1 + X$end[y] - X$start[y]
-            
-            if (enn > r$samples / sampling_rate)
+
+            if (enn > r$samples / sampling_rate) {
               enn <- r$samples / sampling_rate
-            
+            }
+
             # read sound and margin
             noise_sig <-
               warbleR::read_sound_file(
@@ -249,13 +235,14 @@ signal_to_noise_ratio <-
                 to = enn,
                 path = path
               )
-            
+
             # add band-pass frequency filter
             if (!is.null(bp)) {
               # filter to bottom and top freq range
-              if (bp[1] == "freq.range")
+              if (bp[1] == "freq.range") {
                 bp <- c(X$bottom.freq[y], X$top.freq[y])
-              
+              }
+
               noise_sig <-
                 seewave::ffilter(
                   wave = noise_sig,
@@ -268,88 +255,98 @@ signal_to_noise_ratio <-
                   output = "Wave"
                 )
             }
-            
-            
+
+
             # read clip with sound
             signal <-
               seewave::cutw(noise_sig,
-                            from = mar1,
-                            to = mar2,
-                            f = sampling_rate)
-            
+                from = mar1,
+                to = mar2,
+                f = sampling_rate
+              )
+
             # get envelop for sound
             sig.env <-
               seewave::env(signal,
-                           f = sampling_rate,
-                           envt = "hil",
-                           plot = FALSE)
-            
+                f = sampling_rate,
+                envt = "hil",
+                plot = FALSE
+              )
+
             # cut ambient noise before sound
             noise1 <-
               seewave::cutw(noise_sig,
-                            from =  0,
-                            to = mar1,
-                            f = sampling_rate)
-            
+                from = 0,
+                to = mar1,
+                f = sampling_rate
+              )
+
             # get envelop for background noise
             bg.env <-
               seewave::env(noise1,
-                           f = sampling_rate,
-                           envt = "hil",
-                           plot = FALSE)
+                f = sampling_rate,
+                envt = "hil",
+                plot = FALSE
+              )
           }
           return(list(sig.env = sig.env, bg.env = bg.env))
         }
       )
-    
+
     # add sound file selec column and names to envelopes (weird column name so it does not overwrite user columns)
     X$TEMP....y <-
       names(envs) <- paste(X$sound.files, X$selec, sep = "-")
-    
+
     # calculate SNR
-    X$signal.to.noise.ratio <- sapply(1:nrow(X), function(y) {
-      if (X$sound.id[y] != "ambient") suppressWarnings({
-        # sound RMS
-        sig_RMS <- seewave::rms(envs[[X$TEMP....y[y]]]$sig.env)
-        
-        # get reference ambient noise RMS
-        if (noise.ref == "adjacent") {
-          bg_RMS <- seewave::rms(envs[[X$TEMP....y[y]]]$bg.env)
-        } else {
-          # get envelopes from ambient selections
-          bg_envs <-
-            sapply(envs[X$TEMP....y[X$sound.files == X$sound.files[y] &
-                                      X$sound.id == "ambient"]], "[", 'sig.env')
-          
-          # get mean RMS from combined envelopes
-          bg_RMS <- seewave::rms(unlist(sapply(bg_envs, as.vector)))
-        }
-        
-        # Calculate signal-to-noise ratio
-        if (type == 1)
-          snr <- 20 * log10(sig_RMS / bg_RMS)
-        
-        if (type == 2)
-          snr <- 20 * log10((sig_RMS - bg_RMS) / bg_RMS)
-        
-        
-      }) else
-        snr <- NA # return NA if current row is noise
-    
+    X$signal.to.noise.ratio <- sapply(seq_len(nrow(X)), function(y) {
+      if (X$sound.id[y] != "ambient") {
+        suppressWarnings({
+          # sound RMS
+          sig_RMS <- seewave::rms(envs[[X$TEMP....y[y]]]$sig.env)
+
+          # get reference ambient noise RMS
+          if (noise.ref == "adjacent") {
+            bg_RMS <- seewave::rms(envs[[X$TEMP....y[y]]]$bg.env)
+          } else {
+            # get envelopes from ambient selections
+            bg_envs <-
+              sapply(envs[X$TEMP....y[X$sound.files == X$sound.files[y] &
+                X$sound.id == "ambient"]], "[", "sig.env")
+
+            # get mean RMS from combined envelopes
+            bg_RMS <- seewave::rms(unlist(sapply(bg_envs, as.vector)))
+          }
+
+          # Calculate signal-to-noise ratio
+          if (type == 1) {
+            snr <- 20 * log10(sig_RMS / bg_RMS)
+          }
+
+          if (type == 2) {
+            snr <- 20 * log10((sig_RMS - bg_RMS) / bg_RMS)
+          }
+        })
+      } else {
+        snr <- NA
+      } # return NA if current row is noise
+
       return(snr)
-      })
-    
+    })
+
     # remove temporary column
     X$TEMP....y <- NULL
-  
+
     # remove sound.id column
-    if (X$sound.id[1] == "no.sound.id.column")
+    if (X$sound.id[1] == "no.sound.id.column") {
       X$sound.id <- NULL
-    
-    if (output == "data.frame")
-      X <- as.data.frame(X) else
-        attributes(X)$call <- base::match.call() # fix call attribute
-    
-    
+    }
+
+    # fix call if not a data frame
+    if (!is.data.frame(X)) {
+      attributes(X)$call <-
+        base::match.call()
+    } # fix call attribute
+
+
     return(X)
   }

@@ -1,10 +1,10 @@
 #' Measure amplitude envelope correlation
-#' 
+#'
 #' \code{envelope_correlation} measures amplitude envelope correlation of sounds referenced in an extended selection table.
-#' @usage envelope_correlation(X, parallel = 1, cores = getOption("mc.cores", 1), 
-#' pb = getOption("pb", TRUE), method = getOption("method", 1), 
-#' cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est", 
-#' hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), 
+#' @usage envelope_correlation(X, parallel = NULL, cores = getOption("mc.cores", 1),
+#' pb = getOption("pb", TRUE), method = getOption("method", 1),
+#' cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = NULL,
+#' hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
 #' ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."))
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
 #' @param parallel DEPRECATED. Use 'cores' instead.
@@ -13,191 +13,141 @@
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param method Numeric vector of length 1 to indicate the 'experimental design' to measure amplitude envelope correlation. Two methods are available:
 #' \itemize{
-#' \item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. 
+#' \item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
 #' \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 #' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param ssmooth Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).
 #' @param msmooth Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).
-#' @param output Character vector of length 1 to determine if an extended selection table ('est', default) or a data frame ('data.frame'). 'est' format only available if 'X' is itself an extended selection table.
+#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default 
+#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. If supplied, 'hop.size' is ignored.
-#' @param ovlp Numeric vector of length 1 specifying the percent overlap between two 
+#' @param ovlp Numeric vector of length 1 specifying the percent overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return A data frame, or extended selection table similar to input data (depending on argument 'output'), but also includes two new columns ('reference' and  'envelope.correlation')
-#' with the reference sound and the amplitude envelope correlation coefficients.
+#' @return Object 'X' with two additional columns, 'reference' and 'envelope.correlation', containing the id of the sound used as reference and the computed envelope correlation coefficients, respectively.
 #' @export
 #' @name envelope_correlation
-#' @details Amplitude envelope correlation measures the similarity of two sounds in the time domain. The  function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and calculating the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to create envelopes graphs. 
+#' @details Amplitude envelope correlation measures the similarity of two sounds in the time domain. The function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and calculating the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to create envelopes graphs.
 #' @seealso \code{\link{blur_ratio}}, \code{\link{spectrum_blur_ratio}}
 #' @examples
 #' {
-#' # load example data
-#' data("playback_est")
-#' 
-#' # remove ambient selections
-#' playback_est <- playback_est[playback_est$sound.id != "ambient", ]
-#' 
-#' # method 1
-#'envelope_correlation(X = playback_est)
-#' 
-#' # method 2
-#' envelope_correlation(X = playback_est, method = 2)
+#'   # load example data
+#'   data("degradation_est")
+#'
+#'   # create subset of data with only re-recorded files
+#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#'
+#'   # remove ambient selections
+#'   rerecorded_est <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
+#'
+#'   # method 1
+#'   envelope_correlation(X = rerecorded_est)
+#'
+#'   # method 2
+#'   # envelope_correlation(X = rerecorded_est, method = 2)
 #' }
-#' 
+#'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
-#' 
+#'
 #' Apol, C.A., Sturdy, C.B. & Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.
 #' }
-#last modification on nov-01-2019 (MAS)
+# last modification on nov-01-2019 (MAS)
 
-envelope_correlation <- function(X, parallel = 1, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), method = getOption("method", 1),  cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = "est", hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", ".")){
-  
-  # deprecated message
-  if (parallel > 1) 
-    stop2("'parallel' has been deprecated, Use 'cores' instead")
-  
-  # set path if not provided
-  if (is.null(path)) 
-    path <- getwd() else 
-      if (!dir.exists(path)) 
-        stop2("'path' provided does not exist")
-  
-  # must have the same sampling rate
-  if (is_extended_selection_table(X)){
-    if (length(unique(attr(X, "check.results")$sample.rate)) > 1)
-      stop2(
-        "all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())"
-      )} else 
-        print("assuming all sound files have the same sampling rate")
-  
-  
-  # If cores is not numeric
-  if (!is.numeric(cores)) stop2("'cores' must be a numeric vector of length 1") 
-  if (any(!(cores %% 1 == 0), cores < 1)) stop2("'cores' should be a positive integer")
-  
-  # hopsize  
-  if (!is.numeric(hop.size) | hop.size < 0) stop2("'hop.size' must be a positive number") 
-  
-  #check output
-  if (!any(output %in% c("est", "data.frame"))) stop2("'output' must be 'est' or 'data.frame'")  
-  
+envelope_correlation <- function(X, parallel = NULL, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), method = getOption("method", 1), cor.method = "pearson", ssmooth = NULL, msmooth = NULL, output = NULL, hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL), ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", ".")) {
+  # check arguments
+  arguments <- as.list(base::match.call())
+
+  # add objects to argument names
+  for (i in names(arguments)[-1]) {
+    arguments[[i]] <- get(i)
+  }
+
+  # check each arguments
+  check_results <- check_arguments(fun = arguments[[1]], args = arguments)
+
+  # report errors
+  checkmate::reportAssertions(check_results)
+
   # adjust wl based on hope.size
-  if (is.null(wl))
-    wl <- round(read_sound_file(X, index = 1, header = TRUE, path = path)$sample.rate * hop.size  / 1000, 0)
-  
+  if (is.null(wl)) {
+    wl <- round(read_sound_file(X, index = 1, header = TRUE, path = path)$sample.rate * hop.size / 1000, 0)
+  }
+
   # make wl even if odd
   if (!(wl %% 2) == 0) wl <- wl + 1
-  
-  # If method is not numeric
-  if (!is.character(cor.method)) stop2("'cor.method' must be a character vector of length 1") 
-  if (!any(cor.method %in%  c("pearson", "kendall", "spearman"))) stop2("'method' must be either  'pearson', 'kendall' or 'spearman'")
-  
-  # check sound.id column 
-  if (is.null(X$sound.id)) stop2("'X' must contain a 'sound.id' column")
-  
+
   # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-  if (pb) 
+  if (pb) {
     write(file = "", x = paste0("Preparing data for analysis (step 1 out of 3):"))
-  
+  }
+
   X <- prep_X_bRlo_int(X, method = method, cores = cores, pb = pb)
 
   # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & cores > 1)
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores)) else cl <- cores
-  
+  if (Sys.info()[1] == "Windows" & cores > 1) {
+    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+  } else {
+    cl <- cores
+  }
+
   if (pb) write(file = "", x = "Calculating amplitude envelopes (step 2 out of 3):")
-  
+
   # calculate all envelopes apply function
-  envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = 1:nrow(X), cl = cl, FUN = function(y)   {
-    
+  envs <- warbleR:::pblapply_wrblr_int(pbar = pb, X = seq_len(nrow(X)), cl = cl, FUN = function(y) {
     # get clip
     clp <- warbleR::read_sound_file(X = X, index = y, path = path)
-    
+
     # define bandpass based on reference
-    bp <- c(X$bottom.freq[X$TEMP....sgnl == X$reference[y]], X$top.freq[X$TEMP....sgnl == X$reference[y]])
-    
+    bp <- c(X$bottom.freq[X$.sgnl.temp == X$reference[y]], X$top.freq[X$.sgnl.temp == X$reference[y]])
+
     # bandpass filter
-    clp <- seewave::ffilter(clp, from = bp[1] * 1000, 
-                            ovlp = ovlp, to = bp[2] * 1000, bandpass = TRUE, 
-                            wl = wl, output = "Wave")
-    
+    clp <- seewave::ffilter(clp,
+      from = bp[1] * 1000,
+      ovlp = ovlp, to = bp[2] * 1000, bandpass = TRUE,
+      wl = wl, output = "Wave"
+    )
+
     # calculate envelope
     nv <- env(wave = clp, f = clp@samp.rate, ssmooth = ssmooth, plot = FALSE, msmooth = msmooth)[, 1]
-  
+
     return(nv)
-  }) 
-  
+  })
+
   # add sound file selec column and names to envelopes
-  names(envs) <- X$TEMP....sgnl
-  
-  # function to measure envelope correlation
-  # y and z are the sound.files+selec names of the sounds and reference sound (model)
-  env_cor_FUN <- function(y, z){
-    
-    # if names are the same return NA
-    if (y == z) out <- NA else {
-      
-      # extract envelope for sound and model 
-      sgnl.env <- envs[[which(names(envs) == y)]]
-      mdl.env <- envs[[which(names(envs) == z)]]
-      
-      # define short and long envelope for sliding one (short) over the other (long)
-      if(length(mdl.env) > length(sgnl.env)) {
-        lg.env <- mdl.env
-        shrt.env <- sgnl.env
-      } else {
-        lg.env <- sgnl.env
-        shrt.env <- mdl.env
-      }
-      
-      # get length of shortest minus 1 (1 if same length so it runs a single correlation)
-      shrt.lgth <- length(shrt.env) - 1
-      
-      # steps for sliding one sound over the other  
-      stps <- length(lg.env) - shrt.lgth
-      
-      # calculate correlations at each step
-      cors <- sapply(1:stps, function(x) {
-        cor(lg.env[x:(x + shrt.lgth)], shrt.env, method = cor.method)
-      })
-    
-    # return maximum correlation
-    out <- max(cors, na.rm = TRUE)
-    }
-  
-    return(out)
-    }
-  
+  names(envs) <- X$.sgnl.temp
 
+  # set options for loop
   if (pb) write(file = "", x = "Calculating envelope correlations (step 3 out of 3):")
-  
-  # calculate all envelops apply function
-  X_list <- warbleR:::pblapply_wrblr_int(X = 1:nrow(X), pbar = pb, cl = cl, FUN = function(x) {
-    Y <- X[x, , drop = FALSE]
-    Y$envelope.correlation <- env_cor_FUN(y = Y$TEMP....sgnl, z = Y$reference)
-    return(as.data.frame(Y))
-    
-    }) 
-  
-   X2 <- do.call(rbind, X_list)
-  
-  # remove temporal columns
-  X2$TEMP....sgnl <- NULL
-  
-  # fix est
-  if (output == "est" & is_extended_selection_table(X))
-    X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
-  
 
-  # return data frame
-  if (output == "data.frame") X2 <- as.data.frame(X2) else
-      attributes(X2)$call <- base::match.call() # fix call attribute
-  
-  
+  # calculate all envelops apply function
+  X_list <- warbleR:::pblapply_wrblr_int(X = seq_len(nrow(X)), pbar = pb, cl = cl, FUN = function(x) {
+    Y <- X[x, , drop = FALSE]
+    Y$envelope.correlation <- env_cor_FUN(y = Y$.sgnl.temp, z = Y$reference, envs, cor.method)
+    return(as.data.frame(Y))
+  })
+
+  X2 <- do.call(rbind, X_list)
+
+  # make NAs those sounds in which the reference is itself (only happens when method = 2)
+  X2$reference[X2$reference == X2$.sgnl.temp] <- NA
+
+  # remove temporal columns
+  X2$.sgnl.temp <- NULL
+
+  # fix est
+  if (is_extended_selection_table(X)) {
+    X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
+  }
+
+  # fix call if not a data frame
+  if (!is.data.frame(X)) {
+    attributes(X)$call <-
+      base::match.call()
+  } # fix call attribute
+
   return(X2)
 }

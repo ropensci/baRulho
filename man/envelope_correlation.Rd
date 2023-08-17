@@ -61,9 +61,6 @@ Amplitude envelope correlation measures the similarity of two sounds in the time
   # create subset of data with only re-recorded files
   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-  # remove ambient selections
-  rerecorded_est <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
-
   # method 1
   envelope_correlation(X = rerecorded_est)
 

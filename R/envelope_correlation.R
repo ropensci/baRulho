@@ -39,9 +39,6 @@
 #'   # create subset of data with only re-recorded files
 #'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
-#'   # remove ambient selections
-#'   rerecorded_est <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
-#'
 #'   # method 1
 #'   envelope_correlation(X = rerecorded_est)
 #'
@@ -126,14 +123,14 @@ envelope_correlation <- function(X, parallel = NULL, cores = getOption("mc.cores
   # calculate all envelops apply function
   X_list <- warbleR:::pblapply_wrblr_int(X = seq_len(nrow(X)), pbar = pb, cl = cl, FUN = function(x) {
     Y <- X[x, , drop = FALSE]
-    Y$envelope.correlation <- env_cor_FUN(y = Y$.sgnl.temp, z = Y$reference, envs, cor.method)
+    Y$envelope.correlation <- env_cor_FUN(Y, y = Y$.sgnl.temp, z = Y$reference, envs, cor.method)
     return(as.data.frame(Y))
   })
 
   X2 <- do.call(rbind, X_list)
 
-  # make NAs those sounds in which the reference is itself (only happens when method = 2)
-  X2$reference[X2$reference == X2$.sgnl.temp] <- NA
+  # make NAs those sounds in which the reference is itself (only happens when method = 2) or is ambient noise
+  X$reference[X$reference == X$.sgnl.temp | X$sound.id == "ambient"] <- NA
 
   # remove temporal columns
   X2$.sgnl.temp <- NULL

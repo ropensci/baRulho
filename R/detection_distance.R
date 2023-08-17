@@ -299,8 +299,8 @@ detection_distance <-
         }
       )
 
-    # make NAs those sounds in which the reference is itself (only happens when method = 2)
-    X$reference[X$reference == X$.sgnl.temp] <- NA
+    # make NAs those sounds in which the reference is itself (only happens when method = 2) or is ambient noise
+    X$reference[X$reference == X$.sgnl.temp | X$sound.id == "ambient"] <- NA
 
     # remove temporal columns
     X$.sgnl.temp <- NULL

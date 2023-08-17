@@ -50,7 +50,7 @@ Note that lower values will increase time resolution, which is more important fo
 \item{averaged}{Logical to control if frequency spectra are averaged within a sound file. Default is \code{TRUE}.}
 }
 \value{
-A list containing the frequency spectra for each sound file or wave object (if 'X' is supplied and is of class 'extended.selection.table').
+A data frame containing the frequency spectra for each sound file or wave object (if 'X' is supplied and is of class 'extended.selection.table').
 }
 \description{
 \code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.

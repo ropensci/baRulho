@@ -160,7 +160,7 @@ excess_attenuation <-
     X2 <- do.call(rbind, mean_envs)
 
     # split by sound ID
-    sigtype_list <- split(X2, X2$sound.id)
+    # sigtype_list <- split(X2, X2$sound.id)
 
     if (pb) {
       write(
@@ -170,78 +170,16 @@ excess_attenuation <-
     }
 
     # calculate excess attenuation
-    X_list <-
-      warbleR:::pblapply_wrblr_int(X = sigtype_list, pbar = pb, cl = cl, function(Y, meth = method, tp = type) {
-        if (Y$sound.id[1] == "ambient") {
-          Y$excess.attenuation <- NA
-        } else {
-          # method 1 compare to closest distance to source
-          if (meth == 1) {
-            # extract mean envelope of sounds
-            sig_env_REF <- Y$sig_env[which.min(Y$distance)]
-            dist_REF <- Y$distance[which.min(Y$distance)]
-
-            ks <- Y$sig_env / sig_env_REF
-
-            # type Dabelsteen
-            if (tp == "Dabelsteen") {
-              ea <-
-                (-20 * log(ks)) - (6 / (2 * (Y$distance - dist_REF))) + gain
-            }
-
-            if (tp == "Darden") {
-              # EA = g - 20 log(d / 10) - 20 log(k)
-              ea <-
-                gain - 20 * log10(Y$distance / 10) - 20 * log(ks)
-            }
-
-            Y$excess.attenuation <- ea
-            Y$excess.attenuation[which.min(Y$distance)] <- NA
-          }
-
-          # compare to previous distance
-          if (meth == 2) {
-            # save original order
-            Y$org....ord <- seq_len(nrow(Y))
-
-            # sort by distance
-            Y <- Y[order(Y$distance), ]
-
-            ks <- Y$sig_env[-1] / Y$sig_env[-nrow(Y)]
-
-            if (tp == "Dabelsteen") {
-              ea <-
-                (-20 * log(ks)) - (6 / (2 * (Y$distance[-1] - Y$distance[1]))) + gain
-            }
-
-
-            # type Darden
-            if (tp == "Darden") {
-              ea <-
-                gain - 20 * log10(Y$distance[-1] / 10) - 20 * log(ks)
-            }
-
-            # add NA for first distance
-            ea <- c(NA, ea)
-
-            Y$excess.attenuation <- ea
-
-            # reorder results
-            Y <- Y[order(Y$org....ord), ]
-
-            Y$org....ord <- NULL
-          }
-        }
-
-        Y <- as.data.frame(Y)
-        return(Y)
-      })
-
-    # put together in a data frame as X
-    X2 <- do.call(rbind, X_list)
+    X2$excess.attenuation <-
+      unlist(warbleR:::pblapply_wrblr_int(X = seq_len(nrow(X2)), pbar = pb, cl = cl, FUN = function(x) {
+        exc_att_FUN(y = x, X2, method, type, gain)
+      }))
 
     # fix row names
     rownames(X2) <- rownames(X)
+
+    # make NAs those sounds in which the reference is itself (only happens when method = 2) or is ambient noise
+    X2$reference[X2$reference == X2$.sgnl.temp | X2$sound.id == "ambient"] <- NA
 
     # remove temporal column
     X2$sigRMS <- X2$.sgnl.temp <- X2$sig_env <- NULL

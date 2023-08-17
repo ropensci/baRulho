@@ -226,13 +226,13 @@ find_markers <-
       # subtract duration in master sound file
       time_dist_markers <- time_dist_markers - (X$end[X$sound.id == markers[2]] - X$start[X$sound.id == markers[1]])
 
-      # remove template column
-      pks$template <- NULL
-
       # add results
       pks$time.mismatch <- NA
       pks$time.mismatch[pks$marker == markers[1]] <- time_dist_markers
     }
+
+    # remove template column
+    pks$template <- NULL
 
     return(pks)
   }

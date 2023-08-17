@@ -2,10 +2,10 @@ test_that("using extended table and method 1", {
   data("degradation_est")
   
   X <- degradation_est[degradation_est$sound.files != "master.wav", ]
-
-  br <- blur_ratio(X = X, method = 1)
-
-  expect_equal(sum(is.na(br$blur.ratio)), 9)
+  
+  br <- spectrum_blur_ratio(X = X, method = 1)
+  
+  expect_equal(sum(is.na(br$spectrum.blur.ratio)), 9)
   
   expect_equal(nrow(br), 25)
   
@@ -28,9 +28,9 @@ test_that("using data frame", {
   
   X <- as.data.frame(degradation_est[degradation_est$sound.files != "master.wav", ])
   
-  expect_warning(br <- blur_ratio(X = X, method = 2))
+  expect_warning(br <- spectrum_blur_ratio(X = X, method = 2))
   
-  expect_equal(sum(is.na(br$blur.ratio)), 13)
+  expect_equal(sum(is.na(br$spectrum.blur.ratio)), 13)
   
   expect_equal(nrow(br), 25)
   

@@ -1577,9 +1577,9 @@ blur_FUN <-
 
 # function to measure envelope correlation
 # y and z are the sound.files+selec names of the sounds and reference sound (model)
-env_cor_FUN <- function(y, z, envs, cor.method) {
+env_cor_FUN <- function(Y, y, z, envs, cor.method) {
   # if names are the same return NA
-  if (y == z) {
+  if (y == z | Y$sound.id[Y$.sgnl.temp == y] == "ambient") {
     out <- NA
   } else {
     # extract envelope for sound and model
@@ -1615,51 +1615,41 @@ env_cor_FUN <- function(y, z, envs, cor.method) {
 
 # function to extract mean envelopes
 meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
-  # read sound clip
-  clp <-
-    warbleR::read_sound_file(
-      X = X,
-      index = y,
-      from = 0,
-      to = X$end[y],
-      path = path
-    )
-
-  if (X$sound.id[y] != "ambient") {
-    noise_clp <-
+  if (X$sound.id[y] == "ambient") {
+    sig_env <- NA
+  } else {
+    # read sound clip
+    clp <-
       warbleR::read_sound_file(
         X = X,
         index = y,
         from = 0,
-        to = X$start[y] - 0.001,
+        to = X$end[y],
         path = path
-      )
-  }
-
-  # add band-pass frequency filter
-  if (!is.null(bp)) {
-    # filter to bottom and top freq range
-    if (bp == "freq.range") {
-      bp <- c(X$bottom.freq[y], X$top.freq[y])
-    }
-
-    clp <-
-      seewave::ffilter(
-        clp,
-        f = clp@samp.rate,
-        from = bp[1] * 1000,
-        ovlp = ovlp,
-        to = bp[2] * 1000,
-        bandpass = TRUE,
-        wl = wl,
-        output = "Wave"
       )
 
     if (X$sound.id[y] != "ambient") {
       noise_clp <-
+        warbleR::read_sound_file(
+          X = X,
+          index = y,
+          from = 0,
+          to = X$start[y] - 0.001,
+          path = path
+        )
+    }
+
+    # add band-pass frequency filter
+    if (!is.null(bp)) {
+      # filter to bottom and top freq range
+      if (bp == "freq.range") {
+        bp <- c(X$bottom.freq[y], X$top.freq[y])
+      }
+
+      clp <-
         seewave::ffilter(
-          noise_clp,
-          f = noise_clp@samp.rate,
+          clp,
+          f = clp@samp.rate,
           from = bp[1] * 1000,
           ovlp = ovlp,
           to = bp[2] * 1000,
@@ -1667,17 +1657,31 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
           wl = wl,
           output = "Wave"
         )
-    }
-  }
 
-  # get mean envelopes
-  sig_env <-
-    mean(seewave::env(
-      clp,
-      f = clp@samp.rate,
-      envt = "hil",
-      plot = FALSE
-    ))
+      if (X$sound.id[y] != "ambient") {
+        noise_clp <-
+          seewave::ffilter(
+            noise_clp,
+            f = noise_clp@samp.rate,
+            from = bp[1] * 1000,
+            ovlp = ovlp,
+            to = bp[2] * 1000,
+            bandpass = TRUE,
+            wl = wl,
+            output = "Wave"
+          )
+      }
+    }
+
+    # get mean envelopes
+    sig_env <-
+      mean(seewave::env(
+        clp,
+        f = clp@samp.rate,
+        envt = "hil",
+        plot = FALSE
+      ))
+  }
 
   return(data.frame((X[y, , drop = FALSE]), sig_env))
 }
@@ -1686,7 +1690,7 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
 # y and z are the sound.files+selec names of the sounds and reference sound (model)
 spctr_cor_FUN <- function(y, z, spcs, X, cor.method) {
   # if names are the same return NA
-  if (y == z) {
+  if (y == z | X$sound.id[X$.sgnl.temp == y] == "ambient") {
     cor.spctr <- NA
   } else {
     # extract envelope for sound and model
@@ -1710,6 +1714,39 @@ spctr_cor_FUN <- function(y, z, spcs, X, cor.method) {
   }
 
   return(cor.spctr)
+}
+
+exc_att_FUN <- function(y, X, meth, tp, gn) {
+  # print(y)
+  # get names of sound and reference
+  sgnl <- X$.sgnl.temp[y]
+  rfrnc <- X$reference[y]
+
+  if (X$sound.id[X$.sgnl.temp == sgnl] == "ambient" | sgnl == rfrnc) {
+    ea <- NA
+  } else {
+    # method 1 compare to closest distance to source
+    # if (meth == 1) {
+    # extract mean envelope of sounds
+    sig_env_REF <- X$sig_env[X$.sgnl.temp == rfrnc]
+    dist_REF <- X$distance[X$.sgnl.temp == rfrnc]
+    dist_SIG <- X$distance[y]
+
+    ks <- X$sig_env[y] / sig_env_REF
+
+    # type Dabelsteen
+    if (tp == "Dabelsteen") {
+      ea <-
+        (-20 * log(ks)) - (6 / (2 * (dist_SIG - dist_REF))) + gn
+    }
+
+    if (tp == "Darden") {
+      # EA = g - 20 log(d / 10) - 20 log(k)
+      ea <-
+        gn - 20 * log10(dist_SIG / 10) - 20 * log(ks)
+    }
+  }
+  return(ea)
 }
 
 # function to put together simulated sounds (synth_sounds())

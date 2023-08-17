@@ -29,7 +29,7 @@
 #' @param norm Logical to control whether amplitude values are normalized (divided by the maximum) so the highest value is 1. See \code{\link[seewave]{meanspec}}. Default is \code{TRUE}.
 #' @param dB A character string of length 1 specifying the type dB to return: "max0" for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights. See \code{\link[seewave]{meanspec}}. Default is \code{"A"}.
 #' @param averaged Logical to control if frequency spectra are averaged within a sound file. Default is \code{TRUE}.
-#' @return A list containing the frequency spectra for each sound file or wave object (if 'X' is supplied and is of class 'extended.selection.table').
+#' @return A data frame containing the frequency spectra for each sound file or wave object (if 'X' is supplied and is of class 'extended.selection.table').
 #' @export
 #' @name noise_profile
 #' @details The function estimates full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on data frames/(extended) selection tables (using the segments containing no target sound or the 'ambient' sound id) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
@@ -287,6 +287,11 @@ noise_profile <-
       noise.profile <-
         aggregate(amp ~ sound.files + freq, data = noise.profile, FUN = mean)
     }
+
+    # sort by sound file and freq
+    noise.profile <- noise.profile[order(noise.profile$sound.files, noise.profile$freq), ]
+
+    rownames(noise.profile) <- seq_len(nrow(noise.profile))
 
     return(noise.profile)
   }

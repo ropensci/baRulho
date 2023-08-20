@@ -34,19 +34,20 @@
 #' @examples
 #' {
 #'   # load example data
+#'
 #'   data("degradation_est")
+#'
+#'   # set global options
+#'   options(pb = FALSE)
 #'
 #'   # create subset of data with only re-recorded files
 #'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
-#'   # remove noise selections
-#'   pe <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
-#'
 #'   # using margin for noise of 0.01
-#'   tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)
+#'   tsr <- tail_to_signal_ratio(X = rerecorded_est, mar = 0.01)
 #'
-#'   # tail-to-noise ratio (type 2)
-#'   tail_to_signal_ratio(X = rerecorded_est, mar = 0.01, type = 2)
+#'   # use type 2 which is equivalent to tail-to-noise ratio
+#'   tsr <- tail_to_signal_ratio(X = rerecorded_est, mar = 0.01, type = 2)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -58,7 +59,6 @@
 #'
 #' Mathevon, N., Dabelsteen, T., & Blumenrath, S. H. (2005). Are high perches in the blackcap Sylvia atricapilla song or listening posts? A sound transmission study. The Journal of the Acoustical Society of America, 117(1), 442-449.
 #' }
-# last modification on nov-01-2019 (MAS)
 
 tail_to_signal_ratio <- function(X,
                                  mar,
@@ -115,7 +115,7 @@ tail_to_signal_ratio <- function(X,
 
   # calculate STR
   X$tail.to.signal.ratio <-
-    pbapply::pbsapply(seq_len(nrow(X)), cl = cl, function(y) {
+    unlist(warbleR:::pblapply_wrblr_int(X = seq_len(nrow(X)), pbar = pb, cl = cl, function(y) {
       if (X$sound.id[y] != "ambient") {
         # Read sound files to get sample rate and length
         r <-
@@ -231,7 +231,7 @@ tail_to_signal_ratio <- function(X,
       }
 
       return(str)
-    })
+    }))
 
   # fix call if not a data frame
   if (!is.data.frame(X)) {

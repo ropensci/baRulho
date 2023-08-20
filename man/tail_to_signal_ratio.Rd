@@ -56,19 +56,20 @@ Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberat
 \examples{
 {
   # load example data
+
   data("degradation_est")
+
+  # set global options
+  options(pb = FALSE)
 
   # create subset of data with only re-recorded files
   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-  # remove noise selections
-  pe <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
-
   # using margin for noise of 0.01
-  tail_to_signal_ratio(X = pe, mar = 0.01, bp = NULL)
+  tsr <- tail_to_signal_ratio(X = rerecorded_est, mar = 0.01)
 
-  # tail-to-noise ratio (type 2)
-  tail_to_signal_ratio(X = rerecorded_est, mar = 0.01, type = 2)
+  # use type 2 which is equivalent to tail-to-noise ratio
+  tsr <- tail_to_signal_ratio(X = rerecorded_est, mar = 0.01, type = 2)
 }
 
 }

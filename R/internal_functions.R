@@ -6,7 +6,6 @@ stop2 <- function(...) {
 
 # internal baRulho function, not to be called by users. It prepares X for comparing sounds
 # @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-# last modification on sep-2022 (MAS)
 
 prep_X_bRlo_int <- function(X, method, cores, pb) {
   # set pb options
@@ -338,10 +337,10 @@ check_arguments <- function(fun, args) {
       checkmate::assert_data_frame(
         x = args$X,
         any.missing = TRUE,
-        min.rows = if (fun == "master_sound_file") {
+        min.rows = if (!fun %in% c("tail_to_signal_ratio", "signal_to_noise_ratio")) {
           2
         } else {
-          NULL
+          1
         },
         add = check_collection,
         .var.name = "X"
@@ -638,25 +637,51 @@ check_arguments <- function(fun, args) {
   }
 
   if (any(names(args) == "width")) {
-    checkmate::assert_number(
-      x = args$width,
-      lower = 0.1,
-      add = check_collection,
-      .var.name = "width",
-      null.ok = FALSE,
-      na.ok = FALSE
-    )
+    if (fun == "plot_degradation") {
+      checkmate::assert_numeric(
+        x = args$width,
+        lower = 0.0001,
+        finite = TRUE,
+        any.missing = FALSE,
+        all.missing = FALSE,
+        len = 2,
+        add = check_collection,
+        .var.name = "width"
+      )
+    } else {
+      checkmate::assert_number(
+        x = args$width,
+        lower = 0.1,
+        add = check_collection,
+        .var.name = "width",
+        null.ok = FALSE,
+        na.ok = FALSE
+      )
+    }
   }
 
   if (any(names(args) == "height")) {
-    checkmate::assert_number(
-      x = args$height,
-      lower = 0.1,
-      add = check_collection,
-      .var.name = "height",
-      null.ok = FALSE,
-      na.ok = FALSE
-    )
+    if (fun == "plot_degradation") {
+      checkmate::assert_numeric(
+        x = args$height,
+        lower = 0.0001,
+        finite = TRUE,
+        any.missing = FALSE,
+        all.missing = FALSE,
+        len = 2,
+        add = check_collection,
+        .var.name = "height"
+      )
+    } else {
+      checkmate::assert_number(
+        x = args$height,
+        lower = 0.1,
+        add = check_collection,
+        .var.name = "height",
+        null.ok = FALSE,
+        na.ok = FALSE
+      )
+    }
   }
 
   if (any(names(args) == "ssmooth")) {
@@ -717,14 +742,27 @@ check_arguments <- function(fun, args) {
   }
 
   if (any(names(args) == "mar")) {
-    checkmate::assert_number(
-      x = args$mar,
-      lower = 0.00001,
-      add = check_collection,
-      .var.name = "mar",
-      null.ok = FALSE,
-      na.ok = FALSE
-    )
+    if (fun == "plot_degradation") {
+      checkmate::assert_numeric(
+        x = args$mar,
+        lower = 0.0001,
+        finite = TRUE,
+        any.missing = FALSE,
+        all.missing = FALSE,
+        len = 2,
+        add = check_collection,
+        .var.name = "mar"
+      )
+    } else {
+      checkmate::assert_number(
+        x = args$mar,
+        lower = 0.00001,
+        add = check_collection,
+        .var.name = "mar",
+        null.ok = FALSE,
+        na.ok = FALSE
+      )
+    }
   }
 
   if (any(names(args) == "duration")) {

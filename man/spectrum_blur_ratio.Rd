@@ -5,7 +5,8 @@
 \title{Measure blur ratio in the frequency domain}
 \usage{
 spectrum_blur_ratio(X, parallel = NULL, cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), method = getOption("method", 1), ssmooth = 50,
+pb = getOption("pb", TRUE), method = getOption("method", 1), 
+ssmooth = getOption("ssmooth", 50),
 output = NULL, spectra = FALSE, img = FALSE, res = 150,
 hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
  ovlp = getOption("ovlp", 70), palette = viridis::viridis,
@@ -13,7 +14,7 @@ collevels = seq(-120, 0, 5), dest.path = NULL,
 path = getOption("sound.files.path", "."))
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "distance": distance at which each test sound was re-recorded. Each sound must have a unique ID within a distance. An additional 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'.}
 
 \item{parallel}{DEPRECATED. Use 'cores' instead.}
 

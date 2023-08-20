@@ -1,6 +1,7 @@
 # *baRulho 1.1.0*
 
-* Improved documentation
+* Improved documentation for all functions
+* new function `plot_degradation()` to visually compare sounds across distances
 * `atmospheric_attenuation()` is no longer available (use `attenuation()` instead)
 * `align_test_files()` now can take several markers as input and select that with the highest correlation score for aligning test files
 * 'markers' argument deprecated in `align_test_files()`

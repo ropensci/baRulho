@@ -50,7 +50,6 @@
 #'
 #' Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
 #' }
-# last modification on nov-01-2019 (MAS)
 
 realign_test_sounds <-
   function(X,

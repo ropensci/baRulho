@@ -98,7 +98,6 @@
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' }
-# last modification on dec-26-2019 (MAS)
 
 align_test_files <- function(X, Y, output = NULL, path = getOption("sound.files.path", "."), by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), remove.markers = TRUE, ...) {
   # check arguments

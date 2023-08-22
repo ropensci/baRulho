@@ -72,7 +72,7 @@ One ore more image files with a multipanel figure of spectrograms of test sound 
 \code{plot_degradation} creates multipanel plots (as image files) with reference and test sounds by distance and transect.
 }
 \details{
-The function aim to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect, also including its reference if it comes from another transect.
+The function aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded.
 }
 \examples{
 {
@@ -90,9 +90,7 @@ The function aim to simplify the visual inspection of sound degradation by produ
 
   # plot degradation spectrograms
   plot_degradation(
-    X = rerecorded_est, nrow = 3, ovlp = 95,
-    colors = viridis::magma(4, alpha = 0.3),
-    palette = viridis::magma
+    X = rerecorded_est, nrow = 3, ovlp = 95
   )
 
   # using other color palettes
@@ -102,16 +100,16 @@ The function aim to simplify the visual inspection of sound degradation by produ
     palette = viridis::magma
   )
 
-  # missing some data
+  # missing some data, 2 rows
   plot_degradation(
     X = rerecorded_est[-3, ], nrow = 2, ovlp = 95,
     colors = viridis::mako(4, alpha = 0.4), palette = viridis::mako, wl = 200
   )
 
-  # changing marging
+  # changing marging and high overlap
   plot_degradation(X = rerecorded_est, margins = c(5, 1), nrow = 6, ovlp = 95)
 
-  # more rows than needed
+  # more rows than needed (will adjust it automatically)
   plot_degradation(X = rerecorded_est, nrow = 10, ovlp = 90)
 }
 

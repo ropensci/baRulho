@@ -40,7 +40,7 @@
 #' @return One ore more image files with a multipanel figure of spectrograms of test sound by distance, sound id and transect.
 #' @export
 #' @name plot_degradation
-#' @details The function aim to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect, also including its reference if it comes from another transect.
+#' @details The function aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded.
 #' @examples
 #' {
 #'   # load example data
@@ -57,9 +57,7 @@
 #'
 #'   # plot degradation spectrograms
 #'   plot_degradation(
-#'     X = rerecorded_est, nrow = 3, ovlp = 95,
-#'     colors = viridis::magma(4, alpha = 0.3),
-#'     palette = viridis::magma
+#'     X = rerecorded_est, nrow = 3, ovlp = 95
 #'   )
 #'
 #'   # using other color palettes
@@ -69,16 +67,16 @@
 #'     palette = viridis::magma
 #'   )
 #'
-#'   # missing some data
+#'   # missing some data, 2 rows
 #'   plot_degradation(
 #'     X = rerecorded_est[-3, ], nrow = 2, ovlp = 95,
 #'     colors = viridis::mako(4, alpha = 0.4), palette = viridis::mako, wl = 200
 #'   )
 #'
-#'   # changing marging
+#'   # changing marging and high overlap
 #'   plot_degradation(X = rerecorded_est, margins = c(5, 1), nrow = 6, ovlp = 95)
 #'
-#'   # more rows than needed
+#'   # more rows than needed (will adjust it automatically)
 #'   plot_degradation(X = rerecorded_est, nrow = 10, ovlp = 90)
 #' }
 #'
@@ -243,8 +241,10 @@ plot_degradation <-
     }
 
     # create data subsets (element in list) with all the copies of a sound id in transect, also including its reference if it comes from another transect
-    X_df$sound.id.transect <-
-      paste(X_df$sound.id, X$transect, sep = "\n")
+    # add text break if longer than 17 characters
+    tailored_sound_id <- sapply(as.character(X_df$sound.id), function(x) if (nchar(x) > 17) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x)
+
+    X_df$sound.id.transect <- paste(tailored_sound_id, X$transect, sep = "\n")
 
     soundid_X_list <-
       lapply(unique(X_df$sound.id.transect), function(x) {
@@ -255,16 +255,30 @@ plot_degradation <-
         return(Y)
       })
 
-    # add numeric id to each subset
-    soundid_X_list <-
-      lapply(seq_along(soundid_X_list), function(x) {
-        soundid_X_list[[x]]$seq_number <- x
-        return(soundid_X_list[[x]])
-      })
-
     # get unique distances and maximum number of columns (distances) for any sound id
     distances <- sort(unique(X$distance))
     ncol <- length(distances)
+
+    # remove those with only 1 test sound which is a reference (i.e. lowest distance)
+    soundid_X_list <-
+      lapply(soundid_X_list, function(x) {
+        if (nrow(x) == 1 & x$distance[1] == min(distances)) {
+          x <- NULL
+        }
+
+        return(x)
+      })
+
+
+    # add numeric id to each subset
+    soundid_X_list <-
+      lapply(seq_along(soundid_X_list), function(x) {
+        if (!is.null(soundid_X_list[[x]])) {
+          soundid_X_list[[x]]$seq_number <- x
+        }
+        return(soundid_X_list[[x]])
+      })
+
 
     # put all into a single data frame
     soundid_X <- do.call(rbind, soundid_X_list)
@@ -289,9 +303,9 @@ plot_degradation <-
       nrow <- length(unique(soundid_X$sound.id.seq))
     }
 
-    # set image size
+    # set image size fixing height for when only 1 row
     img_width <- ncol * col.width
-    img_heigth <- nrow * row.height
+    img_heigth <- nrow * row.height * if (nrow == 1) 1.4 else 1
 
     # set basic layout for all pages
     # spectrogram panels
@@ -402,20 +416,22 @@ plot_degradation <-
     #   box()
     #   text(x = 0.5, y = 0.5, labels = i)
     # }
-    #
-    # close.screen(all.screens = T)
+
+    close.screen(all.screens = T)
 
     # reset graphic device on exit
-    on.exit(grDevices::dev.off())
+    # on.exit(grDevices::dev.off())
 
     if (pb) {
       write(file = "", x = "Saving plots (step 2 out of 2):")
     }
 
     out <-
-      warbleR:::pblapply_wrblr_int(unique(soundid_X$page), function(x, flm = flim) {
+      warbleR:::pblapply_wrblr_int(sort(unique(soundid_X$page)), function(x, flm = flim) {
         # extract data subset for a page
         Y <- soundid_X[soundid_X$page == x, ]
+
+        try(dev.off(), silent = TRUE)
 
         # start graphic device
         warbleR:::img_wrlbr_int(
@@ -546,6 +562,12 @@ plot_degradation <-
               fl[1] <- 0
             }
 
+            # fix higher if above nyquist frequency
+            if (fl[2] > wave@samp.rate / 2000) {
+              fl[2] <- wave@samp.rate / 2000
+            }
+
+
             par(mar = c(0, 0, 0, 0), new = TRUE)
 
             # start screen
@@ -562,14 +584,13 @@ plot_degradation <-
               grid = FALSE,
               collevels = collevels,
               flim = fl,
-              wl = wl,
-              ...
+              wl = wl
             )
 
             # add vertical lines
             # add dotted lines
             abline(
-              v = c(Y$mar.start[Y$.sgnl.temp == sgnl], X$end[indx] - X$start[indx] + Y$mar.start[Y$.sgnl.temp == sgnl]),
+              v = c(X$mar.start[X$.sgnl.temp == sgnl], X$end[indx] - X$start[indx] + X$mar.start[Y$.sgnl.temp == sgnl]),
               col = "white",
               lty = 3,
               lwd = 1.5
@@ -611,8 +632,11 @@ plot_degradation <-
               rect(min(spc[, 2]), min(spc[, 1]), max(spc[, 2]), max(spc[, 1]), col = "white", border = NA)
               rect(min(spc[, 2]), min(spc[, 1]), max(spc[, 2]), max(spc[, 1]), col = bg_sp_env, border = NA)
 
+              # add 0s at star and end so polygon doesnt twist
+              spc[c(1, nrow(spc)), 2] <- 0
+
               # add polygon with spectrum shape
-              polygon(rbind(c(0, 0), spc[, 2:1]), col = spc_fill, border = NA)
+              polygon(spc[, 2:1], col = spc_fill, border = NA)
 
               box()
 
@@ -656,7 +680,11 @@ plot_degradation <-
                   ),
                   ssmooth = ssmooth
                 )
+              # punt in a matrix including time
+              envlp <- cbind(seq(0, duration(wave), along.with = envlp), envlp)
 
+
+              # set graphic parameters
               par(
                 mar = c(0, 0, 0, 0),
                 new = TRUE
@@ -665,8 +693,8 @@ plot_degradation <-
 
               # set white plot
               plot(
-                x = seq(0, duration(wave), along.with = envlp),
-                y = envlp,
+                x = envlp[, 1],
+                y = envlp[, 2],
                 type = "l",
                 frame.plot = FALSE,
                 yaxt = "n",
@@ -677,14 +705,15 @@ plot_degradation <-
               )
 
               # add background color
-              rect(0, min(envlp), duration(wave), max(envlp), col = "white", border = NA)
-              rect(0, min(envlp), duration(wave), max(envlp), col = bg_sp_env, border = NA)
+              rect(0, min(envlp[, 2]), max(envlp[, 2]), max(envlp[, 2]), max(envlp[, 2]), col = "white", border = NA)
+              rect(0, min(envlp[, 2]), max(envlp[, 2]), max(envlp[, 2]), col = bg_sp_env, border = NA)
+
+              # add 0s at star and end so polygon doesnt twist
+              envlp[c(1, nrow(envlp)), 2] <- 0
 
               # add polygon with envelope shape
               polygon(
-                rbind(c(0, 0), cbind(
-                  seq(0, duration(wave), along.with = envlp), envlp
-                )),
+                envlp,
                 col = spc_fill,
                 border = NA
               )
@@ -786,9 +815,7 @@ plot_degradation <-
           )
           box()
         }
-
-
-
-        close.screen(all.screens = T)
+        cs <- close.screen(all.screens = TRUE)
+        grDevices::dev.off()
       })
   }

@@ -53,7 +53,7 @@
 #'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
 #' # plot (look into temporary working directory `tempdir()`)
-#' plot_align_sounds(X = rerecorded_est, dest.path = tempdir(), duration = 1, ovlp = 0)
+#' plot_align_sounds(X = rerecorded_est, dest.path = tempdir(), duration = 3, ovlp = 0)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

@@ -19,8 +19,7 @@
 #' @export
 #' @name realign_test_sounds
 #' @details This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment.
-#' @examples
-#' {
+#' @examples {
 #'   # load example data
 #'   data("degradation_est")
 #'
@@ -73,7 +72,7 @@ realign_test_sounds <-
       check_arguments(fun = arguments[[1]], args = arguments)
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    report_assertions2(check_results)
 
 
     # set number of processes for printing message

@@ -1,8 +1,7 @@
-test_that("sav file", {
+test_that("save file", {
   
   data("degradation_est")
   
-
     # create master sound file
     master.sel.tab <- master_sound_file(
       X = degradation_est[degradation_est$sound.files == "master.wav",], file.name = "example_master",

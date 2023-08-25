@@ -4,9 +4,9 @@
 \alias{master_sound_file}
 \title{Create a master sound file}
 \usage{
-master_sound_file(X, file.name, dest.path = NULL, overwrite = FALSE, delay = 1,
-gap.duration = 1, amp.marker = 2, flim = c(0, 4), cex = 14,
-path = getOption("sound.files.path", "."))
+master_sound_file(X, file.name, dest.path = getOption("dest.path", "."),
+overwrite = FALSE, delay = 1, gap.duration = 1, amp.marker = 2, flim = c(0, 4), 
+cex = 14, path = getOption("sound.files.path", "."))
 }
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass. An optional 'sound.id' column can be included to use a custom label for each sound in the output. This column must contain a unique id for each sound (labels cannot repeated). If not supplied the function will make it by combining the sound file and selection columns.}
@@ -16,7 +16,7 @@ path = getOption("sound.files.path", "."))
 \item{dest.path}{Character string containing the directory path where the sound file will be saved.
 If \code{NULL} (default) then the current working directory will be used instead.}
 
-\item{overwrite}{Logical argument to determine if the function will overwrite any existing sound file with the same file name. Default is \code{FALSE}.}
+\item{overwrite}{Logical argument to determine if the function will overwrite any existing sound file with the same file name. Default is the current working directory.}
 
 \item{delay}{Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning (and at the end) of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.}
 

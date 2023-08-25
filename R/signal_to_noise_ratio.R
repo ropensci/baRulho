@@ -39,8 +39,7 @@
 #' @export
 #' @name signal_to_noise_ratio
 #' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise immediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
-#' @examples
-#' {
+#' @examples {
 #'   # load example data
 #'   data("degradation_est")
 #'
@@ -94,7 +93,7 @@ signal_to_noise_ratio <-
     check_results <- check_arguments(fun = arguments[[1]], args = arguments)
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    report_assertions2(check_results)
 
     # get sampling rate
     sampling_rate <- warbleR::read_sound_file(X = X, index = 1, path = path, header = TRUE)$sample.rate

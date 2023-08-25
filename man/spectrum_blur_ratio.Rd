@@ -5,16 +5,14 @@
 \title{Measure blur ratio in the frequency domain}
 \usage{
 spectrum_blur_ratio(X, parallel = NULL, cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), method = getOption("method", 1), 
-ssmooth = getOption("ssmooth", 50),
-output = NULL, spectra = FALSE, img = FALSE, res = 150,
+pb = getOption("pb", TRUE),
+spec.smooth = getOption("spec.smooth", 5),
+output = NULL, spectra = FALSE, res = 150,
 hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
- ovlp = getOption("ovlp", 70), palette = viridis::viridis,
-collevels = seq(-120, 0, 5), dest.path = NULL,
-path = getOption("sound.files.path", "."))
+ ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."))
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "distance": distance at which each test sound was re-recorded. Each sound must have a unique ID within a distance. An additional 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'.}
+\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
 
 \item{parallel}{DEPRECATED. Use 'cores' instead.}
 
@@ -22,19 +20,11 @@ path = getOption("sound.files.path", "."))
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{method}{Numeric vector of length 1 to indicate the 'experimental design' for measuring spectrum correlation. Two methods are available:
-\itemize{
-\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
-\item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
-}}
-
-\item{ssmooth}{Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 100.}
+\item{spec.smooth}{Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.}
 
 \item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'. To obtain the power spectra use 'spectra = TRUE'.}
 
 \item{spectra}{Logical to control if power spectra are returned (as attributes). Default is \code{FALSE}.}
-
-\item{img}{Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding spectra are produced. Default is no images ( \code{FALSE}).}
 
 \item{res}{Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.}
 
@@ -46,40 +36,37 @@ is NULL. If supplied, 'hop.size' is ignored. Applied to both spectra and spectro
 \item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Applied to both spectra and spectrograms on image files.}
 
-\item{palette}{A color palette function to be used to assign colors in the
-plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}.}
-
-\item{collevels}{Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.}
-
-\item{dest.path}{Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.}
-
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-Object 'X' with two additional columns, 'reference' and 'spectrum.blur.ratio', containing the id of the sound used as reference and the computed spectrum blur ratio values, respectively. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both sounds and the overlaid power spectrum (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference sound, showing vertical lines with the start and end of sounds to allow users to visually check alignment. If \code{spectra = TRUE} the output would include power spectra for all sounds as attributes ('attributes(X)$spectra').
+Object 'X' with an additional column, 'spectrum.blur.ratio', containing the computed spectrum blur ratio values. If \code{spectra = TRUE} the output would include power spectra for all sounds as attributes ('attributes(X)$spectra').
 }
 \description{
 \code{spectrum_blur_ratio} measures blur ratio of frequency spectra from sounds referenced in an extended selection table.
 }
 \details{
-Spectral blur ratio measures the degradation of sound as a function of the change in sound energy in the frequency domain, analogous to the blur ratio proposed by Dabelsteen et al (1993) for the time domain (and implemented in \code{\link{blur_ratio}}). Low values indicate low degradation of sounds. The function measures the blur ratio of spectra from sounds in which a reference playback has been re-recorded at different distances. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference sound and the re-recorded sound. The function compares each sound type to the corresponding reference sound. The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of spectra is comparable.
+Spectral blur ratio measures the degradation of sound as a function of the change in sound energy in the frequency domain, analogous to the blur ratio proposed by Dabelsteen et al (1993) for the time domain (and implemented in \code{\link{blur_ratio}}). Low values indicate low degradation of sounds. The function measures the blur ratio of spectra from sounds in which a reference playback has been re-recorded at different distances. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference sound and the re-recorded sound. The function compares each sound type to the corresponding reference sound. The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of spectra is comparable. The function uses \code{\link[seewave]{spec}} internally to compute power spectra.
 }
 \examples{
 {
   # load example data
   data("degradation_est")
-   
+
   # create subset of data with only re-recorded files
   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-  # using method 1
-  spectrum_blur_ratio(X = rerecorded_est)
+# add reference to X
+X <- set_reference_sounds(X = rerecorded_est)
+
+  # get spetrum blur ratio
+  spectrum_blur_ratio(X = X)
 
   # using method 2
-  # spectrum_blur_ratio(X = rerecorded_est, method = 2)
+   X <- set_reference_sounds(X = rerecorded_est, method = 2)
+  spectrum_blur_ratio(X = X)
 
   # get power spectra
-  sbr <- spectrum_blur_ratio(X = rerecorded_est, spectra = TRUE)
+  sbr <- spectrum_blur_ratio(X = X, spectra = TRUE)
   spctr <- attributes(sbr)$spectra
 
   # make distance a factor for plotting

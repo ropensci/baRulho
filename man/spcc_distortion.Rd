@@ -9,7 +9,6 @@ spcc_distortion(
   parallel = NULL,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  method = getOption("method", 1),
   cor.method = "pearson",
   output = NULL,
   hop.size = getOption("hop.size", 11.6),

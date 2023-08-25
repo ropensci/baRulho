@@ -14,8 +14,7 @@
 #' @name attenuation
 #' @details Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. Modified from http://www.sengpielaudio.com
 ## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB.
-#' @examples
-#' {
+#' @examples {
 #'   # measure attenuation
 #'   attenuation(f = 2000, dist = 50, dist0 = 1)
 #' }
@@ -38,7 +37,7 @@ attenuation <- function(frequency, temp = 20, rh = 60, pa = 101325, dist0, dist,
   check_results <- check_arguments(fun = arguments[[1]], args = arguments)
 
   # report errors
-  checkmate::reportAssertions(check_results)
+  report_assertions2(check_results)
   # atmospheric attenuation
   pr <- 101325
   To1 <- 273.16

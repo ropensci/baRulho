@@ -2,21 +2,17 @@
 #'
 #' \code{spectrum_correlation} measures frequency spectrum correlation of sounds referenced in an extended selection table.
 #' @usage spectrum_correlation(X, parallel = NULL, cores = getOption("mc.cores", 1),
-#' pb = getOption("pb", TRUE), method = getOption("method", 1), cor.method = "pearson",
-#' output = NULL, hop.size = getOption("hop.size", 11.6),
-#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 70),
-#' path = getOption("sound.files.path", "."))
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "distance": distance at which each test sound was re-recorded. Each sound must have a unique ID within a distance. An additional 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'.
+#' pb = getOption("pb", TRUE), cor.method = "pearson",
+#' spec.smooth = getOption("spec.smooth", 5), output = NULL,
+#' hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
+#' ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."))
+#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' If \code{NULL} (default) then the current working directory is used.
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param method Numeric vector of length 1 to indicate the 'experimental design' to measure frequency spectrum correlation. Two methods are available:
-#' \itemize{
-#' \item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
-#' \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
-#' }
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
+#' @param spec.smooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.
 #' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
@@ -27,9 +23,8 @@
 #' @return Object 'X' with two additional columns, 'reference' and 'spectrum.correlation', containing the id of the sound used as reference and the computed frequency spectrum correlation coefficients, respectively.
 #' @export
 #' @name spectrum_correlation
-#' @details spectral correlation measures the similarity of two sounds in the frequency domain. The function measures the spectral correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function will then compare each sound to the corresponding reference sound. Two methods for calculating spectral correlation are provided (see 'method' argument). Use \code{\link{spectrum_blur_ratio}} to get spectra for plotting.
-#' @examples
-#' {
+#' @details spectral correlation measures the similarity of two sounds in the frequency domain. The function measures the spectral correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function will then compare each sound to the corresponding reference sound. Two methods for calculating spectral correlation are provided (see 'method' argument). The function uses \code{\link[seewave]{meanspec}} internally to compute power spectra. Use \code{\link{spectrum_blur_ratio}} to extract raw spectra values.
+#' @examples {
 #'   # load example data
 #'   data("degradation_est")
 #'
@@ -37,10 +32,15 @@
 #'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
 #'   # method 1
-#'   spectrum_correlation(X = rerecorded_est)
+#'   # add reference column
+#'   Y <- set_reference_sounds(X = rerecorded_est)
+#'
+#'   # run spectrum correlation
+#'   spectrum_correlation(X = Y)
 #'
 #'   # method 2
-#'   # spectrum_correlation(X = rerecorded_est, method = 2)
+#'   Y <- set_reference_sounds(X = rerecorded_est, method = 2)
+#'   # spectrum_correlation(X = Y)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -56,8 +56,8 @@ spectrum_correlation <-
            parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           method = getOption("method", 1),
            cor.method = "pearson",
+           spec.smooth = getOption("spec.smooth", 5),
            output = NULL,
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
@@ -76,7 +76,7 @@ spectrum_correlation <-
       check_arguments(fun = arguments[[1]], args = arguments)
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    report_assertions2(check_results)
 
     # adjust wl based on hope.size
     if (is.null(wl)) {
@@ -97,20 +97,12 @@ spectrum_correlation <-
       wl <- wl + 1
     }
 
-    # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-    if (pb) {
-      write(
-        file = "",
-        x = paste0("Preparing data for analysis (step 1 out of 3):")
-      )
-    }
+    # add sound file selec colums to X (weird column name so it does not overwrite user columns)
+    X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
 
-    X <-
-      prep_X_bRlo_int(X,
-        method = method,
-        cores = cores,
-        pb = pb
-      )
+    # get names of envelopes involved (those as test with reference or as reference)
+    target_sgnl_temp <-
+      unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
 
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
@@ -120,80 +112,61 @@ spectrum_correlation <-
       cl <- cores
     }
 
+    # print message
     if (pb) {
-      write(file = "", x = "Calculating frequency spectrums (step 2 out of 3):")
+      write(file = "", x = "Calculating power spectra (step 1 out of 2):")
     }
 
     # calculate all spectra apply function
-    spcs <-
+    specs <-
       warbleR:::pblapply_wrblr_int(
         pbar = pb,
-        X = seq_len(nrow(X)),
+        X = target_sgnl_temp,
         cl = cl,
-        FUN = function(y, wle = wl, ovl = ovlp) {
-          # load clip
-          clp <- warbleR::read_sound_file(
-            X = X,
-            index = y,
-            path = path
+        FUN = function(x,
+                       ssmth = spec.smooth,
+                       wln = wl,
+                       Q = X,
+                       pth = path,
+                       ovl = ovlp) {
+          spctr_FUN(
+            y = x,
+            spec.smooth = ssmth,
+            wl = wln,
+            X = Q,
+            meanspc = TRUE,
+            path = pth,
+            ovlp = ovl
           )
-
-          # mean spec
-          mspc <-
-            meanspec(
-              wave = clp,
-              f = clp@samp.rate,
-              plot = FALSE,
-              wl = wle,
-              ovlp = ovl
-            )
-
-          return(mspc)
         }
       )
 
     # add sound file selec names to envelopes (weird column name so it does not overwrite user columns)
-    names(spcs) <- X$.sgnl.temp
-
-    # make a data frame with 2 columns with names of the sounds to be compare
-    X$reference <- sapply(seq_len(nrow(X)), function(x, meth = method) {
-      # extract for single sound and order by distance
-      Y <-
-        as.data.frame(X[X$sound.id == X$sound.id[X$.sgnl.temp == X$.sgnl.temp[x]], , drop = FALSE])
-      Y <- Y[order(Y$distance), ]
-
-      # method 1 compare to closest distance to source
-      if (meth == 1) {
-        z <- Y$.sgnl.temp[which.min(Y$distance)]
-      } else
-      # if method 2
-      # if not the first row then the previous row
-      if (Y$.sgnl.temp[1] != X$.sgnl.temp[x]) {
-        z <- X$.sgnl.temp[x - 1]
-      } else {
-        # else the first row
-        z <- Y$.sgnl.temp[1]
-      }
-
-      return(z)
-    })
+    names(specs) <- target_sgnl_temp
 
     if (pb) {
-      write(file = "", x = "Calculating spectrum correlations (step 3 out of 3):")
+      write(file = "", x = "Calculating spectrum correlations (step 2 out of 2):")
     }
 
     # calculate all envelops apply function
     X$spectrum.correlation <-
-      pbapply::pbsapply(
+      unlist(warbleR:::pblapply_wrblr_int(
         X = seq_len(nrow(X)),
+        pbar = pb,
         cl = cl,
-        FUN = function(x) {
-          spctr_cor_FUN(y = X$.sgnl.temp[x], z = X$reference[x], spcs, X, cor.method)
-        }
-      )
-
-    # make NAs those sounds in which the reference is itself (only happens when method = 2) or is ambient noise
-    X$reference[X$reference == X$.sgnl.temp | X$sound.id == "ambient"] <- NA
+        FUN =
+          function(x,
+                   spcs = specs,
+                   cm = cor.method,
+                   Q = X) {
+            spctr_cor_FUN(
+              y = x,
+              specs = spcs,
+              X = Q,
+              cor.method = cm
+            )
+          }
+      ))
 
     # remove temporal columns
     X$.sgnl.temp <- NULL

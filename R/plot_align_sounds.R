@@ -44,16 +44,15 @@
 #' @name plot_align_sounds
 #' @details This functions aims to simplify the evaluation of the alignment of test sound files from  \code{\link{align_test_files}}. The function creates a single spectrogram for each sound file (saved at 'dest.path'). Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The plots include vertical lines denoting the start and end of each sound as well as the sound ID ('sound.id' column in 'X'). Note that no plot is created in the R graphic device.
 #' @seealso \code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
-#' #' @examples
-#' {
+#' @examples {
 #'   # load example data
 #'   data("degradation_est")
 #'
 #'   # create subset of data with only re-recorded files
 #'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
-#' # plot (look into temporary working directory `tempdir()`)
-#' plot_align_sounds(X = rerecorded_est, dest.path = tempdir(), duration = 3, ovlp = 0)
+#'   # plot (look into temporary working directory `tempdir()`)
+#'   plot_align_sounds(X = rerecorded_est, dest.path = tempdir(), duration = 3, ovlp = 0)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -94,10 +93,11 @@ plot_align_sounds <-
     }
 
     # check each arguments
-    check_results <- check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <-
+      check_arguments(fun = arguments[[1]], args = arguments)
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    report_assertions2(check_results)
 
 
     # get sampling rate

@@ -7,7 +7,7 @@
 #' path = getOption("sound.files.path", "."), spl = NULL, spl.cutoff = NULL, temp = 20,
 #' rh = 60, pa = 101325, hab.att.coef = 0.02, max.distance = 1000,
 #' resolution = 0.1, subtract.bgn = TRUE, envelope = "abs", mar = NULL)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
+#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param output Character vector of length 1 to determine if an extended selection table (DEPRECATED. Now the output format mirrors the class of the input 'X'.
@@ -32,15 +32,18 @@
 #' @export
 #' @name detection_distance
 #' @details The function computes the maximum distance at which a sound would be detected, which is calculated as the distance in which the sound pressure level (SPL) goes below the specified SPL cutoff ('spl.cutoff')). The function uses internally \code{\link{attenuation}} to estimate SPL at increasing values until it reaches the defined cutoff. The peak frequency (calculated on the power spectrum of the reference sound) of the reference sound for each sound ID is used as the carrier frequency for distance estimation. The sound recorded at the lowest distance is used as reference. \strong{This function assumes that all recordings have been made at the same recording volume}.
-#' @examples
-#' {
-#'   # load example data
-#'   data("degradation_est")
+#' @examples \dontrun{
+#' # load example data
+#' data("degradation_est")
 #'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#' # create subset of data with only re-recorded files
+#' rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
-#'   detection_distance(X = rerecorded_est[rerecorded_est$distance == 1, ], spl.cutoff = 5, mar = 0.05)
+#'
+#' # add reference to X
+#' X <- set_reference_sounds(X = rerecorded_est)
+#'
+#' detection_distance(X = X[X$distance %in% c(1, 10), ], spl.cutoff = 5, mar = 0.05)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -81,16 +84,11 @@ detection_distance <-
     check_results <- check_arguments(fun = arguments[[1]], args = arguments)
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    report_assertions2(check_results)
 
     # error if no mar supplied when subtract.bgn
     if (is.null(mar) & subtract.bgn) {
       stop2("'mar' must be supplied when 'subtract.bgn = TRUE'")
-    }
-
-    # need mar if subtract.bgn TRUE
-    if (subtract.bgn & is.null(mar)) {
-      stop2("'mar' must be supplied if 'subtract.bgn = TRUE'")
     }
 
     # adjust wl based on hope.size
@@ -112,21 +110,6 @@ detection_distance <-
       wl <- wl + 1
     }
 
-    # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-    if (pb) {
-      write(
-        file = "",
-        x = paste0("Preparing data for analysis (step 1 out of 3):")
-      )
-    }
-
-    X <-
-      prep_X_bRlo_int(X,
-        method = 1,
-        cores = cores,
-        pb = pb
-      )
-
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -138,23 +121,30 @@ detection_distance <-
     # print message
     if (pb) {
       if (is.null(spl)) {
-        write(file = "", x = "Computing sound pressure level and peak frequency (step 2 out of 3):")
+        write(file = "", x = "Computing sound pressure level and peak frequency (step 1 out of 2):")
       } else {
-        write(file = "", x = "Computing peak frequency (step 2 out of 3):")
+        write(file = "", x = "Computing peak frequency (step 1 out of 2):")
       }
     }
+
+    # add sound file selec colums to X (weird column name so it does not overwrite user columns)
+    X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
+
+    # get names of envelopes involved (those as test with reference or as reference)
+    target_sgnl_temp <- unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
+
 
     # calculate all spectra apply function
     peak_freq_list <-
       warbleR:::pblapply_wrblr_int(
         pbar = pb,
-        X = seq_len(nrow(X)),
+        X = target_sgnl_temp,
         cl = cl,
         FUN = function(y, wl) {
           # load clip
           clp <- warbleR::read_sound_file(
             X = X,
-            index = y,
+            index = which(X$.sgnl.temp == y),
             path = path
           )
 
@@ -184,14 +174,14 @@ detection_distance <-
               bg.noise <-
                 read_sound_file(
                   X,
-                  index = y,
+                  index = which(X$.sgnl.temp == y),
                   path = path,
-                  from = if (X$start[y] - mar < 0) {
+                  from = if (X$start[X$.sgnl.temp == y] - mar < 0) {
                     0
                   } else {
-                    X$start[y] - mar
+                    X$start[X$.sgnl.temp == y] - mar
                   },
-                  to = X$start[y]
+                  to = X$start[X$.sgnl.temp == y]
                 )
 
               noiseamp <-
@@ -218,7 +208,7 @@ detection_distance <-
       )
 
     # add sound file selec names to spectra
-    names(peak_freq_list) <- X$.sgnl.temp
+    names(peak_freq_list) <- target_sgnl_temp
 
     ## function to measure detection distance
     detection_dist_FUN <-
@@ -237,7 +227,8 @@ detection_distance <-
         rfrnc <- X$reference[x]
 
         # if sounds are the same or the selection is noise return NA
-        if (any(c(X$sound.id[X$.sgnl.temp == sgnl], X$sound.id[X$reference == rfrnc]) == "ambient")) {
+        # if reference is NA return NA
+        if (is.na(rfrnc)) {
           detect_dist <- NA
         } else {
           # extract spectrum for sound and model
@@ -265,14 +256,15 @@ detection_distance <-
       }
 
     if (pb) {
-      write(file = "", x = "Computing detection distance (step 3 out of 3):")
+      write(file = "", x = "Computing detection distance (step 2 out of 2):")
     }
 
     # get detection distance
     # calculate all spectra apply function
     X$detection.distance <-
-      pbapply::pbsapply(
+      unlist(warbleR:::pblapply_wrblr_int(
         X = seq_len(nrow(X)),
+        pbar = pb,
         cl = cl,
         FUN = function(x,
                        wle = wl,
@@ -297,7 +289,7 @@ detection_distance <-
             ...
           )
         }
-      )
+      ))
 
     # make NAs those sounds in which the reference is itself (only happens when method = 2) or is ambient noise
     X$reference[X$reference == X$.sgnl.temp | X$sound.id == "ambient"] <- NA

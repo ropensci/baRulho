@@ -2,22 +2,17 @@
 #'
 #' \code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.
 #' @usage excess_attenuation(X, parallel = NULL, cores = getOption("mc.cores", 1),
-#' pb = getOption("pb", TRUE), method = getOption("method", 1), type = "Dabelsteen",
+#' pb = getOption("pb", TRUE),  type = "Dabelsteen",
 #'  output = NULL, hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL),
 #'  ovlp = getOption("ovlp", 50), gain = 0, bp = "freq.range",
 #'  path = getOption("sound.files.path", "."))
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "distance": distance at which each test sound was re-recorded. Each sound must have a unique ID within a distance. An additional 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'.
+#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param method Numeric vector of length 1 to indicate the 'experimental design' for measuring excess attenuation. Two methods are available:
-#' \itemize{
-#' \item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
-#' \item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
-#' }
 #' @param type Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
 #' \itemize{
-#' \item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. This is the default method.
+#' \item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. This is the default approach.
 #' \item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. Microphone gain is the microphone gain of the reference and re-recorded sounds.
 #' }
 #' If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
@@ -35,9 +30,8 @@
 #' @export
 #' @name excess_attenuation
 #' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents energy loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation.
-#' The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two methods for calculating excess attenuation are provided (see 'method' argument).
-#' @examples
-#' {
+#' The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two approaches for calculating excess attenuation are provided (see 'type' argument).
+#' @examples {
 #'   # load example data
 #'   data("degradation_est")
 #'
@@ -45,10 +39,13 @@
 #'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 #'
 #'   # using method 1
-#'   excess_attenuation(X = rerecorded_est)
+#'   # add reference to X
+#'   X <- set_reference_sounds(X = rerecorded_est)
+#'   excess_attenuation(X = X)
 #'
 #'   # using method 2
-#'   # excess_attenuation(X = rerecorded_est, method = 2)
+#'   X <- set_reference_sounds(X = rerecorded_est, method = 2)
+#'   # excess_attenuation(X = X)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -73,7 +70,6 @@ excess_attenuation <-
   function(X,
            parallel = NULL, cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           method = getOption("method", 1),
            type = "Dabelsteen",
            output = NULL,
            hop.size = getOption("hop.size", 1),
@@ -94,7 +90,7 @@ excess_attenuation <-
     check_results <- check_arguments(fun = arguments[[1]], args = arguments)
 
     # report errors
-    checkmate::reportAssertions(check_results)
+    report_assertions2(check_results)
 
     # adjust wl based on hope.size
     if (is.null(wl)) {
@@ -115,20 +111,6 @@ excess_attenuation <-
       wl <- wl + 1
     }
 
-    # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-    if (pb) {
-      write(
-        file = "",
-        x = paste0("Preparing data for analysis (step 1 out of 3):")
-      )
-    }
-    X <-
-      prep_X_bRlo_int(X,
-        method = method,
-        cores = cores,
-        pb = pb
-      )
-
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -140,14 +122,21 @@ excess_attenuation <-
     if (pb) {
       write(
         file = "",
-        x = paste0("Calculating amplitude envelopes (step 2 out of 3):")
+        x = paste0("Calculating amplitude envelopes (step 1 out of 2):")
       )
     }
+
+    # add sound file selec colums to X (weird column name so it does not overwrite user columns)
+    X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
+
+    # get names of envelopes involved (those as test with reference or as reference)
+    target_sgnl_temp <- unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
+
 
     # run loop apply function
     mean_envs <-
       warbleR:::pblapply_wrblr_int(
-        X = seq_len(nrow(X)),
+        X = target_sgnl_temp,
         pbar = pb,
         cl = cl,
         FUN = function(y) {
@@ -155,38 +144,38 @@ excess_attenuation <-
         }
       )
 
+    # add sound file selec column as names to envelopes
+    names(mean_envs) <- target_sgnl_temp
+
     # put in a data frame
-    X2 <- do.call(rbind, mean_envs)
+    X$sig_env <- vapply(seq_len(nrow(X)), function(x) {
+      w <- if (any(names(mean_envs) == X$.sgnl.temp[x])) {
+        mean_envs[[which(names(mean_envs) == X$.sgnl.temp[x])]]
+      } else {
+        NA
+      }
+      return(w)
+    }, FUN.VALUE = numeric(1))
 
     # split by sound ID
-    # sigtype_list <- split(X2, X2$sound.id)
+    # sigtype_list <- split(X, X$sound.id)
 
     if (pb) {
       write(
         file = "",
-        x = paste0("Calculating excess attenuation (step 3 out of 3):")
+        x = paste0("Calculating excess attenuation (step 2 out of 2):")
       )
     }
 
     # calculate excess attenuation
-    X2$excess.attenuation <-
-      unlist(warbleR:::pblapply_wrblr_int(X = seq_len(nrow(X2)), pbar = pb, cl = cl, FUN = function(x) {
-        exc_att_FUN(y = x, X2, method, type, gain)
+    X$excess.attenuation <-
+      unlist(warbleR:::pblapply_wrblr_int(X = seq_len(nrow(X)), pbar = pb, cl = cl, FUN = function(x) {
+        exc_att_FUN(y = x, X, type, gain)
       }))
 
-    # fix row names
-    rownames(X2) <- rownames(X)
-
-    # make NAs those sounds in which the reference is itself (only happens when method = 2) or is ambient noise
-    X2$reference[X2$reference == X2$.sgnl.temp | X2$sound.id == "ambient"] <- NA
 
     # remove temporal column
-    X2$sigRMS <- X2$.sgnl.temp <- X2$sig_env <- NULL
-
-    # fix est
-    if (is_extended_selection_table(X)) {
-      X2 <- warbleR::fix_extended_selection_table(X = X2, Y = X)
-    }
+    X$.sgnl.temp <- X$sig_env <- NULL
 
     # fix call if not a data frame
     if (!is.data.frame(X)) {
@@ -195,5 +184,5 @@ excess_attenuation <-
     } # fix call attribute
 
 
-    return(X2)
+    return(X)
   }

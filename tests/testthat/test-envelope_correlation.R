@@ -3,7 +3,9 @@ test_that("using extended table and method 1", {
   
   X <- degradation_est[degradation_est$sound.files != "master.wav", ]
   
-  ec <- envelope_correlation(X = X, method = 1)
+  X <- set_reference_sounds(X, method = 1)
+  
+  ec <- envelope_correlation(X = X)
   
   expect_equal(sum(is.na(ec$envelope.correlation)), 9)
   
@@ -29,7 +31,9 @@ test_that("using data frame and method 2", {
   
   X <- as.data.frame(degradation_est[degradation_est$sound.files != "master.wav", ])
   
-  expect_warning(ec <- envelope_correlation(X = X, method = 2))
+  X <- set_reference_sounds(X, method = 2)
+  
+  expect_warning(ec <- envelope_correlation(X = X))
   
   expect_equal(sum(is.na(ec$envelope.correlation)), 13)
   

@@ -5,13 +5,13 @@
 \title{Measure frequency spectrum correlation}
 \usage{
 spectrum_correlation(X, parallel = NULL, cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), method = getOption("method", 1), cor.method = "pearson",
-output = NULL, hop.size = getOption("hop.size", 11.6),
-wl = getOption("wl", NULL), ovlp = getOption("ovlp", 70),
-path = getOption("sound.files.path", "."))
+pb = getOption("pb", TRUE), cor.method = "pearson",
+spec.smooth = getOption("spec.smooth", 5), output = NULL,
+hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
+ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."))
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "distance": distance at which each test sound was re-recorded. Each sound must have a unique ID within a distance. An additional 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'.}
+\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
 
 \item{parallel}{DEPRECATED. Use 'cores' instead.}
 
@@ -20,13 +20,9 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{method}{Numeric vector of length 1 to indicate the 'experimental design' to measure frequency spectrum correlation. Two methods are available:
-\itemize{
-\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
-\item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
-}}
-
 \item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
+
+\item{spec.smooth}{Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.}
 
 \item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
@@ -47,7 +43,7 @@ Object 'X' with two additional columns, 'reference' and 'spectrum.correlation', 
 \code{spectrum_correlation} measures frequency spectrum correlation of sounds referenced in an extended selection table.
 }
 \details{
-spectral correlation measures the similarity of two sounds in the frequency domain. The function measures the spectral correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function will then compare each sound to the corresponding reference sound. Two methods for calculating spectral correlation are provided (see 'method' argument). Use \code{\link{spectrum_blur_ratio}} to get spectra for plotting.
+spectral correlation measures the similarity of two sounds in the frequency domain. The function measures the spectral correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function will then compare each sound to the corresponding reference sound. Two methods for calculating spectral correlation are provided (see 'method' argument). The function uses \code{\link[seewave]{meanspec}} internally to compute power spectra. Use \code{\link{spectrum_blur_ratio}} to extract raw spectra values.
 }
 \examples{
 {
@@ -58,10 +54,15 @@ spectral correlation measures the similarity of two sounds in the frequency doma
   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
   # method 1
-  spectrum_correlation(X = rerecorded_est)
+  # add reference column
+  Y <- set_reference_sounds(X = rerecorded_est)
+
+  # run spectrum correlation
+  spectrum_correlation(X = Y)
 
   # method 2
-  # spectrum_correlation(X = rerecorded_est, method = 2)
+  Y <- set_reference_sounds(X = rerecorded_est, method = 2)
+  # spectrum_correlation(X = Y)
 }
 
 }

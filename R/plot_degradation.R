@@ -1,7 +1,7 @@
 #' Save multipanel plots with reference and test sounds
 #'
 #' \code{plot_degradation} creates multipanel plots (as image files) with reference and test sounds by distance and transect.
-#' @usage plot_degradation(X, nrow = 4, ssmooth = getOption("ssmooth", 200),
+#' @usage plot_degradation(X, nrow = 4, env.smooth = getOption("env.smooth", 200),
 #' hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
 #' ovlp = getOption("ovlp", 70),  path = getOption("sound.files.path", "."),
 #' dest.path = getOption("dest.path", "."), cores = getOption("mc.cores", 1),
@@ -9,9 +9,9 @@
 #' palette = viridis::viridis, flim = c("-1", "+1"), envelope = TRUE, spectrum = TRUE,
 #' heights = c(4, 1), widths = c(5, 1), margins = c(2, 1), row.height = 2, col.width = 2,
 #' colors = viridis::mako(4, alpha = 0.3), res = 120, ...)
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "distance": distance at which each test sound was re-recorded. Each sound must have a unique ID within a distance. An additional 'transect' column labeling those sounds recorded in the same transect is required if including recordings from more than 1 transect.
+#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param nrow Numeric vector of length 1 with the number of rows per image file. Default is 4. This would be dynamically adjusted if more rows than needed are set.
-#' @param ssmooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope and power spectrum calculations (used internally by \code{\link[seewave]{env}}). Default is 200.
+#' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope and power spectrum calculations (used internally by \code{\link[seewave]{env}}). Default is 200.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. If supplied, 'hop.size' is ignored.
@@ -41,8 +41,7 @@
 #' @export
 #' @name plot_degradation
 #' @details The function aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded.
-#' @examples
-#' {
+#' @examples {
 #'   # load example data
 #'   data("degradation_est")
 #'
@@ -55,29 +54,32 @@
 #'   # set directory to save image files
 #'   options(dest.path = tempdir())
 #'
+#'   # method 1
+#'   Y <- set_reference_sounds(X = rerecorded_est)
+#'
 #'   # plot degradation spectrograms
 #'   plot_degradation(
-#'     X = rerecorded_est, nrow = 3, ovlp = 95
+#'     X = Y, nrow = 3, ovlp = 95
 #'   )
 #'
 #'   # using other color palettes
 #'   plot_degradation(
-#'     X = rerecorded_est, nrow = 3, ovlp = 95,
+#'     X = Y, nrow = 3, ovlp = 95,
 #'     colors = viridis::magma(4, alpha = 0.3),
 #'     palette = viridis::magma
 #'   )
 #'
 #'   # missing some data, 2 rows
 #'   plot_degradation(
-#'     X = rerecorded_est[-3, ], nrow = 2, ovlp = 95,
+#'     X = Y[-3, ], nrow = 2, ovlp = 95,
 #'     colors = viridis::mako(4, alpha = 0.4), palette = viridis::mako, wl = 200
 #'   )
 #'
 #'   # changing marging and high overlap
-#'   plot_degradation(X = rerecorded_est, margins = c(5, 1), nrow = 6, ovlp = 95)
+#'   plot_degradation(X = Y, margins = c(5, 1), nrow = 6, ovlp = 95)
 #'
 #'   # more rows than needed (will adjust it automatically)
-#'   plot_degradation(X = rerecorded_est, nrow = 10, ovlp = 90)
+#'   plot_degradation(X = Y, nrow = 10, ovlp = 90)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -89,7 +91,7 @@
 plot_degradation <-
   function(X,
            nrow = 4,
-           ssmooth = getOption("ssmooth", 200),
+           env.smooth = getOption("env.smooth", 200),
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 70),
@@ -181,19 +183,8 @@ plot_degradation <-
       transects <- unique(X$transect)
     }
 
-    # add sound file selec column and names to X (weird column name so it does not overwrite user columns)
-    if (pb) {
-      write(
-        file = "",
-        x = paste0("Preparing data for analysis (step 1 out of 2):")
-      )
-    }
-
-    X <- prep_X_bRlo_int(X,
-      method = 1,
-      cores = cores,
-      pb = pb
-    )
+    # add sound file selec colums to X (weird column name so it does not overwrite user columns)
+    X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
 
     X_df <- as.data.frame(X)
 
@@ -249,7 +240,7 @@ plot_degradation <-
     soundid_X_list <-
       lapply(unique(X_df$sound.id.transect), function(x) {
         Y <-
-          X_df[X_df$.sgnl.temp %in% unique(X_df$reference[X_df$sound.id.transect == x]) |
+          X_df[X_df$.sgnl.temp %in% stats::na.omit(unique(X_df$reference[X_df$sound.id.transect == x])) |
             X_df$sound.id.transect == x, ]
         Y <- Y[order(Y$distance), ]
         return(Y)
@@ -268,7 +259,6 @@ plot_degradation <-
 
         return(x)
       })
-
 
     # add numeric id to each subset
     soundid_X_list <-
@@ -419,19 +409,19 @@ plot_degradation <-
 
     close.screen(all.screens = T)
 
-    # reset graphic device on exit
-    # on.exit(grDevices::dev.off())
-
-    if (pb) {
-      write(file = "", x = "Saving plots (step 2 out of 2):")
+    # set clusters for windows OS
+    if (Sys.info()[1] == "Windows" & cores > 1) {
+      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+    } else {
+      cl <- cores
     }
 
     out <-
-      warbleR:::pblapply_wrblr_int(sort(unique(soundid_X$page)), function(x, flm = flim) {
+      warbleR:::pblapply_wrblr_int(X = sort(unique(soundid_X$page)), pbar = pb, cl = cl, function(x, flm = flim) {
         # extract data subset for a page
         Y <- soundid_X[soundid_X$page == x, ]
 
-        try(dev.off(), silent = TRUE)
+        # try(dev.off(), silent = TRUE)
 
         # start graphic device
         warbleR:::img_wrlbr_int(
@@ -444,6 +434,7 @@ plot_degradation <-
         )
 
         # set panel layout
+        invisible(close.screen(all.screens = TRUE))
         suppressWarnings(catch <- split.screen(figs = page_layout))
 
         # frequency label
@@ -610,7 +601,7 @@ plot_degradation <-
 
               # smooth
               spc[, 2] <-
-                warbleR::envelope(x = spc[, 2], ssmooth = ssmooth)
+                warbleR::envelope(x = spc[, 2], ssmooth = env.smooth)
 
               # filter to flim
               spc <- spc[spc[, 1] > fl[1] & spc[, 1] < fl[2], ]
@@ -678,7 +669,7 @@ plot_degradation <-
                     from = fl[1] * 1000,
                     to = fl[2] * 1000
                   ),
-                  ssmooth = ssmooth
+                  ssmooth = env.smooth
                 )
               # punt in a matrix including time
               envlp <- cbind(seq(0, duration(wave), along.with = envlp), envlp)
@@ -816,6 +807,6 @@ plot_degradation <-
           box()
         }
         cs <- close.screen(all.screens = TRUE)
-        grDevices::dev.off()
+        try(grDevices::dev.off(), silent = TRUE)
       })
   }

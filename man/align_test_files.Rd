@@ -39,78 +39,29 @@ An object of the same class than 'X' with the aligned sounds from test (re-recor
 The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table' by default.
 }
 \examples{
-\dontrun{
-# set temporary directory
-td <- tempdir()
+{
+  # set temporary directory
+  td <- tempdir()
 
-# load example data from warbleR
-data(list = c("Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4", "lbh_selec_table"))
+  # save example files in working director to recreate a case in which working
+  # with sound files instead of extended selection tables.
+  # This doesn't have to be done with your own data as you will
+  # have them as sound files already.
+  for (i in unique(degradation_est$sound.files)[1:2]) {
+    writeWave(object = attr(degradation_est, "wave.objects")[[i]], file.path(td, i))
+  }
 
-# save sound files to temporary folder
-writeWave(Phae.long1, file.path(td, "Phae.long1.wav"))
-writeWave(Phae.long2, file.path(td, "Phae.long2.wav"))
-writeWave(Phae.long3, file.path(td, "Phae.long3.wav"))
-writeWave(Phae.long4, file.path(td, "Phae.long4.wav"))
+  # set path and no progress bar in global options
+  options(sound.files.path = td, pb = FALSE)
 
-# make an extended selection table
-est <- warbleR::selection_table(
-  X = lbh_selec_table, extended = TRUE,
-  confirm.extended = FALSE, path = td, pb = FALSE
-)
+  # extract annotations for master sound file
+  master <- degradation_est[degradation_est$sound.files == "master.wav", ]
 
-# create master sound file
-master.sf <- master_sound_file(
-  X = est, file.name = "example_master",
-  dest.path = td, gap.duration = 0.3
-)
+  # get marker position
+  markers <- find_markers(X = master, test.files = unique(degradation_est$sound.files)[2])
 
-# read master
-exmp.master <- readWave(file.path(td, "example_master.wav"))
-
-# add 1 s silence
-exmp.test1 <- addsilw(
-  wave = exmp.master, at = "start", d = 1, output = "Wave",
-  f = exmp.master@samp.rate
-)
-
-exmp.test2 <- addsilw(
-  wave = exmp.master, at = "start", d = 2, output = "Wave",
-  f = exmp.master@samp.rate
-)
-
-# create noise
-ns <- noisew(
-  f = exmp.master@samp.rate, d = duration(exmp.test2) + 1,
-  output = "Wave"
-)
-
-# make noise exactly the same length and add noise to 2 examples
-exmp.test1@left <- exmp.test1@left + (ns@left[1:length(exmp.test1@left)] * 500)
-exmp.test2@left <- exmp.test2@left + (ns@left[1:length(exmp.test2@left)] * 500)
-
-# normalize before saving
-exmp.test1 <- normalize(exmp.test1, unit = "16")
-exmp.test2 <- normalize(exmp.test2, unit = "16")
-
-# save examples
-writeWave(
-  object = exmp.test1, filename = file.path(td, "example_test1.wav"),
-  extensible = FALSE
-)
-
-writeWave(
-  object = exmp.test2, filename = file.path(td, "example_test2.wav"),
-  extensible = FALSE
-)
-
-# find  tempaltes
-found.templts <- find_markers(
-  X = master.sf,
-  test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE
-)
-
-# align sounds and output extended selection table
-alg.tests <- align_test_files(X = master.sf, Y = found.templts, path = td, pb = FALSE)
+  # align all test sounds
+  alg.tests <- align_test_files(X = master, Y = markers, pb = FALSE)
 }
 
 }

@@ -31,8 +31,7 @@
 #' @export
 #' @name tail_to_signal_ratio
 #' @details Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
-#' @examples
-#' {
+#' @examples {
 #'   # load example data
 #'
 #'   data("degradation_est")
@@ -84,7 +83,7 @@ tail_to_signal_ratio <- function(X,
   check_results <- check_arguments(fun = arguments[[1]], args = arguments)
 
   # report errors
-  checkmate::reportAssertions(check_results)
+  report_assertions2(check_results)
 
   # get sampling rate
   sampling_rate <-
@@ -170,7 +169,7 @@ tail_to_signal_ratio <- function(X,
         # add band-pass frequency filter
         if (!is.null(bp)) {
           # filter to bottom and top freq range
-          if (bp == "freq.range") {
+          if (bp[1] == "freq.range") {
             bp <- c(X$bottom.freq[y], X$top.freq[y])
           }
 
@@ -220,6 +219,7 @@ tail_to_signal_ratio <- function(X,
         sig_RMS <- seewave::rms(sig.env)
 
         # get reference ambient noise RMS
+
         tail_RMS <- seewave::rms(tail.env)
 
         # Calculate tail.to.signal ratio

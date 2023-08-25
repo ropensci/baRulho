@@ -13,10 +13,13 @@ test_that("basic", {
   # set directory to save image files
   options(dest.path = tempdir())
   
+  X <- set_reference_sounds(rerecorded_est[rerecorded_est$sound.files != "master.wav", ])
+  
+  
   # plot (look into temporary working directory `tempdir()`)
     # plot degradation spectrograms
     plot_degradation(
-      X = rerecorded_est, nrow = 3, ovlp = 95,
+      X = X, nrow = 3, ovlp = 95,
       colors = viridis::magma(4, alpha = 0.3),
       palette = viridis::magma
     )
@@ -48,10 +51,12 @@ test_that("many ros", {
   # set directory to save image files
   options(dest.path = tempdir())
   
+  X <- set_reference_sounds(rerecorded_est)
+  
   # plot (look into temporary working directory `tempdir()`)
   # plot degradation spectrograms
   plot_degradation(
-    X = rerecorded_est, nrow = 3000, ovlp = 95,
+    X = X, nrow = 3000, ovlp = 95,
     colors = viridis::magma(4, alpha = 0.3),
     palette = viridis::magma
   )

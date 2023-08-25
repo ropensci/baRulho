@@ -4,73 +4,6 @@ stop2 <- function(...) {
   stop(..., call. = FALSE)
 }
 
-# internal baRulho function, not to be called by users. It prepares X for comparing sounds
-# @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-
-prep_X_bRlo_int <- function(X, method, cores, pb) {
-  # set pb options
-  on.exit(pbapply::pboptions(type = .Options$pboptions$type), add = TRUE)
-
-  # add sound file selec colums to X (weird column name so it does not overwrite user columns)
-  X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
-
-  # make it a regular data frame (no est)
-  X2 <- as.data.frame(X)
-
-  # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & cores > 1) {
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
-  } else {
-    cl <- cores
-  }
-
-  # set pb options
-  pbapply::pboptions(type = ifelse(as.logical(pb), "timer", "none"))
-
-  # add second column with names of the reference sounds to be compared against
-  X$reference <-
-    pbapply::pbsapply(X2$.sgnl.temp, cl = cl, function(x, meth = method) {
-      # extract for single sound id and order by distance
-      Y <-
-        X2[X2$sound.id == X$sound.id[X2$.sgnl.temp == x], , drop = FALSE]
-      Y <- Y[order(Y$distance), ]
-
-      # method 1 compare to closest distance to source
-      if (meth == 1) {
-        # if column transect if found select the lowest distance in that trasnect
-        if (!is.null(X2$transect)) {
-          W <- X2[X2$transect == X2$transect[X2$.sgnl.temp == x] & X2$sound.id == X$sound.id[X2$.sgnl.temp == x], , drop = FALSE]
-
-          # if there is another distance that is shorter in other transects for that signal, use that distance
-          z <- if (min(W$distance) <= min(Y$distance)) {
-            W$.sgnl.temp[which.min(W$distance)]
-          } else {
-            Y$.sgnl.temp[which.min(Y$distance)]
-          }
-        } else {
-          z <- Y$.sgnl.temp[which.min(Y$distance)]
-        }
-      } else {
-        # if method 2
-        # get those from the same transect and same sound id
-        W <- X2[X2$transect == X2$transect[X2$.sgnl.temp == x] & X2$sound.id == X$sound.id[X2$.sgnl.temp == x], , drop = FALSE]
-        W <- W[order(W$distance), ]
-
-        # if not the first row then the previous row
-        if (W$.sgnl.temp[1] != x) {
-          z <- W$.sgnl.temp[which(W$.sgnl.temp == x) - 1]
-        } else {
-          # else the first row
-          z <- x
-        }
-      }
-
-      return(z)
-    })
-
-  return(X)
-}
-
 
 # internal baRulho function, not to be called by users. It is a modified version of warbleR::find_peaks
 # that allows to define internally if progress bar would be used (pbapply::pblapply uses pboptions to do this)
@@ -217,15 +150,56 @@ report_assertions2 <- function(collection) {
     # modfied to get more informative message
     msgs <-
       gsub(
-        pattern = "Variable 'names(X)'",
-        replacement = "Column names in 'X'",
+        pattern = "Variable 'X$distances':",
+        replacement = "",
         x = msgs,
         fixed = TRUE
       )
+
+    msgs <-
+      gsub(
+        pattern = "Variable 'names(X)': Names",
+        replacement = "Columns in 'X':",
+        x = msgs,
+        fixed = TRUE
+      )
+
+    msgs <-
+      gsub(
+        pattern = "Variable 'transect column': Names must include the elements {'transect'}, but is missing elements {'transect'}.",
+        replacement = "Column 'transect' in 'X' is required when 'method = 2'",
+        x = msgs,
+        fixed = TRUE
+      )
+
+    msgs <-
+      gsub(
+        pattern = "the elements ",
+        replacement = "",
+        x = msgs,
+        fixed = TRUE
+      )
+
+    msgs <-
+      gsub(
+        pattern = "elements ",
+        replacement = "",
+        x = msgs,
+        fixed = TRUE
+      )
+
     msgs <-
       gsub(
         pattern = "Variable",
         replacement = "Argument",
+        x = msgs,
+        fixed = TRUE
+      )
+
+    msgs <-
+      gsub(
+        pattern = "must be disjunct from {'reference'}, but has {'reference'}.",
+        replacement = "Cannot include a column 'reference'. It must be removed.",
         x = msgs,
         fixed = TRUE
       )
@@ -242,6 +216,14 @@ report_assertions2 <- function(collection) {
       gsub(
         pattern = "Argument 'transect column': Names must include the elements {'transect'}, but is missing elements {'transect'}",
         replacement = "Argument 'X': requires a 'transect' column when 'method = 2'",
+        x = msgs,
+        fixed = TRUE
+      )
+
+    msgs <-
+      gsub(
+        pattern = "but is missing {'reference'}",
+        replacement = "but is missing {'reference'} (Did you forget to run 'set_reference_sounds() first?)",
         x = msgs,
         fixed = TRUE
       )
@@ -277,7 +259,7 @@ check_unique_sels <- function(x, fun) {
 assert_unique_sels <-
   checkmate::makeAssertionFunction(check_unique_sels)
 
-# duplicated sound.id within  sound file and distance
+# duplicated sound.id within sound file and distance
 check_unique_sound.id <- function(x, fun) {
   if (anyDuplicated(paste0(x$sound.files, x$sound.id)) > 0) {
     "Duplicated 'selec' labels within at least one sound file"
@@ -309,6 +291,19 @@ check_unique_sound.id <- function(x, fun) {
 assert_unique_sound.id <-
   checkmate::makeAssertionFunction(check_unique_sound.id)
 
+# check than more than 1 distance is found
+check_several_distances <- function(x, fun) {
+  if (!is.null(x$distance)) {
+    if (length(unique(x$distance)) == 1) {
+      "Column 'distance'in 'X' must include more than 1 distance"
+    }
+  } else {
+    TRUE
+  }
+}
+
+assert_several_distances <-
+  checkmate::makeAssertionFunction(check_several_distances)
 
 # check if argument has been deprecated
 check_deprecated <- function(x) {
@@ -357,41 +352,71 @@ check_arguments <- function(fun, args) {
         .var.name = "X"
       )
 
-      if (fun != "master_sound_file") {
-        # functions that compare by distance
-        if (fun %in% c(
-          "blur_ratio",
-          "detection_distance",
-          "envelope_correlation",
-          "excess_attenuation",
-          "spcc",
-          "spectrum_blur_ratio",
-          "spectrum_correlation"
-        )) {
-          cols <-
-            c(
-              "sound.files",
-              "selec",
-              "start",
-              "end",
-              "sound.id",
-              "distance"
-            )
+      # default columns
+      cols <- c("sound.files", "selec", "start", "end", "sound.id")
 
-          checkmate::assert_numeric(
-            x = args$X$distance,
-            any.missing = FALSE,
-            all.missing = FALSE,
-            lower = 0,
-            add = check_collection,
-            .var.name = "X$distance"
-          )
-        } else {
-          cols <-
-            c("sound.files", "selec", "start", "end", "sound.id")
-        }
-      } else {
+      # overwrite for other functions
+      if (fun == "master_sound_file") {
         cols <- c("sound.files", "selec", "start", "end")
+      }
+      # functions that compare by distance
+      if (fun %in% c(
+        "blur_ratio",
+        "detection_distance",
+        "envelope_correlation",
+        "excess_attenuation",
+        "spcc",
+        "spectrum_blur_ratio",
+        "spectrum_correlation"
+      )) {
+        cols <-
+          c(
+            "sound.files",
+            "selec",
+            "start",
+            "end",
+            "sound.id",
+            "distance",
+            "reference"
+          )
+
+        checkmate::assert_numeric(
+          x = args$X$distance,
+          any.missing = FALSE,
+          all.missing = FALSE,
+          lower = 0,
+          null.ok = TRUE,
+          add = check_collection,
+          .var.name = "X$distance"
+        )
+
+        assert_several_distances(
+          x = args$X,
+          fun = fun,
+          add = check_collection,
+          .var.name = "X$distances"
+        )
+      }
+
+
+      if (fun == "set_reference_sounds") {
+        cols <- c(
+          "sound.files",
+          "selec",
+          "start",
+          "end",
+          "sound.id",
+          "distance"
+        )
+        checkmate::assert_numeric(
+          x = args$X$distance,
+          any.missing = FALSE,
+          all.missing = FALSE,
+          lower = 0,
+          null.ok = TRUE,
+          add = check_collection,
+          .var.name = "X$distance"
+        )
       }
 
       checkmate::assert_names(
@@ -399,6 +424,7 @@ check_arguments <- function(fun, args) {
         type = "unique",
         must.include = cols,
         add = check_collection,
+        disjunct.from = if (fun == "set_reference_sounds") "reference" else NULL,
         .var.name = "names(X)"
       )
       try(
@@ -439,7 +465,7 @@ check_arguments <- function(fun, args) {
             )
           }
         } else {
-          if (!fun %in% c("find_markers", "align_test_files")) {
+          if (!fun %in% c("find_markers", "align_test_files", "set_reference_sounds")) {
             warning2("assuming all sound files have the same sampling rate")
           }
         }
@@ -684,27 +710,14 @@ check_arguments <- function(fun, args) {
     }
   }
 
-  if (any(names(args) == "ssmooth")) {
+  if (any(names(args) == "env.smooth")) {
     checkmate::assert_number(
-      x = args$ssmooth,
+      x = args$env.smooth,
       lower = 1,
       add = check_collection,
-      .var.name = "ssmooth",
+      .var.name = "env.smooth",
       null.ok = FALSE,
       na.ok = FALSE
-    )
-  }
-
-  if (any(names(args) == "msmooth")) {
-    checkmate::assert_numeric(
-      x = args$msmooth,
-      lower = 0,
-      finite = TRUE,
-      any.missing = FALSE,
-      all.missing = FALSE,
-      len = 2,
-      add = check_collection,
-      .var.name = "msmooth"
     )
   }
 
@@ -729,12 +742,11 @@ check_arguments <- function(fun, args) {
   }
 
   if (any(names(args) == "flim")) {
-    checkmate::assert_numeric(
+    checkmate::assert_vector(
       x = args$flim,
-      lower = 0,
-      finite = TRUE,
       any.missing = FALSE,
       all.missing = FALSE,
+      null.ok = FALSE,
       len = 2,
       add = check_collection,
       .var.name = "flim"
@@ -1023,17 +1035,30 @@ check_arguments <- function(fun, args) {
   }
 
   if (any(names(args) == "bp")) {
-    checkmate::assert_numeric(
-      x = args$bp,
-      any.missing = FALSE,
-      all.missing = FALSE,
-      len = 2,
-      unique = TRUE,
-      lower = 0,
-      add = check_collection,
-      .var.name = "bp",
-      na.ok = FALSE
-    )
+    if (is.numeric(args$bp)) {
+      checkmate::assert_numeric(
+        x = args$bp,
+        any.missing = FALSE,
+        all.missing = FALSE,
+        len = 2,
+        unique = TRUE,
+        lower = 0,
+        add = check_collection,
+        .var.name = "bp"
+      )
+    } else {
+      checkmate::assert_character(
+        x = args$bp,
+        null.ok = FALSE,
+        add = check_collection,
+        .var.name = "bp",
+        len = 1,
+        pattern = "^freq.range$",
+        any.missing = FALSE,
+        all.missing = FALSE,
+        ignore.case = FALSE
+      )
+    }
   }
 
   if (any(names(args) == "img")) {
@@ -1175,15 +1200,11 @@ check_arguments <- function(fun, args) {
   invisible(NULL)
 }
 
-
-
-
 # remove options when unloading
 .onUnload <- function(libpath) {
   options(baRulho_check_args = NULL)
   invisible(NULL)
 }
-
 
 # warning function that doesn't print call
 warning2 <- function(...) {
@@ -1283,31 +1304,60 @@ detection_distance_ohn_int <-
 
     return(iter_dist)
   }
+## function to measure blur ratio
+
+spctr_FUN <- function(y, spec.smooth, wl, X, path, meanspc = FALSE, ovlp) {
+  # load clip
+  clp <- warbleR::read_sound_file(
+    X = X,
+    index = which(X$.sgnl.temp == y),
+    path = path
+  )
+
+  # calculate spectrum
+  clp.spc <- if (meanspc) {
+    # mean spec
+    meanspec(
+      wave = clp,
+      f = clp@samp.rate,
+      plot = FALSE,
+      wl = wl,
+      ovlp = ovlp
+    )
+  } else {
+    seewave::spec(
+      wave = clp,
+      f = clp@samp.rate,
+      plot = FALSE,
+      wl = wl
+    )
+  }
+
+  # smoothing
+  clp.spc[, 2] <-
+    warbleR::envelope(
+      x = clp.spc[, 2],
+      ssmooth = spec.smooth
+    )
+
+  return(clp.spc)
+}
 
 ## function to measure blur ratio
-# y and z are the sound.files+selec names of the sounds and reference sound (model)
-# envelope mismatch ratio
 blur_FUN <-
   function(X,
            envs,
-           path,
-           img,
-           dest.path,
            x,
-           res,
            ovlp,
            wl,
-           collevels,
-           palette,
-           ...) {
+           sampling.rate) {
     # get names of sound and reference
     sgnl <- X$.sgnl.temp[x]
     rfrnc <- X$reference[x]
 
-    # if sounds are the same or the selection is noise return NA
-    if (sgnl == rfrnc |
-      any(c(X$sound.id[X$.sgnl.temp == sgnl], X$sound.id[X$reference == rfrnc]) == "ambient")) {
-      out <- NA
+    # if reference is NA return NA
+    if (is.na(rfrnc)) {
+      bl.rt <- NA
     } else {
       # extract envelope for sound and model
       sgnl.env <- envs[[which(names(envs) == sgnl)]]
@@ -1321,15 +1371,10 @@ blur_FUN <-
         rfrnc.env <- rfrnc.env[1:length(sgnl.env)]
       }
 
-      # duration (any works as they all must have the same sampling rate)
+      # duration (any sampling rate works as they all must have the same sampling rate)
       # dur <- length(sgnl.env) / (attr(X, "check.results")$sample.rate[1] * 1000)
       dur <-
-        length(sgnl.env) / warbleR::read_sound_file(
-          X = X,
-          index = x,
-          path = path,
-          header = TRUE
-        )$sample.rate
+        length(sgnl.env) / sampling.rate
 
       # convert envelopes to PMF (probability mass function)
       rfrnc.pmf <- rfrnc.env / sum(rfrnc.env)
@@ -1337,59 +1382,408 @@ blur_FUN <-
 
       # get blur ratio as half the sum of absolute differences between envelope PMFs
       bl.rt <- sum(abs(rfrnc.pmf - sgn.pmf)) / 2
+    }
+    return(bl.rt)
+  }
+
+
+## function to measure spectrum blur ratio
+blur_sp_FUN <-
+  function(x, X, ovlp, wl, specs, sampling_rate) {
+    # get names of sound and reference
+    sgnl <- X$.sgnl.temp[x]
+    rfrnc <- X$reference[x]
+
+    # if reference is NA return NA
+    if (is.na(rfrnc)) {
+      sp.bl.rt <- NA
+    } else {
+      # extract spectrum for sound and model
+      sgnl.spc <- specs[[which(names(specs) == sgnl)]]
+      rfrnc.spc <- specs[[which(names(specs) == rfrnc)]]
+
+      # make them the same number of rows
+      sgnl.spc <- sgnl.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))), ]
+      rfrnc.spc <- rfrnc.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))), ]
+
+      # make test the same frequency range as reference
+      bp <- c(X$bottom.freq[X$.sgnl.temp == rfrnc], X$top.freq[X$.sgnl.temp == rfrnc])
+
+      bp <- bp + c(-0.2, 0.2) # add 0.2 kHz buffer
+      if (bp[1] < 0) {
+        # force 0 if negative
+        bp[1] <- 0
+      }
+      if (bp[2] > ceiling(sampling_rate / 2000) - 1) {
+        bp[2] <-
+          ceiling(sampling_rate / 2000) - 1
+      } # force lower than nyquist freq if higher
+
+      # apply bandpass by shrinking freq range and remove freq column based on reference freq bins
+      sgnl.spc <-
+        sgnl.spc[rfrnc.spc[, 1] > bp[1] &
+          rfrnc.spc[, 1] < bp[2], 2]
+      rfrnc.spc <-
+        rfrnc.spc[rfrnc.spc[, 1] > bp[1] &
+          rfrnc.spc[, 1] < bp[2], 2]
+
+
+      # convert envelopes to PMF (probability mass function)
+      rfrnc.pmf <- rfrnc.spc / sum(rfrnc.spc)
+      sgnl.pmf <- sgnl.spc / sum(sgnl.spc)
+
+      # get blur ratio as half the sum of absolute differences between spectra PMFs
+      sp.bl.rt <- sum(abs(rfrnc.pmf - sgnl.pmf)) / 2
+    }
+    return(sp.bl.rt)
+  }
+
+## function to plot  blur ratios
+plot_blur_FUN <-
+  function(X,
+           energy_vectors,
+           spectrum,
+           path,
+           dest.path,
+           x,
+           res,
+           ovlp,
+           wl,
+           collevels,
+           palette,
+           bp,
+           flim) {
+    # get names of sound and reference
+    sgnl <- X$.sgnl.temp[x]
+    rfrnc <- X$reference[x]
+
+    # if reference is NA return NA
+    if (!is.na(rfrnc)) {
+      # extract envelope for sound and model
+      sgnl.energy <- energy_vectors[[which(names(energy_vectors) == sgnl)]]
+      rfrnc.energy <- energy_vectors[[which(names(energy_vectors) == rfrnc)]]
+
+      # make them the same length as the shortest one
+      if (length(sgnl.energy) > length(rfrnc.energy)) {
+        sgnl.energy <- sgnl.energy[1:length(rfrnc.energy)]
+      }
+      if (length(rfrnc.energy) > length(sgnl.energy)) {
+        rfrnc.energy <- rfrnc.energy[1:length(sgnl.energy)]
+      }
+
+      sampling_rate <- warbleR::read_sound_file(
+        X = X,
+        index = x,
+        path = path,
+        header = TRUE
+      )$sample.rate
+
+      dur <-
+        length(sgnl.energy) / sampling_rate
+
+      # run band pass
+      if (spectrum) {
+        # make them the same frequency range as reference
+        bp <- c(X$bottom.freq[X$.sgnl.temp == rfrnc], X$top.freq[X$.sgnl.temp == rfrnc])
+
+        bp <- bp + c(-0.2, 0.2) # add 0.2 kHz buffer
+        if (bp[1] < 0) {
+          # force 0 if negative
+          bp[1] <- 0
+        }
+        if (bp[2] > ceiling(sampling_rate / 2000) - 1) {
+          bp[2] <-
+            ceiling(sampling_rate / 2000) - 1
+        } # force lower than nyquist freq if higher
+
+        # apply bandpass by shrinking freq range and remove freq column based on reference freq bins
+        sgnl.energy <-
+          sgnl.energy[rfrnc.energy[, 1] > bp[1] &
+            rfrnc.energy[, 1] < bp[2], 2]
+        rfrnc.energy <-
+          rfrnc.energy[rfrnc.energy[, 1] > bp[1] &
+            rfrnc.energy[, 1] < bp[2], 2]
+      }
+
+      # convert envelopes to PMF (probability mass function)
+      rfrnc.pmf <- rfrnc.energy / sum(rfrnc.energy)
+      sgn.pmf <- sgnl.energy / sum(sgnl.energy)
+
+      # get blur ratio as half the sum of absolute differences between envelope PMFs
+      bl.rt <- sum(abs(rfrnc.pmf - sgn.pmf)) / 2
+
+      img_name <- paste0(
+        if (spectrum) "spectrum_blur_ratio_" else "blur_ratio_",
+        X$sound.id[x],
+        "-",
+        rfrnc,
+        "-",
+        sgnl,
+        ".jpeg"
+      )
 
       # plot
-      if (img) {
-        warbleR:::img_wrlbr_int(
-          filename = paste0(
-            "blur_ratio_",
-            X$sound.id[x],
-            "-",
-            rfrnc,
-            "-",
-            sgnl,
-            ".jpeg"
-          ),
-          path = dest.path,
-          width = 10.16 * 1.5,
-          height = 10.16,
-          units = "cm",
-          res = res
-        )
+      warbleR:::img_wrlbr_int(
+        filename = img_name,
+        path = dest.path,
+        width = 10.16 * 1.5,
+        height = 10.16,
+        units = "cm",
+        res = res
+      )
 
-        # time values for plots
-        time.vals <- seq(0, dur, length.out = length(sgnl.env))
 
-        # difference between envelopes
-        env.diff <- rfrnc.pmf - sgn.pmf
+      # matrix for layout
+      page_layout <- matrix(
+        c(
+          0.06, 0.4, 0, 0.55, # bottom left spectrogram
+          0.06, 0.4, 0.55, 1, # top left spectrogram
+          0.4, 1, 0, 1,  # right pannel with blur ratio
+          0, 0.06, 0.1, 1
+        ),
+       
+        nrow = 4,
+        byrow = TRUE
+      )
 
-        # matrix for layout
-        ly.mat <- matrix(
+      # testing layout screens
+      # ss <- split.screen(figs = page_layout)
+      # for(i in 1:nrow(page_layout))
+      # {screen(i)
+      #   par( mar = rep(0, 4))
+      #   plot(0.5, xlim = c(0,1), ylim = c(0,1), type = "n", axes = FALSE, xlab = "", ylab = "", xaxt = "n", yaxt = "n")
+      #   box()
+      #   text(x = 0.5, y = 0.5, labels = i)
+      # }
+      # 
+      # save par settings
+      oldpar <- par(no.readonly = TRUE)
+      on.exit(par(oldpar))
+
+      # close if open any screen
+      invisible(close.screen(all.screens = TRUE))
+
+      # split screen
+      split.screen(page_layout)
+
+      ## plot spectros
+
+      # index of reference
+      rf.indx <-
+        which(paste(X$sound.files, X$selec, sep = "-") == rfrnc)
+
+      # freq limit of reference
+      flm <- c(X$bottom.freq[rf.indx], X$top.freq[rf.indx])
+
+      # set frequency limits
+      if (is.character(flim)[1]) {
+        flm <-
           c(
-            0, 0.3, 0, 0.5, # bottom left spectrogram
-            0, 0.3, 0.5, 1, # top left spectrogram
-            0.2, 1, 0, 1
-          ),
-          # right pannel envelopes
-          nrow = 3,
-          byrow = TRUE
+            flm[1] + as.numeric(flim[1]),
+            flm[2] + as.numeric(flim[2])
+          )
+      } else {
+        flm <- flim
+      }
+      # fix if lower than 0
+      if (flm[1] < 0) {
+        flm[1] <- 0
+      }
+      
+      #####
+      # end for sound and reference
+      rf.info <-
+        warbleR::read_sound_file(
+          X = X,
+          index = rf.indx,
+          header = TRUE,
+          path = path
         )
+      rf.dur <- rf.info$samples / rf.info$sample.rate
 
-        # save par settings
-        oldpar <- par(no.readonly = TRUE)
-        on.exit(par(oldpar))
+      # fix upper frequency in flim
+      if (flm[2] > rf.info$sample.rate / 2000) {
+        flm[2] <- rf.info$sample.rate / 2000
+      }
+      
+      sgnl.info <-
+        warbleR::read_sound_file(
+          X = X,
+          index = x,
+          header = TRUE,
+          path = path
+        )
+      sgnl.dur <- sgnl.info$samples / sgnl.info$sample.rate
 
-        # close if open any screen
-        invisible(close.screen(all.screens = TRUE))
+      # calculate margin for spectrogram, before and after
+      mar.rf.af <-
+        mar.rf.bf <- (X$end[rf.indx] - X$start[rf.indx]) / 4
 
-        # split screen
-        split.screen(ly.mat)
+      # start for sound and reference
+      strt.sgnl <- X$start[x] - mar.rf.bf
+      if (strt.sgnl < 0) {
+        strt.sgnl <- 0
+      }
+      strt.rf <- X$start[rf.indx] - mar.rf.bf
+      if (strt.rf < 0) {
+        strt.rf <- 0
+      }
 
-        # plot envelopes
-        screen(3)
+      end.sgnl <- X$end[x] + mar.rf.af
+      if (end.sgnl > sgnl.dur) {
+        end.sgnl <- sgnl.dur
+      }
+      end.rf <- X$end[rf.indx] + mar.rf.af
+      if (end.rf > rf.dur) {
+        end.rf <- rf.dur
+      }
 
-        # set image margins
-        par(mar = c(4, 4, 4, 3))
+      # extract clip reference and sound
+      clp.sgnl <-
+        warbleR::read_sound_file(
+          X = X,
+          index = x,
+          from = strt.sgnl,
+          to = end.sgnl,
+          path = path
+        )
+      clp.rfnc <-
+        warbleR::read_sound_file(
+          X = X,
+          index = rf.indx,
+          from = strt.rf,
+          to = end.rf,
+          path = path
+        )
+      # add box with reference color
+      box(col = "#31688E", lwd = 3)
+      
+      # frequency axis for spectrograms
+      screen(4)
+      par(mar = c(0, 0, 0, 0), new = TRUE)
+      
+      plot(
+        1,
+        frame.plot = FALSE,
+        type = "n",
+        yaxt = "n",
+        xaxt = "n"
+      )
+      
+      text(
+        x = 0.8,
+        y = 1,
+        "Frequency (kHz)",
+        srt = 90,
+        cex = 1.2
+      )
+      
+
+      # sound at bottom left
+      screen(1)
+      par(mar = c(3, 2, 0.15, 0.3))
+
+      warbleR:::spectro_wrblr_int2(
+        wave = clp.sgnl,
+        f = clp.sgnl@samp.rate,
+        flim = flm,
+        axisX = FALSE,
+        axisY = FALSE,
+        tlab = NULL,
+        flab = NULL,
+        main = NULL,
+        grid = FALSE,
+        rm.zero = TRUE,
+        cexaxis = 1,
+        add = TRUE,
+        ovlp = ovlp,
+        wl = wl,
+        collevels = collevels,
+        palette = palette
+      )
+      
+      at_freq <-
+        pretty(seq(0, clp.sgnl@samp.rate / 2000, length.out = 10)[-10], n = 10)
+      axis(2,
+           at = at_freq,
+           labels = 
+             c(at_freq[-length(at_freq)], "")
+      )
+      
+      # plot time ticks
+      at_time <-
+        pretty(seq(0, duration(clp.sgnl), length.out = 10)[-10], n = 4)
+      axis(1,
+           at = at_time,
+           labels =c(at_time[c(-length(at_time))], "")
+      )
+      
+      # add x axis label
+      mtext(
+        text = "Time (s)",
+        side = 1,
+        line = 2
+      )
+
+      
+      
+      # lines showing position of sound
+      abline(
+        v = c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf),
+        col = "#B4DE2CFF",
+        lty = 2
+      )
+
+      # add box with sound color
+      box(col = "#B4DE2CFF", lwd = 3)
+
+      # reference at top left
+      screen(2)
+      par(mar = c(0.15, 2, 0.3, 0.3))
+
+      warbleR:::spectro_wrblr_int2(
+        wave = clp.rfnc,
+        f = clp.rfnc@samp.rate,
+        flim = flm,
+        axisX = FALSE,
+        axisY = FALSE,
+        tlab = NULL,
+        flab = NULL,
+        main = NULL,
+        grid = FALSE,
+        rm.zero = TRUE,
+        cexaxis = 1,
+        add = TRUE,
+        ovlp = ovlp,
+        wl = wl,
+        collevels = collevels,
+        palette = palette
+      )
+
+      # lines showing position of sound
+      abline(
+        v = c(mar.rf.bf, X$end[rf.indx] - X$start[rf.indx] + mar.rf.bf),
+        col = "#31688ECC",
+        lty = 2
+      )
+
+      at_freq <-
+        pretty(seq(0, clp.rfnc@samp.rate / 2000, length.out = 10)[-10], n = 10)
+      axis(2,
+           at = at_freq,
+           labels = 
+             c(at_freq[-length(at_freq)], "")
+      )
+      # plot envelopes
+      screen(3)
+
+      # set image margins
+      par(mar = c(4, 1, 4, if (spectrum) 4.2 else 3.2))
+
+      # plot envelope
+      if (!spectrum) {
+        # time values for plots
+        time.vals <- seq(0, dur, length.out = length(sgnl.energy))
 
         # reference envelope first
         plot(
@@ -1439,7 +1833,7 @@ blur_FUN <-
         mtext(
           text = "Amplitude (PMF)",
           side = 4,
-          line = 1.5
+          line = 1
         )
 
         # add sound envelope
@@ -1467,15 +1861,101 @@ blur_FUN <-
           paste("Blur ratio:", round(bl.rt, 2)),
           cex = 1
         )
+      }
+
+      # spectrum
+      if (spectrum) {
+        # create time values for area calculation
+        f.vals <-
+          seq(bp[1], bp[2], length.out = length(rfrnc.pmf))
+
+        # reference spectrum first
+        plot(
+          x = rfrnc.pmf,
+          y = f.vals,
+          type = "l",
+          xlab = "",
+          ylab = "",
+          col = "#31688E",
+          xlim = c(
+            min(rfrnc.pmf, sgn.pmf),
+            max(rfrnc.pmf, sgn.pmf) * 1.1
+          ),
+          cex.main = 0.8,
+          lwd = 1.2,
+          yaxt = "n"
+        )
+
+        # add x axis label
+        mtext(
+          text = "Power spectrum (PMF)",
+          side = 1,
+          line = 2.5
+        )
+
+        # add title
+        mtext(
+          text = paste("Sound ID:", X$sound.id[x]),
+          side = 3,
+          line = 3,
+          cex = 1
+        )
+        mtext(
+          text = paste("Reference:", rfrnc),
+          side = 3,
+          line = 1.75,
+          col = "#31688E",
+          cex = 1
+        )
+        mtext(
+          text = paste("Test sound:", sgnl),
+          side = 3,
+          line = 0.5,
+          col = "#B4DE2C",
+          cex = 1
+        )
+
+        # add y axis
+        axis(side = 4)
+        mtext(
+          text = "Frequency (kHz)",
+          side = 4,
+          line = 2
+        )
+
+        # add sound spectrum
+        lines(sgn.pmf,
+          f.vals,
+          col = "#B4DE2C",
+          lwd = 1.2
+        )
+
+        # sound spectrum on top
+        polygon(
+          y = c(f.vals, rev(f.vals)),
+          x = c(sgn.pmf, rev(rfrnc.pmf)),
+          col = "#FDE72533",
+          border = NA
+        )
+
+        # get plotting area limits
+        usr <- par("usr")
+
+        # and blu ratio value
+        text(
+          x = ((usr[1] + usr[2]) / 2),
+          y = (usr[4] - usr[3]) * 0.9 + usr[3],
+          paste("Spectrum blur ratio:", round(bl.rt, 2)),
+          cex = 1
+        )
 
         # index of reference
         rf.indx <-
           which(paste(X$sound.files, X$selec, sep = "-") == rfrnc)
 
         # freq limit of reference
-        flim <- c(X$bottom.freq[rf.indx], X$top.freq[rf.indx])
+        # flim <- c(X$bottom.freq[rf.indx], X$top.freq[rf.indx])
 
-        #####
         # end for sound and reference
         rf.info <-
           warbleR::read_sound_file(
@@ -1509,6 +1989,7 @@ blur_FUN <-
           strt.rf <- 0
         }
 
+
         end.sgnl <- X$end[x] + mar.rf.af
         if (end.sgnl > sgnl.dur) {
           end.sgnl <- sgnl.dur
@@ -1535,94 +2016,62 @@ blur_FUN <-
             to = end.rf,
             path = path
           )
-
-        ## plot spectros
-        # sound at bottom left
-        screen(1)
-        par(mar = c(0.3, 0.3, 0.15, 0.3))
-
-        warbleR:::spectro_wrblr_int2(
-          wave = clp.sgnl,
-          f = clp.sgnl@samp.rate,
-          flim = flim,
-          axisX = FALSE,
-          axisY = FALSE,
-          tlab = NULL,
-          flab = NULL,
-          main = NULL,
-          grid = FALSE,
-          rm.zero = TRUE,
-          cexaxis = 1.2,
-          add = TRUE,
-          ovlp = ovlp,
-          wl = wl,
-          collevels = collevels,
-          palette = palette
-        )
-
-        # lines showing position of sound
-        abline(
-          v = c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf),
-          col = "#B4DE2CFF",
-          lty = 2
-        )
-
-        # add box with sound color
-        box(col = "#B4DE2CFF", lwd = 3)
-
-        # reference at top left
-        screen(2)
-        par(mar = c(0.15, 0.3, 0.3, 0.3))
-
-        warbleR:::spectro_wrblr_int2(
-          wave = clp.rfnc,
-          f = clp.rfnc@samp.rate,
-          flim = flim,
-          axisX = FALSE,
-          axisY = FALSE,
-          tlab = NULL,
-          flab = NULL,
-          main = NULL,
-          grid = FALSE,
-          rm.zero = TRUE,
-          cexaxis = 1.2,
-          add = TRUE,
-          ovlp = ovlp,
-          wl = wl,
-          collevels = collevels,
-          palette = palette
-        )
-
-        # lines showing position of sound
-        abline(
-          v = c(mar.rf.bf, X$end[rf.indx] - X$start[rf.indx] + mar.rf.bf),
-          col = "#31688ECC",
-          lty = 2
-        )
-
-        # add box with reference color
-        box(col = "#31688E", lwd = 3)
-
-        # close graph
-        dev.off()
       }
 
-      # return maximum correlation
-      return(bl.rt)
+      # close graph
+      dev.off()
     }
-    return(out)
   }
+
+# function to extract envelopes from wave objects
+env_FUN <- function(X, y, env.smooth, ovlp, wl, path) {
+  # load clip
+  clp <- warbleR::read_sound_file(
+    X = X,
+    index = which(X$.sgnl.temp == y),
+    path = path
+  )
+
+  # define bandpass
+  bp <- c(X$bottom.freq[X$.sgnl.temp == y], X$top.freq[X$.sgnl.temp == y])
+
+  # bandpass filter
+  clp <- seewave::ffilter(
+    clp,
+    from = bp[1] * 1000,
+    ovlp = ovlp,
+    to = bp[2] * 1000,
+    bandpass = TRUE,
+    wl = wl,
+    output = "Wave"
+  )
+
+  # calculate envelope
+  nv <-
+    warbleR::envelope(
+      x = clp@left,
+      ssmooth = env.smooth
+    )
+
+  return(nv)
+}
 
 # function to measure envelope correlation
 # y and z are the sound.files+selec names of the sounds and reference sound (model)
-env_cor_FUN <- function(Y, y, z, envs, cor.method) {
+env_cor_FUN <- function(X, x, envs, cor.method) {
   # if names are the same return NA
-  if (y == z | Y$sound.id[Y$.sgnl.temp == y] == "ambient") {
-    out <- NA
+
+  # get names of sound and reference
+  sgnl <- X$.sgnl.temp[x]
+  rfrnc <- X$reference[x]
+
+  # if reference is NA return NA
+  if (is.na(rfrnc)) {
+    envcor <- NA
   } else {
     # extract envelope for sound and model
-    sgnl.env <- envs[[which(names(envs) == y)]]
-    mdl.env <- envs[[which(names(envs) == z)]]
+    sgnl.env <- envs[[which(names(envs) == sgnl)]]
+    mdl.env <- envs[[which(names(envs) == rfrnc)]]
 
     # define short and long envelope for sliding one (short) over the other (long)
     if (length(mdl.env) > length(sgnl.env)) {
@@ -1645,101 +2094,95 @@ env_cor_FUN <- function(Y, y, z, envs, cor.method) {
     })
 
     # return maximum correlation
-    out <- max(cors, na.rm = TRUE)
+    envcor <- max(cors, na.rm = TRUE)
   }
-
-  return(out)
+  return(envcor)
 }
 
 # function to extract mean envelopes
 meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
-  if (X$sound.id[y] == "ambient") {
-    sig_env <- NA
-  } else {
-    # read sound clip
+  # read sound clip
+  clp <-
+    warbleR::read_sound_file(
+      X = X,
+      index = which(X$.sgnl.temp == y),
+      from = 0,
+      to = X$end[X$.sgnl.temp == y],
+      path = path
+    )
+
+  noise_clp <-
+    warbleR::read_sound_file(
+      X = X,
+      index = which(X$.sgnl.temp == y),
+      from = 0,
+      to = X$start[X$.sgnl.temp == y] - 0.001,
+      path = path
+    )
+
+  # add band-pass frequency filter
+  if (!is.null(bp)) {
+    # filter to bottom and top freq range
+    if (bp[1] == "freq.range") {
+      bp <- c(X$bottom.freq[X$.sgnl.temp == y], X$top.freq[X$.sgnl.temp == y])
+    }
+
     clp <-
-      warbleR::read_sound_file(
-        X = X,
-        index = y,
-        from = 0,
-        to = X$end[y],
-        path = path
-      )
-
-    if (X$sound.id[y] != "ambient") {
-      noise_clp <-
-        warbleR::read_sound_file(
-          X = X,
-          index = y,
-          from = 0,
-          to = X$start[y] - 0.001,
-          path = path
-        )
-    }
-
-    # add band-pass frequency filter
-    if (!is.null(bp)) {
-      # filter to bottom and top freq range
-      if (bp == "freq.range") {
-        bp <- c(X$bottom.freq[y], X$top.freq[y])
-      }
-
-      clp <-
-        seewave::ffilter(
-          clp,
-          f = clp@samp.rate,
-          from = bp[1] * 1000,
-          ovlp = ovlp,
-          to = bp[2] * 1000,
-          bandpass = TRUE,
-          wl = wl,
-          output = "Wave"
-        )
-
-      if (X$sound.id[y] != "ambient") {
-        noise_clp <-
-          seewave::ffilter(
-            noise_clp,
-            f = noise_clp@samp.rate,
-            from = bp[1] * 1000,
-            ovlp = ovlp,
-            to = bp[2] * 1000,
-            bandpass = TRUE,
-            wl = wl,
-            output = "Wave"
-          )
-      }
-    }
-
-    # get mean envelopes
-    sig_env <-
-      mean(seewave::env(
+      seewave::ffilter(
         clp,
         f = clp@samp.rate,
-        envt = "hil",
-        plot = FALSE
-      ))
+        from = bp[1] * 1000,
+        ovlp = ovlp,
+        to = bp[2] * 1000,
+        bandpass = TRUE,
+        wl = wl,
+        output = "Wave"
+      )
+
+    noise_clp <-
+      seewave::ffilter(
+        noise_clp,
+        f = noise_clp@samp.rate,
+        from = bp[1] * 1000,
+        ovlp = ovlp,
+        to = bp[2] * 1000,
+        bandpass = TRUE,
+        wl = wl,
+        output = "Wave"
+      )
   }
 
-  return(data.frame((X[y, , drop = FALSE]), sig_env))
+  # get mean envelopes
+  sig_env <-
+    mean(seewave::env(
+      clp,
+      f = clp@samp.rate,
+      envt = "hil",
+      plot = FALSE
+    ))
+
+  return(sig_env)
 }
 
 # function to measure spectrum correlation
 # y and z are the sound.files+selec names of the sounds and reference sound (model)
-spctr_cor_FUN <- function(y, z, spcs, X, cor.method) {
-  # if names are the same return NA
-  if (y == z | X$sound.id[X$.sgnl.temp == y] == "ambient") {
+spctr_cor_FUN <- function(y, specs, X, cor.method) {
+  # get names of sound and reference
+  sgnl <- X$.sgnl.temp[y]
+  rfrnc <- X$reference[y]
+
+  # if reference is NA return NA
+  if (is.na(rfrnc)) {
     cor.spctr <- NA
   } else {
     # extract envelope for sound and model
-    sgnl.spctr <- spcs[[which(names(spcs) == y)]]
-    mdl.spctr <- spcs[[which(names(spcs) == z)]]
-
+    sgnl.spctr <- specs[[which(names(specs) == sgnl)]]
+    mdl.spctr <- specs[[which(names(specs) == rfrnc)]]
 
     ### filter to freq range of sounds and remove freq column
     # get range as lowest bottom and highest top
     frng <-
-      c(min(X$bottom.freq[X$.sgnl.temp %in% c(y, z)]), max(X$top.freq[X$.sgnl.temp %in% c(y, z)]))
+      c(min(X$bottom.freq[X$.sgnl.temp %in% c(sgnl, rfrnc)]), max(X$top.freq[X$.sgnl.temp %in% c(sgnl, rfrnc)]))
     sgnl.spctr <-
       sgnl.spctr[sgnl.spctr[, 1] > frng[1] &
         sgnl.spctr[, 1] < frng[2], 2]
@@ -1754,17 +2197,16 @@ spctr_cor_FUN <- function(y, z, spcs, X, cor.method) {
   return(cor.spctr)
 }
 
-exc_att_FUN <- function(y, X, meth, tp, gn) {
-  # print(y)
+exc_att_FUN <- function(y, X, tp, gn) {
+  
   # get names of sound and reference
   sgnl <- X$.sgnl.temp[y]
   rfrnc <- X$reference[y]
 
-  if (X$sound.id[X$.sgnl.temp == sgnl] == "ambient" | sgnl == rfrnc) {
+  # if reference is NA return NA
+  if (is.na(rfrnc)) {
     ea <- NA
   } else {
-    # method 1 compare to closest distance to source
-    # if (meth == 1) {
     # extract mean envelope of sounds
     sig_env_REF <- X$sig_env[X$.sgnl.temp == rfrnc]
     dist_REF <- X$distance[X$.sgnl.temp == rfrnc]
@@ -1791,17 +2233,3 @@ exc_att_FUN <- function(y, X, meth, tp, gn) {
 rbind2 <- function(...) {
   suppressWarnings(rbind(...))
 }
-
-# ## internal function to subtract SPL from background noise
-# # sound = sound SPL
-# # noise = noise SPL
-# lessdB <- function(sound.noise, noise){
-#
-#   puttative_SPLs <- seq(0.01, sound.noise, by = 0.01)
-#
-#   sum_SPLs <-  20 * log10((10^(puttative_SPLs/20)) + (10^(noise/20)))
-#
-#   sound_SPL <- puttative_SPLs[which.min(abs(sum_SPLs - sound.noise))]
-#
-#   return(sound_SPL)
-#   }

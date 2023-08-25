@@ -5,14 +5,14 @@
 \title{Measure amplitude envelope correlation}
 \usage{
 envelope_correlation(X, parallel = NULL, cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), method = getOption("method", 1),
-cor.method = "pearson", ssmooth = getOption("ssmooth", 200),
-msmooth = NULL, output = NULL, hop.size = getOption("hop.size", 11.6),
+pb = getOption("pb", TRUE),
+cor.method = "pearson", env.smooth = getOption("env.smooth", 200),
+output = NULL, hop.size = getOption("hop.size", 11.6),
 wl = getOption("wl", NULL), ovlp = getOption("ovlp", 70),
 path = getOption("sound.files.path", "."))
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "distance": distance at which each test sound was re-recorded. Each sound must have a unique ID within a distance. An additional 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'.}
+\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
 
 \item{parallel}{DEPRECATED. Use 'cores' instead.}
 
@@ -21,17 +21,9 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{method}{Numeric vector of length 1 to indicate the 'experimental design' to measure amplitude envelope correlation. Two methods are available:
-\itemize{
-\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
-\item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
-}}
-
 \item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
 
-\item{ssmooth}{Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).}
-
-\item{msmooth}{Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).}
+\item{env.smooth}{Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).}
 
 \item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
@@ -62,11 +54,15 @@ Amplitude envelope correlation measures the similarity of two sounds in the time
   # create subset of data with only re-recorded files
   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-  # method 1
-  envelope_correlation(X = rerecorded_est)
+  # add reference to X
+  X <- set_reference_sounds(X = rerecorded_est)
+
+  envelope_correlation(X = X)
 
   # method 2
-  # envelope_correlation(X = rerecorded_est, method = 2)
+  # add reference to X
+  X <- set_reference_sounds(X = rerecorded_est, method = 2)
+  envelope_correlation(X = X)
 }
 
 }

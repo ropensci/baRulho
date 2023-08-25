@@ -3,11 +3,14 @@ test_that("using extended table", {
   
   X <- degradation_est[degradation_est$sound.files != "master.wav", ]
   
-  dd <- detection_distance(X = X[X$distance == 1, ], spl.cutoff = 5, mar = 0.05)
   
-  expect_equal(sum(is.na(dd$detection.distance)), 1)
+  X <- set_reference_sounds(X, method = 2)
   
-  expect_equal(nrow(dd), 5)
+  dd <- detection_distance(X = X[X$distance %in% c(1, 10), ], spl.cutoff = 5, mar = 0.05)
+  
+  expect_equal(sum(is.na(dd$detection.distance)), 11)
+  
+  expect_equal(nrow(dd), 15)
   
   expect_equal(ncol(dd), 11)
   
@@ -28,11 +31,13 @@ test_that("using data frame", {
   
   X <- as.data.frame(degradation_est[degradation_est$sound.files != "master.wav", ])
   
-  dd <- detection_distance(X = X[X$distance == 1, ], spl.cutoff = 5, mar = 0.05)
+  X <- set_reference_sounds(X)
   
-  expect_equal(sum(is.na(dd$detection.distance)), 1)
+  dd <- detection_distance(X = X[X$distance %in% c(1, 10), ], spl.cutoff = 5, mar = 0.05)
   
-  expect_equal(nrow(dd), 5)
+  expect_equal(sum(is.na(dd$detection.distance)), 7)
+  
+  expect_equal(nrow(dd), 15)
   
   expect_equal(ncol(dd), 11)
   

@@ -3,13 +3,16 @@ test_that("using extended table and method 1", {
   
   X <- degradation_est[degradation_est$sound.files != "master.wav", ]
   
-  ec <- spectrum_correlation(X = X, method = 1)
+  X <- set_reference_sounds(X)
+  
+  ec <- spectrum_correlation(X = X)
   
   expect_equal(sum(is.na(ec$spectrum.correlation)), 9)
   
   expect_equal(nrow(ec), 25)
   
   expect_equal(ncol(ec), 11)
+  
   
   expect_equal(class(ec)[1], "extended_selection_table")
   
@@ -29,9 +32,11 @@ test_that("using data frame and method 2", {
   
   X <- as.data.frame(degradation_est[degradation_est$sound.files != "master.wav", ])
   
-  expect_warning(ec <- spectrum_correlation(X = X, method = 2))
+  X <- set_reference_sounds(X, method = 2)
   
-  expect_equal(sum(is.na(ec$spectrum.correlation)), 9)
+  expect_warning(ec <- spectrum_correlation(X = X))
+  
+  expect_equal(sum(is.na(ec$spectrum.correlation)), 13)
   
   expect_equal(nrow(ec), 25)
   

@@ -5,15 +5,14 @@
 \title{Measure blur ratio in the time domain}
 \usage{
 blur_ratio(X, parallel = NULL, cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), method = getOption("method", 1), 
-ssmooth = getOption("ssmooth", 200),
-msmooth = NULL, output = NULL, envelopes = FALSE, img = FALSE, res = 150,
+pb = getOption("pb", TRUE),  
+env.smooth = getOption("env.smooth", 200),
+output = NULL, envelopes = FALSE, 
 hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
-ovlp = getOption("ovlp", 70), palette = viridis::viridis, collevels = seq(-120, 0, 5),
-dest.path = NULL, path = getOption("sound.files.path", "."))
+ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."))
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "distance": distance at which each test sound was re-recorded. Each sound must have a unique ID within a distance. An additional 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'.}
+\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
 
 \item{parallel}{DEPRECATED. Use 'cores' instead.}
 
@@ -21,23 +20,11 @@ dest.path = NULL, path = getOption("sound.files.path", "."))
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{method}{Numeric vector of length 1 to indicate the 'experimental design' for measuring envelope correlation. Two methods are available:
-\itemize{
-\item \code{1}: compare all sounds with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
-\item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
-}}
-
-\item{ssmooth}{Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200.}
-
-\item{msmooth}{Numeric vector of length 2 to smooth the amplitude envelope with a mean sliding window for amplitude envelope calculation. The first element is the window length (in number of amplitude values) and the second one the window overlap (used internally by \code{\link[seewave]{env}}).}
+\item{env.smooth}{Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200.}
 
 \item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'. To obtain the amplitude envelopes use 'envelopes = TRUE'.}
 
 \item{envelopes}{Logical to control if envelopes are returned (as attributes, 'attributes(X)$envelopes'). Default is \code{FALSE}.}
-
-\item{img}{Logical argument to control if image files in 'jpeg' format containing the images being compared and the corresponding envelopes are produced. Default is no images (\code{FALSE}).}
-
-\item{res}{Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
@@ -45,19 +32,12 @@ dest.path = NULL, path = getOption("sound.files.path", "."))
 is NULL. If supplied, 'hop.size' is ignored.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files.}
-
-\item{palette}{A color palette function to be used to assign colors in the
-plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}.}
-
-\item{collevels}{Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.}
-
-\item{dest.path}{Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.}
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Used for applying bandpass filtering.}
 
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-Object 'X' with two additional columns, 'reference' and 'blur.ratio', containing containing the id of the sound used as reference and the computed blur ratio values, respectively. If \code{img = TRUE} it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both sounds and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference sound and also show vertical lines with the start and end of sounds to allow users to visually check alignment. If \code{envelopes = TRUE} the output would include amplitude envelopes for all sounds as attributes ('attributes(X)$envelopes').
+Object 'X' with two additional columns, 'reference' and 'blur.ratio', containing containing the id of the sound used as reference and the computed blur ratio values, respectively. If \code{envelopes = TRUE} the output would include amplitude envelopes for all sounds as attributes ('attributes(X)$envelopes').
 }
 \description{
 \code{blur_ratio} measures blur ratio in sounds referenced in an extended selection table.
@@ -73,14 +53,16 @@ Blur ratio measures the degradation of sound as a change in sound energy in the 
   # create subset of data with only re-recorded files
   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
   
-  # using method 1
-  blur_ratio(X = rerecorded_est)
+ # add reference to X
+ X <- set_reference_sounds(X = rerecorded_est)
+  blur_ratio(X = X)
 
   # using method 2
-  # blur_ratio(X = rerecorded_est, method = 2)
+X <- set_reference_sounds(X = rerecorded_est, method = 2)
+  # blur_ratio(X = X)
 
   # get envelopes
-  br <- blur_ratio(X = rerecorded_est, envelopes = TRUE)
+  br <- blur_ratio(X = X, envelopes = TRUE)
   envs <- attributes(br)$envelopes
 
   # make distance a factor for plotting

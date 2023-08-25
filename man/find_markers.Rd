@@ -35,78 +35,25 @@ A data frame with test file names, marker id, maximum cross-correlation score fo
 The function takes a master sound file's reference data ('X') and finds the position of acoustics markers ('markers' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that referred to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow. In cases in which markers are not correctly detected editing test sound files to remove audio segments with no target sounds (before the start marker and after the end marker) can improve performance. Using a low 'hop.size' or window length 'wl' (used internally by \code{\link[ohun]{template_correlator}}) can help to improve precision Other spectrogram types (argument 'type' in \code{\link[ohun]{template_correlator}}) can sometimes show better performance when markers are highly degraded.
 }
 \examples{
-\dontrun{
-# use a temporary directory
-td <- tempdir()
+{
+  # set temporary directory
+  td <- tempdir()
 
-# load example data from warbleR
-data(list = c("Phae.long1", "Phae.long2", "lbh_selec_table"))
+  # save example files in working director to recreate a case in which working
+  # with sound files. This doesn't have to be done with your own data as you will
+  # have them as sound files already.
+  for (i in unique(degradation_est$sound.files)[1:2]) {
+    writeWave(object = attr(degradation_est, "wave.objects")[[i]], file.path(td, i))
+  }
 
-# save sound files to temporary folder
-writeWave(Phae.long1, file.path(td, "Phae.long1.wav"))
-writeWave(Phae.long2, file.path(td, "Phae.long2.wav"))
+  # set path and no progress bar in global options
+  options(sound.files.path = td, pb = FALSE)
 
-# make an extended selection table
-est <- selection_table(
-  X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
-  path = td, pb = FALSE
-)
+  # extract annotations for master sound file
+  master <- degradation_est[degradation_est$sound.files == "master.wav", ]
 
-# create master sound file
-master.sf <- master_sound_file(
-  X = est, file.name = "example_master",
-  dest.path = td, gap.duration = 0.3
-)
-
-# read master
-exmp.master <- readWave(file.path(td, "example_master.wav"))
-
-# add 1 s silence
-exmp.test1 <- addsilw(
-  wave = exmp.master, at = "start", d = 1,
-  output = "Wave", f = exmp.master@samp.rate
-)
-
-exmp.test2 <- addsilw(
-  wave = exmp.master, at = "start", d = 2,
-  output = "Wave", f = exmp.master@samp.rate
-)
-
-# create noise
-ns <- noisew(
-  f = exmp.master@samp.rate, d = duration(exmp.test2) + 1,
-  output = "Wave"
-)
-
-# make noise exactly the same length and add noise to 2 examples
-exmp.test1@left <- exmp.test1@left + (ns@left[1:length(exmp.test1@left)] * 500)
-exmp.test2@left <- exmp.test2@left + (ns@left[1:length(exmp.test2@left)] * 500)
-
-exmp.test1 <- tuneR::normalize(exmp.test1, unit = "16")
-exmp.test2 <- tuneR::normalize(exmp.test2, unit = "16")
-
-# save examples
-writeWave(object = exmp.test1, filename = file.path(td, "example_test1.wav"), extensible = FALSE)
-writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), extensible = FALSE)
-
-# search using start and end marker (default)
-find_markers(
-  X = master.sf,
-  test.files = c("example_test1.wav", "example_test2.wav"), path = td, pb = FALSE
-)
-
-# search using start marker
-find_markers(
-  X = master.sf,
-  test.files = c("example_test1.wav", "example_test2.wav"),
-  path = td, pb = FALSE, marker = "start_marker"
-)
-# search using end marker
-find_markers(
-  X = master.sf,
-  test.files = c("example_test1.wav", "example_test2.wav"),
-  path = td, pb = FALSE, marker = "end_marker"
-)
+  # get marker position
+  markers <- find_markers(X = master, test.files = unique(degradation_est$sound.files)[2])
 }
 }
 \references{

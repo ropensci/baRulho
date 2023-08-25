@@ -12,7 +12,7 @@ rh = 60, pa = 101325, hab.att.coef = 0.02, max.distance = 1000,
 resolution = 0.1, subtract.bgn = TRUE, envelope = "abs", mar = NULL)
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}
+\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
@@ -61,14 +61,18 @@ containing the id of the sound used as reference and the computed detection dist
 The function computes the maximum distance at which a sound would be detected, which is calculated as the distance in which the sound pressure level (SPL) goes below the specified SPL cutoff ('spl.cutoff')). The function uses internally \code{\link{attenuation}} to estimate SPL at increasing values until it reaches the defined cutoff. The peak frequency (calculated on the power spectrum of the reference sound) of the reference sound for each sound ID is used as the carrier frequency for distance estimation. The sound recorded at the lowest distance is used as reference. \strong{This function assumes that all recordings have been made at the same recording volume}.
 }
 \examples{
-{
-  # load example data
-  data("degradation_est")
+\dontrun{
+# load example data
+data("degradation_est")
 
-  # create subset of data with only re-recorded files
-  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+# create subset of data with only re-recorded files
+rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-  detection_distance(X = rerecorded_est[rerecorded_est$distance == 1, ], spl.cutoff = 5, mar = 0.05)
+
+# add reference to X
+X <- set_reference_sounds(X = rerecorded_est)
+
+detection_distance(X = X[X$distance \%in\% c(1, 10), ], spl.cutoff = 5, mar = 0.05)
 }
 
 }

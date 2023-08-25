@@ -75,14 +75,7 @@ Image files in jpeg format with spectrograms in the working directory, one for e
 \details{
 This functions aims to simplify the evaluation of the alignment of test sound files from  \code{\link{align_test_files}}. The function creates a single spectrogram for each sound file (saved at 'dest.path'). Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The plots include vertical lines denoting the start and end of each sound as well as the sound ID ('sound.id' column in 'X'). Note that no plot is created in the R graphic device.
 }
-\references{
-{
-Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
-}
-}
-\seealso{
-\code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
-#' @examples
+\examples{
 {
   # load example data
   data("degradation_est")
@@ -90,9 +83,18 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
   # create subset of data with only re-recorded files
   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
 
-# plot (look into temporary working directory `tempdir()`)
-plot_align_sounds(X = rerecorded_est, dest.path = tempdir(), duration = 3, ovlp = 0)
+  # plot (look into temporary working directory `tempdir()`)
+  plot_align_sounds(X = rerecorded_est, dest.path = tempdir(), duration = 3, ovlp = 0)
 }
+
+}
+\references{
+{
+Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.2
+}
+}
+\seealso{
+\code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

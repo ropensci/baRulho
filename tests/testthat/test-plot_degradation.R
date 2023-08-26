@@ -61,7 +61,6 @@ test_that("many ros", {
     palette = viridis::magma
   )
   
-  
   fls <-
     list.files(path = tempdir(),
                pattern = "^plot_degrad",

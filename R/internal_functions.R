@@ -367,7 +367,8 @@ check_arguments <- function(fun, args) {
         "excess_attenuation",
         "spcc",
         "spectrum_blur_ratio",
-        "spectrum_correlation"
+        "spectrum_correlation",
+        "plot_degradation"
       )) {
         cols <-
           c(
@@ -1452,8 +1453,20 @@ plot_blur_FUN <-
            collevels,
            palette,
            bp,
-           flim) {
-    # get names of sound and reference
+           flim,
+           colors) {
+   
+    # set colors
+    
+    # ref_col <- "#31688E"
+    # test_col <- "#B4DE2C"
+    # blur_col <- "#FDE72533"
+    ref_col <- colors[1]
+    test_col <- colors[2]
+    blur_col <- colors[3]
+    
+
+        # get names of sound and reference
     sgnl <- X$.sgnl.temp[x]
     rfrnc <- X$reference[x]
 
@@ -1536,12 +1549,11 @@ plot_blur_FUN <-
       # matrix for layout
       page_layout <- matrix(
         c(
-          0.06, 0.4, 0, 0.55, # bottom left spectrogram
-          0.06, 0.4, 0.55, 1, # top left spectrogram
+          0.06, 0.4, 0, 0.562, # bottom left spectrogram
+          0.06, 0.4, 0.562, 1, # top left spectrogram
           0.4, 1, 0, 1,  # right pannel with blur ratio
           0, 0.06, 0.1, 1
         ),
-       
         nrow = 4,
         byrow = TRUE
       )
@@ -1655,8 +1667,7 @@ plot_blur_FUN <-
           to = end.rf,
           path = path
         )
-      # add box with reference color
-      box(col = "#31688E", lwd = 3)
+
       
       # frequency axis for spectrograms
       screen(4)
@@ -1671,7 +1682,7 @@ plot_blur_FUN <-
       )
       
       text(
-        x = 0.8,
+        x = 1,
         y = 1,
         "Frequency (kHz)",
         srt = 90,
@@ -1730,16 +1741,17 @@ plot_blur_FUN <-
       # lines showing position of sound
       abline(
         v = c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf),
-        col = "#B4DE2CFF",
+        col = 
+          "white",
         lty = 2
       )
 
       # add box with sound color
-      box(col = "#B4DE2CFF", lwd = 3)
+      box(col = adjustcolor(test_col, 0.6), lwd = 3)
 
       # reference at top left
       screen(2)
-      par(mar = c(0.15, 2, 0.3, 0.3))
+      par(mar = c(0, 2, 0.3, 0.3))
 
       warbleR:::spectro_wrblr_int2(
         wave = clp.rfnc,
@@ -1760,10 +1772,13 @@ plot_blur_FUN <-
         palette = palette
       )
 
+      
+      # add box with reference color
+      box(col = adjustcolor(ref_col, 0.6), lwd = 3)
       # lines showing position of sound
       abline(
         v = c(mar.rf.bf, X$end[rf.indx] - X$start[rf.indx] + mar.rf.bf),
-        col = "#31688ECC",
+        col = "white",
         lty = 2
       )
 
@@ -1774,6 +1789,7 @@ plot_blur_FUN <-
            labels = 
              c(at_freq[-length(at_freq)], "")
       )
+      
       # plot envelopes
       screen(3)
 
@@ -1792,13 +1808,30 @@ plot_blur_FUN <-
           type = "l",
           xlab = "",
           ylab = "",
-          col = "#31688E",
+          col = adjustcolor(ref_col, 0.7),
           ylim = c(min(rfrnc.pmf, sgn.pmf), max(rfrnc.pmf, sgn.pmf) * 1.1),
           cex.main = 0.8,
-          lwd = 1.2,
-          yaxt = "n"
+          lwd = 1.4,
+          yaxt = "n",
+          xaxs="i",
+          yaxs="i"
         )
 
+        # add background color
+        rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col ="#D3D3D380", border = NA)
+        
+        # white envelope polygon
+        # add 0s at star and end so polygon doesnt twist
+        sgn.pmf[c(1, nrow(sgn.pmf))] <- 0
+        
+        # add polygon with envelope shape
+        polygon(
+          x = time.vals,
+          y = sgn.pmf,
+          col = "white",
+          border = NA
+        )
+        
         # add x axis label
         mtext(
           text = "Time (s)",
@@ -1817,14 +1850,15 @@ plot_blur_FUN <-
           text = paste("Reference:", rfrnc),
           side = 3,
           line = 1.75,
-          col = "#31688E",
+          col = ref_col,
           cex = 1
         )
+        
         mtext(
           text = paste("Test sound:", sgnl),
           side = 3,
           line = 0.5,
-          col = "#B4DE2C",
+          col = test_col,
           cex = 1
         )
 
@@ -1836,21 +1870,36 @@ plot_blur_FUN <-
           line = 1
         )
 
-        # add sound envelope
-        lines(time.vals,
-          sgn.pmf,
-          col = "#B4DE2CFF",
-          lwd = 1.2
-        )
-
+        
         # sound envelope on top
         polygon(
           x = c(time.vals, rev(time.vals)),
           y = c(sgn.pmf, rev(rfrnc.pmf)),
-          col = "#FDE72533",
+          col = adjustcolor(blur_col, 0.2),
+          border = NA
+        )
+        
+        # blur region
+        polygon(
+          x = c(time.vals, rev(time.vals)),
+          y = c(sgn.pmf, rev(rfrnc.pmf)),
+          col = adjustcolor(blur_col, 0.2),
           border = NA
         )
 
+        # add sound envelope
+        lines(time.vals,
+              sgn.pmf,
+              col = adjustcolor(test_col, 0.7),
+              lwd = 1.4
+        )
+        # add sound envelope
+        lines(time.vals,
+              rfrnc.pmf,
+              col = adjustcolor(ref_col, 0.7),
+              lwd = 1.4
+        )
+        
         # get plotting area limits
         usr <- par("usr")
 
@@ -1876,16 +1925,32 @@ plot_blur_FUN <-
           type = "l",
           xlab = "",
           ylab = "",
-          col = "#31688E",
+          col = ref_col,
           xlim = c(
             min(rfrnc.pmf, sgn.pmf),
             max(rfrnc.pmf, sgn.pmf) * 1.1
           ),
           cex.main = 0.8,
           lwd = 1.2,
-          yaxt = "n"
+          yaxt = "n",
+          xaxs="i",
+          yaxs="i"
         )
-
+        
+        # add background color
+        rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col ="#D3D3D380", border = NA)
+        
+        # white envelope polygon
+        # add 0s at star and end so polygon doesnt twist
+        rfrnc.pmf[c(1, nrow(rfrnc.pmf))] <- 0
+        
+        # add polygon with spectrum shape
+        polygon(
+          x = rfrnc.pmf,
+          y = f.vals,
+          col = "white",
+          border = NA
+        )
         # add x axis label
         mtext(
           text = "Power spectrum (PMF)",
@@ -1904,14 +1969,14 @@ plot_blur_FUN <-
           text = paste("Reference:", rfrnc),
           side = 3,
           line = 1.75,
-          col = "#31688E",
+          col = ref_col,
           cex = 1
         )
         mtext(
           text = paste("Test sound:", sgnl),
           side = 3,
           line = 0.5,
-          col = "#B4DE2C",
+          col = test_col,
           cex = 1
         )
 
@@ -1920,13 +1985,13 @@ plot_blur_FUN <-
         mtext(
           text = "Frequency (kHz)",
           side = 4,
-          line = 2
+          line = 1.8
         )
 
         # add sound spectrum
         lines(sgn.pmf,
           f.vals,
-          col = "#B4DE2C",
+          col = test_col,
           lwd = 1.2
         )
 
@@ -1934,10 +1999,24 @@ plot_blur_FUN <-
         polygon(
           y = c(f.vals, rev(f.vals)),
           x = c(sgn.pmf, rev(rfrnc.pmf)),
-          col = "#FDE72533",
+          col = adjustcolor(blur_col, 0.2),
           border = NA
         )
 
+        # add sound envelope
+        lines(sgn.pmf, 
+              f.vals,
+              col = adjustcolor(test_col, 0.7),
+              lwd = 1.4
+        )
+        # add sound envelope
+        lines(rfrnc.pmf,
+              f.vals,
+              col = adjustcolor(ref_col, 0.7),
+              lwd = 1.4
+        )
+        
+        
         # get plotting area limits
         usr <- par("usr")
 

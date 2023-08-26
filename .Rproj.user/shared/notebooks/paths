@@ -45,6 +45,7 @@
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-master_sound_file.R="55F6E620"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-noise_profile.R="6D40D077"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-plot_align_sounds.R="DCAC8F08"
+/home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-plot_blur_ratio.R="FAC311C5"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-plot_degradation.R="815C4EC9"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-realign_test_sounds.R="1BB6A01A"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-signal_to_noise_ratio.R="112813CD"

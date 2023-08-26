@@ -240,7 +240,7 @@ plot_degradation <-
     soundid_X_list <-
       lapply(unique(X_df$sound.id.transect), function(x) {
         Y <-
-          X_df[X_df$.sgnl.temp %in% stats::na.omit(unique(X_df$reference[X_df$sound.id.transect == x])) |
+          X_df[X_df$.sgnl.temp %in% (unique(X_df$reference[X_df$sound.id.transect == x])) |
             X_df$sound.id.transect == x, ]
         Y <- Y[order(Y$distance), ]
         return(Y)
@@ -421,7 +421,6 @@ plot_degradation <-
         # extract data subset for a page
         Y <- soundid_X[soundid_X$page == x, ]
 
-        # try(dev.off(), silent = TRUE)
 
         # start graphic device
         warbleR:::img_wrlbr_int(
@@ -581,7 +580,7 @@ plot_degradation <-
             # add vertical lines
             # add dotted lines
             abline(
-              v = c(X$mar.start[X$.sgnl.temp == sgnl], X$end[indx] - X$start[indx] + X$mar.start[Y$.sgnl.temp == sgnl]),
+              v = c(X$mar.start[indx], X$end[indx] - X$start[indx] + X$mar.start[indx]),
               col = "white",
               lty = 3,
               lwd = 1.5

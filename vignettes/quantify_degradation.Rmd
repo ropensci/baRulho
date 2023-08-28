@@ -14,7 +14,7 @@ output:
       smooth_scroll: true
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{baRulho}
+  %\VignetteIndexEntry{Quantify degradation}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -79,7 +79,7 @@ library(baRulho)
 library(ggplot2)
 
 
-load("../data/test_sounds_est.rda")
+# load("../data/test_sounds_est.rda")
 source("~/Dropbox/R_package_testing/baRulho/R/plot_blur_ratio.R")
 source("~/Dropbox/R_package_testing/baRulho/R/internal_functions.R")
 # data("test_sounds_est")
@@ -98,7 +98,7 @@ kbl
 ```
 &nbsp;
  
- Note that besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also includes the following columns:
+Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. The structure of the data must indicate the transect and distance within that transect for each sound. Hence, besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also includes the following columns:
  - **'sound.id': ID of sounds used to identify same sounds at different distances and transects**
  - **'distance': refers to the distance from the source at which each sound was recorded**
  - **'transect' identify sounds (rows) from the same transect**. Each distance is replicated once within a transect.  
@@ -142,7 +142,60 @@ kbl
 ```
 
 
-## Degradation measurements  
+## Measuring degradation 
+
+### Data format
+
+The functions `set_reference_sounds()` can be used to determined, for each row in the input data, which sounds would be used as references. The function can do this using any of the two methods described above:
+
+```{r}
+
+# add reference column
+test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
+
+# print
+test_sounds_est
+```
+
+```{r, echo = FALSE}
+
+kbl <- kable(test_sounds_est, align = "c", row.names = F, format = "html", escape = F)
+
+kbl <- column_spec(kbl, 10, background = "#ccebff", bold = TRUE)
+
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
+
+kbl <- scroll_box(kbl, height = "400px")
+
+kbl
+```
+&nbsp;
+
+The function adds the column 'reference' which is then used by downstream functions plotting or measuring degradation. References are indicated as a the combination of the 'sound.files' and 'selec' column. For instance, '10m.wav-1' indicates that the row in which the 'selec' column is '1' and the sound file is '10m.wav' should be used as reference. The function also checks that the information 'X' is in the right format so it wont produce errors in downstream analysis (see 'X' argument description for details on format). The function will ignore rows with 'sound.id' 'ambient', 'start_marker' and 'end_marker'.
+
+### Visual inspection
+
+The function `plot_degradation()` aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved as JPEG files in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect. Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional):
+
+
+```{r, eval = FALSE}
+
+# set path where images will be saved (will be used by all image creating function)
+options(dest.path = tempdir())
+
+# sort to order panels
+test_sounds_est <- test_sounds_est[order(test_sounds_est$sound.id, test_sounds_est$transect, decreasing = FALSE), ]
+
+# create plots
+plot_degradation(test_sounds_est)
+
+```
+
+<center><img src="plot_degradation_p1.jpeg" alt="degradation plot"></center>
+
+&nbsp;
+
+Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded. Before  This is one the plots generated using the example data.
 
 ### Blur ratio
  
@@ -151,8 +204,6 @@ Blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}
 
-# add reference column
-test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
 
 # run blur ratio
 br <- blur_ratio(X = test_sounds_est)
@@ -160,9 +211,6 @@ br <- blur_ratio(X = test_sounds_est)
 ```
 
 ```{r, eval = TRUE, echo = FALSE}
-
-# add reference column
-test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
 
 # run blur ratio
 br <- blur_ratio(test_sounds_est)
@@ -213,7 +261,7 @@ sbr <- blur_ratio(test_sounds_est, dest.path = tempdir())
 
 Output image files (in the working directory) look like these ones:
 
-<center><img src="blur_ratio_example.gif" alt="time sync with realign_test_sounds"></center>
+<center><img src="blur_ratio_example.gif" alt="time sync with realign_test_sounds"  width="500" height="400"></center>
 
 &nbsp;
 
@@ -327,21 +375,6 @@ ggplot(spctr[spctr$freq > 0.3, ], aes(y = amp, x = freq, col = distance)) +
 
 ```
 
-We can also zoom in to the frequency range of the sounds by subsetting the spectrum data:
-
-```{r}
-
-# get the frequencies higher than lowest bottom but lower than highest top freq
-spctr <- spctr[spctr$freq > min(test_sounds_est$bottom.freq) & spctr$freq < max(test_sounds_est$top.freq), ]
-
-ggplot(spctr, aes(y = amp, x = freq, col = distance)) +
-  geom_line() +
-  facet_wrap(~sound.id) +
-  scale_color_viridis_d(alpha = 0.7) +
-  labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
-  coord_flip() +
-  theme_classic()
-```
 &nbsp;
 
 ### Excess attenuation
@@ -561,7 +594,7 @@ kbl
 
 ### Noise profiles
 
-The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no sound) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra. The following code measures the ambient noise profile for the recordings at distance >= 5m on the example extended selection table:
+The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no sound) or over entire sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra. The following code measures the ambient noise profile for the recordings at distance >= 5m on the example extended selection table:
 
 ```{r, eval = TRUE}
 
@@ -644,7 +677,7 @@ ggplot(np, aes(y = amp, x = freq, col = sound.files, group = sf.sl)) +
 ```
 
 
-The function can estimate noise profiles for complete sound files, by supplying a list of the files (argument 'files', and not supplying  'X') or by simply running it without supplying 'X' or 'files'. In this case it will run over all sound files in the working directory (or 'path' supplied). 
+The function can estimate noise profiles for entire sound files, by supplying a list of the files (argument 'files', and not supplying  'X') or by simply running it without supplying 'X' or 'files'. In this case it will run over all sound files in the working directory (or 'path' supplied). 
 
 ---
 

@@ -14,7 +14,7 @@ output:
       smooth_scroll: true
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{baRulho}
+  %\VignetteIndexEntry{Synth and align sounds}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
@@ -340,7 +340,7 @@ unique(test_sounds_est$sound.files)
 
 Their names are self-explanatory: a master sound file ("master.wav") and its annotations, a reference sound file ("reference_1m.wav") and two test files ("test_10m.wav" and "test_20m.wav") re-recorded at 10 and 20 m respectively.
 
-Now we will save those files in a temporary working directory (those objects are extended seletion tables in the R environment) to resemble the usual case in which the acoustic data is found in sound files.
+Now we will save those files in a temporary working directory (those objects are extended selection tables in the R environment) to resemble the usual case in which the acoustic data is found in sound files.
 
 ```{r}
 

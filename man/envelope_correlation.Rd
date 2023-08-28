@@ -44,24 +44,21 @@ Object 'X' with two additional columns, 'reference' and 'envelope.correlation', 
 \code{envelope_correlation} measures amplitude envelope correlation of sounds referenced in an extended selection table.
 }
 \details{
-Amplitude envelope correlation measures the similarity of two sounds in the time domain. The function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and calculating the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to create envelopes graphs.
+Amplitude envelope correlation measures the similarity of two sounds in the time domain. The function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and computing the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to create envelopes graphs.
 }
 \examples{
 {
   # load example data
-  data("degradation_est")
-
-  # create subset of data with only re-recorded files
-  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+  data("test_sounds_est")
 
   # add reference to X
-  X <- set_reference_sounds(X = rerecorded_est)
+  X <- set_reference_sounds(X = test_sounds_est)
 
   envelope_correlation(X = X)
 
   # method 2
   # add reference to X
-  X <- set_reference_sounds(X = rerecorded_est, method = 2)
+  X <- set_reference_sounds(X = test_sounds_est, method = 2)
   envelope_correlation(X = X)
 }
 

@@ -36,13 +36,10 @@
 #' @seealso \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}, \code{\link{blur_ratio}}
 #' @examples {
 #'   # load example data
-#'   data("degradation_est")
-#'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#'   data("test_sounds_est")
 #'
 #'   # add reference to X
-#'   X <- set_reference_sounds(X = rerecorded_est)
+#'   X <- set_reference_sounds(X = test_sounds_est)
 #'
 #'   # create plots
 #'   plot_blur_ratio(X = X, dest.path = tempdir())
@@ -122,9 +119,9 @@ plot_blur_ratio <-
     # print message
     if (pb) {
       if (type == "envelope") {
-        write(file = "", x = "Calculating amplitude envelopes (step 1 out of 2):")
+        write(file = "", x = "Computing amplitude envelopes (step 1 out of 2):")
       } else {
-        write(file = "", x = "Calculating power spectra (step 1 out of 2):")
+        write(file = "", x = "Computing power spectra (step 1 out of 2):")
       }
     }
 

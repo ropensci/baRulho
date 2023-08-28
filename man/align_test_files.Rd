@@ -43,25 +43,27 @@ The function aligns sounds found in re-recorded sound files (referenced in 'Y') 
   # set temporary directory
   td <- tempdir()
 
+# load example data
+data("master_est")
+
   # save example files in working director to recreate a case in which working
   # with sound files instead of extended selection tables.
   # This doesn't have to be done with your own data as you will
   # have them as sound files already.
-  for (i in unique(degradation_est$sound.files)[1:2]) {
-    writeWave(object = attr(degradation_est, "wave.objects")[[i]], file.path(td, i))
+  for (i in unique(test_sounds_est$sound.files)[1:2]) {
+    writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
   }
 
+ # save master file
+ writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
   # set path and no progress bar in global options
   options(sound.files.path = td, pb = FALSE)
 
-  # extract annotations for master sound file
-  master <- degradation_est[degradation_est$sound.files == "master.wav", ]
-
   # get marker position
-  markers <- find_markers(X = master, test.files = unique(degradation_est$sound.files)[2])
+  markers <- find_markers(X = master_est, test.files = unique(test_sounds_est$sound.files)[2])
 
   # align all test sounds
-  alg.tests <- align_test_files(X = master, Y = markers, pb = FALSE)
+  alg.tests <- align_test_files(X = master_est, Y = markers, pb = FALSE)
 }
 
 }
@@ -71,7 +73,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 }
 }
 \seealso{
-\code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{plot_align_sounds}}
+\code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -63,14 +63,10 @@ The function computes the maximum distance at which a sound would be detected, w
 \examples{
 \dontrun{
 # load example data
-data("degradation_est")
-
-# create subset of data with only re-recorded files
-rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
-
+data("test_sounds_est")
 
 # add reference to X
-X <- set_reference_sounds(X = rerecorded_est)
+X <- set_reference_sounds(X = test_sounds_est)
 
 detection_distance(X = X[X$distance \%in\% c(1, 10), ], spl.cutoff = 5, mar = 0.05)
 }

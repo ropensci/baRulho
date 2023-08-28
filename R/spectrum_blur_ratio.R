@@ -27,19 +27,16 @@
 #' @details Spectral blur ratio measures the degradation of sound as a function of the change in sound energy in the frequency domain, analogous to the blur ratio proposed by Dabelsteen et al (1993) for the time domain (and implemented in \code{\link{blur_ratio}}). Low values indicate low degradation of sounds. The function measures the blur ratio of spectra from sounds in which a reference playback has been re-recorded at different distances. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference sound and the re-recorded sound. The function compares each sound type to the corresponding reference sound. The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of spectra is comparable. The function uses \code{\link[seewave]{spec}} internally to compute power spectra.
 #' @examples {
 #'   # load example data
-#'   data("degradation_est")
-#'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
-#'
+#'   data("test_sounds_est")
+#'   
 #' # add reference to X
-#' X <- set_reference_sounds(X = rerecorded_est)
+#' X <- set_reference_sounds(X = test_sounds_est)
 #'
 #'   # get spetrum blur ratio
 #'   spectrum_blur_ratio(X = X)
 #'
 #'   # using method 2
-#'    X <- set_reference_sounds(X = rerecorded_est, method = 2)
+#'    X <- set_reference_sounds(X = test_sounds_est, method = 2)
 #'   spectrum_blur_ratio(X = X)
 #'
 #'   # get power spectra
@@ -142,7 +139,7 @@ spectrum_blur_ratio <-
     if (pb)
       write(
         file = "",
-        x = paste0("Calculating power spectra (step 1 out of ", steps, "):")
+        x = paste0("Computing power spectra (step 1 out of ", steps, "):")
       )
     
     # calculate all spectra apply function
@@ -173,7 +170,7 @@ spectrum_blur_ratio <-
     if (pb)
       write(
         file = "",
-        x = paste0("Calculating spectrum blur ratio (step 2 out of ", steps, "):")
+        x = paste0("Computing spectrum blur ratio (step 2 out of ", steps, "):")
       )
     
     # get blur ratio

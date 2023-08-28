@@ -77,19 +77,16 @@ The function aims to simplify the visual inspection of sound degradation by prod
 \examples{
 {
   # load example data
-  data("degradation_est")
-
-  # create subset of data with only re-recorded files
-  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+  data("test_sounds_est")
 
   # order so spectrograms from same sound id as close in the graph
-  rerecorded_est <- rerecorded_est[order(rerecorded_est$sound.id), ]
+  test_sounds_est <- test_sounds_est[order(test_sounds_est$sound.id), ]
 
   # set directory to save image files
   options(dest.path = tempdir())
 
   # method 1
-  Y <- set_reference_sounds(X = rerecorded_est)
+  Y <- set_reference_sounds(X = test_sounds_est)
 
   # plot degradation spectrograms
   plot_degradation(
@@ -123,7 +120,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying habitat-induced degradatio
 }
 }
 \seealso{
-\code{\link{blur_ratio}}, \code{\link{realign_test_sounds}}, \code{\link{plot_align_sounds}}
+\code{\link{blur_ratio}}, \code{\link{realign_test_sounds}}, \code{\link{plot_aligned_sounds}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -30,21 +30,18 @@
 #' @export
 #' @name excess_attenuation
 #' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents energy loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation.
-#' The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two approaches for calculating excess attenuation are provided (see 'type' argument).
+#' The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two approaches for computing excess attenuation are provided (see 'type' argument).
 #' @examples {
 #'   # load example data
-#'   data("degradation_est")
-#'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#'   data("test_sounds_est")
 #'
 #'   # using method 1
 #'   # add reference to X
-#'   X <- set_reference_sounds(X = rerecorded_est)
+#'   X <- set_reference_sounds(X = test_sounds_est)
 #'   excess_attenuation(X = X)
 #'
 #'   # using method 2
-#'   X <- set_reference_sounds(X = rerecorded_est, method = 2)
+#'   X <- set_reference_sounds(X = test_sounds_est, method = 2)
 #'   # excess_attenuation(X = X)
 #' }
 #'
@@ -122,7 +119,7 @@ excess_attenuation <-
     if (pb) {
       write(
         file = "",
-        x = paste0("Calculating amplitude envelopes (step 1 out of 2):")
+        x = paste0("Computing amplitude envelopes (step 1 out of 2):")
       )
     }
 
@@ -163,7 +160,7 @@ excess_attenuation <-
     if (pb) {
       write(
         file = "",
-        x = paste0("Calculating excess attenuation (step 2 out of 2):")
+        x = paste0("Computing excess attenuation (step 2 out of 2):")
       )
     }
 

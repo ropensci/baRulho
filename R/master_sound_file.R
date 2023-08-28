@@ -112,7 +112,7 @@ master_sound_file <-
 
     # save par settings
     oldpar <- par(no.readonly = TRUE)
-    on.exit(suppressWarnings(par(oldpar)))
+    on.exit(try(suppressWarnings(par(oldpar)), silent = TRUE))
 
     # save image of start marker in temporary directory
     if (!nzchar(gsexe)) {

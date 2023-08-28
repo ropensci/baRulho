@@ -41,19 +41,13 @@
 #' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise immediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
 #' @examples {
 #'   # load example data
-#'   data("degradation_est")
-#'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#'   data("test_sounds_est")
 #'
 #'   # using measure ambient noise reference selections
-#'   signal_to_noise_ratio(X = rerecorded_est, mar = 0.05, noise.ref = "custom")
-#'
-#'   # remove ambient selections
-#'   rerecorded_est <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
+#'   signal_to_noise_ratio(X = test_sounds_est, mar = 0.05, noise.ref = "custom")
 #'
 #'   # using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
-#'   signal_to_noise_ratio(X = rerecorded_est, mar = 0.05, noise.ref = "adjacent")
+#'   signal_to_noise_ratio(X = test_sounds_est, mar = 0.05, noise.ref = "adjacent")
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

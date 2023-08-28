@@ -1,7 +1,7 @@
 #' Plot spectrograms to check test sound files alignment
 #'
-#' \code{plot_align_sounds} plots spectrograms to visually inspect alignment precision on test sound files.
-#' @usage plot_align_sounds(X, hop.size = getOption("hop.size", 11.6),
+#' \code{plot_aligned_sounds} plots spectrograms to visually inspect alignment precision on test sound files.
+#' @usage plot_aligned_sounds(X, hop.size = getOption("hop.size", 11.6),
 #' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 50),
 #' path = getOption("sound.files.path", "."), cores = getOption("mc.cores", 1),
 #' pb = getOption("pb", TRUE), collevels = seq(-120, 0, 5),
@@ -41,18 +41,15 @@
 #' version of \code{\link[seewave]{spectro}}, so it takes the same arguments.
 #' @return Image files in jpeg format with spectrograms in the working directory, one for each sound file in 'X'.
 #' @export
-#' @name plot_align_sounds
+#' @name plot_aligned_sounds
 #' @details This functions aims to simplify the evaluation of the alignment of test sound files from  \code{\link{align_test_files}}. The function creates a single spectrogram for each sound file (saved at 'dest.path'). Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The plots include vertical lines denoting the start and end of each sound as well as the sound ID ('sound.id' column in 'X'). Note that no plot is created in the R graphic device.
 #' @seealso \code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
 #' @examples {
 #'   # load example data
-#'   data("degradation_est")
-#'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#'   data("test_sounds_est")
 #'
 #'   # plot (look into temporary working directory `tempdir()`)
-#'   plot_align_sounds(X = rerecorded_est, dest.path = tempdir(), duration = 3, ovlp = 0)
+#'   plot_aligned_sounds(X = test_sounds_est, dest.path = tempdir(), duration = 3, ovlp = 0)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -61,7 +58,7 @@
 #' }
 
 
-plot_align_sounds <-
+plot_aligned_sounds <-
   function(X,
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),

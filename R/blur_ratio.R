@@ -27,17 +27,14 @@
 #' @seealso \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
 #' @examples {
 #'   # load example data
-#'   data("degradation_est")
-#'    
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#'   data("test_sounds_est")
 #'   
 #'  # add reference to X
-#'  X <- set_reference_sounds(X = rerecorded_est)
+#'  X <- set_reference_sounds(X = test_sounds_est)
 #'   blur_ratio(X = X)
 #'
 #'   # using method 2
-#' X <- set_reference_sounds(X = rerecorded_est, method = 2)
+#' X <- set_reference_sounds(X = test_sounds_est, method = 2)
 #'   # blur_ratio(X = X)
 #'
 #'   # get envelopes
@@ -130,7 +127,7 @@ blur_ratio <-
     
     # print message
     if (pb)
-      write(file = "", x = paste0("Calculating amplitude envelopes (step 1 out of ", steps, "):"))
+      write(file = "", x = paste0("Computing amplitude envelopes (step 1 out of ", steps, "):"))
     
     # calculate all envelops apply function
     envs <-
@@ -148,7 +145,7 @@ blur_ratio <-
     
     # set options to run loops
     if (pb)
-      write(file = "", x = paste0("Calculating blur ratio (step 2 out of ", steps, "):"))
+      write(file = "", x = paste0("Computing blur ratio (step 2 out of ", steps, "):"))
     
     # get blur ratio
     # calculate all envelops apply function

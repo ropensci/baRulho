@@ -3,6 +3,7 @@
 \docType{package}
 \name{baRulho}
 \alias{baRulho}
+\alias{baRulho-package}
 \title{baRulho: quantifying habitat-induced acoustic signal degradation}
 \description{
 `baRulho` is a package intended to quantify habitat-induced degradation of (animal) acoustic signals.
@@ -14,11 +15,18 @@ The main features of the package are:
   \item The comparison of playback sounds re-recorded at different distances
   }
 Most functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/maRce10/baRulho}
+  \item Report bugs at \url{https://github.com/maRce10/baRulho/issues}
+}
 
-License: GPL (>= 2)
 }
 \author{
 Marcelo Araya-Salas
 
   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }
+\keyword{internal}

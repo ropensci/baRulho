@@ -1,7 +1,9 @@
-# *baRulho 1.1.0*
+# *baRulho 2.1.0*
 
+* new function `plot_blur_ratio()` that generates plots previously created by `blur_ratio()` and `spectrum_blur_ratio()`
 * Improved documentation for all functions
 * new function `plot_degradation()` to visually compare sounds across distances
+* new function `plot_aligned_sounds()` to visually assess precision of test sound alignment
 * `atmospheric_attenuation()` is no longer available (use `attenuation()` instead)
 * `align_test_files()` now can take several markers as input and select that with the highest correlation score for aligning test files
 * 'markers' argument deprecated in `align_test_files()`

@@ -21,25 +21,25 @@
 #' @details This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment.
 #' @examples {
 #'   # load example data
-#'   data("degradation_est")
-#'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
-#'
-#'   # create "unaligned_rerecorded_est" by adding noise to "rerecorded_est" start and end
-#'   unaligned_rerecorded_est <- rerecorded_est
-#'   set.seed(123)
-#'   noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
-#'     nrow(unaligned_rerecorded_est),
-#'     replace = TRUE
-#'   )
-#'   attr(unaligned_rerecorded_est, "check.res")$start <-
-#'     unaligned_rerecorded_est$start <- unaligned_rerecorded_est$start + noise_time
-#'   attr(unaligned_rerecorded_est, "check.res")$end <- unaligned_rerecorded_est$end <-
-#'     unaligned_rerecorded_est$end + noise_time
-#'
-#'   # re align
-#'   realign_test_sounds(X = unaligned_rerecorded_est)
+#'   data("test_sounds_est")
+#'   
+#'   # create "unaligned_test_sounds_est" by 
+#'   # adding noise to "test_sounds_est" start and end
+#' unaligned_test_sounds_est <- test_sounds_est
+#' set.seed(123)
+#' noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
+#' nrow(unaligned_test_sounds_est),
+#' replace = TRUE)
+#' 
+#' attr(unaligned_test_sounds_est, "check.res")$start <-
+#' unaligned_test_sounds_est$start <- unaligned_test_sounds_est$start + noise_time
+#' 
+#' attr(unaligned_test_sounds_est, "check.res")$end <- unaligned_test_sounds_est$end <-
+#' unaligned_test_sounds_est$end + noise_time
+#' 
+#' # re align
+#' 
+#' realign_test_sounds(X = unaligned_test_sounds_est)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

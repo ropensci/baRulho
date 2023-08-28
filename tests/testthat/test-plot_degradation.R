@@ -1,19 +1,19 @@
 test_that("basic", {
   # load example data
-  data("degradation_est")
+  data("test_sounds_est")
   
-  # create subset of data with only re-recorded files
-  rerecorded_est <-
-    degradation_est[degradation_est$sound.files != "master.wav",]
+  
+  test_sounds_est <-
+    test_sounds_est[test_sounds_est$sound.files != "master.wav",]
   
   # order so spectrograms from same sound id as close in the graph
-  rerecorded_est <-
-    rerecorded_est[order(rerecorded_est$sound.id),]
+  test_sounds_est <-
+    test_sounds_est[order(test_sounds_est$sound.id),]
   
   # set directory to save image files
   options(dest.path = tempdir())
   
-  X <- set_reference_sounds(rerecorded_est[rerecorded_est$sound.files != "master.wav", ])
+  X <- set_reference_sounds(test_sounds_est[test_sounds_est$sound.files != "master.wav", ])
   
   
   # plot (look into temporary working directory `tempdir()`)
@@ -38,20 +38,20 @@ test_that("basic", {
 
 test_that("many ros", {
   # load example data
-  data("degradation_est")
+  data("test_sounds_est")
   
-  # create subset of data with only re-recorded files
-  rerecorded_est <-
-    degradation_est[degradation_est$sound.files != "master.wav",]
+  
+  test_sounds_est <-
+    test_sounds_est[test_sounds_est$sound.files != "master.wav",]
   
   # order so spectrograms from same sound id as close in the graph
-  rerecorded_est <-
-    rerecorded_est[order(rerecorded_est$sound.id),]
+  test_sounds_est <-
+    test_sounds_est[order(test_sounds_est$sound.id),]
   
   # set directory to save image files
   options(dest.path = tempdir())
   
-  X <- set_reference_sounds(rerecorded_est)
+  X <- set_reference_sounds(test_sounds_est)
   
   # plot (look into temporary working directory `tempdir()`)
   # plot degradation spectrograms

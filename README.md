@@ -12,11 +12,13 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
-[![packageversion](https://img.shields.io/badge/Package%20version-1.1.0-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2023--08--13-yellowgreen.svg)](/commits/master)
+[![packageversion](https://img.shields.io/badge/Package%20version-2.1.0-orange.svg?style=flat-square)](commits/develop)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--08--26-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
+[![Codecov test
+coverage](https://codecov.io/gh/maRce10/baRulho/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/baRulho?branch=master)
 <!-- badges: end -->
 
 <img src="vignettes/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
@@ -25,11 +27,35 @@ Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranl
 facilitate acoustic analysis of (animal) sound transmission experiments,
 which typically aim to quantify changes in signal structure when
 transmitted in a given habitat by broadcasting and re-recording animal
-sounds at increasing distances. The package offers a workflow with
-functions to prepare the data set for analysis as well as to calculate
-and visualize several degradation metrics, including blur ratio,
-signal-to-noise ratio, excess attenuation and envelope correlation among
-others (Dabelsteen et al 1993).
+sounds at increasing distances. A common sequence of steps to
+experimentally test hypotheses related to sound transmission is depicted
+in the following diagram:
+
+<center>
+<img src="vignettes/analysis_workflow.jpg" alt="analysis workflow" width="620">
+</center>
+
+[baRulho](https://marce10.github.io/baRulho/) offers functions for
+critical steps in this workflow (those in black, including ‘checks’)
+that required acoustic data manipulation and analysis.
+
+The main features of the package are:
+
+- The use of loops to apply tasks through sounds referenced in a
+  selection table (sensu
+  [warbleR](https://cran.r-project.org/package=warbleR))
+- The production of image files with graphic representations of sound in
+  time and/or frequency that let users verify acoustic analyses
+- The use of annotation tables as the object format to input acoustic
+  data and annotations and to output results
+- The use of parallelization to distribute tasks among several cores to
+  improve computational efficiency
+
+[baRulho](https://marce10.github.io/baRulho/) builds upon functions and
+data formats from the
+[warbleR](https://cran.r-project.org/package=warbleR) and
+[seewave](https://cran.r-project.org/package=seewave) packages, so some
+experience with these packages is advised.
 
 Install/load the package from CRAN as follows:
 

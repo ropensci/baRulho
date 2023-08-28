@@ -32,6 +32,8 @@
 #'
 #' @docType package
 #' @name baRulho
+#' @keywords internal
+"_PACKAGE"
 #' @details License: GPL (>= 2)
 NULL
 #> NULL

@@ -42,18 +42,15 @@ Object 'X' with two additional columns, 'reference' and 'cross.correlation', con
 \code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
 }
 \details{
-Spectrographic cross-correlation measures frequency distortion of sounds as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little sound distortion has occurred). Cross-correlation is measured of sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{cross_correlation}} function.
+Spectrographic cross-correlation measures frequency distortion of sounds as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little sound distortion has occurred). Cross-correlation is measured of sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{cross_correlation}} function.
 }
 \examples{
 {
   # load example data
-  data("degradation_est")
-
-  # create subset of data with only re-recorded files
-  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+  data("test_sounds_est")
 
   # add reference to X
-  X <- set_reference_sounds(X = rerecorded_est)
+  X <- set_reference_sounds(X = test_sounds_est)
 
   # get spcc
   spcc(X = X)

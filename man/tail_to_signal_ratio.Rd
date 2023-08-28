@@ -51,25 +51,22 @@ with the tail-to-signal ratio values.
 \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of sounds referenced in an extended selection table.
 }
 \details{
-Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
+Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
 }
 \examples{
 {
   # load example data
 
-  data("degradation_est")
+  data("test_sounds_est")
 
   # set global options
   options(pb = FALSE)
 
-  # create subset of data with only re-recorded files
-  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
-
   # using margin for noise of 0.01
-  tsr <- tail_to_signal_ratio(X = rerecorded_est, mar = 0.01)
+  tsr <- tail_to_signal_ratio(X = test_sounds_est, mar = 0.01)
 
   # use type 2 which is equivalent to tail-to-noise ratio
-  tsr <- tail_to_signal_ratio(X = rerecorded_est, mar = 0.01, type = 2)
+  tsr <- tail_to_signal_ratio(X = test_sounds_est, mar = 0.01, type = 2)
 }
 
 }

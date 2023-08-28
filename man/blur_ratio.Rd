@@ -48,17 +48,14 @@ Blur ratio measures the degradation of sound as a change in sound energy in the 
 \examples{
 {
   # load example data
-  data("degradation_est")
-   
-  # create subset of data with only re-recorded files
-  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+  data("test_sounds_est")
   
  # add reference to X
- X <- set_reference_sounds(X = rerecorded_est)
+ X <- set_reference_sounds(X = test_sounds_est)
   blur_ratio(X = X)
 
   # using method 2
-X <- set_reference_sounds(X = rerecorded_est, method = 2)
+X <- set_reference_sounds(X = test_sounds_est, method = 2)
   # blur_ratio(X = X)
 
   # get envelopes

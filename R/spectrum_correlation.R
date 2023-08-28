@@ -23,23 +23,20 @@
 #' @return Object 'X' with two additional columns, 'reference' and 'spectrum.correlation', containing the id of the sound used as reference and the computed frequency spectrum correlation coefficients, respectively.
 #' @export
 #' @name spectrum_correlation
-#' @details spectral correlation measures the similarity of two sounds in the frequency domain. The function measures the spectral correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function will then compare each sound to the corresponding reference sound. Two methods for calculating spectral correlation are provided (see 'method' argument). The function uses \code{\link[seewave]{meanspec}} internally to compute power spectra. Use \code{\link{spectrum_blur_ratio}} to extract raw spectra values.
+#' @details spectral correlation measures the similarity of two sounds in the frequency domain. The function measures the spectral correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function will then compare each sound to the corresponding reference sound. Two methods for computing spectral correlation are provided (see 'method' argument). The function uses \code{\link[seewave]{meanspec}} internally to compute power spectra. Use \code{\link{spectrum_blur_ratio}} to extract raw spectra values.
 #' @examples {
 #'   # load example data
-#'   data("degradation_est")
-#'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#'   data("test_sounds_est")
 #'
 #'   # method 1
 #'   # add reference column
-#'   Y <- set_reference_sounds(X = rerecorded_est)
+#'   Y <- set_reference_sounds(X = test_sounds_est)
 #'
 #'   # run spectrum correlation
 #'   spectrum_correlation(X = Y)
 #'
 #'   # method 2
-#'   Y <- set_reference_sounds(X = rerecorded_est, method = 2)
+#'   Y <- set_reference_sounds(X = test_sounds_est, method = 2)
 #'   # spectrum_correlation(X = Y)
 #' }
 #'
@@ -114,7 +111,7 @@ spectrum_correlation <-
 
     # print message
     if (pb) {
-      write(file = "", x = "Calculating power spectra (step 1 out of 2):")
+      write(file = "", x = "Computing power spectra (step 1 out of 2):")
     }
 
     # calculate all spectra apply function
@@ -145,7 +142,7 @@ spectrum_correlation <-
     names(specs) <- target_sgnl_temp
 
     if (pb) {
-      write(file = "", x = "Calculating spectrum correlations (step 2 out of 2):")
+      write(file = "", x = "Computing spectrum correlations (step 2 out of 2):")
     }
 
     # calculate all envelops apply function

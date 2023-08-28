@@ -66,19 +66,13 @@ Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambien
 \examples{
 {
   # load example data
-  data("degradation_est")
-
-  # create subset of data with only re-recorded files
-  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+  data("test_sounds_est")
 
   # using measure ambient noise reference selections
-  signal_to_noise_ratio(X = rerecorded_est, mar = 0.05, noise.ref = "custom")
-
-  # remove ambient selections
-  rerecorded_est <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
+  signal_to_noise_ratio(X = test_sounds_est, mar = 0.05, noise.ref = "custom")
 
   # using margin for ambient noise of 0.05 and adjacent measure ambient noise reference
-  signal_to_noise_ratio(X = rerecorded_est, mar = 0.05, noise.ref = "adjacent")
+  signal_to_noise_ratio(X = test_sounds_est, mar = 0.05, noise.ref = "adjacent")
 }
 
 }

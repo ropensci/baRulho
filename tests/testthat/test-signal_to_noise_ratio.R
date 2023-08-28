@@ -1,7 +1,7 @@
 test_that("using extended table and method 1", {
-  data("degradation_est")
+  data("test_sounds_est")
   
-  X <- degradation_est[degradation_est$sound.files != "master.wav", ]
+  X <- test_sounds_est[test_sounds_est$sound.files != "master.wav", ]
   
   snr <- signal_to_noise_ratio(X = X, mar = 0.1)
   
@@ -16,17 +16,17 @@ test_that("using extended table and method 1", {
 })
 
 test_that("using data frame", {
-  data("degradation_est")
+  data("test_sounds_est")
   
   # set temporary directory
   td <- tempdir()  
   
-  for (i in unique(degradation_est$sound.files)[-1])
-    writeWave(object = attr(degradation_est, "wave.objects")[[i]], file.path(td, i))
+  for (i in unique(test_sounds_est$sound.files)[-1])
+    writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
   
   options(sound.files.path = td, pb = FALSE)
   
-  X <- as.data.frame(degradation_est[degradation_est$sound.files != "master.wav", ])
+  X <- as.data.frame(test_sounds_est[test_sounds_est$sound.files != "master.wav", ])
   
   snr <- signal_to_noise_ratio(X = X, mar = 0.1)
   

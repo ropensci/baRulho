@@ -44,72 +44,6 @@ opts_chunk$set(tidy = TRUE, fig.align = "center", message = FALSE, warning = FAL
 
 <img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
-The [baRulho](https://cran.r-project.org/package=baRulho) package is intended to facilitate acoustic analysis of (animal) sound transmission experiments. Such studies typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. We will refer to these changes in signal structure 'degradation' for the sake of simplicity. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics. [baRulho](https://marce10.github.io/baRulho/) builds upon functions and data formats from the [warbleR](https://cran.r-project.org/package=warbleR) and [seewave](https://cran.r-project.org/package=seewave) packages, so some experience with these packages is advised.
-
-The main features of the package are:
-
- - The use of loops to apply tasks through sounds referenced in a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR))
- - The production of image files with graphic representations of sound in time and/or frequency that let users verify acoustic analyses 
- - The use of annotation tables as the object format to input acoustic data and annotations and to output results 
- - The use of parallelization to distribute tasks among several cores to improve computational efficiency
-
-The package can be install/load from CRAN as follows:
-
-```{r, eval = FALSE}
-
-# From CRAN would be
-install.packages("baRulho")
-
-# load package
-library(baRulho)
-```
-
-&nbsp;
-
-To install the latest developmental version from [github](https://github.com/) you will need the R package [remotes](https://cran.r-project.org/package=remote):
-
-```{r, eval = FALSE}
-
-# From github
-remotes::install_github("maRce10/baRulho")
-
-# load package
-library(baRulho)
-
-# also set a working directory, for this example we will use a temporary directory
-td <- tempdir()
-```
-
-```{r, eval = TRUE, echo = FALSE, message=FALSE}
-
-# global option chunks
-knitr::opts_chunk$set(dpi = 70, fig.width = 8, fig.height = 6)
-
-# load package
-library(baRulho)
-library(kableExtra)
-
-# also set a working directory, for this example we will use a temporary directory
-td <- tempdir()
-```
-
-&nbsp;
-
-For this vignette we will also need a few more packages:
-
-```{r load packages, eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
-
-library(warbleR)
-library(ggplot2)
-library(viridis)
-```
-
-&nbsp;
-
-### Inputting acoustic data and annotations
-
-The package requires the annotation data to be input as a data frame, selection table or extended selection tables. If a data frame is used it must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique annotation identifier (within a sound file), 3) "start": start time and 4) "end": end time of annotation, 5) 'top.freq': top frequency (for bandpass) and  6) 'bottom.freq' and bottom frequency (for bandpass) of the annotation. A selection table is an objects class from the package [warbleR](https://cran.r-project.org/package=warbleR) that contain annotation data (i.e. time-frequency position of sounds in sound files) that has been previously double-checked. An extended selection table is an object class (also from [warbleR](https://cran.r-project.org/package=warbleR)) that contains both the annotations and the corresponding acoustic data as wave objects. Therefore, extended selection tables are **self-contained objects** since the original sound files are no longer needed to perform acoustic analyses. These objects are created by the `selection_table()` function from [warbleR](https://cran.r-project.org/package=warbleR). Take a look at the [intro to warbleR vignette](https://cran.r-project.org/package=warbleR/vignettes/Intro_to_warbleR.html) for more details. Selection tables and extended selection tables are recommended as they apply a double-checking step on the acoustic data during creation, which helps avoiding downstream errors during analysis. Analysis on extended selection tables also run faster than in the other object classes.
-
 <div class="alert alert-info">
 
 <font size="5">Glossary</font> 
@@ -132,408 +66,6 @@ The package requires the annotation data to be input as a data frame, selection 
 
 --- 
 
-# Workflow of sound processing and analysis
-
-A common sequence of steps to experimentally test hypotheses related to sound transmission is depicted in the following diagram:
-
- <center><img src="analysis_workflow.jpg" alt="analysis workflow" width="620"></center>
-
-&nbsp;
-
-[baRulho](https://marce10.github.io/baRulho/) offers functions for critical steps in this workflow (those in black, including 'checks') that required acoustic data manipulation and analysis. Additional functions from [warbleR](https://cran.r-project.org/package=warbleR) can be used (and are used in this vignette) to complement functions in [baRulho](https://marce10.github.io/baRulho/). All these tools will be presented following the above workflow.
-
-&nbsp;
-
-
-# Synthesize sounds
-
-We often want to figure out how transmission properties vary across a range of frequencies.
-For instance, Tobias et al (2010) studied whether acoustic adaptation (a special case of sensory drive; Morton 1975), could explain song evolution in Amazonian avian communities.  To test this the authors created synthetic pure tone sounds that were used as playback and re-recorded in different habitats. This is the actual procedure of creating synthetic sounds as they described it: 
-
-> "Tones were synthesized at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz) to encompass the range of maximum avian auditory sensitivity (Dooling 1982). At each frequency, we generated two sequences of two 100-msec tones. One sequence had  a  relatively  short  interval  of  150  msec,  close  to  the  mean internote interval in our sample (152± 4 msec). The other sequence had a longer interval of 250 msec, close to the mean maximum internote interval in our sample (283± 74 msec). The first sequence reflects a fast-paced song and the second a slower paced song  (sensu  Slabbekoorn  et  al.  2007).  The  master  file  (44100 Hz/16 bit WAV) thereby consisted of a series of 12 pairs of artificial 100-ms constant-frequency tones at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz)." 
-
-We can synthesize the same pure tones using the function `sim_songs()` from the package [warbleR](https://cran.r-project.org/package=warbleR). The function requires 1) the number of tones to synthesize (argument `n`), 2) the duration of the tones (`durs`, in seconds), 3) the duration of the intervals (`gaps`, in seconds) and 4) the frequencies for each tone to be synthesized (`freqs`, in kHz). In addition, the argument `diff.fun` should be set to "pure.tone" and the argument `harm` to 1 to remove harmonics. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR)) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument `selec.table = TRUE`. This can be done as follows:
-
-
-```{r, eval = FALSE}
-
-# synthesize
-synth.l <- sim_songs(
-  n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0.15,
-  diff.fun = "pure.tone", selec.table = TRUE, path = td
-)
-
-# plot spectro
-seewave::spectro(synth.l$wave,
-  scale = FALSE, palette = viridis,
-  grid = FALSE, flim = c(0, 6), collevels = seq(-20, 0, 1)
-)
-```
-
-```{r, eval=TRUE, echo=FALSE}
-# synthesize
-synth.l <- sim_songs(
-  n = 6, durs = 0.1, freqs = c(0.5, 1:5), harms = 1, gaps = 0.15,
-  diff.fun = "pure.tone", selec.table = TRUE, path = td
-)
-```
-
-
- <img src="spectro_synth_song.png" alt="spectrogram syntehtic sounds" width="750">
-
-
-&nbsp;
-
-The function returns a list in which the first element is the selection table and the second one the wave object:
-
-```{r, eval = TRUE}
-
-class(synth.l)
-```
-
-```{r, eval = TRUE}
-
-names(synth.l)
-```
-
-```{r, eval = FALSE}
-
-synth.l$selec.table
-```
-
-```{r, eval = TRUE, echo = FALSE, results='asis'}
-
-kbl <- kable(synth.l$selec.table, align = "c", row.names = F, format = "html", escape = F)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-print(kbl)
-```
-
-&nbsp;
-
-The function also saves the associated '.wav' file in the working directory (in this example `tempdir()`). 
-
-```{r}
-
-list.files(path = td, pattern = "\\.wav$")
-```
-
-&nbsp;
-
-# Create master sound file for playback
-
-The function `master_sound_file()` creates a master sound file (as you probably guessed) for playback experiments. The function takes wave objects from an data frame or (extended) selection table containing the model sounds and concatenates them in a single sound file (with some silence in between sounds which length can be modified). `master_sound_file()` adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds, which streamlines quantification of acoustic degradation. 
-The following example shows how to create a master sound file using the synthetic sounds generated above. For the synthetic sounds we need to add a little space between the top and bottom frequency because `sim_songs()` make those values exactly the same for pure tones: 
-
-```{r, eval = FALSE, echo = TRUE}
-
-# extract selection table
-st <- synth.l$selec.table
-
-# add freq range (0.5 kHz)
-st$bottom.freq <- st$bottom.freq - 0.25
-st$top.freq <- st$top.freq + 0.25
-
-# make an extended selection table
-synth.est <- selection_table(
-  X = st, extended = TRUE,
-  confirm.extended = FALSE, path = td
-)
-
-# create master sound file
-synth_master_annotations <- master_sound_file(
-  X = synth.est, file.name = "synthetic_master",
-  dest.path = td, gap.duration = 0.15
-)
-```
-
-&nbsp;
-
-The function saves the master sound file as a wave file and returns a selection table in the R environment with the time and frequency 'coordinates' of the sounds in that file. We can look at the spectrogram of the output file using the [warbleR](https://cran.r-project.org/package=warbleR) function `spectrograms()` as follows:
-
-```{r, eval=FALSE, echo=TRUE}
-
-# plot spectro (saved in working directory)
-spectrograms(synth_master_annotations,
-  path = td, by.song = "sound.files",
-  xl = 3, collevels = seq(-60, 0, 5), osci = TRUE
-)
-```
-
- <img src="synthetic_master.wav.jpeg" alt="spectrogram of master file">
-
-The function can also create a master sound file from sounds from different sounds files, as is likely the case with recordings collected in the field. The following example shows how to create a master sound file using several sound files. The code uses the example data and recordings from the package [warbleR](https://cran.r-project.org/package=warbleR):
-
-```{r, eval = FALSE, echo = TRUE}
-
-# load example data from warbleR
-data(list = c(
-  "Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4",
-  "lbh_selec_table"
-))
-
-# save sound files to temporary folder
-writeWave(Phae.long1, file.path(td, "Phae.long1.wav"))
-writeWave(Phae.long2, file.path(td, "Phae.long2.wav"))
-writeWave(Phae.long3, file.path(td, "Phae.long3.wav"))
-writeWave(Phae.long4, file.path(td, "Phae.long4.wav"))
-
-# make an extended selection table
-est <- selection_table(
-  X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
-  path = td
-)
-
-# create master sound file
-master_annotations <- master_sound_file(
-  X = est, file.name = "example_master",
-  dest.path = td, gap.duration = 0.3
-)
-```
-
-&nbsp;
-
-Again, we can look at the spectrogram of the output file:
-
-```{r, eval=FALSE, echo=TRUE}
-
-spectrograms(master_annotations,
-  path = td, by.song = "sound.files",
-  xl = 3, collevels = seq(-60, 0, 5), osci = TRUE
-)
-```
-
-
- <img src="example_master.wav.jpeg" alt="spectrogram of master file">
-
-Note that the output could also be exported to [Raven sound analysis software](https://ravensoundsoftware.com/software/raven-pro) ([Cornell Lab of Ornithology](https://www.birds.cornell.edu/home)) for visualization or further manipulation using the function `exp_raven()` from the [Rraven](https://cran.r-project.org/package=Rraven) package. `exp_raven()` exports selections in the R environment to a '.txt' file that can be read in Raven:
- 
-
-```{r, eval = FALSE}
-
-Rraven::exp_raven(master_annotations, path = td, file.name = "example_master_selection_table")
-```
-
-&nbsp;
-
-Both sound files and annotations can be visualized in Raven ( acoustic analysis software):
-
- <img src="example_master_table.jpg" alt="Raven view">
-
-&nbsp;
-
-Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details on how to export data from R to Raven. 
-
-Note that the start and end markers are placed at relatively low amplitudes so they are less affected by degradation. The frequency range of markers can be set with argument `flim`. The relative amplitude of markers can also be adjusted with the `amp.marker` argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than sounds. These two features should increases the chances of being "detected" at further distances regardless of the amplitude of sounds. 
-
-# Time sync re-recorded sounds
-
-Once we went to the field (or lab) and re-recorded the master sound files at different distances, we are ready to start with data analysis. The first step for getting the data ready for analysis involves finding sounds within the re-recorded sound files. We only need to align the start marker between the master playback and the re-recorded sound files, based on the fact that the time difference between the marker and the sounds should be the same in both cases:
-
-
- <center><img src="align-crop-optimize.gif" alt="Align recordings diagram"  width="550"></center>
-
-&nbsp;
-
-We will use example files from a degradation experiment that are hosted in [this repository](). The following code download a zip file with all the data (sound files + annotations) into a temporary working directory and unzip it into a folder called "degrad_exp_files":    
-
-```{r, eval = TRUE}
-
-download.file(
-  "https://figshare.com/ndownloader/files/41778951",
-  destfile = file.path(tempdir(), "degrad_exp_files.zip"),
-  method = "wget"
-)
-
-# folder to save files (you can change it to you preference)
-td <- file.path(tempdir(), "degrad_exp_files")
-
-unzip(file.path(tempdir(), "degrad_exp_files.zip"),
-  exdir = td
-)
-```
-
-
-These are the files contained in the data set:
-
-```{r}
-list.files(td)
-```
-
-&nbsp;
-
-Their names are self-explanatory: a master sound file ("master.wav") and its annotations ("master_annotations.csv"), a reference sound file ("reference_1m.wav") and two test files ("test_10m.wav" and "test_20m.wav") re-recorded at 10 and 20 m respectively.
-
-```{r DELETE, eval = FALSE, echo = FALSE}
-
-# read master
-exmp.master <- readWave(file.path(td, "example_master.wav"))
-
-# add 1 s silence and create first copy
-exmp.test1 <- addsilw(wave = exmp.master, at = "start", d = 1, output = "Wave", f = exmp.master@samp.rate)
-
-# add 2 s silence and create second copy
-exmp.test2 <- addsilw(wave = exmp.master, at = "start", d = 2, output = "Wave", f = exmp.master@samp.rate)
-
-# make noise
-ns <- noisew(f = exmp.master@samp.rate, d = duration(exmp.test2) + 1, output = "Wave")
-
-# make noise exactly the same length and add noise to 2 examples
-exmp.test1@left <- exmp.test1@left + (ns@left[1:length(exmp.test1@left)] * 150)
-exmp.test2@left <- exmp.test2@left + (ns@left[1:length(exmp.test2@left)] * 150)
-
-# normalize both  before saving
-exmp.test1 <- normalize(exmp.test1, unit = "16")
-exmp.test2 <- normalize(exmp.test2, unit = "16")
-
-# save simulated re-recorded sound files
-writeWave(object = exmp.test1, filename = file.path(td, "example_test1.wav"), extensible = FALSE)
-
-writeWave(object = exmp.test2, filename = file.path(td, "example_test2.wav"), extensible = FALSE)
-```
-
-&nbsp;
-
-To find the location of the start marker on the test sound files we use the functions `find_markers()` to run a cross-correlation of one or more markers across the test files in order to determine the exact time in which each marker is found: 
-
-```{r, eval = FALSE}
-
-master_annotations <-
-  read.csv(file.path(td, "master_annotations.csv"))
-
-markers_position <- find_markers(X = master_annotations, path = td)
-
-markers_position
-```
-
-```{r, eval = TRUE, echo=FALSE, results='asis'}
-
-master_annotations <- read.csv(file.path(td, "master_annotations.csv"))
-
-markers_position <- find_markers(X = master_annotations, path = td)
-
-kbl <- kable(markers_position, align = "c", row.names = F, format = "html", escape = F)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl
-```
-
-&nbsp;
-
-The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions `template_correlator()` and `template_detector` from the package [ohun](https://CRAN.R-project.org/package=ohun). If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0. With the time location of acoustic markers we can infer the position of all other sounds in the new recordings. A selection table from re-recorded files can be generated using the function `align_test_files()`:
-
-```{r, eval = TRUE}
-
-
-aligned_tests <-
-  align_test_files(
-    X = master_annotations,
-    Y = markers_position,
-    path = td,
-    by.song = TRUE
-  )
-```
-
-&nbsp;
-
-By default the function returns an `extended_selection_table`  created 'by.song' (see '?selection_table()'), which is the data format that pretty much all [baRulho](https://marce10.github.io/baRulho/) functions take.  
-
-```{r, eval = TRUE}
-
-is_extended_selection_table(aligned_tests)
-
-aligned_tests
-```
-
-```{r, eval = TRUE, echo = FALSE}
-
-print(TRUE)
-```
-
-```{r, eval = TRUE, echo = FALSE, results='asis'}
-
-kbl <- kable(aligned_tests, align = "c", row.names = F, format = "html", escape = F)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-
-kbl <- scroll_box(kbl, width = "800px", height = "300px")
-kbl
-```
-&nbsp;
-
-We can also check the precision of the alignment by looking at the spectrograms:
-
-```{r, eval = FALSE}
-
-spectrograms(aligned_tests, by.song = "sound.files", xl = 3, collevels = seq(-60, 0, 5), dest.path = td, osci = TRUE)
-```
-
-
- <img src="example_test1.wav.jpeg" alt="test 1">
-
-&nbsp;
-
- <img src="example_test2.wav.jpeg" alt="test 2">
-
-&nbsp;
-
-Below are some examples from actual test sounds that were re-recorded in the field at 1, 30, 65, and 100 m respectively, and were later aligned using the start marker:
-
- <img src="tlalpan_playback.jpeg" alt="Re-recorded at Tlalpan">
-
-&nbsp;
-
-
----
-
-### Further aligning
-
-When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded sounds. This is problematic for quantifying degradation in [baRulho](https://marce10.github.io/baRulho/) (and other sound analysis software) as precise alignment of sound is crucial for the accuracy of downstream measures of sound degradation. 
-
-Misalignment can be fixed with the function `realign_test_sounds()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `realign_test_sounds()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation. 
-
-[baRulho](https://marce10.github.io/baRulho/) comes with an example data set called  `playback_est_unaligned`, which contains sounds in which the time position of sounds is slightly unaligned. We can use this data to show how the function `realign_test_sounds()` works: 
-
-```{r, eval = FALSE}
-data("playback_est_unaligned")
-
-# method 1
-playback_est_aligned <- realign_test_sounds(X = playback_est_unaligned)
-```
-
-The output extended selection table contains the new start and end values after alignment. 
-
-This is how the sounds look before and after being aligned:
-
-```{r, eval = FALSE}
-
-# rename sound files so aligned and unaligned sounds are intercalated
-unalg <- rename_waves_est(playback_est_unaligned, playback_est_unaligned$sound.files, new.selec = seq(1, 200, by = 2)[1:nrow(playback_est_unaligned)])
-alg <- rename_waves_est(playback_est_aligned, playback_est_aligned$sound.files, new.selec = seq(2, 200, by = 2)[1:nrow(playback_est_aligned)])
-
-# add label
-unalg$type <- "Before aligning"
-alg$type <- "After aligning"
-
-# put together in a single ext sel tab
-unalg.alg <- rbind(unalg, alg)
-
-# create spectrograms
-spectrograms(unalg.alg[unalg.alg$sound.id != "ambient", ], dest.path = tempdir(), res = 100, wl = 300, title.labels = "type", sel.labels = NULL)
-```
-
-
-<center><img src="realign_test_sounds_results.gif" alt="time sync with realign_test_sounds"></center>
-
-&nbsp;
-
-In case this doesn't work as expected there is a plan B. The function `seltailor()` from [warbleR](https://cran.r-project.org/package=warbleR) allows user to manually adjust the start and end of sounds in a extended selection table.
-
-&nbsp;
-
-# Quantifying sound degradation
 
 Most [baRulho](https://marce10.github.io/baRulho/) functions are design to quantify sound degradation. There are a few important things to keep in mind about functions for quantifying degradation:
 
@@ -552,7 +84,6 @@ s
 
 data("playback_est")
 
-playback_est
 ```
 
 
@@ -572,7 +103,13 @@ kbl
 ```
 &nbsp;
  
- Note that besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also contains a **'sound.id' column, which contains the ID of sounds used to identify correspondent sounds across distances**, and a **'distance' column that refers to the distance from the source at which each sound was recorded**. Sound ID and distance are required for the comparison of sounds. Also note that some selections are labeled as "ambient" in the 'sound.id'. These selections refer to ambient (background) noise. Ambient noise can be used by some functions to correct for amplitude differences due to non-target sounds.
+ Note that besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also contains a **'sound.id' column, which contains the ID of sounds used to identify correspondent sounds across distances**, a **'distance' column that refers to the distance from the source at which each sound was recorded** and a **'transect' column' that (surprise!) identify sounds (rows) from the same transect**. The combined information from these columns is used to identify the reference sounds for each test sound. The function `set_reference_sounds()` does exactly that. There are two possible experimental designs whe defining reference sounds (which is controlled by the argument 'method' in `set_reference_sounds()`):
+
+- 1: compare sounds (by 'sound.id') with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. The function will try to use references from the same transect. However, if there is another test sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead.
+- 2: compare all sounds with their counterpart recorded at the distance immediately before within a transect (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
+
+
+Also note that some selections are labeled as "ambient" in the 'sound.id'. These selections refer to ambient (background) noise. Ambient noise can be used by some functions to correct for amplitude differences due to non-target sounds.
  
 In this example data there are 4 recordings at increasing distances: 1m, 5m, 10m and 15m:
 
@@ -580,6 +117,9 @@ In this example data there are 4 recordings at increasing distances: 1m, 5m, 10m
 
 # count selection per recordings
 unique(playback_est$sound.files)
+
+playback_est <- playback_est[playback_est$sound.files != "master.wav", ]
+
 ```
 
 The data contains selections for 5 sounds as well as 2 ambient noise selections at each distance/recording:
@@ -587,6 +127,7 @@ The data contains selections for 5 sounds as well as 2 ambient noise selections 
 ```{r, eval = FALSE}
 
 table(playback_est$sound.id, playback_est$distance)
+
 ```
 
 ```{r, eval = TRUE, echo=FALSE}
@@ -611,7 +152,7 @@ Blur ratio can be calculated as follows:
 ```{r, eval = FALSE}
 
 # run blur ratio
-br <- blur_ratio(playback_est, method = 1)
+br <- blur_ratio(playback_est)
 
 # check output class
 is_extended_selection_table(br)

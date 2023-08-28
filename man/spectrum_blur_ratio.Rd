@@ -50,19 +50,16 @@ Spectral blur ratio measures the degradation of sound as a function of the chang
 \examples{
 {
   # load example data
-  data("degradation_est")
-
-  # create subset of data with only re-recorded files
-  rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
-
+  data("test_sounds_est")
+  
 # add reference to X
-X <- set_reference_sounds(X = rerecorded_est)
+X <- set_reference_sounds(X = test_sounds_est)
 
   # get spetrum blur ratio
   spectrum_blur_ratio(X = X)
 
   # using method 2
-   X <- set_reference_sounds(X = rerecorded_est, method = 2)
+   X <- set_reference_sounds(X = test_sounds_est, method = 2)
   spectrum_blur_ratio(X = X)
 
   # get power spectra

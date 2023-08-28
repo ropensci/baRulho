@@ -34,16 +34,13 @@
 #' @name noise_profile
 #' @details The function estimates full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on data frames/(extended) selection tables (using the segments containing no target sound or the 'ambient' sound id) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
 #' @examples {{ # load example data
-#'   data("degradation_est")
-#'
-#'   # create subset of data with only re-recorded files
-#'   rerecorded_est <- degradation_est[degradation_est$sound.files != "master.wav", ]
+#'   data("test_sounds_est")
 #'
 #'   # measure on custom noise reference
-#'   noise_profile(X = rerecorded_est, mar = 0.01, pb = FALSE, noise.ref = "custom")
+#'   noise_profile(X = test_sounds_est, mar = 0.01, pb = FALSE, noise.ref = "custom")
 #'
 #'   # remove noise selections so noise is measured right before the signals
-#'   pe <- rerecorded_est[rerecorded_est$sound.id != "ambient", ]
+#'   pe <- test_sounds_est[test_sounds_est$sound.id != "ambient", ]
 #'
 #'   noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent") }}
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

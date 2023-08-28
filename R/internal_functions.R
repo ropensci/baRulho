@@ -453,7 +453,7 @@ check_arguments <- function(fun, args) {
       )
 
       if (!fun %in% c(
-        "plot_align_sounds",
+        "plot_aligned_sounds",
         "degrad_catalog",
         "detection_distance",
         "signal_to_noise_ratio",

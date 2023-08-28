@@ -37,7 +37,9 @@ editor_options:
 ```{r, eval = TRUE, echo = FALSE, message=FALSE}
 
 # global option chunks
-knitr::opts_chunk$set(dpi = 70, fig.width = 8, fig.height = 6)
+knitr::opts_chunk$set(dpi = 70,
+                      fig.width = 8,
+                      fig.height = 6)
 
 # load package
 library(baRulho)
@@ -46,23 +48,18 @@ library(kableExtra)
 # also set a working directory, for this example we will use a temporary directory
 td <- tempdir()
 
-opts_chunk$set(tidy = TRUE, fig.align = "center", message = FALSE, warning = FALSE)
+opts_chunk$set(
+  tidy = TRUE,
+  fig.align = "center",
+  message = FALSE,
+  warning = FALSE
+)
 ```
 
 <img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
 
-This vignette shows how to create synthetic sounds for playback experiments and how to align re-recorded sounds to their reference once playback has been coducted. For this vignette we will need a few more packages:
-
-```{r load packages, eval=TRUE, echo=TRUE, warning=FALSE, message=FALSE}
-
-library(warbleR)
-library(ggplot2)
-library(viridis)
-library(baRulho)
-```
-
-&nbsp;
+This vignette shows deals with two things: how to create synthetic sounds for playback experiments and how to align re-recorded sounds to their reference once playback has been conducted. Here is some terms that will be used in this vignettes and throughout the package.
 
 <div class="alert alert-info">
 
@@ -78,7 +75,7 @@ library(baRulho)
 
 -**Test sound**: sounds re-recorded far from the source to test for transmission/degradation (also refer to as 're-recorded' sounds).
 
--**Degradation**: term used to describe any changes in the structure of a sound when transmitted in a given habitat (note that there is no agreement on this terminology in the scientific community).
+-**Degradation**: loose term used to describe any changes in the structure of a sound when transmitted in a habitat.
 
 </div>
 
@@ -96,51 +93,117 @@ For instance, Tobias et al (2010) studied whether acoustic adaptation (a special
 We can synthesize the same pure tones using the function `synth_sounds()`. The function requires 1) the frequencies of tones to synthesize (argument `frequencies`, in kHz) and 2) the duration of the tones (`durations`, in seconds). In addition, logical arguments `fm` and `am` allow to create frequency and amplitude modulated sounds respectvelty. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR)) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument `selec.table = TRUE`. This can be done as follows:
 
 
-```{r, eval = FALSE}
+```{r, eval = TRUE, fig.height=5, dpi=120, message=FALSE, warning=FALSE}
+
+# load packages
+library(viridis)
+library(baRulho)
 
 # synthesize
- synth.l <- synth_sounds(
-   mar = 0.01,
-   frequencies =  c(0.5, 1:5),
-   durations = 0.1,
-   fm = FALSE,
-   am = FALSE,
-   nharmonics = 1,
-   shuffle = FALSE,
-   replicates = 1
- )
+synth_est <- synth_sounds(
+  mar = 0.1,
+  frequencies = c(0.5, 1:5),
+  durations = 0.1,
+  fm = FALSE,
+  am = FALSE,
+  sampling.rate = 12
+)
 
 td <- tempdir()
 
-# export in a single file
-Rraven::exp_est(X = synth.l, single.file = TRUE, path = td, file.name = "synth_sounds.wav")
+# export into a single file
+Rraven::exp_est(
+  X = synth_est,
+  single.file = TRUE,
+  path = td,
+  file.name = "synth_sounds.wav"
+)
+
+# plot spectro
+seewave::spectro(
+  readWave(file.path(td, "synth_sounds.wav")),
+  scale = FALSE,
+  palette = viridis,
+  grid = FALSE,
+  flim = c(0, 5.5),
+  collevels = seq(-20, 0, 1),
+  osc = TRUE, colwave = "#482878FF",
+  heights = c(2, 1), 
+  wl = 100
+)
 
 ```
 
-```{r, eval = TRUE, echo = FALSE, fig.height=5, dpi=120}
+&nbsp;
+
+The function can add complexity to additional acoustic dimensions. For instance the following code generates all possible combinations of frequencies (2, 3 and 4 kHz), durations (0.1, and 0.2 s), frequency modulation (tonal and modulated) and amplitude modulation (flat and modulated envelope):
+
+```{r, eval = TRUE, echo = TRUE, fig.height=5, dpi=120, message=FALSE, warning=FALSE}
 
 # synthesize
- synth.l <- synth_sounds(
-   mar = 0.075,
-   frequencies =  c(0.5, 1:5),
-   durations = 0.1,
-   fm = FALSE,
-   am = FALSE,
-   nharmonics = 1,
-   shuffle = FALSE,
-   replicates = 1
- )
+synth_est2 <- synth_sounds(
+  mar = 0.01, sig2 = 0.9,
+  frequencies = 2:4,
+  durations = c(0.1, 0.2),
+  fm = TRUE,
+  am = TRUE,
+  shuffle = TRUE,
+  seed = 123, 
+  sampling.rate = 12
+)
 
 td <- tempdir()
 
 # export in a single file
-Rraven::exp_est(X = synth.l, single.file = TRUE, path = td, file.name = "synth_sounds.wav")
+Rraven::exp_est(
+  X = synth_est2,
+  single.file = TRUE,
+  path = td,
+  file.name = "synth_sounds2.wav"
+)
 
 # plot spectro
-seewave::spectro(readWave(file.path(td, "synth_sounds.wav")),
-  scale = FALSE, palette = viridis,
-  grid = FALSE, flim = c(0, 6), collevels = seq(-20, 0, 1)
+seewave::spectro(
+  readWave(file.path(td, "synth_sounds2.wav"), from = 0, to = 3, units = "seconds"),
+  scale = FALSE,
+  palette = viridis,
+  grid = FALSE,
+  flim = c(0.5, 5.5),
+  collevels = seq(-20, 0, 1),
+  osc = TRUE, colwave = "#482878FF",
+  heights = c(2, 1),
+  wl = 140
 )
+
+```
+
+Note that the output is an extended selection table that contains the time-frequency annotations for all synthetic sounds:
+
+
+```{r, eval = FALSE}
+# check first 6 rows
+head(as.data.frame(synth_est2))
+```
+
+```{r, eval = TRUE, echo=FALSE, results='asis'}
+
+kbl <- kable(head(as.data.frame(synth_est2))
+, align = "c", row.names = F, format = "html", escape = F)
+
+kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+
+
+kbl <- scroll_box(kbl, width = "800px", height = "300px")
+
+kbl
+```
+&nbsp;
+
+As this is an extended selection table, the 'sound.files' column refers to Wave objects included as attributes instead of files in a directory:
+
+```{r}
+# check name of wave objects
+names(attributes(synth_est2)$wave.objects)
 ```
 
 &nbsp;
@@ -154,10 +217,11 @@ The following example shows how to create a master sound file using the syntheti
 
 # create master sound file
 synth_master_annotations <- master_sound_file(
-  X = synth.l, file.name = "synthetic_master",
+  X = synth_est, file.name = "synthetic_master",
   dest.path = td, gap.duration = 0.15
 )
 
+check_sels(synth_master_annotations, path =td)
 ```
 
 &nbsp;
@@ -167,15 +231,22 @@ The function saves the master sound file as a wave file and returns a selection 
 ```{r, eval=FALSE, echo=TRUE}
 
 # plot spectro (saved in working directory)
-spectrograms(synth_master_annotations,
-  path = td, by.song = "sound.files",
-  xl = 3, collevels = seq(-60, 0, 5), osci = TRUE
+spectrograms(
+  X = synth_master_annotations,
+  path = td,
+  dest.path = td,
+  by.song = "sound.files",
+  xl = 3,
+  collevels = seq(-60, 0, 5),
+  osci = TRUE, 
+  wl = 140
 )
+
 ```
 
  <img src="synthetic_master.wav.jpeg" alt="spectrogram of master file">
 
-The function can also create a master sound file from sounds from different sounds files, as is likely the case with recordings collected in the field. The following example shows how to create a master sound file using several sound files. The code uses the example data and recordings from the package [warbleR](https://cran.r-project.org/package=warbleR):
+The function can also create a master sound file from sounds found in sound files and from several sounds files, as is likely the case with recordings collected in the field. The following example shows how to create a master sound file using several sound files. The code uses the example data and recordings from the package [warbleR](https://cran.r-project.org/package=warbleR):
 
 ```{r, eval = FALSE, echo = TRUE}
 
@@ -248,15 +319,14 @@ Once we went to the field (or lab) and re-recorded the master sound files at dif
 
 &nbsp;
 
-We will use example files from a degradation experiment that are included in the package as example data. The complete data set of the experiment is hosted in [this repository](https://figshare.com/articles/media/baRulho_an_R_package_to_quantify_animal_acoustic_signal_transmission_and_degradation/21559074):
-
-There are two example objects that will be used: 
+We will use acoustic data included in the package as example data. This is a data subset from a sound transmission experiment. The complete data set of the experiment is hosted in [this repository](https://figshare.com/articles/media/baRulho_an_R_package_to_quantify_animal_acoustic_signal_transmission_and_degradation/21559074). There are two example objects that will be used: 
 
 ```{r}
 data("master_est")
 
 data("test_sounds_est")
 ```
+&nbsp;
 
 These are the files contained in the data set:
 
@@ -281,14 +351,14 @@ unlink(list.files(path = td, full.names = TRUE, pattern = ".wav"))
 writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
 
 # save test sound files
-for (i in unique(test_sounds_est$sound.files))
-    writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
+for (i in unique(test_sounds_est$sound.files)) {
+  writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
+}
 
 # make annotations a data frame
 master_annotations <- as.data.frame(master_est)
-
 ```
-
+&nbsp;
 
 To find the location of the start marker on the test sound files we use the functions `find_markers()` to run a cross-correlation of one or more markers across the test files in order to determine the exact time in which each marker is found: 
 
@@ -305,9 +375,7 @@ markers_position
 # set path globally (so no need to write it each time)
 options(sound.files.path = td)
 
-markers_position <- find_markers(X = master_annotations)
-
-markers_position
+markers_position <- find_markers(X = master_annotations, pb= FALSE)
 
 kbl <- kable(markers_position, align = "c", row.names = F, format = "html", escape = F)
 
@@ -318,15 +386,15 @@ kbl
 
 &nbsp;
 
-The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions `template_correlator()` and `template_detector` from the package [ohun](https://CRAN.R-project.org/package=ohun). If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0. In some cases precision can improve by increasing the time resolution of the spectrogram, that is, by lowering the size of the time window. This is done with the argument 'hop.size'. By default it is 11.6 ms (which is equivalent to a 512 samples window length in a 44.1 kHz file). Let's try 4 ms: 
+The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions `template_correlator()` and `template_detector` from the package [ohun](https://CRAN.R-project.org/package=ohun). If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two templates in the test-files against that in the master sound file. In a perfect detection the value must be 0. So this number can be used as a measure of error. In some cases precision can improve by increasing the time resolution of the spectrogram, that is, by lowering the size of the time window. This is done with the argument 'hop.size'. By default it is 11.6 ms (which is equivalent to a 512 samples window length in a 44.1 kHz file). Let's try 4 ms: 
 ```{r, eval = FALSE}
 
 # lower window length
 markers_position <- find_markers(X = master_annotations, hop.size = 4)
 
 markers_position
-
 ```
+&nbsp;
 
 With the time location of acoustic markers we can infer the position of all other sounds in the new recordings. A selection table from re-recorded files can be generated using the function `align_test_files()`:
 
@@ -336,10 +404,9 @@ aligned_tests <-
   align_test_files(
     X = master_annotations,
     Y = markers_position,
-    by.song = TRUE, 
+    by.song = TRUE,
     remove.markers = FALSE
   )
-
 ```
 
 &nbsp;
@@ -364,6 +431,7 @@ kbl <- kable(aligned_tests, align = "c", row.names = F, format = "html", escape 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl <- scroll_box(kbl, width = "800px", height = "300px")
+
 kbl
 ```
 &nbsp;
@@ -375,7 +443,6 @@ We can also check the precision of the alignment by looking at the spectrograms.
 ```{r, eval = FALSE}
 
 plot_aligned_sounds(X = aligned_tests, dest.path = tempdir(), duration = 2.4, ovlp = 0)
-
 ```
 
  These are two of the files generated by the code above:
@@ -396,28 +463,24 @@ Misalignment can be fixed with the function `realign_test_sounds()`. This functi
 We can simulate a aligned data set in which test sound are slightly off their position: 
 
 ```{r}
- 
+
 unaligned_test_sounds_est <- test_sounds_est
-    set.seed(123)
-    noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
-      nrow(unaligned_test_sounds_est),
-      replace = TRUE
-    )
-    attr(unaligned_test_sounds_est, "check.res")$start <-
-      unaligned_test_sounds_est$start <- unaligned_test_sounds_est$start + noise_time
-    attr(unaligned_test_sounds_est, "check.res")$end <- unaligned_test_sounds_est$end <-
-      unaligned_test_sounds_est$end + noise_time
-
-
+set.seed(123)
+noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
+  nrow(unaligned_test_sounds_est),
+  replace = TRUE
+)
+attr(unaligned_test_sounds_est, "check.res")$start <-
+  unaligned_test_sounds_est$start <- unaligned_test_sounds_est$start + noise_time
+attr(unaligned_test_sounds_est, "check.res")$end <- unaligned_test_sounds_est$end <-
+  unaligned_test_sounds_est$end + noise_time
 ```
 
 Now we can re-aligned test sounds:
 ```{r, eval = FALSE}
 
-    # re align
-    rts <- realign_test_sounds(X = unaligned_test_sounds_est)
-
-
+# re align
+rts <- realign_test_sounds(X = unaligned_test_sounds_est)
 ```
 
 This is how the sounds look before and after being aligned:

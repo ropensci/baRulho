@@ -1,6 +1,5 @@
 ---
-title: baRulho
-subtitle: <font size="5">Quantifying habitat-induced degradation of (animal) acoustic signals</font>
+title: Quantify degradation
 pagetitle: baRulho quantifying sound degradation
 author: 
 - <a href="https://marceloarayasalas.weebly.com">Marcelo Araya-Salas, PhD</a>
@@ -39,42 +38,21 @@ editor_options:
 ```{r eval= TRUE, echo=FALSE}
 
 library(knitr)
+library(kableExtra)
 opts_chunk$set(tidy = TRUE, fig.align = "center", message = FALSE, warning = FALSE)
 ```
 
 <img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
-<div class="alert alert-info">
 
-<font size="5">Glossary</font> 
-
--**Model sound**: sound in which transmission properties will be studied, usually found in the original field recordings or synthetic sound files.
-
--**Reference sound**: sound to use as a pattern to compare against. Usually created by re-recording a model sound broadcast at 1 m from the source (speaker).
-
--**Sound ID**: ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
-
--**Ambient noise**: energy from background sounds in the recording, excluding sounds of interest.  
-
--**Test sound**: sounds re-recorded far from the source to test for transmission/degradation (also refer to as 're-recorded' sounds).
-
--**Degradation**: term used to describe any changes in the structure of a sound when transmitted in a given habitat (note that there is no agreement on this terminology in the scientific community).
-
-</div>
-
-&nbsp;
-
---- 
-
-
-Most [baRulho](https://marce10.github.io/baRulho/) functions are design to quantify sound degradation. There are a few important things to keep in mind about functions for quantifying degradation:
+There are a few important things to keep in mind about functions for quantifying degradation:
 
 - The package currently assumes that all recordings have been made with the same equipment and recording volume. This will be modified in future versions to allow for amplitude calibration of recordings.
 - Wave envelope and frequency spectrum calculations are made after applying a bandpass filter within the frequency range of the reference sound ('bottom.freq' and 'top.freq' columns)
 - The package offers two methods to compare sounds to the reference: 
     1. Compare all sounds with the counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
     1. Compare all sounds with the counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the one recorded at 5m, then sound recorded at 15m compared with the one recorded at 10m and so on).
-
+- The package assumes all sound files have the same sampling rate.
 
 ## Required data structure
 
@@ -82,18 +60,35 @@ The input data should contain some additional information. [baRulho](https://mar
 s
 ```{r,eval=FALSE}
 
-data("playback_est")
+
+# load packages
+library(baRulho)
+library(viridis)
+library(ggplot2)
+
+# load example data
+data("test_sounds_est")
 
 ```
 
 
 ```{r, eval = TRUE, echo = FALSE}
+# load packages
+library(viridis)
+library(baRulho)
+library(ggplot2)
 
-data("playback_est")
 
-kbl <- kable(playback_est, align = "c", row.names = F, format = "html", escape = F)
+load("../data/test_sounds_est.rda")
+source("~/Dropbox/R_package_testing/baRulho/R/plot_blur_ratio.R")
+source("~/Dropbox/R_package_testing/baRulho/R/internal_functions.R")
+# data("test_sounds_est")
 
-kbl <- column_spec(kbl, 7:8, background = "#ccebff", bold = TRUE)
+options(pb = FALSE)
+
+kbl <- kable(test_sounds_est, align = "c", row.names = F, format = "html", escape = F)
+
+kbl <- column_spec(kbl, 7:9, background = "#ccebff", bold = TRUE)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 12)
 
@@ -103,11 +98,18 @@ kbl
 ```
 &nbsp;
  
- Note that besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also contains a **'sound.id' column, which contains the ID of sounds used to identify correspondent sounds across distances**, a **'distance' column that refers to the distance from the source at which each sound was recorded** and a **'transect' column' that (surprise!) identify sounds (rows) from the same transect**. The combined information from these columns is used to identify the reference sounds for each test sound. The function `set_reference_sounds()` does exactly that. There are two possible experimental designs whe defining reference sounds (which is controlled by the argument 'method' in `set_reference_sounds()`):
+ Note that besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also includes the following columns:
+ - **'sound.id': ID of sounds used to identify same sounds at different distances and transects**
+ - **'distance': refers to the distance from the source at which each sound was recorded**
+ - **'transect' identify sounds (rows) from the same transect**. Each distance is replicated once within a transect.  
+ 
+ 
+ 
+Importantly, each sound ID can have only one sample at each distance/transect combination.
+The combined information from these columns is used to identify the reference sounds for each test sound. The function `set_reference_sounds()` does exactly that. There are two possible experimental designs whe defining reference sounds (which is controlled by the argument 'method' in `set_reference_sounds()`):
 
-- 1: compare sounds (by 'sound.id') with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. The function will try to use references from the same transect. However, if there is another test sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead.
+- 1: compare sounds (by 'sound.id') with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. For this design users can have a single example for the shortest distance to be used as reference (for instance at 1m as is the case in most studies) The function will try to use references from the same transect. However, if there is another test sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. 
 - 2: compare all sounds with their counterpart recorded at the distance immediately before within a transect (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
-
 
 Also note that some selections are labeled as "ambient" in the 'sound.id'. These selections refer to ambient (background) noise. Ambient noise can be used by some functions to correct for amplitude differences due to non-target sounds.
  
@@ -116,23 +118,21 @@ In this example data there are 4 recordings at increasing distances: 1m, 5m, 10m
 ```{r,eval=TRUE}
 
 # count selection per recordings
-unique(playback_est$sound.files)
-
-playback_est <- playback_est[playback_est$sound.files != "master.wav", ]
+unique(test_sounds_est$sound.files)
 
 ```
 
-The data contains selections for 5 sounds as well as 2 ambient noise selections at each distance/recording:
+The data contains selections for 5 sounds as well as 1 ambient noise selections at each distance/recording:
 
 ```{r, eval = FALSE}
 
-table(playback_est$sound.id, playback_est$distance)
+table(test_sounds_est$sound.id, test_sounds_est$distance)
 
 ```
 
 ```{r, eval = TRUE, echo=FALSE}
 
-tb <- table(playback_est$sound.id, playback_est$distance)
+tb <- table(test_sounds_est$sound.id, test_sounds_est$distance)
 
 kbl <- kable(tb, align = "c", row.names = TRUE, format = "html", escape = F)
 
@@ -151,20 +151,22 @@ Blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}
 
-# run blur ratio
-br <- blur_ratio(playback_est)
+# add reference column
+test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
 
-# check output class
-is_extended_selection_table(br)
+# run blur ratio
+br <- blur_ratio(X = test_sounds_est)
+
 ```
 
 ```{r, eval = TRUE, echo = FALSE}
 
-# run blur ratio
-br <- blur_ratio(playback_est, method = 1, img = FALSE, pb = FALSE)
+# add reference column
+test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
 
-# check output class
-is_extended_selection_table(br)
+# run blur ratio
+br <- blur_ratio(test_sounds_est)
+
 ```
 
 ```{r, eval = FALSE}
@@ -177,7 +179,7 @@ br
 
 kbl <- kable(br, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
@@ -187,19 +189,23 @@ kbl
 ```
 &nbsp;
 
-The output data frame is similar to input data, except that it includes two new columns ('reference' and 'blur.ratio') with the reference sound and blur ratio values. Note that `NAs` are returned for sounds used as reference and 'ambient' noise selections.
+The output data frame is simply the input data with an additional column ('blur.ratio') with the  blur ratio values. Note that `NAs` are returned for sounds used as reference and 'ambient' noise selections.
 
-If `img = TRUE` it also returns 1 image file (in 'jpeg' format) for each comparison showing spectrograms of both sounds and the overlaid amplitude envelopes (as probability mass functions (PMF)). 
+The function `plot_blur_ratio()` can be used to generate image files (in 'jpeg' format) for each comparison showing spectrograms of both sounds and the overlaid amplitude envelopes (as probability mass functions (PMF)). 
 
 ```{r, eval = FALSE}
 
-# run blur ratio
-br <- blur_ratio(playback_est, method = 1, img = TRUE, ssmooth = 300, dest.path = td)
+# set path in which to save images
+options(dest.path = td)
+
+# plot blur ratio
+plot_blur_ratio(X = test_sounds_est)
+
 ```
 
 ```{r, eval = FALSE, echo = FALSE}
 
-sbr <- blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tempdir(), pb = FALSE)
+sbr <- blur_ratio(test_sounds_est, dest.path = tempdir())
 
 # make the gif here
 # https://ezgif.com
@@ -218,7 +224,7 @@ The function can also return the amplitude spectrum contours when the argument `
 ```{r}
 
 # get envelopes
-br <- blur_ratio(X = playback_est, envelopes = TRUE)
+br <- blur_ratio(X = test_sounds_est, envelopes = TRUE)
 envs <- attributes(br)$envelopes
 
 # make distance a factor for plotting
@@ -233,12 +239,12 @@ theme_classic()
 
 ```
 
-Note than the `smooth` argument could change envelope shapes and related measurements. The following code sets `smooth = 800`:
+The `env.smooth` argument could change envelope shapes and related measurements. The following code sets `env.smooth = 800`:
 
 ```{r}
 
 # get envelopes
-br <- blur_ratio(X = playback_est, envelopes = TRUE)
+br <- blur_ratio(X = test_sounds_est, envelopes = TRUE)
 envs <- attributes(br)$envelopes
 
 envs$distance <- as.factor(envs$distance)
@@ -262,24 +268,20 @@ Spectrum blur ratio can be calculated as follows:
 ```{r, eval = FALSE}
 
 # run Spectrum blur ratio
-sbr <- spectrum_blur_ratio(playback_est, method = 1, img = TRUE, dest.path = td)
+sbr <- spectrum_blur_ratio(test_sounds_est)
 
-# check output class
-is_extended_selection_table(sbr)
 ```
 
 ```{r, eval = TRUE, echo = FALSE}
 
 # run Spectrum blur ratio
-sbr <- spectrum_blur_ratio(playback_est, method = 1, pb = FALSE)
+sbr <- spectrum_blur_ratio(test_sounds_est)
 
-# check output class
-is_extended_selection_table(sbr)
 ```
 
 ```{r, eval = FALSE, echo = FALSE}
 
-sbr <- spectrum_blur_ratio(playback_est, method = 1, img = TRUE, dest.path = tempdir())
+sbr <- spectrum_blur_ratio(test_sounds_est)
 
 # make the gif here
 # https://ezgif.com
@@ -296,7 +298,7 @@ sbr
 
 kbl <- kable(sbr, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
@@ -306,14 +308,10 @@ kbl
 ```
 &nbsp;
 
-<center><img src="spectrum_blur_ratio_example.gif" alt="spectrum blur-ratio"></center>
-
-&nbsp;
-
 As in `blur_ratio()`, `spectrum_blur_ratio()` can also return the amplitude spectrum contours with the argument `spectra = TRUE`:
 
 ```{r}
-sbr <- spectrum_blur_ratio(X = playback_est, spectra = TRUE)
+sbr <- spectrum_blur_ratio(X = test_sounds_est, spectra = TRUE)
 
 spctr <- attributes(sbr)$spectra
 
@@ -334,7 +332,7 @@ We can also zoom in to the frequency range of the sounds by subsetting the spect
 ```{r}
 
 # get the frequencies higher than lowest bottom but lower than highest top freq
-spctr <- spctr[spctr$freq > min(playback_est$bottom.freq) & spctr$freq < max(playback_est$top.freq), ]
+spctr <- spctr[spctr$freq > min(test_sounds_est$bottom.freq) & spctr$freq < max(test_sounds_est$top.freq), ]
 
 ggplot(spctr, aes(y = amp, x = freq, col = distance)) +
   geom_line() +
@@ -355,10 +353,8 @@ With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude 
 ```{r, eval = TRUE}
 
 # run  envelope correlation
-ea <- excess_attenuation(playback_est, method = 1, pb = FALSE)
+ea <- excess_attenuation(test_sounds_est)
 
-# check output class
-is_extended_selection_table(ea)
 ```
 
 
@@ -373,7 +369,7 @@ ea
 
 kbl <- kable(ea, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
@@ -393,10 +389,8 @@ Amplitude envelope correlation measures the similarity of two sounds in the time
 ```{r, eval = TRUE}
 
 # run  envelope correlation
-ec <- envelope_correlation(playback_est, method = 1, pb = FALSE)
+ec <- envelope_correlation(test_sounds_est)
 
-# check output class
-is_extended_selection_table(ec)
 ```
 
 The output is also similar to those of other functions; an extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')
@@ -411,7 +405,7 @@ ec
 
 kbl <- kable(ec, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
@@ -431,10 +425,8 @@ Spectrum correlation measures the similarity of two sounds in the frequency doma
 ```{r, eval = TRUE}
 
 # run spectrum correlation
-sc <- spectrum_correlation(playback_est, method = 1, pb = FALSE)
+sc <- spectrum_correlation(test_sounds_est)
 
-# check output class
-is_extended_selection_table(sc)
 ```
 
 The output is also similar to that of `envelope_correlation()`:
@@ -448,7 +440,7 @@ sc
 
 kbl <- kable(sc, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
@@ -468,10 +460,8 @@ Signal-to-noise ratio (SNR) quantifies sound amplitude level in relation to ambi
 ```{r, eval = TRUE}
 
 # run signal to noise ratio
-sa <- signal_to_noise_ratio(playback_est, pb = FALSE, noise.ref = "custom")
+sa <- signal_to_noise_ratio(test_sounds_est, pb = FALSE, noise.ref = "custom")
 
-# check output class
-is_extended_selection_table(sa)
 ```
 
 The output is also similar to the other functions:
@@ -506,13 +496,8 @@ Tail-to-signal ratio (TSR) is used to quantify reverberations. Specifically TSR 
 ```{r, eval = TRUE}
 
 # run tail to signal ratio
-tsr <- tail_to_signal_ratio(playback_est,
-  pb = FALSE,
-  type = 1, mar = 0.05
-)
+tsr <- tail_to_signal_ratio(test_sounds_est, type = 1, mar = 0.05)
 
-# check output class
-is_extended_selection_table(tsr)
 ```
 
 Again, the output is similar to other functions:
@@ -546,10 +531,8 @@ Finally, the function `spcc()` measures spectrogram cross-correlation as a metri
 ```{r, eval = TRUE}
 
 # run spcc
-spd <- spcc(X = playback_est, method = 1, wl = 512, pb = FALSE)
+spd <- spcc(X = test_sounds_est, wl = 512)
 
-# check output class
-is_extended_selection_table(spd)
 ```
 
 And again, the output is similar to other functions:
@@ -563,7 +546,7 @@ spd
 
 kbl <- kable(spd, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <- column_spec(kbl, 9:10, background = "#ccebff", bold = TRUE)
+kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
 
 kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
 
@@ -583,7 +566,7 @@ The function `noise_profile()` allows to estimate the frequency spectrum of ambi
 ```{r, eval = TRUE}
 
 # run noise profile
-np <- noise_profile(X = playback_est[playback_est$distance > 5, ], mar = 0.05)
+np <- noise_profile(X = test_sounds_est[test_sounds_est$distance > 5, ], mar = 0.05)
 ```
 
 The output is a data frame with amplitude values for the frequency bins for each wave object in the extended selection table:
@@ -623,7 +606,7 @@ The output data is actually an average of several frequency spectra for each sou
 ```{r, eval = TRUE, warning = FALSE}
 
 np <- noise_profile(
-  X = playback_est[playback_est$distance > 5, ],
+  X = test_sounds_est[test_sounds_est$distance > 5, ],
   mar = 0.1, averaged = FALSE
 )
 
@@ -644,7 +627,7 @@ Note that we can limit the frequency range by using a bandpass filter ('bp' argu
 ```{r, eval = TRUE}
 
 np <- noise_profile(
-  X = playback_est[playback_est$distance > 5, ],
+  X = test_sounds_est[test_sounds_est$distance > 5, ],
   mar = 0.05, bp = c(0, 10),
   averaged = FALSE, hop.size = 3
 )

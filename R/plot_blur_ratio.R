@@ -167,7 +167,7 @@ plot_blur_ratio <-
         pbar = pb,
         X = which(!is.na(X$.sgnl.temp)),
         cl = cl,
-        FUN = function(x,
+        FUN = function(y = x,
                        rs = res,
                        en.vctr = energy_vectors,
                        spct = if (type == "envelope") FALSE else TRUE,
@@ -177,14 +177,15 @@ plot_blur_ratio <-
                        ovp = ovlp,
                        dest.pth = dest.path,
                        fl = flim,
-                       cols = colors) {
+                       cols = colors,
+                       Q = X) {
           plot_blur_FUN(
-            X,
+            X = Q,
             energy_vectors = en.vctr,
-            spectrum = spct,
+            spectr = spct,
             path,
             dest.path = dest.pth,
-            x,
+            x = y,
             res = rs,
             ovlp = ovp,
             wl = wle,

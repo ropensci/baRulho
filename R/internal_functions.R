@@ -362,6 +362,7 @@ check_arguments <- function(fun, args) {
       # functions that compare by distance
       if (fun %in% c(
         "blur_ratio",
+        "plot_blur_ratio",
         "detection_distance",
         "envelope_correlation",
         "excess_attenuation",
@@ -1443,7 +1444,7 @@ blur_sp_FUN <-
 plot_blur_FUN <-
   function(X,
            energy_vectors,
-           spectrum,
+           spectr,
            path,
            dest.path,
            x,
@@ -1457,10 +1458,6 @@ plot_blur_FUN <-
            colors) {
    
     # set colors
-    
-    # ref_col <- "#31688E"
-    # test_col <- "#B4DE2C"
-    # blur_col <- "#FDE72533"
     ref_col <- colors[1]
     test_col <- colors[2]
     blur_col <- colors[3]
@@ -1495,7 +1492,7 @@ plot_blur_FUN <-
         length(sgnl.energy) / sampling_rate
 
       # run band pass
-      if (spectrum) {
+      if (spectr) {
         # make them the same frequency range as reference
         bp <- c(X$bottom.freq[X$.sgnl.temp == rfrnc], X$top.freq[X$.sgnl.temp == rfrnc])
 
@@ -1526,7 +1523,7 @@ plot_blur_FUN <-
       bl.rt <- sum(abs(rfrnc.pmf - sgn.pmf)) / 2
 
       img_name <- paste0(
-        if (spectrum) "spectrum_blur_ratio_" else "blur_ratio_",
+        if (spectr) "spectrum_blur_ratio_" else "blur_ratio_",
         X$sound.id[x],
         "-",
         rfrnc,
@@ -1794,10 +1791,10 @@ plot_blur_FUN <-
       screen(3)
 
       # set image margins
-      par(mar = c(4, 1, 4, if (spectrum) 4.2 else 3.2))
+      par(mar = c(4, 1, 4, if (spectr) 4.2 else 3.2))
 
       # plot envelope
-      if (!spectrum) {
+      if (!spectr) {
         # time values for plots
         time.vals <- seq(0, dur, length.out = length(sgnl.energy))
 
@@ -1818,7 +1815,7 @@ plot_blur_FUN <-
         )
 
         # add background color
-        rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col ="#D3D3D380", border = NA)
+        rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col =adjustcolor("#DEF5E5FF", 0.4), border = NA)
         
         # white envelope polygon
         # add 0s at star and end so polygon doesnt twist
@@ -1906,14 +1903,14 @@ plot_blur_FUN <-
         # and blu ratio value
         text(
           x = ((usr[1] + usr[2]) / 2) + usr[1],
-          y = usr[4] * 0.9,
+          y = usr[4] * 0.95,
           paste("Blur ratio:", round(bl.rt, 2)),
           cex = 1
         )
       }
 
       # spectrum
-      if (spectrum) {
+      if (spectr) {
         # create time values for area calculation
         f.vals <-
           seq(bp[1], bp[2], length.out = length(rfrnc.pmf))

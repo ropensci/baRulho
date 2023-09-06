@@ -56,7 +56,7 @@ It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showi
 \code{plot_blur_ratio} measures blur ratio in sounds referenced in an extended selection table.
 }
 \details{
-Blur ratio measures the degradation of sound as a change in sound energy in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of sounds. The function generates image files (in 'jpeg' format) for each posible blur ratio in estimation in 'X'. The image files show the spectrograms of both sounds and the overlaid amplitude envelopes (as probability mass functions (PMF)). Spectrograms are shown within the frequency range of the reference sound and also show vertical lines with the start and end of sounds.
+The function generates image files (in 'jpeg' format) for each possible blur ratio estimation in 'X'. The image files show the spectrograms of both sounds and the overlaid power distribution (either amplitude envelopes or power spectrum, see argument 'type') as probability mass functions (PMF). The output graphs highlight the mismatch between the compared distribution which represent the estimated blur ratio returned by either \code{\link{blur_ratio}} or \code{\link{spectrum_blur_ratio}}. Spectrograms are shown within the frequency range of the reference sound and also show dotted lines with the time (type = "envelope") or frequency range (type = "spectrum") in which energy distributions where computed.
 }
 \examples{
 {

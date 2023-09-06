@@ -21,9 +21,9 @@
 #'   # set temporary directory
 #'   td <- tempdir()
 #'
-#' # load example data
-#' data("master_est")
-#' 
+#'   # load example data
+#'   data("master_est")
+#'
 #'   # save example files in working director to recreate a case in which working
 #'   # with sound files instead of extended selection tables.
 #'   # This doesn't have to be done with your own data as you will
@@ -32,8 +32,9 @@
 #'     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
 #'   }
 #'
-#'  # save master file
-#'  writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
+#'   # save master file
+#'   writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
+#' }
 
 #'   # set path and no progress bar in global options
 #'   options(sound.files.path = td, pb = FALSE)

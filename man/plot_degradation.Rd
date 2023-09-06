@@ -11,7 +11,7 @@ dest.path = getOption("dest.path", "."), cores = getOption("mc.cores", 1),
 pb = getOption("pb", TRUE), collevels = seq(-120, 0, 5),
 palette = viridis::viridis, flim = c("-1", "+1"), envelope = TRUE, spectrum = TRUE,
 heights = c(4, 1), widths = c(5, 1), margins = c(2, 1), row.height = 2, col.width = 2,
-colors = viridis::mako(4, alpha = 0.3), res = 120, ...)
+cols = viridis::mako(4, alpha = 0.3), res = 120, ...)
 }
 \arguments{
 \item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
@@ -57,7 +57,7 @@ plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viri
 
 \item{col.width}{Numeric vector of length 1 controlling the width (in inches) of sound panels in the output image file. Default is 2.}
 
-\item{colors}{Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).}
+\item{cols}{Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).}
 
 \item{res}{Numeric argument of length 1. Controls image resolution. Default is 120 (faster) although 300 - 400 is recommended for publication/presentation quality.}
 
@@ -96,14 +96,14 @@ The function aims to simplify the visual inspection of sound degradation by prod
   # using other color palettes
   plot_degradation(
     X = Y, nrow = 3, ovlp = 95,
-    colors = viridis::magma(4, alpha = 0.3),
+    cols = viridis::magma(4, alpha = 0.3),
     palette = viridis::magma
   )
 
   # missing some data, 2 rows
   plot_degradation(
     X = Y[-3, ], nrow = 2, ovlp = 95,
-    colors = viridis::mako(4, alpha = 0.4), palette = viridis::mako, wl = 200
+    cols = viridis::mako(4, alpha = 0.4), palette = viridis::mako, wl = 200
   )
 
   # changing marging and high overlap

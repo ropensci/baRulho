@@ -1,5 +1,6 @@
 # *baRulho 2.1.0*
 
+* new function `manual_realign()` that generates an interacitve plot for manual adjustment of time alignments
 * new function `plot_blur_ratio()` that generates plots previously created by `blur_ratio()` and `spectrum_blur_ratio()`
 * Improved documentation for all functions
 * new function `plot_degradation()` to visually compare sounds across distances

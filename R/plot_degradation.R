@@ -8,7 +8,7 @@
 #' pb = getOption("pb", TRUE), collevels = seq(-120, 0, 5),
 #' palette = viridis::viridis, flim = c("-1", "+1"), envelope = TRUE, spectrum = TRUE,
 #' heights = c(4, 1), widths = c(5, 1), margins = c(2, 1), row.height = 2, col.width = 2,
-#' colors = viridis::mako(4, alpha = 0.3), res = 120, ...)
+#' cols = viridis::mako(4, alpha = 0.3), res = 120, ...)
 #' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param nrow Numeric vector of length 1 with the number of rows per image file. Default is 4. This would be dynamically adjusted if more rows than needed are set.
 #' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope and power spectrum calculations (used internally by \code{\link[seewave]{env}}). Default is 200.
@@ -32,7 +32,7 @@
 #' @param margins Numeric vector of length 2 to control the relative time of the test sound (first number) and adjacent margins (i.e. adjacent background noise, second number) to be included in the spectrogram \code{spectrum = TRUE}. Default is c(2, 1) which means that each margin next to the sound is half the duration of the sound. Note that all spectrograms will have the same time length so margins will be calculated to ensure all spectrograms match the duration of the spectrogram in the longest sound. As such, this argument controls the margin on the longest sound.
 #' @param row.height Numeric vector of length 1 controlling the height (in inches) of sound panels in the output image file. Default is 2.
 #' @param col.width Numeric vector of length 1 controlling the width (in inches) of sound panels in the output image file. Default is 2.
-#' @param colors Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).
+#' @param cols Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).
 #' @param res Numeric argument of length 1. Controls image resolution. Default is 120 (faster) although 300 - 400 is recommended for publication/presentation quality.
 #' @param ... Additional arguments to be passed to the internal spectrogram
 #' creating function for customizing graphical output. The function is a modified
@@ -62,14 +62,14 @@
 #'   # using other color palettes
 #'   plot_degradation(
 #'     X = Y, nrow = 3, ovlp = 95,
-#'     colors = viridis::magma(4, alpha = 0.3),
+#'     cols = viridis::magma(4, alpha = 0.3),
 #'     palette = viridis::magma
 #'   )
 #'
 #'   # missing some data, 2 rows
 #'   plot_degradation(
 #'     X = Y[-3, ], nrow = 2, ovlp = 95,
-#'     colors = viridis::mako(4, alpha = 0.4), palette = viridis::mako, wl = 200
+#'     cols = viridis::mako(4, alpha = 0.4), palette = viridis::mako, wl = 200
 #'   )
 #'
 #'   # changing marging and high overlap
@@ -106,7 +106,7 @@ plot_degradation <-
            margins = c(2, 1),
            row.height = 2,
            col.width = 2,
-           colors = viridis::mako(4, alpha = 0.3),
+           cols = viridis::mako(4, alpha = 0.3),
            res = 120,
            ...) {
     # check arguments
@@ -125,10 +125,10 @@ plot_degradation <-
     report_assertions2(check_results)
 
     # set colors
-    bg_titles <- colors[1]
-    env_fill <- colors[2]
-    spc_fill <- colors[3]
-    bg_sp_env <- colors[4]
+    bg_titles <- cols[1]
+    env_fill <- cols[2]
+    spc_fill <- cols[3]
+    bg_sp_env <- cols[4]
 
     # adjust wl based on hope.size
     if (is.null(wl)) {
@@ -230,7 +230,7 @@ plot_degradation <-
 
     # create data subsets (element in list) with all the copies of a sound id in transect, also including its reference if it comes from another transect
     # add text break if longer than 17 characters
-    tailored_sound_id <- sapply(as.character(X_df$sound.id), function(x) if (nchar(x) > 17) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x)
+    tailored_sound_id <- sapply(as.character(X_df$sound.id), function(x) if (nchar(x) > 15) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x)
 
     X_df$sound.id.transect <- paste(tailored_sound_id, X$transect, sep = "\n")
 
@@ -404,7 +404,7 @@ plot_degradation <-
     #   text(x = 0.5, y = 0.5, labels = i)
     # }
 
-    close.screen(all.screens = T)
+    close.screen(all.screens = TRUE)
 
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {

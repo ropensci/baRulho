@@ -19,14 +19,13 @@
 #' @name align_test_files
 #' @details The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table' by default.
 #' @seealso \code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
-#' @examples
-#' {
+#' @examples \dontrun{
 #'   # set temporary directory
 #'   td <- tempdir()
 #'
-#' # load example data
-#' data("master_est")
-#' 
+#'   # load example data
+#'   data("master_est")
+#'
 #'   # save example files in working director to recreate a case in which working
 #'   # with sound files instead of extended selection tables.
 #'   # This doesn't have to be done with your own data as you will
@@ -35,17 +34,34 @@
 #'     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
 #'   }
 #'
-#'  # save master file
-#'  writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
+#'   # save master file
+#'   writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
+#' }
 
 #'   # set path and no progress bar in global options
-#'   options(sound.files.path = td, pb = FALSE)
+#'   options(sound.files.path = td, pb = FALSE, dest.path = td)
 #'
 #'   # get marker position
 #'   markers <- find_markers(X = master_est, test.files = unique(test_sounds_est$sound.files)[2])
 #'
 #'   # align all test sounds
 #'   alg.tests <- align_test_files(X = master_est, Y = markers, pb = FALSE)
+#'   
+#'   # modify annotation so alignment is poor
+#'   lag <- (as.numeric(as.factor(alg.tests.est$sound.files)) - 2) / 30
+#'   alg.tests.est$start <- alg.tests.est$start + lag
+#'   alg.tests.est$end <- alg.tests.est$end + lag
+#'   attributes(alg.tests.est)$check.res$start <- attributes(alg.tests.est)$check.res$start + lag
+#'   attributes(alg.tests.est)$check.res$end <- attributes(alg.tests.est)$check.res$end + lag
+#'   
+#'   # check alignment visually (go to tempdir() and check jpeg files)
+#'   plot_aligned_sounds(X = alg.tests.est)
+#'   
+#'   # realign manuallyu
+#'   realigned_est <- manual_realign(X = alg.tests.est, Y = master_est)
+
+#'   # check alignment visually again (go to tempdir() and check jpeg files)
+#'   plot_aligned_sounds(X = realigned_est)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

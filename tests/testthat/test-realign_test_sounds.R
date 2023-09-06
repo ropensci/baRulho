@@ -4,9 +4,6 @@ test_that("basic", {
     # load example data
     data("test_sounds_est")
 
-    
-    
-
     # create "unaligned_test_sounds_est" by adding noise to "test_sounds_est" start and end
     unaligned_test_sounds_est <- test_sounds_est
     set.seed(123)

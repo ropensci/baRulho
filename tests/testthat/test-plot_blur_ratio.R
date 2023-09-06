@@ -2,9 +2,6 @@ test_that("basic", {
     # load example data
     data("test_sounds_est")
 
-    
-    
-
     # add reference to X
     X <- set_reference_sounds(X = test_sounds_est[test_sounds_est$sound.id == test_sounds_est$sound.id[2], ])
 

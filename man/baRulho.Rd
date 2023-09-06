@@ -15,6 +15,8 @@ The main features of the package are:
   \item The comparison of playback sounds re-recorded at different distances
   }
 Most functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency.
+
+License: GPL (>= 2)
 }
 \seealso{
 Useful links:
@@ -29,4 +31,3 @@ Marcelo Araya-Salas
 
   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }
-\keyword{internal}

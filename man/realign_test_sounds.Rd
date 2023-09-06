@@ -41,24 +41,25 @@ This function uses spectrographic cross-correlation to align the position in tim
 {
   # load example data
   data("test_sounds_est")
-  
-  # create "unaligned_test_sounds_est" by 
+
+  # create "unaligned_test_sounds_est" by
   # adding noise to "test_sounds_est" start and end
-unaligned_test_sounds_est <- test_sounds_est
-set.seed(123)
-noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
-nrow(unaligned_test_sounds_est),
-replace = TRUE)
+  unaligned_test_sounds_est <- test_sounds_est
+  set.seed(123)
+  noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
+    nrow(unaligned_test_sounds_est),
+    replace = TRUE
+  )
 
-attr(unaligned_test_sounds_est, "check.res")$start <-
-unaligned_test_sounds_est$start <- unaligned_test_sounds_est$start + noise_time
+  attr(unaligned_test_sounds_est, "check.res")$start <-
+    unaligned_test_sounds_est$start <- unaligned_test_sounds_est$start + noise_time
 
-attr(unaligned_test_sounds_est, "check.res")$end <- unaligned_test_sounds_est$end <-
-unaligned_test_sounds_est$end + noise_time
+  attr(unaligned_test_sounds_est, "check.res")$end <- unaligned_test_sounds_est$end <-
+    unaligned_test_sounds_est$end + noise_time
 
-# re align
+  # re align
 
-realign_test_sounds(X = unaligned_test_sounds_est)
+  realign_test_sounds(X = unaligned_test_sounds_est)
 }
 
 }

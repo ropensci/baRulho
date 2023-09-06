@@ -19,7 +19,8 @@ Suggests:
     kableExtra,
     testthat (>= 3.0.0),
     covr,
-    formatR
+    formatR,
+    Rraven
 VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Repository: CRANs

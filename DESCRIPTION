@@ -1,6 +1,6 @@
 Package: baRulho
 Type: Package
-Title: Quantifying Habitat-Induced Acoustic Signal Degradation  
+Title: Quantifying (Animal) Sound Degradation  
 Version: 2.1.0
 Author: Marcelo Araya-Salas [aut, cre]
 Maintainer: Marcelo Araya-Salas <marcelo.araya@ucr.ac.cr>
@@ -18,7 +18,8 @@ Suggests:
     knitr,
     kableExtra,
     testthat (>= 3.0.0),
-    covr
+    covr,
+    formatR
 VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Repository: CRANs

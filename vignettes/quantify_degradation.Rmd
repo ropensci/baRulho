@@ -685,7 +685,7 @@ Please report any bugs [here](https://github.com/maRce10/baRulho/issues).
 
 The package [baRulho](https://marce10.github.io/baRulho/) should be cited as follows:
 
-Araya-Salas, M. (2020), *baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R*. R package version 1.0.0.
+Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0.
 
 ---
 
@@ -693,7 +693,7 @@ Araya-Salas, M. (2020), *baRulho: quantifying habitat-induced degradation of (an
 
 1. Araya-Salas, M. (2017). *Rraven: connecting R and Raven bioacoustic software*. R package version 1.0.0.
 
-1.  Araya-Salas, M. (2020), *baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R*. R package version 1.0.0
+1.  Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0
   
 1. Araya-Salas M, Smith-Vidaurre G. (2017) *warbleR: An R package to streamline analysis of animal acoustic signals*. Methods Ecol Evol 8:184–191.
 

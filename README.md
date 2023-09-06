@@ -1,4 +1,4 @@
-baRulho: quantifying habitat-induced degradation of (animal) sounds
+baRulho: quantifying degradation of (animal) sounds
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -13,7 +13,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![packageversion](https://img.shields.io/badge/Package%20version-2.1.0-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2023--08--26-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--09--06-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
@@ -34,6 +34,8 @@ in the following diagram:
 <center>
 <img src="vignettes/analysis_workflow.jpg" alt="analysis workflow" width="620">
 </center>
+
+ 
 
 [baRulho](https://marce10.github.io/baRulho/) offers functions for
 critical steps in this workflow (those in black, including ‘checks’)
@@ -57,6 +59,16 @@ data formats from the
 [seewave](https://cran.r-project.org/package=seewave) packages, so some
 experience with these packages is advised.
 
+Take a look at the vignettes for an overview of the main features of the
+packages:
+
+- [Align test
+  sounds](https://marce10.github.io/baRulho/articles/align_test_sounds.html)
+- [Quantify
+  degradation](https://marce10.github.io/baRulho/articles/quantify_degradation.html)
+
+## Installing baRulho
+
 Install/load the package from CRAN as follows:
 
 ``` r
@@ -79,12 +91,36 @@ remotes::install_github("maRce10/baRulho")
 library(baRulho)
 ```
 
+Further system requirements due to the dependency
+[seewave](https://rug.mnhn.fr/seewave/) may be needed. Take a look a
+[this link](https://rug.mnhn.fr/seewave/inst.html) for instruction on
+how to install/troubleshoot these external dependencies.
+
+## Other packages
+
+The packages [seewave](https://cran.r-project.org/package=seewave) and
+[tuneR](https://cran.r-project.org/package=seewave) provide a huge
+variety of functions for acoustic analysis and manipulation. They moslty
+works on wave objects already imported into the R environment. The
+package [Rraven](https://cran.r-project.org/package=Rraven) facilitates
+the exchange of data between R and [Raven sound analysis
+software](https://ravensoundsoftware.com) ([Cornell Lab of
+Ornithology](https://www.birds.cornell.edu/home)) and can be very
+helpful for incorporating Raven as the annotating tool into acoustic
+analysis workflow in R. The package
+[ohun](https://github.com/maRce10/ohun) works on automated detection of
+sound events, providing functions to diagnose and optimize detection
+routines. [dynaSpec](https://cran.r-project.org/package=seewave) is
+allows to create dynamic spectrograms (i.e. spectrogram videos).
+
+## Citation
+
 Please cite [baRulho](https://marce10.github.io/baRulho/) as follows:
 
-Araya-Salas, M. (2020), *baRulho: quantifying habitat-induced
-degradation of (animal) acoustic signals in R*. R package version 1.0.0.
+Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal)
+acoustic signals in R*. R package version 1.0.0.
 
-# References
+## References
 
 1.  Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993).
     *Habitat-induced degradation of sound signals: Quantifying the

@@ -1,4 +1,4 @@
-#' baRulho: quantifying habitat-induced acoustic signal degradation
+#' baRulho: quantifying acoustic signal degradation
 #'
 #' `baRulho` is a package intended to quantify habitat-induced degradation of (animal) acoustic signals.
 #'

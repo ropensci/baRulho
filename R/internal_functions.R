@@ -136,7 +136,7 @@ find_peaks_bRlh_int <-
   function(libname, pkgname) {
     packageStartupMessage("\nPlease cite 'baRulho' as: \n")
     packageStartupMessage(
-      "Araya-Salas, M. (2020), baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0"
+      "Araya-Salas, M. (2020), baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.0"
     )
 
     invisible(TRUE)

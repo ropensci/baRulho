@@ -4,7 +4,7 @@
 \name{baRulho}
 \alias{baRulho}
 \alias{baRulho-package}
-\title{baRulho: quantifying habitat-induced acoustic signal degradation}
+\title{baRulho: quantifying acoustic signal degradation}
 \description{
 `baRulho` is a package intended to quantify habitat-induced degradation of (animal) acoustic signals.
 }

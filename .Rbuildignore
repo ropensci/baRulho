@@ -8,3 +8,10 @@ LICENSE.md
 ^_pkgdown\.yml$
 ^\.github$
 ^codecov\.yml$
+^codemeta\.json$
+^\.github$
+^CONTRIBUTING\.md$
+^tic\.R$
+^.*\.pdf$
+^\.\.pdf$
+^doc$

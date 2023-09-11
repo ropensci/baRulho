@@ -3,7 +3,7 @@
 #' \code{align_test_files} aligns test (re-recorded) sound files.
 #' @usage align_test_files(X, Y, output = NULL, path = getOption("sound.files.path", "."),
 #' by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1),
-#' pb = getOption("pb", TRUE), remove.markers = TRUE, ...)
+#' pb = getOption("pb", TRUE), ...)
 #' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.
 #' @param Y object of class 'data.frame' with the output of \code{\link{find_markers}}. This object contains the position of markers in the re-recorded sound files. If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used.
 #' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
@@ -12,14 +12,14 @@
 #' @param marker Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is \code{NULL}. DEPRECATED.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param remove.markers Logical to control if acoustic markers are removed in the output (default).
 #' @param ...	Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.
 #' @return An object of the same class than 'X' with the aligned sounds from test (re-recorded) sound files.
 #' @export
 #' @name align_test_files
 #' @details The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table' by default.
-#' @seealso \code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
-#' @examples \dontrun{
+#' @seealso \code{\link{manual_realign}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
+#' @examples 
+#' {
 #'   # set temporary directory
 #'   td <- tempdir()
 #'
@@ -36,8 +36,7 @@
 #'
 #'   # save master file
 #'   writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
-#' }
-
+#' 
 #'   # set path and no progress bar in global options
 #'   options(sound.files.path = td, pb = FALSE, dest.path = td)
 #'
@@ -46,30 +45,13 @@
 #'
 #'   # align all test sounds
 #'   alg.tests <- align_test_files(X = master_est, Y = markers, pb = FALSE)
-#'   
-#'   # modify annotation so alignment is poor
-#'   lag <- (as.numeric(as.factor(alg.tests.est$sound.files)) - 2) / 30
-#'   alg.tests.est$start <- alg.tests.est$start + lag
-#'   alg.tests.est$end <- alg.tests.est$end + lag
-#'   attributes(alg.tests.est)$check.res$start <- attributes(alg.tests.est)$check.res$start + lag
-#'   attributes(alg.tests.est)$check.res$end <- attributes(alg.tests.est)$check.res$end + lag
-#'   
-#'   # check alignment visually (go to tempdir() and check jpeg files)
-#'   plot_aligned_sounds(X = alg.tests.est)
-#'   
-#'   # realign manuallyu
-#'   realigned_est <- manual_realign(X = alg.tests.est, Y = master_est)
-
-#'   # check alignment visually again (go to tempdir() and check jpeg files)
-#'   plot_aligned_sounds(X = realigned_est)
 #' }
-#'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' }
 
-align_test_files <- function(X, Y, output = NULL, path = getOption("sound.files.path", "."), by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), remove.markers = TRUE, ...) {
+align_test_files <- function(X, Y, output = NULL, path = getOption("sound.files.path", "."), by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), ...) {
   # check arguments
   arguments <- as.list(base::match.call())
 
@@ -113,13 +95,9 @@ align_test_files <- function(X, Y, output = NULL, path = getOption("sound.files.
     # make data frame
     W <- data.frame(sound.files = Y$sound.files[y], selec = seq_along(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, marker = Y$marker[y])
 
-    # remove markers
-    if (remove.markers) {
-      W <- W[!W$sound.id %in% c("start_marker", "end_marker"), ]
 
-      # re set selec labels
-      W$selec <- seq_len(nrow(W))
-    }
+      # re set rownames
+      rownames(W) <- seq_len(nrow(W))
 
     return(W)
   })

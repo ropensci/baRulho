@@ -43,6 +43,7 @@
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat.R="BFF47264"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-align_test_files.R="4D651487"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-attenuation.R="A04BBD8F"
+/home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-auto_realign.R="607E435B"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-blur_ratio.R="29E72367"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-detection_distance.R="6B7A25B4"
 /home/m/Dropbox/R_package_testing/baRulho/tests/testthat/test-envelope_correlation.R="504D18E4"

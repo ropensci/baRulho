@@ -10,7 +10,7 @@ path = getOption("sound.files.path", "."), collevels = seq(-120, 0, 5),
 palette = viridis::viridis, duration = 2, mar = 0.2, step.lengths = c(5, 30),
 flim = NULL, label.col = "white",  ext.window = TRUE, width = 10, 
 height = 5, srt = 0, cex = 1, fast.spec = TRUE, 
-marker = "start_marker", ...)
+marker = "start_marker", grid = 0.2, ...)
 }
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}
@@ -53,6 +53,8 @@ marker = "start_marker", ...)
 
 \item{marker}{Character string with the name of the marker to be used as the main reference for checking/adjusting time alignments. Default is 'start_marker'. Note that this can take any of the sound IDs in 'Y$sound.id'.}
 
+\item{grid}{Numeric vector of length 1 controling the spacing between vertical lines on the spectrogram. Default is 0.2 s. Use 0 to remove grid.}
+
 \item{...}{Additional arguments to be passed to the internal spectrogram
 creating function for customizing graphical output. The function is a modified
 version of \code{\link[seewave]{spectro}}, so it takes the same arguments.}
@@ -72,7 +74,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) ac
 }
 }
 \seealso{
-\code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
+\code{\link{auto_realign}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

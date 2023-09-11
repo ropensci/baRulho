@@ -2,7 +2,7 @@
 % Please edit documentation in R/realign_test_sounds.R
 \name{spcc_align}
 \alias{spcc_align}
-\title{alternative name for \code{\link{realign_test_sounds}}}
+\title{alternative name for \code{\link{auto_realign}}}
 \usage{
 spcc_align(
   X,
@@ -16,9 +16,9 @@ spcc_align(
 )
 }
 \description{
-alternative name for \code{\link{realign_test_sounds}}
+alternative name for \code{\link{auto_realign}}
 }
 \details{
-see \code{\link{realign_test_sounds}} for documentation. \code{\link{spcc_align}} will be deprecated in future versions.
+see \code{\link{auto_realign}} for documentation. \code{\link{spcc_align}} will be deprecated in future versions.
 }
 \keyword{internal}

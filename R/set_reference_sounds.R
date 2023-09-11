@@ -68,7 +68,7 @@ set_reference_sounds <-
     if (!is_extended_selection_table(X) & !is_selection_table(X)) {
       # print message
       if (pb) {
-        write(file = "", x = "Checking annotations in 'X' (step 1 out of 2):")
+        write(file = "", x = "Checking annotations (step 1 out of 2):")
       }
 
       X_check <-

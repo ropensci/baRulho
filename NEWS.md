@@ -8,11 +8,11 @@
 * `atmospheric_attenuation()` is no longer available (use `attenuation()` instead)
 * `align_test_files()` now can take several markers as input and select that with the highest correlation score for aligning test files
 * 'markers' argument deprecated in `align_test_files()`
-* fix bug in `realign_test_sounds()`
+* fix bug in `auto_realign()`
 * `find_markers()` compares the time difference between markers to that in the master sound file as a measure of precision
 * `find_markers()` can run several markers as templates on the same files
 * 'template.rows' argument deprecated in `find_markers()`
-* `spcc_align()` renamed `realign_test_sounds()`
+* `spcc_align()` renamed `auto_realign()`
 * `search_templates()` renamed `find_markers()`
 * 'output' argument deprecated
 * 'parallel' argument deprecated and replaced by 'cores'

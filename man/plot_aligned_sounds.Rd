@@ -91,7 +91,7 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) ac
 }
 }
 \seealso{
-\code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
+\code{\link{manual_realign}};  \code{\link{auto_realign}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

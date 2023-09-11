@@ -1,7 +1,7 @@
 #' Fix misaligned start and end of test sounds
 #'
-#' \code{realign_test_sounds} fixes misaligned start and end of test sounds in an extended selection table using spectrographic cross-correlation
-#' @usage realign_test_sounds(X, parallel = NULL, cores = getOption("mc.cores", 1),
+#' \code{auto_realign} fixes misaligned start and end of test sounds in an extended selection table using spectrographic cross-correlation
+#' @usage auto_realign(X, parallel = NULL, cores = getOption("mc.cores", 1),
 #' pb = getOption("pb", TRUE), hop.size = getOption("hop.size", 11.6),
 #' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 90), wn = 'hanning')
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.
@@ -17,7 +17,7 @@
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.
 #' @return Object 'X' in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
 #' @export
-#' @name realign_test_sounds
+#' @name auto_realign
 #' @details This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment.
 #' @examples {
 #'   # load example data
@@ -40,7 +40,7 @@
 #'
 #'   # re align
 #'
-#'   realign_test_sounds(X = unaligned_test_sounds_est)
+#'   auto_realign(X = unaligned_test_sounds_est)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -51,7 +51,7 @@
 #' Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
 #' }
 
-realign_test_sounds <-
+auto_realign <-
   function(X,
            parallel = NULL,
            cores = getOption("mc.cores", 1),
@@ -211,10 +211,10 @@ realign_test_sounds <-
   }
 
 ##############################################################################################################
-#' alternative name for \code{\link{realign_test_sounds}}
+#' alternative name for \code{\link{auto_realign}}
 #'
 #' @keywords internal
-#' @details see \code{\link{realign_test_sounds}} for documentation. \code{\link{spcc_align}} will be deprecated in future versions.
+#' @details see \code{\link{auto_realign}} for documentation. \code{\link{spcc_align}} will be deprecated in future versions.
 #' @export
 
-spcc_align <- realign_test_sounds
+spcc_align <- auto_realign

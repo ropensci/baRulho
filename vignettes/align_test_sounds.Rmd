@@ -404,8 +404,7 @@ aligned_tests <-
   align_test_files(
     X = master_annotations,
     Y = markers_position,
-    by.song = TRUE,
-    remove.markers = FALSE
+    by.song = TRUE
   )
 ```
 
@@ -459,7 +458,7 @@ plot_aligned_sounds(X = aligned_tests, dest.path = tempdir(), duration = 2.4, ov
 
 When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded sounds. This is problematic for quantifying degradation in [baRulho](https://marce10.github.io/baRulho/) (and other sound analysis software) as precise alignment of sound is crucial for the accuracy of downstream measures of sound degradation. 
 
-Misalignment can be fixed with the function `realign_test_sounds()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `realign_test_sounds()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation. 
+Misalignment can be fixed with the function `auto_realign()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `manual_realign()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation. 
 We can simulate a aligned data set in which test sound are slightly off their position: 
 
 ```{r}
@@ -480,7 +479,7 @@ Now we can re-aligned test sounds:
 ```{r, eval = FALSE}
 
 # re align
-rts <- realign_test_sounds(X = unaligned_test_sounds_est)
+rts <- auto_realign(X = unaligned_test_sounds_est)
 ```
 
 This is how the sounds look before and after being aligned:
@@ -502,7 +501,7 @@ spectrograms(unalg.alg[unalg.alg$sound.id != "ambient", ], dest.path = tempdir()
 ```
 
 
-<center><img src="realign_test_sounds_results.gif" alt="time sync with realign_test_sounds"></center>
+<center><img src="auto_realign_results.gif" alt="time sync with manual_realign"></center>
 
 &nbsp;
 

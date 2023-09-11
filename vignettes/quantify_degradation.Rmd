@@ -262,7 +262,7 @@ sbr <- blur_ratio(test_sounds_est, dest.path = tempdir())
 
 Output image files (in the working directory) look like these ones:
 
-<center><img src="blur_ratio_example.gif" alt="time sync with realign_test_sounds"  width="500" height="400"></center>
+<center><img src="blur_ratio_example.gif" alt="Blur ratio visualization"  width="500" height="400"></center>
 
 &nbsp;
 

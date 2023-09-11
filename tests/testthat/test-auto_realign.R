@@ -17,7 +17,7 @@ test_that("basic", {
       unaligned_test_sounds_est$end + noise_time
 
     # re align
-    rts <- realign_test_sounds(X = unaligned_test_sounds_est)
+    rts <- auto_realign(X = unaligned_test_sounds_est)
   
     
     expect_equal(nrow(rts), 25)
@@ -30,3 +30,4 @@ test_that("basic", {
     expect_equal(class(rts)[1], "extended_selection_table")
     
   })
+

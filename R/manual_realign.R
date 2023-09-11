@@ -7,7 +7,7 @@
 #' palette = viridis::viridis, duration = 2, mar = 0.2, step.lengths = c(5, 30),
 #' flim = NULL, label.col = "white",  ext.window = TRUE, width = 10, 
 #' height = 5, srt = 0, cex = 1, fast.spec = TRUE, 
-#' marker = "start_marker", ...)
+#' marker = "start_marker", grid = 0.2, ...)
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
 #' @param Y object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 1. 6ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
@@ -28,6 +28,7 @@
 #' @param cex Numeric argument of length 1controlling the size of sound id text labels. Default is 1.
 #' @param fast.spec Logical. If \code{TRUE} then image function is used internally to create spectrograms, which substantially increases performance (much faster), although some options become unavailable, as collevels (amplitude scale). Default is \code{FALSE}.
 #' @param marker Character string with the name of the marker to be used as the main reference for checking/adjusting time alignments. Default is 'start_marker'. Note that this can take any of the sound IDs in 'Y$sound.id'.
+#' @param grid Numeric vector of length 1 controling the spacing between vertical lines on the spectrogram. Default is 0.2 s. Use 0 to remove grid. 
 #' @param ... Additional arguments to be passed to the internal spectrogram
 #' creating function for customizing graphical output. The function is a modified
 #' version of \code{\link[seewave]{spectro}}, so it takes the same arguments.
@@ -35,7 +36,7 @@
 #' @export
 #' @name manual_realign
 #' @details This functions allows the interactive adjustment of the alignment of test sound files produced by \code{\link{align_test_files}}. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assesing and adjusting their alignment. Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The lower spectrogram shows a series of 'buttons' that users can click on to control if the test sound file spectrogram (low panel) needs to be moved to the left ("<") or right (">"). Users can also reset the spectrogram to its original position ('reset'), move on to the next sound file in 'X' (test sound file annotations) or stop the process (stop button). The function returns an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
-#' @seealso \code{\link{realign_test_sounds}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
+#' @seealso \code{\link{auto_realign}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
 #' @examples
 #' {
 #'   # set temporary directory
@@ -92,6 +93,7 @@ manual_realign <-
            cex = 1,
            fast.spec = TRUE,
            marker = "start_marker",
+           grid = 0.2,
            ...) {
     # stop if not run interactively
     if (!interactive()) {
@@ -186,7 +188,7 @@ manual_realign <-
     # import sound data
     master_wave_info <- read_wave(
       index = 1,
-      X,
+      Y,
       header = TRUE,
       path = path
     )
@@ -314,6 +316,10 @@ manual_realign <-
       ...
     )
 
+    # plot grid
+    if (grid > 0)
+      abline(v = seq(grid, duration(master_wave), by = grid), lty = 4)
+    
     # add Freq axis
     at_freq <-
       pretty(seq(0, master_wave@samp.rate / 2000, length.out = 6)[-6], n = 6)
@@ -468,6 +474,10 @@ manual_realign <-
         ...
       )
 
+      # plot grid
+      if (grid > 0)
+        abline(v = seq(grid, duration(master_wave), by = grid), lty = 4)
+      
       # progress bar
       prct <- (i / length(rerec_files))
       y <- grconvertY(y = 0.99, from = "npc", to = "user")

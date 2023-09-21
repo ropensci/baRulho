@@ -53,7 +53,7 @@ marker = "start_marker", grid = 0.2, ...)
 
 \item{marker}{Character string with the name of the marker to be used as the main reference for checking/adjusting time alignments. Default is 'start_marker'. Note that this can take any of the sound IDs in 'Y$sound.id'.}
 
-\item{grid}{Numeric vector of length 1 controling the spacing between vertical lines on the spectrogram. Default is 0.2 s. Use 0 to remove grid.}
+\item{grid}{Numeric vector of length 1 controlling the spacing between vertical lines on the spectrogram. Default is 0.2 s. Use 0 to remove grid.}
 
 \item{...}{Additional arguments to be passed to the internal spectrogram
 creating function for customizing graphical output. The function is a modified
@@ -67,6 +67,46 @@ Creates a multipanel graph with spectrograms of master and test sound files in w
 }
 \details{
 This functions allows the interactive adjustment of the alignment of test sound files produced by \code{\link{align_test_files}}. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assesing and adjusting their alignment. Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The lower spectrogram shows a series of 'buttons' that users can click on to control if the test sound file spectrogram (low panel) needs to be moved to the left ("<") or right (">"). Users can also reset the spectrogram to its original position ('reset'), move on to the next sound file in 'X' (test sound file annotations) or stop the process (stop button). The function returns an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
+}
+\examples{
+{
+  # set temporary directory
+  td <- tempdir()
+
+  # load example data
+  data("master_est")
+
+  # save example files in working director to recreate a case in which working
+  # with sound files instead of extended selection tables.
+  # This doesn't have to be done with your own data as you will
+  # have them as sound files already.
+  for (i in unique(test_sounds_est$sound.files)[1:2]) {
+    writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
+  }
+
+  # save master file
+  writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
+
+  # set path and no progress bar in global options
+  options(sound.files.path = td, pb = FALSE)
+
+  # get marker position
+  markers <- find_markers(X = master_est, test.files = unique(test_sounds_est$sound.files)[2])
+
+  # align all test sounds
+  alg.tests <- align_test_files(X = master_est, Y = markers, pb = FALSE)
+  
+  # add error to alignment
+  lag <- (as.numeric(as.factor(alg.tests$sound.files)) - 2) / 30
+  alg.tests$start <- alg.tests$start + lag
+  alg.tests$end <- alg.tests$end + lag
+  
+  \dontrun{
+  realigned_est <- manual_realign(X = alg.tests, Y = master_df, duration = 2, 
+  ovlp = 50, hop.size = 14, collevels = seq(-140, 0, 5), palette = mako, 
+  ext.window = F)
+ }
+}
 }
 \references{
 {

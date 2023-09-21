@@ -28,7 +28,7 @@
 #' @param cex Numeric argument of length 1controlling the size of sound id text labels. Default is 1.
 #' @param fast.spec Logical. If \code{TRUE} then image function is used internally to create spectrograms, which substantially increases performance (much faster), although some options become unavailable, as collevels (amplitude scale). Default is \code{FALSE}.
 #' @param marker Character string with the name of the marker to be used as the main reference for checking/adjusting time alignments. Default is 'start_marker'. Note that this can take any of the sound IDs in 'Y$sound.id'.
-#' @param grid Numeric vector of length 1 controling the spacing between vertical lines on the spectrogram. Default is 0.2 s. Use 0 to remove grid. 
+#' @param grid Numeric vector of length 1 controlling the spacing between vertical lines on the spectrogram. Default is 0.2 s. Use 0 to remove grid. 
 #' @param ... Additional arguments to be passed to the internal spectrogram
 #' creating function for customizing graphical output. The function is a modified
 #' version of \code{\link[seewave]{spectro}}, so it takes the same arguments.
@@ -55,8 +55,7 @@
 #'
 #'   # save master file
 #'   writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
-#' }
-
+#' 
 #'   # set path and no progress bar in global options
 #'   options(sound.files.path = td, pb = FALSE)
 #'
@@ -65,8 +64,18 @@
 #'
 #'   # align all test sounds
 #'   alg.tests <- align_test_files(X = master_est, Y = markers, pb = FALSE)
+#'   
+#'   # add error to alignment
+#'   lag <- (as.numeric(as.factor(alg.tests$sound.files)) - 2) / 30
+#'   alg.tests$start <- alg.tests$start + lag
+#'   alg.tests$end <- alg.tests$end + lag
+#'   
+#'   \dontrun{
+#'   realigned_est <- manual_realign(X = alg.tests, Y = master_df, duration = 2, 
+#'   ovlp = 50, hop.size = 14, collevels = seq(-140, 0, 5), palette = mako, 
+#'   ext.window = F)
+#'  }
 #' }
-#'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2

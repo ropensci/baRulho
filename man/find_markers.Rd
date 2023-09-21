@@ -34,6 +34,32 @@ A data frame with test file names, marker id, maximum cross-correlation score fo
 \details{
 The function takes a master sound file's reference data ('X') and finds the position of acoustics markers ('markers' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that referred to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow. In cases in which markers are not correctly detected editing test sound files to remove audio segments with no target sounds (before the start marker and after the end marker) can improve performance. Using a low 'hop.size' or window length 'wl' (used internally by \code{\link[ohun]{template_correlator}}) can help to improve precision Other spectrogram types (argument 'type' in \code{\link[ohun]{template_correlator}}) can sometimes show better performance when markers are highly degraded.
 }
+\examples{
+{
+  # set temporary directory
+  td <- tempdir()
+
+  # load example data
+  data("master_est")
+
+  # save example files in working director to recreate a case in which working
+  # with sound files instead of extended selection tables.
+  # This doesn't have to be done with your own data as you will
+  # have them as sound files already.
+  for (i in unique(test_sounds_est$sound.files)[1:2]) {
+    writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
+  }
+
+  # save master file
+  writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
+
+  # set path and no progress bar in global options
+  options(sound.files.path = td, pb = FALSE)
+
+  # get marker position
+  markers <- find_markers(X = master_est, test.files = unique(test_sounds_est$sound.files)[2])
+}
+}
 \references{
 {
 Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2

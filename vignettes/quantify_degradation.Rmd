@@ -78,12 +78,6 @@ library(viridis)
 library(baRulho)
 library(ggplot2)
 
-
-# load("../data/test_sounds_est.rda")
-source("~/Dropbox/R_package_testing/baRulho/R/plot_blur_ratio.R")
-source("~/Dropbox/R_package_testing/baRulho/R/internal_functions.R")
-# data("test_sounds_est")
-
 options(pb = FALSE)
 
 kbl <- kable(test_sounds_est, align = "c", row.names = F, format = "html", escape = F)

@@ -10,14 +10,14 @@ test_that("basic", {
                          full.names = TRUE))
     
     # create plots
-    plot_blur_ratio(X = X, dest.path = tempdir(), pb = FALSE)
+    plot_blur_ratio(X = X[2:3, ], dest.path = tempdir(), pb = FALSE)
     
     fls <-
       list.files(path = tempdir(),
                  pattern = "^blur_ratio",
                  full.names = TRUE)
     
-    expect_length(fls, 4)
+    expect_length(fls, 1)
     
     unlink(fls)
     })

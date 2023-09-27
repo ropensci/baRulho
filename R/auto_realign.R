@@ -124,7 +124,7 @@ auto_realign <-
 
     # fix end to include half the duration of the selection at both sides
     attr(Y, "check.results")$end[indx.algn] <- Y$end[indx.algn] <-
-      sapply(indx.algn, function(x) {
+      vapply(indx.algn, function(x) {
         wv.info <- warbleR::read_wave(X, index = x, header = TRUE)
         mxdur <- wv.info$samples / wv.info$sample.rate
         new.end <- X$end[x] + (X$end[x] - X$start[x]) * 0.7
@@ -134,7 +134,7 @@ auto_realign <-
         } else {
           return(new.end)
         }
-      })
+      }, FUN.VALUE = numeric(1))
 
     # fix start in the same way
     attr(Y, "check.results")$start[indx.algn] <-

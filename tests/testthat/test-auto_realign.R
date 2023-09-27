@@ -19,7 +19,6 @@ test_that("basic", {
     # re align
     rts <- auto_realign(X = unaligned_test_sounds_est)
   
-    
     expect_equal(nrow(rts), 25)
     
     expect_equal(ncol(rts), 9)

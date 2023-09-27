@@ -35,7 +35,7 @@
 #' @return Creates a multipanel graph with spectrograms of master and test sound files in which users can interactively adjust their alignment in time. Return an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
 #' @export
 #' @name manual_realign
-#' @details This functions allows the interactive adjustment of the alignment of test sound files produced by \code{\link{align_test_files}}. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assesing and adjusting their alignment. Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The lower spectrogram shows a series of 'buttons' that users can click on to control if the test sound file spectrogram (low panel) needs to be moved to the left ("<") or right (">"). Users can also reset the spectrogram to its original position ('reset'), move on to the next sound file in 'X' (test sound file annotations) or stop the process (stop button). The function returns an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
+#' @details This function allows the interactive adjustment of the alignment of test sound files produced by \code{\link{align_test_files}}. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assesing and adjusting their alignment. Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The lower spectrogram shows a series of 'buttons' that users can click on to control if the test sound file spectrogram (low panel) needs to be moved to the left ("<") or right (">"). Users can also reset the spectrogram to its original position ('reset'), move on to the next sound file in 'X' (test sound file annotations) or stop the process (stop button). The function returns an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
 #' @seealso \code{\link{auto_realign}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
 #' @examples
 #' {
@@ -285,7 +285,7 @@ manual_realign <-
     rect(0, 0, 2, 2, col = "white", border = NA)
     rect(0, 0, 2, 2, col = "#366A9FFF", border = NA)
 
-    top_lab <- sapply(as.character(Y$sound.files[1]), function(x) if (nchar(x) > 20) paste0(substr(x, 0, 20), "\n", substr(x, 21, nchar(x))) else x)
+    top_lab <- vapply(as.character(Y$sound.files[1]), function(x) {if (nchar(x) > 20) paste0(substr(x, 0, 20), "\n", substr(x, 21, nchar(x))) else x}, FUN.VALUE = character(1))
 
     text(
       x = 1,
@@ -410,7 +410,7 @@ manual_realign <-
       rect(0, 0, 2, 2, col = "white", border = NA)
       rect(0, 0, 2, 2, col = "#366A9FFF", border = NA)
 
-      bottom_lab <- sapply(as.character(W$sound.files[1]), function(x) if (nchar(x) > 15) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x)
+      bottom_lab <- vapply(as.character(W$sound.files[1]), function(x) {if (nchar(x) > 15) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x}, FUN.VALUE = character(1))
 
 
       # spectrogram title vertical boxes

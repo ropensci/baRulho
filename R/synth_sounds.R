@@ -166,9 +166,9 @@ synth_sounds <-
 
     # name with parameters
     names(sim.songs) <-
-      sapply(seq_len(nrow(eg)), function(x) {
+      vapply(seq_len(nrow(eg)), function(x) {
         paste(eg[x, ], collapse = "_")
-      })
+      }, FUN.VALUE = character(1))
 
     # extract select tables
     sim.song.sts <- lapply(sim.songs, function(X) {

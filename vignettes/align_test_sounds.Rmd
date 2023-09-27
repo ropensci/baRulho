@@ -109,19 +109,17 @@ synth_est <- synth_sounds(
   sampling.rate = 12
 )
 
-td <- tempdir()
-
-# export into a single file
-Rraven::exp_est(
+# convert into a single wave object
+synth_wav <- Rraven::exp_est(
   X = synth_est,
   single.file = TRUE,
-  path = td,
-  file.name = "synth_sounds.wav"
+ wave.object = TRUE
 )
+
 
 # plot spectro
 seewave::spectro(
-  readWave(file.path(td, "synth_sounds.wav")),
+  synth_wav,
   scale = FALSE,
   palette = viridis,
   grid = FALSE,
@@ -152,19 +150,18 @@ synth_est2 <- synth_sounds(
   sampling.rate = 12
 )
 
-td <- tempdir()
-
-# export in a single file
-Rraven::exp_est(
+# convert into a single wave object
+synth_wav2 <- Rraven::exp_est(
   X = synth_est2,
   single.file = TRUE,
   path = td,
-  file.name = "synth_sounds2.wav"
+ wave.object = TRUE
 )
 
 # plot spectro
 seewave::spectro(
-  readWave(file.path(td, "synth_sounds2.wav"), from = 0, to = 3, units = "seconds"),
+  synth_wav2,
+  tlim = c(0, 3),
   scale = FALSE,
   palette = viridis,
   grid = FALSE,
@@ -404,7 +401,7 @@ aligned_tests <-
   align_test_files(
     X = master_annotations,
     Y = markers_position,
-    by.song = TRUE
+    by.song = TRUE, remove.markers = FALSE
   )
 ```
 
@@ -452,11 +449,24 @@ plot_aligned_sounds(X = aligned_tests, dest.path = tempdir(), duration = 2.4, ov
 
 &nbsp;
 
----
+## Manually fixing alignment
 
-### Further aligning
+In some cases alignments might not be totally accurate. The function `manual_realign()` allows users to interactively adjust the alignment of test sound files produced by \code{\link{align_test_files}}. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assesing and adjusting their alignment:
 
-When this process is done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded sounds. This is problematic for quantifying degradation in [baRulho](https://marce10.github.io/baRulho/) (and other sound analysis software) as precise alignment of sound is crucial for the accuracy of downstream measures of sound degradation. 
+```{r, eval = FALSE}
+
+manual_realign(X = aligned_tests, Y = master_annotations, duration = 2.4)
+
+```
+
+ <img src="manual_realign.gif" alt="manual realign">
+
+Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The lower spectrogram shows a series of 'buttons' that users can click on to control if the test sound file spectrogram (low panel) needs to be moved to the left ("<") or right (">"). Users can also reset the spectrogram to its original position ('reset'), move on to the next sound file in 'X' (test sound file annotations) or stop the process (stop button). The function returns an object similar to the input object 'X' in which the start and end of the sounds have been adjusted. By default it uses the start marker as reference but this can be modified with the argument 'marker'.
+
+
+## Further aligning
+
+When alignments are done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded sounds. This is problematic for quantifying degradation in [baRulho](https://marce10.github.io/baRulho/) (and other sound analysis software) as precise alignment of sound is crucial for the accuracy of downstream measures of sound degradation. 
 
 Misalignment can be fixed with the function `auto_realign()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `manual_realign()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation. 
 We can simulate a aligned data set in which test sound are slightly off their position: 

@@ -239,7 +239,7 @@ noise_profile <-
       })
 
     # get numbers of rows
-    rws <- sapply(noise.profiles, nrow)
+    rws <- vapply(noise.profiles, nrow, FUN.VALUE = numeric(1))
 
     # make all the same length if noise.ref is adjacent
     if (length(unique(rws)) > 1 & noise.ref == "adjacent") {

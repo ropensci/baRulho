@@ -123,10 +123,10 @@ signal_to_noise_ratio <-
     }
 
     if (noise.ref == "custom" &
-      any(sapply(unique(X$sound.files), function(x) {
+      any(vapply(unique(X$sound.files), function(x) {
         sum(X$sound.files == x &
           X$sound.id == "ambient")
-      }) == 0)) {
+      }, FUN.VALUE = numeric(1)) == 0)) {
       stop2(
         "Each sound file referenced in 'X' must have at least 1 'ambient' selection when 'noise.ref = 'custom'"
       )
@@ -290,7 +290,7 @@ signal_to_noise_ratio <-
       names(envs) <- paste(X$sound.files, X$selec, sep = "-")
 
     # calculate SNR
-    X$signal.to.noise.ratio <- sapply(seq_len(nrow(X)), function(y) {
+    X$signal.to.noise.ratio <- vapply(seq_len(nrow(X)), function(y) {
       if (X$sound.id[y] != "ambient") {
         suppressWarnings({
           # sound RMS
@@ -302,7 +302,7 @@ signal_to_noise_ratio <-
           } else {
             # get envelopes from ambient selections
             bg_envs <-
-              sapply(envs[X$TEMP....y[X$sound.files == X$sound.files[y] &
+              lapply(envs[X$TEMP....y[X$sound.files == X$sound.files[y] &
                 X$sound.id == "ambient"]], "[", "sig.env")
 
             # get mean RMS from combined envelopes
@@ -323,7 +323,7 @@ signal_to_noise_ratio <-
       } # return NA if current row is noise
 
       return(snr)
-    })
+    }, FUN.VALUE = numeric(1))
 
     # remove temporary column
     X$TEMP....y <- NULL

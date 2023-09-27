@@ -230,7 +230,7 @@ plot_degradation <-
 
     # create data subsets (element in list) with all the copies of a sound id in transect, also including its reference if it comes from another transect
     # add text break if longer than 17 characters
-    tailored_sound_id <- sapply(as.character(X_df$sound.id), function(x) if (nchar(x) > 15) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x)
+    tailored_sound_id <- vapply(as.character(X_df$sound.id), function(x) {if (nchar(x) > 15) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x}, FUN.VALUE = character(1))
 
     X_df$sound.id.transect <- paste(tailored_sound_id, X$transect, sep = "\n")
 
@@ -502,12 +502,12 @@ plot_degradation <-
             by = sum(spectrum, envelope) + 1
           )[seq_len(nrow(grd))]
 
-        grd$.sgnl.temp <- sapply(seq_len(nrow(grd)), function(o) {
+        grd$.sgnl.temp <- vapply(seq_len(nrow(grd)), function(o) {
           sgnl <- Y$.sgnl.temp[Y$distance == grd$distance[o] &
             Y$sound.id.seq == grd$sound.id.seq[o]]
           if (length(sgnl) == 0) sgnl <- NA
           return(sgnl)
-        })
+        }, FUN.VALUE = character(1))
 
         # start with empty signal id vector so it can be recorded with prev_sgnl (this is needed for adding frequency labels when the spectrogram at the left side is missing)
         sgnl <- NA

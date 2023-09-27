@@ -80,18 +80,18 @@ find_peaks_bRlh_int <-
       # Y <- Y[Y$template %in% comp_mat[, 1], ]
 
       # add start as time - half duration of template
-      peaks$start <- sapply(seq_len(nrow(peaks)), function(i) {
+      peaks$start <- vapply(seq_len(nrow(peaks)), function(i) {
         peaks$time[i] -
           ((Y$end[Y$template == peaks$template[i]] -
             Y$start[Y$template == peaks$template[i]]) / 2)
-      })
+      }, FUN.VALUE = numeric(1))
 
       # add end as time + half duration of template
-      peaks$end <- sapply(seq_len(nrow(peaks)), function(i) {
+      peaks$end <- vapply(seq_len(nrow(peaks)), function(i) {
         peaks$time[i] +
           ((Y$end[Y$template == peaks$template[i]] -
             Y$start[Y$template == peaks$template[i]]) / 2)
-      })
+      }, FUN.VALUE = numeric(1))
 
       # add selec labels
       peaks$selec <- 1
@@ -1106,9 +1106,9 @@ env_cor_FUN <- function(X, x, envs, cor.method) {
     stps <- length(lg.env) - shrt.lgth
 
     # calculate correlations at each step
-    cors <- sapply(1:stps, function(x) {
+    cors <- vapply(1:stps, function(x) {
       cor(lg.env[x:(x + shrt.lgth)], shrt.env, method = cor.method)
-    })
+    }, FUN.VALUE = numeric(1))
 
     # return maximum correlation
     envcor <- max(cors, na.rm = TRUE)

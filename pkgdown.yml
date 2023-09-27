@@ -1,0 +1,8 @@
+pandoc: 2.19.2
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  align_test_sounds: align_test_sounds.html
+  quantify_degradation: quantify_degradation.html
+last_built: 2023-09-27T20:38Z
+

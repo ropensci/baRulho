@@ -13,7 +13,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![packageversion](https://img.shields.io/badge/Package%20version-2.1.0-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2023--09--21-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--09--28-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
@@ -108,7 +108,7 @@ software](https://ravensoundsoftware.com) ([Cornell Lab of
 Ornithology](https://www.birds.cornell.edu/home)) and can be very
 helpful for incorporating Raven as the annotating tool into acoustic
 analysis workflow in R. The package
-[ohun](https://github.com/maRce10/ohun) works on automated detection of
+[ohun](https://github.com/ropensci/ohun) works on automated detection of
 sound events, providing functions to diagnose and optimize detection
 routines. [dynaSpec](https://cran.r-project.org/package=seewave) is
 allows to create dynamic spectrograms (i.e. spectrogram videos).

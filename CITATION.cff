@@ -1,0 +1,373 @@
+# -----------------------------------------------------------
+# CITATION file created with {cffr} R package, v0.5.0
+# See also: https://docs.ropensci.org/cffr/
+# -----------------------------------------------------------
+ 
+cff-version: 1.2.0
+message: 'To cite package "baRulho" in publications use:'
+type: software
+license: GPL-2.0-or-later
+title: 'baRulho: Quantifying (Animal) Sound Degradation'
+version: 2.1.0
+abstract: Intended to facilitate acoustic analysis of (animal) sound transmission
+  experiments, which typically aim to quantify changes in signal structure when transmitted
+  in a given habitat by broadcasting and re-recording animal sounds at increasing
+  distances. The package offers a workflow with functions to prepare the data set
+  for analysis as well as to calculate and visualize several degradation metrics,
+  including blur ratio, signal-to-noise ratio, excess attenuation and envelope correlation
+  among others (Dabelsteen et al 1993 <doi:10.1121/1.406682>).
+authors:
+- family-names: Araya-Salas
+  given-names: Marcelo
+  email: marcelo.araya@ucr.ac.cr
+preferred-citation:
+  type: generic
+  title: 'baRulho: quantifying habitat-induced degradation of (animal) acoustic signals
+    in R'
+  authors:
+  - family-names: Araya-Salas
+    given-names: M.
+  year: '2020'
+repository: https://CRAN.R-project.org/package=baRulho
+repository-code: https://github.com/maRce10/baRulho
+url: https://github.com/maRce10/baRulho
+contact:
+- family-names: Araya-Salas
+  given-names: Marcelo
+  email: marcelo.araya@ucr.ac.cr
+keywords:
+- acoustic-signals
+- animal
+- behavior
+- bioacoustics
+- cran
+references:
+- type: software
+  title: utils
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2023'
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: stats
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2023'
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: seewave
+  abstract: 'seewave: Sound Analysis and Synthesis'
+  notes: Imports
+  url: https://rug.mnhn.fr/seewave/
+  repository: https://CRAN.R-project.org/package=seewave
+  authors:
+  - family-names: Sueur
+    given-names: Jerome
+    email: sueur@mnhn.fr
+  - family-names: Aubin
+    given-names: Thierry
+  - family-names: Simonis
+    given-names: Caroline
+  year: '2023'
+- type: software
+  title: tuneR
+  abstract: 'tuneR: Analysis of Music and Speech'
+  notes: Imports
+  repository: https://CRAN.R-project.org/package=tuneR
+  authors:
+  - family-names: Ligges
+    given-names: Uwe
+    email: ligges@statistik.tu-dortmund.de
+    orcid: https://orcid.org/0000-0001-5875-6167
+  - family-names: Krey
+    given-names: Sebastian
+  - family-names: Mersmann
+    given-names: Olaf
+  - family-names: Schnackenberg
+    given-names: Sarah
+  - family-names: Guénard
+    given-names: Guillaume
+  - family-names: Ellis
+    given-names: Daniel P. W.
+  - name: Underbit Technologies
+  year: '2023'
+- type: software
+  title: fftw
+  abstract: 'fftw: Fast FFT and DCT Based on the FFTW Library'
+  notes: Imports
+  repository: https://CRAN.R-project.org/package=fftw
+  authors:
+  - family-names: Mersmann
+    given-names: Olaf
+    email: olafm@p-value.net
+  year: '2023'
+- type: software
+  title: methods
+  abstract: 'R: A Language and Environment for Statistical Computing'
+  notes: Imports
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2023'
+  institution:
+    name: R Foundation for Statistical Computing
+- type: software
+  title: viridis
+  abstract: 'viridis: Colorblind-Friendly Color Maps for R'
+  notes: Imports
+  url: https://sjmgarnier.github.io/viridis/
+  repository: https://CRAN.R-project.org/package=viridis
+  authors:
+  - family-names: Garnier
+    given-names: Simon
+    email: garnier@njit.edu
+  year: '2023'
+- type: software
+  title: Sim.DiffProc
+  abstract: 'Sim.DiffProc: Simulation of Diffusion Processes'
+  notes: Imports
+  url: https://github.com/acguidoum/Sim.DiffProc
+  repository: https://CRAN.R-project.org/package=Sim.DiffProc
+  authors:
+  - family-names: Guidoum
+    given-names: Arsalane Chouaib
+    email: acguidoum@usthb.dz
+  - family-names: Boukhetala
+    given-names: Kamal
+    email: kboukhetala@usthb.dz
+  year: '2023'
+- type: software
+  title: png
+  abstract: 'png: Read and write PNG images'
+  notes: Imports
+  url: http://www.rforge.net/png/
+  repository: https://CRAN.R-project.org/package=png
+  authors:
+  - family-names: Urbanek
+    given-names: Simon
+    email: Simon.Urbanek@r-project.org
+  year: '2023'
+- type: software
+  title: checkmate
+  abstract: 'checkmate: Fast and Versatile Argument Checks'
+  notes: Imports
+  url: https://mllg.github.io/checkmate/
+  repository: https://CRAN.R-project.org/package=checkmate
+  authors:
+  - family-names: Lang
+    given-names: Michel
+    email: michellang@gmail.com
+    orcid: https://orcid.org/0000-0001-9754-0393
+  year: '2023'
+- type: software
+  title: cli
+  abstract: 'cli: Helpers for Developing Command Line Interfaces'
+  notes: Imports
+  url: https://cli.r-lib.org
+  repository: https://CRAN.R-project.org/package=cli
+  authors:
+  - family-names: Csárdi
+    given-names: Gábor
+    email: csardi.gabor@gmail.com
+  year: '2023'
+- type: software
+  title: 'R: A Language and Environment for Statistical Computing'
+  notes: Depends
+  url: https://www.R-project.org/
+  authors:
+  - name: R Core Team
+  location:
+    name: Vienna, Austria
+  year: '2023'
+  institution:
+    name: R Foundation for Statistical Computing
+  version: '>= 3.2.1'
+- type: software
+  title: warbleR
+  abstract: 'warbleR: Streamline Bioacoustic Analysis'
+  notes: Depends
+  url: https://marce10.github.io/warbleR/
+  repository: https://CRAN.R-project.org/package=warbleR
+  authors:
+  - family-names: Araya-Salas
+    given-names: Marcelo
+    email: marcelo.araya@ucr.ac.cr
+    orcid: https://orcid.org/0000-0003-3594-619X
+  - family-names: Smith-Vidaurre
+    given-names: Grace
+    email: gsmithvi@gmail.com
+  year: '2023'
+  version: '>= 1.1.29'
+- type: software
+  title: ohun
+  abstract: 'ohun: Optimizing Acoustic Signal Detection'
+  notes: Depends
+  url: https://marce10.github.io/ohun/
+  repository: https://CRAN.R-project.org/package=ohun
+  authors:
+  - family-names: Araya-Salas
+    given-names: Marcelo
+    email: marcelo.araya@ucr.ac.cr
+    orcid: https://orcid.org/0000-0003-3594-619X
+  year: '2023'
+  version: '>= 1.0.0'
+- type: software
+  title: rmarkdown
+  abstract: 'rmarkdown: Dynamic Documents for R'
+  notes: Suggests
+  url: https://pkgs.rstudio.com/rmarkdown/
+  repository: https://CRAN.R-project.org/package=rmarkdown
+  authors:
+  - family-names: Allaire
+    given-names: JJ
+    email: jj@posit.co
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  - family-names: Dervieux
+    given-names: Christophe
+    email: cderv@posit.co
+    orcid: https://orcid.org/0000-0003-4474-2498
+  - family-names: McPherson
+    given-names: Jonathan
+    email: jonathan@posit.co
+  - family-names: Luraschi
+    given-names: Javier
+  - family-names: Ushey
+    given-names: Kevin
+    email: kevin@posit.co
+  - family-names: Atkins
+    given-names: Aron
+    email: aron@posit.co
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  - family-names: Cheng
+    given-names: Joe
+    email: joe@posit.co
+  - family-names: Chang
+    given-names: Winston
+    email: winston@posit.co
+  - family-names: Iannone
+    given-names: Richard
+    email: rich@posit.co
+    orcid: https://orcid.org/0000-0003-3925-190X
+  year: '2023'
+- type: software
+  title: ggplot2
+  abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
+  notes: Suggests
+  url: https://ggplot2.tidyverse.org
+  repository: https://CRAN.R-project.org/package=ggplot2
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+    orcid: https://orcid.org/0000-0003-4757-117X
+  - family-names: Chang
+    given-names: Winston
+    orcid: https://orcid.org/0000-0002-1576-2126
+  - family-names: Henry
+    given-names: Lionel
+  - family-names: Pedersen
+    given-names: Thomas Lin
+    email: thomas.pedersen@posit.co
+    orcid: https://orcid.org/0000-0002-5147-4711
+  - family-names: Takahashi
+    given-names: Kohske
+  - family-names: Wilke
+    given-names: Claus
+    orcid: https://orcid.org/0000-0002-7470-9261
+  - family-names: Woo
+    given-names: Kara
+    orcid: https://orcid.org/0000-0002-5125-4188
+  - family-names: Yutani
+    given-names: Hiroaki
+    orcid: https://orcid.org/0000-0002-3385-7233
+  - family-names: Dunnington
+    given-names: Dewey
+    orcid: https://orcid.org/0000-0002-9415-4582
+  year: '2023'
+- type: software
+  title: knitr
+  abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
+  notes: Suggests
+  url: https://yihui.org/knitr/
+  repository: https://CRAN.R-project.org/package=knitr
+  authors:
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  year: '2023'
+- type: software
+  title: kableExtra
+  abstract: 'kableExtra: Construct Complex Table with ''kable'' and Pipe Syntax'
+  notes: Suggests
+  url: http://haozhu233.github.io/kableExtra/
+  repository: https://CRAN.R-project.org/package=kableExtra
+  authors:
+  - family-names: Zhu
+    given-names: Hao
+    email: haozhu233@gmail.com
+    orcid: https://orcid.org/0000-0002-3386-6076
+  year: '2023'
+- type: software
+  title: testthat
+  abstract: 'testthat: Unit Testing for R'
+  notes: Suggests
+  url: https://testthat.r-lib.org
+  repository: https://CRAN.R-project.org/package=testthat
+  authors:
+  - family-names: Wickham
+    given-names: Hadley
+    email: hadley@posit.co
+  year: '2023'
+  version: '>= 3.0.0'
+- type: software
+  title: covr
+  abstract: 'covr: Test Coverage for Packages'
+  notes: Suggests
+  url: https://covr.r-lib.org
+  repository: https://CRAN.R-project.org/package=covr
+  authors:
+  - family-names: Hester
+    given-names: Jim
+    email: james.f.hester@gmail.com
+  year: '2023'
+- type: software
+  title: formatR
+  abstract: 'formatR: Format R Code Automatically'
+  notes: Suggests
+  url: https://github.com/yihui/formatR
+  repository: https://CRAN.R-project.org/package=formatR
+  authors:
+  - family-names: Xie
+    given-names: Yihui
+    email: xie@yihui.name
+    orcid: https://orcid.org/0000-0003-0645-5666
+  year: '2023'
+- type: software
+  title: Rraven
+  abstract: 'Rraven: Connecting R and ''Raven'' Sound Analysis Software'
+  notes: Suggests
+  url: https://github.com/maRce10/Rraven
+  repository: https://CRAN.R-project.org/package=Rraven
+  authors:
+  - family-names: Araya-Salas
+    given-names: Marcelo
+    email: marcelo.araya@ucr.ac.cr
+    orcid: https://orcid.org/0000-0003-3594-619X
+  year: '2023'

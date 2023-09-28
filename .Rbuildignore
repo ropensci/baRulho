@@ -18,3 +18,4 @@ README\.Rmd$
 ^tic\.R$
 ^doc$
 ^Meta$
+^CITATION\.cff$

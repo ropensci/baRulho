@@ -17,6 +17,7 @@
 #' @export
 #' @name align_test_files
 #' @details The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table' by default.
+#' @family test sound alignment
 #' @seealso \code{\link{manual_realign}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
 #' @examples 
 #' {

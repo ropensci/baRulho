@@ -54,7 +54,7 @@
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @seealso \code{\link[Rraven]{exp_raven}}
-#' @family test sound alignment
+#' @family prepare acoustic data
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' }

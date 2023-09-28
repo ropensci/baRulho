@@ -72,7 +72,19 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) ac
 }
 \seealso{
 \code{\link{manual_realign}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
+
+Other prepare acoustic data: 
+\code{\link{master_sound_file}()},
+\code{\link{synth_sounds}()}
+
+Other test sound alignment: 
+\code{\link{auto_realign}()},
+\code{\link{find_markers}()},
+\code{\link{manual_realign}()},
+\code{\link{plot_aligned_sounds}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }
+\concept{prepare acoustic data}
+\concept{test sound alignment}

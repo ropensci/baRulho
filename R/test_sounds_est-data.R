@@ -4,6 +4,7 @@
 #' @format Extended selection table object in the \code{\link{warbleR}} format, which contains annotations and acoustic data.
 #'
 #' @usage data(test_sounds_est)
+#' @family data sets
 #'
 #' @source Marcelo Araya-Salas
 "test_sounds_est"

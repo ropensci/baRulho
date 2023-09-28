@@ -44,6 +44,7 @@
 #'
 #'   noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent") }}
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
+#' @family miscellaneous
 #' @seealso \code{\link{excess_attenuation}}
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2.

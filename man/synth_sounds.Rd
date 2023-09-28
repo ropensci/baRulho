@@ -78,7 +78,12 @@ Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamlin
 }
 \seealso{
 \code{\link[warbleR]{simulate_songs}} from the package warbleR.
+
+Other prepare acoustic data: 
+\code{\link{align_test_files}()},
+\code{\link{master_sound_file}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }
+\concept{prepare acoustic data}

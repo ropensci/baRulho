@@ -72,7 +72,14 @@ Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal voca
 }
 \seealso{
 \code{\link{blur_ratio}}, \code{\link[warbleR]{cross_correlation}}
+
+Other test sound alignment: 
+\code{\link{align_test_files}()},
+\code{\link{find_markers}()},
+\code{\link{manual_realign}()},
+\code{\link{plot_aligned_sounds}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }
+\concept{test sound alignment}

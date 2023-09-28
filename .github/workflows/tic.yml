@@ -31,8 +31,8 @@ jobs:
           # use a different tic template type if you do not want to build on all listed platforms
           - { os: windows-latest, r: "release" }
           - { os: macOS-latest, r: "release", pkgdown: "true", latex: "true" }
-          - { os: ubuntu-latest, r: "devel" }
           - { os: ubuntu-latest, r: "release" }
+          #- { os: ubuntu-latest, r: "devel" }
 
     env:
       # make sure to run `tic::use_ghactions_deploy()` to set up deployment
@@ -63,10 +63,14 @@ jobs:
       - name: Extra deps
         if: runner.os == 'Linux'
         run: |
-          sudo apt-get install -y make libssl-dev libcurl4-openssl-dev libxml2-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev cmake libfftw3-3 libfftw3-dev libsndfile1 libsndfile1-dev flac
+          sudo apt-get install -y make libssl-dev libcurl4-openssl-dev libxml2-dev libfontconfig1-dev libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev cmake libfftw3-3 libfftw3-dev libsndfile1 libsndfile1-dev libudunits2-dev 
           sudo apt-add-repository -r ppa:armagetronad-dev/ppa
           sudo apt update -q
-
+          
+      - name: Install macOS system dependencies
+        if: runner.os == 'macOS'
+        run: brew install gdal proj udunits
+      
       # set date/week for use in cache creation
       # https://github.community/t5/GitHub-Actions/How-to-set-and-access-a-Workflow-variable/m-p/42970
       # - cache R packages daily

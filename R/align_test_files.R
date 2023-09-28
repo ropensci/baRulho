@@ -20,7 +20,7 @@
 #' @details The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table' by default.
 #' @family test sound alignment
 #' @seealso \code{\link{manual_realign}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
-#' @examples 
+#' @examples
 #' {
 #'   # set temporary directory
 #'   td <- tempdir()
@@ -38,7 +38,7 @@
 #'
 #'   # save master file
 #'   writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
-#' 
+#'
 #'   # set path and no progress bar in global options
 #'   options(sound.files.path = td, pb = FALSE, dest.path = td)
 #'
@@ -98,8 +98,8 @@ align_test_files <- function(X, Y, output = NULL, path = getOption("sound.files.
     W <- data.frame(sound.files = Y$sound.files[y], selec = seq_along(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, marker = Y$marker[y])
 
 
-      # re set rownames
-      rownames(W) <- seq_len(nrow(W))
+    # re set rownames
+    rownames(W) <- seq_len(nrow(W))
 
     return(W)
   })

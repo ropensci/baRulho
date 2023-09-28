@@ -19,9 +19,6 @@ test_that("on extended table without ambient sound id", {
   # load example data
   data("test_sounds_est")
   
-  
-  
-  
   # remove noise selections so noise is measured right before the signals
   test_sounds_est <- test_sounds_est[test_sounds_est$sound.id != "ambient", ]
   

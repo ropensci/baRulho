@@ -231,7 +231,9 @@ plot_degradation <-
 
     # create data subsets (element in list) with all the copies of a sound id in transect, also including its reference if it comes from another transect
     # add text break if longer than 17 characters
-    tailored_sound_id <- vapply(as.character(X_df$sound.id), function(x) {if (nchar(x) > 15) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x}, FUN.VALUE = character(1))
+    tailored_sound_id <- vapply(as.character(X_df$sound.id), function(x) {
+      if (nchar(x) > 15) paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else x
+    }, FUN.VALUE = character(1))
 
     X_df$sound.id.transect <- paste(tailored_sound_id, X$transect, sep = "\n")
 

@@ -33,7 +33,8 @@
 #' @export
 #' @name noise_profile
 #' @details The function estimates full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on data frames/(extended) selection tables (using the segments containing no target sound or the 'ambient' sound id) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
-#' @examples {{ # load example data
+#' @examples {
+#'   # load example data
 #'   data("test_sounds_est")
 #'
 #'   # measure on custom noise reference
@@ -42,7 +43,8 @@
 #'   # remove noise selections so noise is measured right before the signals
 #'   pe <- test_sounds_est[test_sounds_est$sound.id != "ambient", ]
 #'
-#'   noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent") }}
+#'   noise_profile(X = pe, mar = 0.01, pb = FALSE, noise.ref = "adjacent")
+#' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @family miscellaneous
 #' @seealso \code{\link{excess_attenuation}}
@@ -66,6 +68,22 @@ noise_profile <-
            norm = TRUE,
            dB = "A",
            averaged = TRUE) {
+    # check arguments
+    arguments <- as.list(base::match.call())
+
+    # add objects to argument names
+    for (i in names(arguments)[-1]) {
+      arguments[[i]] <- get(i)
+    }
+
+    # check each arguments
+    check_results <-
+      check_arguments(fun = arguments[[1]], args = arguments)
+
+    # report errors
+    report_assertions2(check_results)
+
+    # if X is not supplied modify noise reference
     if (!is.null(X)) {
       # invert selections so gaps become selections instead if noise.ref != ambient
       if (noise.ref == "custom" &
@@ -128,21 +146,6 @@ noise_profile <-
 
       # set noise.ref to ambient so the whole sound file is measured
       noise.ref <- "custom"
-    }
-
-    # If cores is not numeric
-    if (!is.numeric(cores)) {
-      stop2("'cores' must be a numeric vector of length 1")
-    }
-
-    if (any(!(cores %% 1 == 0), cores < 1)) {
-      stop2("'cores' should be a positive integer")
-    }
-
-    # hopsize
-    if (!is.numeric(hop.size) |
-      hop.size < 0) {
-      stop2("'hop.size' must be a positive number")
     }
 
     # adjust wl based on hope.size

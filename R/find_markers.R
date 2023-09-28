@@ -35,7 +35,7 @@
 #'
 #'   # save master file
 #'   writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
-#' 
+#'
 #'   # set path and no progress bar in global options
 #'   options(sound.files.path = td, pb = FALSE)
 #'

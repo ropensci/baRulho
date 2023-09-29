@@ -32,7 +32,7 @@ experimentally test hypotheses related to sound transmission is depicted
 in the following diagram:
 
 <center>
-<img src="vignettes/analysis_workflow.jpg" alt="analysis workflow" width="620">
+<img src="vignettes/analysis_workflow.jpg" alt="analysis workflow" width="80%">
 </center>
 
  
@@ -102,16 +102,19 @@ The packages [seewave](https://cran.r-project.org/package=seewave) and
 [tuneR](https://cran.r-project.org/package=seewave) provide a huge
 variety of functions for acoustic analysis and manipulation. They moslty
 works on wave objects already imported into the R environment. The
-package [Rraven](https://cran.r-project.org/package=Rraven) facilitates
-the exchange of data between R and [Raven sound analysis
+package [warbleR](https://cran.r-project.org/package=warbleR) provides
+functions to visualize and measure sounds alreay referenced in
+annotation tables, similar to
+[baRulho](https://marce10.github.io/baRulho/). The package
+[Rraven](https://cran.r-project.org/package=Rraven) facilitates the
+exchange of data between R and [Raven sound analysis
 software](https://ravensoundsoftware.com) ([Cornell Lab of
 Ornithology](https://www.birds.cornell.edu/home)) and can be very
 helpful for incorporating Raven as the annotating tool into acoustic
 analysis workflow in R. The package
 [ohun](https://github.com/ropensci/ohun) works on automated detection of
 sound events, providing functions to diagnose and optimize detection
-routines. [dynaSpec](https://cran.r-project.org/package=seewave) is
-allows to create dynamic spectrograms (i.e. spectrogram videos).
+routines.
 
 ## Citation
 

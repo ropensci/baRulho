@@ -49,7 +49,7 @@ plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viri
 
 \item{colors}{Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).}
 
-\item{n.samples}{Numeric vector of length 1 specifying the number of amplitude samples to use for representing amplitude envelopes. Default is 100. If null the raw amplitude envelope is used (note that this can result in high RAM memory usage for large data sets).}
+\item{n.samples}{Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power dsiributions. Default is 100. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).}
 }
 \value{
 It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showing spectrograms of both sounds and the overlaid amplitude envelopes (or power spectra if \code{spectrum = TRUE}) as probability mass functions (PMF). Spectrograms are shown within the frequency range of the reference sound.

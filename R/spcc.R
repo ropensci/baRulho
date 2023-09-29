@@ -57,19 +57,19 @@ spcc <-
            path = getOption("sound.files.path", ".")) {
     # check arguments
     arguments <- as.list(base::match.call())
-
+    
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-
+    
     # check each arguments
     check_results <-
       check_arguments(fun = arguments[[1]], args = arguments)
-
+    
     # report errors
     report_assertions2(check_results)
-
+    
     # adjust wl based on hope.size
     if (is.null(wl)) {
       wl <-
@@ -83,26 +83,26 @@ spcc <-
           0
         )
     }
-
+    
     # make wl even if odd
     if (!(wl %% 2) == 0) {
       wl <- wl + 1
     }
-
+    
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
-
-
+    
+    
     # # put together in a single
     comp_mat <- cbind(X$.sgnl.temp, X$reference)
-
+    
     # remove NA rows
-    comp_mat <- comp_mat[stats::complete.cases(comp_mat), ]
-
-
+    comp_mat <- comp_mat[stats::complete.cases(comp_mat),]
+    
+    
     # save previous warbleR options
     prev_wl <- .Options$warbleR
-
+    
     on.exit(
       warbleR_options(
         wl = prev_wl$wl,
@@ -112,12 +112,12 @@ spcc <-
         pb = prev_wl$pb
       )
     )
-
+    
     # steps for warbleR message
     options("int_warbleR_steps" = c(current = 0, total = 1))
-
+    
     on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
-
+    
     warbleR_options(
       wl = wl,
       ovlp = ovlp,
@@ -126,38 +126,39 @@ spcc <-
       pb = pb,
       compare.matrix = comp_mat
     )
-
+    
     # run spcc
     xcorrs <-
-      warbleR::cross_correlation(
-        X = X,
-        cor.method = "pearson",
-        path = path
-      )$max.xcorr.matrix
-
+      warbleR::cross_correlation(X = X,
+                                 cor.method = "pearson",
+                                 path = path)$max.xcorr.matrix
+    
     # put results back into X
     X$cross.correlation <- NA
-
+    
     # fill score values on X
     X$cross.correlation <- vapply(seq_len(nrow(X)), function(x) {
       # get score for each row
-      xc <- xcorrs$score[xcorrs$X1 == X$.sgnl.temp[x] & xcorrs$X2 == X$reference[x]]
-
+      xc <-
+        xcorrs$score[xcorrs$X1 == X$.sgnl.temp[x] &
+                       xcorrs$X2 == X$reference[x]]
+      
       # if empty then NA
-      if (length(xc) == 0) xc <- NA
-
+      if (length(xc) == 0)
+        xc <- NA
+      
       return(xc)
     }, FUN.VALUE = numeric(1L))
-
+    
     # fix call if not a data frame
     if (!is.data.frame(X)) {
       attributes(X)$call <-
         base::match.call()
     } # fix call attribute
-
+    
     # remove temporary colu8mn
     X$.sgnl.temp <- NULL
-
+    
     return(X)
   }
 

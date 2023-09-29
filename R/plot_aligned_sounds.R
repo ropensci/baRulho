@@ -84,20 +84,20 @@ plot_aligned_sounds <-
            ...) {
     # check arguments
     arguments <- as.list(base::match.call())
-
+    
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-
+    
     # check each arguments
     check_results <-
       check_arguments(fun = arguments[[1]], args = arguments)
-
+    
     # report errors
     report_assertions2(check_results)
-
-
+    
+    
     # get sampling rate
     sampling_rate <-
       warbleR::read_sound_file(
@@ -106,23 +106,21 @@ plot_aligned_sounds <-
         path = path,
         header = TRUE
       )$sample.rate
-
+    
     # adjust wl based on hope.size
     if (is.null(wl)) {
-      wl <- round(
-        sampling_rate * hop.size / 1000,
-        0
-      )
+      wl <- round(sampling_rate * hop.size / 1000,
+                  0)
     }
-
+    
     # make wl even if odd
     if (!(wl %% 2) == 0) {
       wl <- wl + 1
     }
-
+    
     # split data set by sound file
     X_by_sound_file <- split(X, X$sound.files)
-
+    
     ### run loop over sound files
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
@@ -130,7 +128,7 @@ plot_aligned_sounds <-
     } else {
       cl <- cores
     }
-
+    
     # run loop
     out <-
       warbleR:::pblapply_wrblr_int(
@@ -139,16 +137,14 @@ plot_aligned_sounds <-
         cl = cl,
         FUN = function(Y) {
           warbleR:::img_wrlbr_int(
-            filename = paste0(
-              "plot_align_", gsub(".wav", "", Y$sound.files[1]), ".jpeg"
-            ),
+            filename = paste0("plot_align_", gsub(".wav", "", Y$sound.files[1]), ".jpeg"),
             path = dest.path,
             width = width,
             height = height,
             units = "in",
             res = res
           )
-
+          
           # set start and end of clip to plot
           from <- if (min(Y$start) - mar >= 0) {
             min(Y$start) - mar
@@ -156,7 +152,7 @@ plot_aligned_sounds <-
             0
           }
           to <- from + duration
-
+          
           # import sound data
           wave <- read_wave(
             Y,
@@ -165,21 +161,21 @@ plot_aligned_sounds <-
             to = to,
             path = path
           )
-
-
+          
+          
           # adjust spectrogram margins
           prev_mar <- par("mar")
           par(mar = c(5.1, 4, 3, 1))
-
+          
           # reset graphic parameterswhen function is don
           on.exit(par(mar = prev_mar))
-
+          
           # set flim (mostly for sound.id labels below)
           if (is.null(flim)) {
             flim <-
               c(0, wave@samp.rate / 2000.1)
           } # use 2000.1 to avoid errors at the highest of nyquist frequency
-
+          
           # plot spectrogram
           warbleR:::spectro_wrblr_int2(
             wave = wave,
@@ -193,7 +189,7 @@ plot_aligned_sounds <-
             fast.spec = fast.spec,
             ...
           )
-
+          
           # add dotted lines
           abline(
             v = c(Y$start - from, Y$end - from),
@@ -201,12 +197,12 @@ plot_aligned_sounds <-
             lty = 3,
             lwd = 1.5
           )
-
+          
           # add sound.id labels
           if (label) {
             # position of sound.id labels in the freq axis
             y_pos <- flim[2] - 2 * ((flim[2] - flim[1]) / 12)
-
+            
             # plot sound id labels
             text(
               labels = Y$sound.id,
@@ -218,7 +214,7 @@ plot_aligned_sounds <-
               cex = cex
             )
           }
-
+          
           dev.off()
         }
       )

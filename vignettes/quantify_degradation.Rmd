@@ -37,9 +37,15 @@ editor_options:
 
 ```{r eval= TRUE, echo=FALSE}
 
+
 library(knitr)
 library(kableExtra)
-opts_chunk$set(tidy = TRUE, fig.align = "center", message = FALSE, warning = FALSE)
+opts_chunk$set(
+  tidy = TRUE,
+  fig.align = "center",
+  message = FALSE,
+  warning = FALSE
+)
 ```
 
 <img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
@@ -179,7 +185,10 @@ The function `plot_degradation()` aims to simplify the visual inspection of soun
 options(dest.path = tempdir())
 
 # sort to order panels
-test_sounds_est <- test_sounds_est[order(test_sounds_est$sound.id, test_sounds_est$transect, decreasing = FALSE), ]
+test_sounds_est <-
+  test_sounds_est[order(test_sounds_est$sound.id,
+                        test_sounds_est$transect,
+                        decreasing = FALSE),]
 
 # create plots
 plot_degradation(test_sounds_est)
@@ -274,11 +283,11 @@ envs <- attributes(br)$envelopes
 envs$distance <- as.factor(envs$distance)
 
 # plot
-ggplot(envs, aes(x= time, y = amp, col = distance)) +
-geom_line() + facet_wrap(~ sound.id) +
-scale_color_manual(values = viridis::viridis(4)) +
-labs(x = "Time (s)", y = "Amplitude (PMF)") +
-theme_classic()
+ggplot(envs, aes(x = time, y = amp, col = distance)) +
+  geom_line() + facet_wrap( ~ sound.id) +
+  scale_color_manual(values = viridis::viridis(4)) +
+  labs(x = "Time (s)", y = "Amplitude (PMF)") +
+  theme_classic()
 
 ```
 
@@ -294,7 +303,7 @@ envs$distance <- as.factor(envs$distance)
 
 ggplot(envs, aes(x = time, y = amp, col = distance)) +
   geom_line() +
-  facet_wrap(~sound.id) +
+  facet_wrap( ~ sound.id) +
   scale_color_viridis_d(alpha = 0.7) +
   labs(x = "Time (s)", y = "Amplitude (PMF)") +
   theme_classic()
@@ -360,9 +369,9 @@ spctr <- attributes(sbr)$spectra
 
 spctr$distance <- as.factor(spctr$distance)
 
-ggplot(spctr[spctr$freq > 0.3, ], aes(y = amp, x = freq, col = distance)) +
+ggplot(spctr[spctr$freq > 0.3,], aes(y = amp, x = freq, col = distance)) +
   geom_line() +
-  facet_wrap(~sound.id) +
+  facet_wrap( ~ sound.id) +
   scale_color_viridis_d(alpha = 0.7) +
   labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
   coord_flip() +
@@ -594,7 +603,8 @@ The function `noise_profile()` allows to estimate the frequency spectrum of ambi
 ```{r, eval = TRUE}
 
 # run noise profile
-np <- noise_profile(X = test_sounds_est[test_sounds_est$distance > 5, ], mar = 0.05)
+np <-
+  noise_profile(X = test_sounds_est[test_sounds_est$distance > 5,], mar = 0.05)
 ```
 
 The output is a data frame with amplitude values for the frequency bins for each wave object in the extended selection table:
@@ -633,15 +643,18 @@ The output data is actually an average of several frequency spectra for each sou
 
 ```{r, eval = TRUE, warning = FALSE}
 
-np <- noise_profile(
-  X = test_sounds_est[test_sounds_est$distance > 5, ],
-  mar = 0.1, averaged = FALSE
-)
+np <- noise_profile(X = test_sounds_est[test_sounds_est$distance > 5,],
+                    mar = 0.1, averaged = FALSE)
 
 # make a column containing sound file and selection
 np$sf.sl <- paste(np$sound.files, np$selec)
 
-ggplot(np, aes(y = amp, x = freq, col = sound.files, group = sf.sl)) +
+ggplot(np, aes(
+  y = amp,
+  x = freq,
+  col = sound.files,
+  group = sf.sl
+)) +
   geom_line(linewidth = 1.4) +
   scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +
   labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
@@ -655,15 +668,22 @@ Note that we can limit the frequency range by using a bandpass filter ('bp' argu
 ```{r, eval = TRUE}
 
 np <- noise_profile(
-  X = test_sounds_est[test_sounds_est$distance > 5, ],
-  mar = 0.05, bp = c(0, 10),
-  averaged = FALSE, hop.size = 3
+  X = test_sounds_est[test_sounds_est$distance > 5,],
+  mar = 0.05,
+  bp = c(0, 10),
+  averaged = FALSE,
+  hop.size = 3
 )
 
 # make a column containing sound file and selection
 np$sf.sl <- paste(np$sound.files, np$selec)
 
-ggplot(np, aes(y = amp, x = freq, col = sound.files, group = sf.sl)) +
+ggplot(np, aes(
+  y = amp,
+  x = freq,
+  col = sound.files,
+  group = sf.sl
+)) +
   geom_line(linewidth = 1.4) +
   scale_color_viridis_d(begin = 0.2, end = 0.8, alpha = 0.5) +
   labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +

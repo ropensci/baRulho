@@ -185,7 +185,7 @@ blur_ratio <-
       
       # get envelopes in a data frame
       env.dfs <-
-        warbleR:::pblapply_wrblr_int(pbar = pb, 1:length(envs), cl = cl, function(y) {
+        warbleR:::pblapply_wrblr_int(pbar = pb, seq_along(envs), cl = cl, function(y) {
           # extract 1 envelope
           x <- envs[[y]]
           

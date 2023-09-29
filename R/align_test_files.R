@@ -53,118 +53,172 @@
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
 #' }
 
-align_test_files <- function(X, Y, output = NULL, path = getOption("sound.files.path", "."), by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), ...) {
-  # check arguments
-  arguments <- as.list(base::match.call())
-
-  # add objects to argument names
-  for (i in names(arguments)[-1]) {
-    # use try to avoid errors with argumets from dots (...)
-    try(arguments[[i]] <- get(i), silent = TRUE)
-  }
-
-  # check each arguments
-  check_results <- check_arguments(fun = arguments[[1]], args = arguments)
-
-  # report errors
-  report_assertions2(check_results)
-
-  # if more than one marker per test files then keep only the marker with the highest score
-  if (any(table(Y$sound.files) > 1)) {
-    Y <- Y[stats::ave(x = -Y$scores, as.factor(Y$sound.files), FUN = rank) <= 1, ]
-  }
-
-  if (pb & is_extended_selection_table(X)) {
-    write(
-      file = "",
-      x = paste0("Aligning test sound files (step 1 out of 2):")
-    )
-  }
-
-  # set clusters for windows OS
-  if (Sys.info()[1] == "Windows" & cores > 1) {
-    cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
-  } else {
-    cl <- cores
-  }
-
-  # align each file
-  out <- warbleR:::pblapply_wrblr_int(pbar = pb, X = seq_len(nrow(Y)), cl = cl, FUN = function(y) {
-    # compute start and end as the difference in relation to the marker position in the master sound file
-    start <- X$start + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
-    end <- X$end + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
-
-    # make data frame
-    W <- data.frame(sound.files = Y$sound.files[y], selec = seq_along(start), start, end, bottom.freq = X$bottom.freq, top.freq = X$top.freq, sound.id = X$sound.id, marker = Y$marker[y])
-
-
-    # re set rownames
-    rownames(W) <- seq_len(nrow(W))
-
-    return(W)
-  })
-
-  # put data frames togheter
-  sync.sls <- do.call(rbind, out)
-
-
-  # check if any selection exceeds length of recordings
-  # if(exists("wav_dur"))
-  wvdr <- wavdur(path = path, files = unique(sync.sls$sound.files)) # else
-  # wvdr <- warbleR::duration_wavs(path = path)
-
-  # add duration to data frame
-  sync.sls <- merge(sync.sls, wvdr)
-
-  # start empty vector to add name of problematic files
-  problematic_files <- character()
-
-  if (any(sync.sls$end > sync.sls$duration)) {
-    warning2(x = paste(sum(sync.sls$end > sync.sls$duration), "selection(s) exceeded sound file length and were removed (run getOption('baRulho')$files_to_check_align_test_files to see which test files were involved)"))
-
-    problematic_files <- append(problematic_files, unique(sync.sls$sound.files[sync.sls$end > sync.sls$duration]))
-
-    # remove exceeding selections
-    sync.sls <- sync.sls[!sync.sls$end > sync.sls$duration, ]
-  }
-
-  if (any(sync.sls$start < 0)) {
-    warning2(x = paste(sum(sync.sls$start < 0), "selection(s) were absent at the start of the files (negative start values) and were removed (run getOption('baRulho')$files_to_check_align_test_files to see which test files were involved)"))
-
-    problematic_files <- append(problematic_files, unique(sync.sls$sound.files[sync.sls$start < 0]))
-
-    # remove exceeding selections
-    sync.sls <- sync.sls[sync.sls$start >= 0, ]
-  }
-
-  on.exit(options(baRulho = list(files_to_check_align_test_files = unique(problematic_files))))
-
-  # remove duration column and marker
-  sync.sls$duration <- NULL
-
-  if (is_extended_selection_table(X)) {
-    if (pb) {
-      write(
-        file = "",
-        x = paste0("Creating extended selection table (step 2 out of 2):")
-      )
+align_test_files <-
+  function(X,
+           Y,
+           output = NULL,
+           path = getOption("sound.files.path", "."),
+           by.song = TRUE,
+           marker = NULL,
+           cores = getOption("mc.cores", 1),
+           pb = getOption("pb", TRUE),
+           ...) {
+    # check arguments
+    arguments <- as.list(base::match.call())
+    
+    # add objects to argument names
+    for (i in names(arguments)[-1]) {
+      # use try to avoid errors with argumets from dots (...)
+      try(arguments[[i]] <- get(i), silent = TRUE)
     }
-    if (by.song) # if by song add a numeric column to represent sound files
+    
+    # check each arguments
+    check_results <-
+      check_arguments(fun = arguments[[1]], args = arguments)
+    
+    # report errors
+    report_assertions2(check_results)
+    
+    # if more than one marker per test files then keep only the marker with the highest score
+    if (any(table(Y$sound.files) > 1)) {
+      Y <-
+        Y[stats::ave(x = -Y$scores,
+                     as.factor(Y$sound.files),
+                     FUN = rank) <= 1,]
+    }
+    
+    if (pb & is_extended_selection_table(X)) {
+      write(file = "",
+            x = paste0("Aligning test sound files (step 1 out of 2):"))
+    }
+    
+    # set clusters for windows OS
+    if (Sys.info()[1] == "Windows" & cores > 1) {
+      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+    } else {
+      cl <- cores
+    }
+    
+    # align each file
+    out <-
+      warbleR:::pblapply_wrblr_int(
+        pbar = pb,
+        X = seq_len(nrow(Y)),
+        cl = cl,
+        FUN = function(y) {
+          # compute start and end as the difference in relation to the marker position in the master sound file
+          start <-
+            X$start + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
+          end <- X$end + (Y$start[y] - X$start[X$sound.id == Y$marker[y]])
+          
+          # make data frame
+          W <-
+            data.frame(
+              sound.files = Y$sound.files[y],
+              selec = seq_along(start),
+              start,
+              end,
+              bottom.freq = X$bottom.freq,
+              top.freq = X$top.freq,
+              sound.id = X$sound.id,
+              marker = Y$marker[y]
+            )
+          
+          
+          # re set rownames
+          rownames(W) <- seq_len(nrow(W))
+          
+          return(W)
+        }
+      )
+    
+    # put data frames togheter
+    sync.sls <- do.call(rbind, out)
+    
+    
+    # check if any selection exceeds length of recordings
+    # if(exists("wav_dur"))
+    wvdr <-
+      wavdur(path = path, files = unique(sync.sls$sound.files)) # else
+    # wvdr <- warbleR::duration_wavs(path = path)
+    
+    # add duration to data frame
+    sync.sls <- merge(sync.sls, wvdr)
+    
+    # start empty vector to add name of problematic files
+    problematic_files <- character()
+    
+    if (any(sync.sls$end > sync.sls$duration)) {
+      warning2(
+        x = paste(
+          sum(sync.sls$end > sync.sls$duration),
+          "selection(s) exceeded sound file length and were removed (run getOption('baRulho')$files_to_check_align_test_files to see which test files were involved)"
+        )
+      )
+      
+      problematic_files <-
+        append(problematic_files, unique(sync.sls$sound.files[sync.sls$end > sync.sls$duration]))
+      
+      # remove exceeding selections
+      sync.sls <- sync.sls[!sync.sls$end > sync.sls$duration,]
+    }
+    
+    if (any(sync.sls$start < 0)) {
+      warning2(
+        x = paste(
+          sum(sync.sls$start < 0),
+          "selection(s) were absent at the start of the files (negative start values) and were removed (run getOption('baRulho')$files_to_check_align_test_files to see which test files were involved)"
+        )
+      )
+      
+      problematic_files <-
+        append(problematic_files, unique(sync.sls$sound.files[sync.sls$start < 0]))
+      
+      # remove exceeding selections
+      sync.sls <- sync.sls[sync.sls$start >= 0,]
+    }
+    
+    on.exit(options(baRulho = list(
+      files_to_check_align_test_files = unique(problematic_files)
+    )))
+    
+    # remove duration column and marker
+    sync.sls$duration <- NULL
+    
+    if (is_extended_selection_table(X)) {
+      if (pb) {
+        write(
+          file = "",
+          x = paste0("Creating extended selection table (step 2 out of 2):")
+        )
+      }
+      if (by.song)
+        # if by song add a numeric column to represent sound files
       {
         sync.sls$song <- as.numeric(as.factor(sync.sls$sound.files))
         by.song <- "song"
       } else {
-      by.song <- NULL
-    } # rewrite by song as null
-
-    sync.sls <- selection_table(sync.sls, extended = TRUE, confirm.extended = FALSE, path = path, by.song = by.song, pb = pb, verbose = pb, ...)
-
-    # remove song column
-    sync.sls$song <- NULL
-
-    # fix call attribute
-    attributes(sync.sls)$call <- base::match.call()
+        by.song <- NULL
+      } # rewrite by song as null
+      
+      sync.sls <-
+        selection_table(
+          sync.sls,
+          extended = TRUE,
+          confirm.extended = FALSE,
+          path = path,
+          by.song = by.song,
+          pb = pb,
+          verbose = pb,
+          ...
+        )
+      
+      # remove song column
+      sync.sls$song <- NULL
+      
+      # fix call attribute
+      attributes(sync.sls)$call <- base::match.call()
+    }
+    
+    return(sync.sls)
   }
-
-  return(sync.sls)
-}

@@ -207,7 +207,7 @@ spectrum_blur_ratio <-
     if (spectra) {
       spec.dfs <-
         warbleR:::pblapply_wrblr_int(
-          X = 1:length(specs),
+          X = seq_along(specs),
           cl = cl,
           pbar = pb,
           FUN = function(y) {

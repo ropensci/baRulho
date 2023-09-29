@@ -71,18 +71,19 @@ tail_to_signal_ratio <- function(X,
                                  path = getOption("sound.files.path", ".")) {
   # check arguments
   arguments <- as.list(base::match.call())
-
+  
   # add objects to argument names
   for (i in names(arguments)[-1]) {
     arguments[[i]] <- get(i)
   }
-
+  
   # check each arguments
-  check_results <- check_arguments(fun = arguments[[1]], args = arguments)
-
+  check_results <-
+    check_arguments(fun = arguments[[1]], args = arguments)
+  
   # report errors
   report_assertions2(check_results)
-
+  
   # get sampling rate
   sampling_rate <-
     warbleR::read_sound_file(
@@ -91,17 +92,17 @@ tail_to_signal_ratio <- function(X,
       path = path,
       header = TRUE
     )$sample.rate
-
+  
   # adjust wl based on hope.size
   if (is.null(wl)) {
     wl <- round(sampling_rate * hop.size / 1000, 0)
   }
-
+  
   # make wl even if odd
   if (!(wl %% 2) == 0) {
     wl <- wl + 1
   }
-
+  
   # set clusters for windows OS
   if (Sys.info()[1] == "Windows" & cores > 1) {
     cl <-
@@ -109,7 +110,7 @@ tail_to_signal_ratio <- function(X,
   } else {
     cl <- cores
   }
-
+  
   # calculate STR
   X$tail.to.signal.ratio <-
     unlist(warbleR:::pblapply_wrblr_int(X = seq_len(nrow(X)), pbar = pb, cl = cl, function(y) {
@@ -124,14 +125,14 @@ tail_to_signal_ratio <- function(X,
             header = TRUE,
             path = path
           )
-
-
+        
+        
         # reset time coordinates of sounds if higher than duration
         enn <- X$end[y] + mar
         if (enn > r$samples / sampling_rate) {
           enn <- r$samples / sampling_rate
         }
-
+        
         # read sound and margin
         tail.wv <-
           warbleR::read_sound_file(
@@ -141,17 +142,15 @@ tail_to_signal_ratio <- function(X,
             to = enn,
             path = path
           )
-
+        
         # read sound
         if (type == 1) {
           signal <-
-            warbleR::read_sound_file(
-              X = X,
-              index = y,
-              path = path
-            )
+            warbleR::read_sound_file(X = X,
+                                     index = y,
+                                     path = path)
         }
-
+        
         # read background noise right before the sound
         if (type == 2) {
           signal <-
@@ -163,14 +162,14 @@ tail_to_signal_ratio <- function(X,
               path = path
             )
         }
-
+        
         # add band-pass frequency filter
         if (!is.null(bp)) {
           # filter to bottom and top freq range
           if (bp[1] == "freq.range") {
             bp <- c(X$bottom.freq[y], X$top.freq[y])
           }
-
+          
           signal <-
             seewave::ffilter(
               signal,
@@ -182,7 +181,7 @@ tail_to_signal_ratio <- function(X,
               wl = wl,
               output = "Wave"
             )
-
+          
           tail.wv <-
             seewave::ffilter(
               tail.wv,
@@ -195,52 +194,50 @@ tail_to_signal_ratio <- function(X,
               output = "Wave"
             )
         }
-
-
+        
+        
         # get RMS for sound (or noise if type 2)
         sig.env <-
           seewave::env(signal,
-            f = sampling_rate,
-            envt = "hil",
-            plot = FALSE
-          )
-
+                       f = sampling_rate,
+                       envt = "hil",
+                       plot = FALSE)
+        
         # get RMS for background noise
         tail.env <-
           seewave::env(tail.wv,
-            f = sampling_rate,
-            envt = "hil",
-            plot = FALSE
-          )
-
+                       f = sampling_rate,
+                       envt = "hil",
+                       plot = FALSE)
+        
         # sound (or noise) RMS
         sig_RMS <- seewave::rms(sig.env)
-
+        
         # get reference ambient noise RMS
-
+        
         tail_RMS <- seewave::rms(tail.env)
-
+        
         # Calculate tail.to.signal ratio
         str <- tail_RMS / sig_RMS
-
+        
         str <- 10 * log(str)
       } else {
         str <- NA
       }
-
+      
       return(str)
     }))
-
+  
   # fix call if not a data frame
   if (!is.data.frame(X)) {
     attributes(X)$call <-
       base::match.call()
   } # fix call attribute
-
+  
   # remove sound.id column if was not  found in X
   if (X$sound.id[1] == "no.sound.id.column") {
     X$sound.id <- NULL
   }
-
+  
   return(X)
 }

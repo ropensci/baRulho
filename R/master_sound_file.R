@@ -341,7 +341,7 @@ master_sound_file <-
     # create selection table
     sel.tab <- data.frame(
       sound.files = file.name,
-      selec = 1:(nrow(X) + 2),
+      selec = seq_along(nrow(X) + 2),
       start = c(delay, X$pb.start, X$pb.end[nrow(X)] + gap.duration),
       end = c(
         delay + dur_strt_mrkr,

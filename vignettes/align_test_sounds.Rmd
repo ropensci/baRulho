@@ -36,6 +36,7 @@ editor_options:
 &nbsp; 
 ```{r, eval = TRUE, echo = FALSE, message=FALSE}
 
+
 # global option chunks
 knitr::opts_chunk$set(dpi = 70,
                       fig.width = 8,
@@ -95,6 +96,7 @@ We can synthesize the same pure tones using the function `synth_sounds()`. The f
 
 ```{r, eval = TRUE, fig.height=5, dpi=120, message=FALSE, warning=FALSE}
 
+
 # load packages
 library(viridis)
 library(baRulho)
@@ -110,11 +112,9 @@ synth_est <- synth_sounds(
 )
 
 # convert into a single wave object
-synth_wav <- Rraven::exp_est(
-  X = synth_est,
-  single.file = TRUE,
- wave.object = TRUE
-)
+synth_wav <- Rraven::exp_est(X = synth_est,
+                             single.file = TRUE,
+                             wave.object = TRUE)
 
 
 # plot spectro
@@ -125,8 +125,9 @@ seewave::spectro(
   grid = FALSE,
   flim = c(0, 5.5),
   collevels = seq(-20, 0, 1),
-  osc = TRUE, colwave = "#482878FF",
-  heights = c(2, 1), 
+  osc = TRUE,
+  colwave = "#482878FF",
+  heights = c(2, 1),
   wl = 100
 )
 
@@ -138,15 +139,17 @@ The function can add complexity to additional acoustic dimensions. For instance 
 
 ```{r, eval = TRUE, echo = TRUE, fig.height=5, dpi=120, message=FALSE, warning=FALSE}
 
+
 # synthesize
 synth_est2 <- synth_sounds(
-  mar = 0.01, sig2 = 0.9,
+  mar = 0.01,
+  sig2 = 0.9,
   frequencies = 2:4,
   durations = c(0.1, 0.2),
   fm = TRUE,
   am = TRUE,
   shuffle = TRUE,
-  seed = 123, 
+  seed = 123,
   sampling.rate = 12
 )
 
@@ -155,7 +158,7 @@ synth_wav2 <- Rraven::exp_est(
   X = synth_est2,
   single.file = TRUE,
   path = td,
- wave.object = TRUE
+  wave.object = TRUE
 )
 
 # plot spectro
@@ -167,7 +170,8 @@ seewave::spectro(
   grid = FALSE,
   flim = c(0.5, 5.5),
   collevels = seq(-20, 0, 1),
-  osc = TRUE, colwave = "#482878FF",
+  osc = TRUE,
+  colwave = "#482878FF",
   heights = c(2, 1),
   wl = 140
 )
@@ -184,10 +188,18 @@ head(as.data.frame(synth_est2))
 
 ```{r, eval = TRUE, echo=FALSE, results='asis'}
 
-kbl <- kable(head(as.data.frame(synth_est2))
-, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <- kable(
+  head(as.data.frame(synth_est2))
+  ,
+  align = "c",
+  row.names = F,
+  format = "html",
+  escape = F
+)
+
+kbl <-
+  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 
 kbl <- scroll_box(kbl, width = "800px", height = "300px")
@@ -212,13 +224,16 @@ The following example shows how to create a master sound file using the syntheti
 
 ```{r, eval = FALSE, echo = TRUE}
 
+
 # create master sound file
 synth_master_annotations <- master_sound_file(
-  X = synth_est, file.name = "synthetic_master",
-  dest.path = td, gap.duration = 0.15
+  X = synth_est,
+  file.name = "synthetic_master",
+  dest.path = td,
+  gap.duration = 0.15
 )
 
-check_sels(synth_master_annotations, path =td)
+check_sels(synth_master_annotations, path = td)
 ```
 
 &nbsp;
@@ -235,7 +250,7 @@ spectrograms(
   by.song = "sound.files",
   xl = 3,
   collevels = seq(-60, 0, 5),
-  osci = TRUE, 
+  osci = TRUE,
   wl = 140
 )
 
@@ -247,9 +262,13 @@ The function can also create a master sound file from sounds found in sound file
 
 ```{r, eval = FALSE, echo = TRUE}
 
+
 # load example data from warbleR
 data(list = c(
-  "Phae.long1", "Phae.long2", "Phae.long3", "Phae.long4",
+  "Phae.long1",
+  "Phae.long2",
+  "Phae.long3",
+  "Phae.long4",
   "lbh_selec_table"
 ))
 
@@ -261,14 +280,18 @@ writeWave(Phae.long4, file.path(td, "Phae.long4.wav"))
 
 # make an extended selection table
 est <- selection_table(
-  X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
+  X = lbh_selec_table,
+  extended = TRUE,
+  confirm.extended = FALSE,
   path = td
 )
 
 # create master sound file
 master_annotations <- master_sound_file(
-  X = est, file.name = "example_master",
-  dest.path = td, gap.duration = 0.3
+  X = est,
+  file.name = "example_master",
+  dest.path = td,
+  gap.duration = 0.3
 )
 ```
 
@@ -278,9 +301,13 @@ Again, we can look at the spectrogram of the output file:
 
 ```{r, eval=FALSE, echo=TRUE}
 
-spectrograms(master_annotations,
-  path = td, by.song = "sound.files",
-  xl = 3, collevels = seq(-60, 0, 5), osci = TRUE
+spectrograms(
+  master_annotations,
+  path = td,
+  by.song = "sound.files",
+  xl = 3,
+  collevels = seq(-60, 0, 5),
+  osci = TRUE
 )
 ```
 
@@ -292,7 +319,8 @@ Note that the output could also be exported to [Raven sound analysis software](h
 
 ```{r, eval = FALSE}
 
-Rraven::exp_raven(master_annotations, path = td, file.name = "example_master_selection_table")
+Rraven::exp_raven(master_annotations, path = td,
+                  file.name = "example_master_selection_table")
 ```
 
 &nbsp;
@@ -341,11 +369,17 @@ Now we will save those files in a temporary working directory (those objects are
 
 ```{r}
 
+
 # first remove any other wave file in the temporary working directory (dont do it with yourd data!)
-unlink(list.files(path = td, full.names = TRUE, pattern = ".wav"))
+unlink(list.files(
+  path = td,
+  full.names = TRUE,
+  pattern = ".wav"
+))
 
 # save master sound file
-writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
+writeWave(object = attr(master_est, "wave.objects")[[1]],
+          file.path(td, "master.wav"))
 
 # save test sound files
 for (i in unique(test_sounds_est$sound.files)) {
@@ -372,11 +406,19 @@ markers_position
 # set path globally (so no need to write it each time)
 options(sound.files.path = td)
 
-markers_position <- find_markers(X = master_annotations, pb= FALSE)
+markers_position <- find_markers(X = master_annotations, pb = FALSE)
 
-kbl <- kable(markers_position, align = "c", row.names = F, format = "html", escape = F)
+kbl <-
+  kable(
+    markers_position,
+    align = "c",
+    row.names = F,
+    format = "html",
+    escape = F
+  )
 
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <-
+  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 ```
@@ -387,7 +429,8 @@ The position of the markers is determined as the highest spectrogram cross-corre
 ```{r, eval = FALSE}
 
 # lower window length
-markers_position <- find_markers(X = master_annotations, hop.size = 4)
+markers_position <-
+  find_markers(X = master_annotations, hop.size = 4)
 
 markers_position
 ```
@@ -401,7 +444,8 @@ aligned_tests <-
   align_test_files(
     X = master_annotations,
     Y = markers_position,
-    by.song = TRUE, remove.markers = FALSE
+    by.song = TRUE,
+    remove.markers = FALSE
   )
 ```
 
@@ -438,7 +482,13 @@ We can also check the precision of the alignment by looking at the spectrograms.
 
 ```{r, eval = FALSE}
 
-plot_aligned_sounds(X = aligned_tests, dest.path = tempdir(), duration = 2.4, ovlp = 0)
+
+plot_aligned_sounds(
+  X = aligned_tests,
+  dest.path = tempdir(),
+  duration = 2.4,
+  ovlp = 0
+)
 ```
 
  These are two of the files generated by the code above:
@@ -473,15 +523,20 @@ We can simulate a aligned data set in which test sound are slightly off their po
 
 ```{r}
 
+
 unaligned_test_sounds_est <- test_sounds_est
 set.seed(123)
-noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
-  nrow(unaligned_test_sounds_est),
-  replace = TRUE
-)
+noise_time <-
+  sample(
+    c(0.005,-0.005, 0.006,-0.006, 0, 0.002,-0.002),
+    nrow(unaligned_test_sounds_est),
+    replace = TRUE
+  )
 attr(unaligned_test_sounds_est, "check.res")$start <-
-  unaligned_test_sounds_est$start <- unaligned_test_sounds_est$start + noise_time
-attr(unaligned_test_sounds_est, "check.res")$end <- unaligned_test_sounds_est$end <-
+  unaligned_test_sounds_est$start <-
+  unaligned_test_sounds_est$start + noise_time
+attr(unaligned_test_sounds_est, "check.res")$end <-
+  unaligned_test_sounds_est$end <-
   unaligned_test_sounds_est$end + noise_time
 ```
 
@@ -495,9 +550,18 @@ rts <- auto_realign(X = unaligned_test_sounds_est)
 This is how the sounds look before and after being aligned:
 ```{r, eval = FALSE, echo = FALSE}
 
+
 # rename sound files so aligned and unaligned sounds are intercalated
-unalg <- rename_waves_est(playback_est_unaligned, playback_est_unaligned$sound.files, new.selec = seq(1, 200, by = 2)[1:nrow(playback_est_unaligned)])
-alg <- rename_waves_est(playback_est_aligned, playback_est_aligned$sound.files, new.selec = seq(2, 200, by = 2)[1:nrow(playback_est_aligned)])
+unalg <-
+  rename_waves_est(
+    playback_est_unaligned,
+    playback_est_unaligned$sound.files,
+    new.selec = seq(1, 200, by = 2)[1:nrow(playback_est_unaligned)]
+  )
+alg <-
+  rename_waves_est(playback_est_aligned,
+                   playback_est_aligned$sound.files,
+                   new.selec = seq(2, 200, by = 2)[1:nrow(playback_est_aligned)])
 
 # add label
 unalg$type <- "Before aligning"
@@ -507,7 +571,14 @@ alg$type <- "After aligning"
 unalg.alg <- rbind(unalg, alg)
 
 # create spectrograms
-spectrograms(unalg.alg[unalg.alg$sound.id != "ambient", ], dest.path = tempdir(), res = 100, wl = 300, title.labels = "type", sel.labels = NULL)
+spectrograms(
+  unalg.alg[unalg.alg$sound.id != "ambient",],
+  dest.path = tempdir(),
+  res = 100,
+  wl = 300,
+  title.labels = "type",
+  sel.labels = NULL
+)
 ```
 
 

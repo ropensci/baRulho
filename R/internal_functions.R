@@ -22,7 +22,7 @@ find_peaks_bRlh_int <-
     } else {
       cl <- cores
     }
-
+    
     # loop over scores of each dyad
     pks <-
       warbleR:::pblapply_wrblr_int(
@@ -31,71 +31,70 @@ find_peaks_bRlh_int <-
         cl = cl,
         FUN = function(i) {
           # extract data for a dyad
-          dat <- xc.output$scores[xc.output$scores$dyad == i, ]
-
+          dat <- xc.output$scores[xc.output$scores$dyad == i,]
+          
           # check xc.output being a autodetec.output object
           if (!(is(xc.output, "xcorr.output") |
-            is(xc.output, "xc.output"))) {
+                is(xc.output, "xc.output"))) {
             stop2("'xc.output' must be and object of class 'xcorr.output'")
           }
-
+          
           ## get peaks as the ones higher than previous and following scores
           pks <-
             dat[c(FALSE, diff(dat$score) > 0) &
-              c(rev(diff(rev(dat$score)) > 0), FALSE) &
-              dat$score > cutoff, , drop = FALSE]
-
+                  c(rev(diff(rev(dat$score)) > 0), FALSE) &
+                  dat$score > cutoff, , drop = FALSE]
+          
           # get the single highest peak
           if (max.peak) {
             pks <- dat[which.max(dat$score), , drop = FALSE]
           }
-
+          
           return(pks)
         }
       )
-
+    
     # put results in a data frame
     peaks <- do.call(rbind, pks)
-
+    
     # relabel rows
     if (nrow(peaks) > 0) {
       rownames(peaks) <- seq_len(nrow(peaks))
-
+      
       # remove dyad column
       peaks$dyad <- NULL
-
+      
       #### name as in a warbleR selection table
       # remove selec info at the end
       peaks$sound.files <-
         substr(peaks$sound.files,
-          start = 0,
-          regexpr("\\-[^\\-]*$", peaks$sound.files) - 1
-        )
-
+               start = 0,
+               regexpr("\\-[^\\-]*$", peaks$sound.files) - 1)
+      
       #### add start and end
       # add template column to selection table in xc.output
       Y <- xc.output$org.selection.table
       Y$template <- paste(Y$sound.files, Y$selec, sep = "-")
-
+      
       # Y <- Y[Y$template %in% comp_mat[, 1], ]
-
+      
       # add start as time - half duration of template
       peaks$start <- vapply(seq_len(nrow(peaks)), function(i) {
         peaks$time[i] -
           ((Y$end[Y$template == peaks$template[i]] -
-            Y$start[Y$template == peaks$template[i]]) / 2)
+              Y$start[Y$template == peaks$template[i]]) / 2)
       }, FUN.VALUE = numeric(1))
-
+      
       # add end as time + half duration of template
       peaks$end <- vapply(seq_len(nrow(peaks)), function(i) {
         peaks$time[i] +
           ((Y$end[Y$template == peaks$template[i]] -
-            Y$start[Y$template == peaks$template[i]]) / 2)
+              Y$start[Y$template == peaks$template[i]]) / 2)
       }, FUN.VALUE = numeric(1))
-
+      
       # add selec labels
       peaks$selec <- 1
-
+      
       if (nrow(peaks) > 1) {
         for (i in 2:nrow(peaks)) {
           if (peaks$sound.files[i] == peaks$sound.files[i - 1]) {
@@ -103,10 +102,10 @@ find_peaks_bRlh_int <-
           }
         }
       }
-
+      
       # sort columns in a intuitive order
       peaks <- warbleR::sort_colms(peaks)
-
+      
       # output results
       if (output == "data.frame") {
         return(peaks)
@@ -119,15 +118,15 @@ find_peaks_bRlh_int <-
           spectrogram = xc.output$spectrogram
           # warbleR.version = packageVersion("warbleR")
         )
-
+        
         class(output_list) <- c("list", "find_peaks.output")
-
+        
         return(output_list)
       }
     } else {
       # no detections
       write(file = "", x = "no peaks above cutoff were detected")
-
+      
       return(NULL)
     }
   }
@@ -138,7 +137,7 @@ find_peaks_bRlh_int <-
     packageStartupMessage(
       "Araya-Salas, M. (2020), baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.0"
     )
-
+    
     invisible(TRUE)
   }
 
@@ -168,16 +167,14 @@ message2 <- function(x, color = "black") {
 # coloring text
 colortext <-
   function(text,
-           as = c(
-             "red",
-             "blue",
-             "green",
-             "magenta",
-             "cyan",
-             "orange",
-             "black",
-             "silver"
-           )) {
+           as = c("red",
+                  "blue",
+                  "green",
+                  "magenta",
+                  "cyan",
+                  "orange",
+                  "black",
+                  "silver")) {
     if (has_color()) {
       unclass(cli::make_ansi_style(baRulho_style(as))(text))
     } else {
@@ -190,18 +187,16 @@ has_color <- function() {
 }
 
 baRulho_style <-
-  function(color = c(
-             "red",
-             "blue",
-             "green",
-             "magenta",
-             "cyan",
-             "orange",
-             "black",
-             "silver"
-           )) {
+  function(color = c("red",
+                     "blue",
+                     "green",
+                     "magenta",
+                     "cyan",
+                     "orange",
+                     "black",
+                     "silver")) {
     type <- match.arg(color)
-
+    
     c(
       red = "red",
       blue = "blue",
@@ -229,7 +224,7 @@ detection_distance_ohn_int <-
     # initial SPL and distance
     L <- spl
     iter_dist <- 0
-
+    
     # loop until SPL is equal or lower than background noise
     while (L - spl.cutoff > 0) {
       iter_dist <- iter_dist + resolution
@@ -244,53 +239,50 @@ detection_distance_ohn_int <-
           hab.att.coef = hab.att.coef
         )
       L <- spl - att$combined.attenuation
-
+      
       if (iter_dist >= max.distance) {
         iter_dist <- NA
         break
       }
     }
-
+    
     return(iter_dist)
   }
 ## function to measure blur ratio
 
-spctr_FUN <- function(y, spec.smooth, wl, X, path, meanspc = FALSE, ovlp) {
-  # load clip
-  clp <- warbleR::read_sound_file(
-    X = X,
-    index = which(X$.sgnl.temp == y),
-    path = path
-  )
-
-  # calculate spectrum
-  clp.spc <- if (meanspc) {
-    # mean spec
-    meanspec(
-      wave = clp,
-      f = clp@samp.rate,
-      plot = FALSE,
-      wl = wl,
-      ovlp = ovlp
-    )
-  } else {
-    seewave::spec(
-      wave = clp,
-      f = clp@samp.rate,
-      plot = FALSE,
-      wl = wl
-    )
+spctr_FUN <-
+  function(y, spec.smooth, wl, X, path, meanspc = FALSE, ovlp) {
+    # load clip
+    clp <- warbleR::read_sound_file(X = X,
+                                    index = which(X$.sgnl.temp == y),
+                                    path = path)
+    
+    # calculate spectrum
+    clp.spc <- if (meanspc) {
+      # mean spec
+      meanspec(
+        wave = clp,
+        f = clp@samp.rate,
+        plot = FALSE,
+        wl = wl,
+        ovlp = ovlp
+      )
+    } else {
+      seewave::spec(
+        wave = clp,
+        f = clp@samp.rate,
+        plot = FALSE,
+        wl = wl
+      )
+    }
+    
+    # smoothing
+    clp.spc[, 2] <-
+      warbleR::envelope(x = clp.spc[, 2],
+                        ssmooth = spec.smooth)
+    
+    return(clp.spc)
   }
-
-  # smoothing
-  clp.spc[, 2] <-
-    warbleR::envelope(
-      x = clp.spc[, 2],
-      ssmooth = spec.smooth
-    )
-
-  return(clp.spc)
-}
 
 ## function to measure blur ratio
 blur_FUN <-
@@ -303,7 +295,7 @@ blur_FUN <-
     # get names of sound and reference
     sgnl <- X$.sgnl.temp[x]
     rfrnc <- X$reference[x]
-
+    
     # if reference is NA return NA
     if (is.na(rfrnc)) {
       bl.rt <- NA
@@ -311,24 +303,23 @@ blur_FUN <-
       # extract envelope for sound and model
       sgnl.env <- envs[[which(names(envs) == sgnl)]]
       rfrnc.env <- envs[[which(names(envs) == rfrnc)]]
-
+      
       # make them the same length as the shortest one
       if (length(sgnl.env) > length(rfrnc.env)) {
-        sgnl.env <- sgnl.env[1:length(rfrnc.env)]
+        sgnl.env <- sgnl.env[seq_along(rfrnc.env)]
       }
       if (length(rfrnc.env) > length(sgnl.env)) {
-        rfrnc.env <- rfrnc.env[1:length(sgnl.env)]
+        rfrnc.env <- rfrnc.env[seq_along(sgnl.env)]
       }
-
+      
       # duration (any sampling rate works as they all must have the same sampling rate)
-      # dur <- length(sgnl.env) / (attr(X, "check.results")$sample.rate[1] * 1000)
       dur <-
         length(sgnl.env) / sampling.rate
-
+      
       # convert envelopes to PMF (probability mass function)
       rfrnc.pmf <- rfrnc.env / sum(rfrnc.env)
       sgn.pmf <- sgnl.env / sum(sgnl.env)
-
+      
       # get blur ratio as half the sum of absolute differences between envelope PMFs
       bl.rt <- sum(abs(rfrnc.pmf - sgn.pmf)) / 2
     }
@@ -342,7 +333,7 @@ blur_sp_FUN <-
     # get names of sound and reference
     sgnl <- X$.sgnl.temp[x]
     rfrnc <- X$reference[x]
-
+    
     # if reference is NA return NA
     if (is.na(rfrnc)) {
       sp.bl.rt <- NA
@@ -350,14 +341,17 @@ blur_sp_FUN <-
       # extract spectrum for sound and model
       sgnl.spc <- specs[[which(names(specs) == sgnl)]]
       rfrnc.spc <- specs[[which(names(specs) == rfrnc)]]
-
+      
       # make them the same number of rows
-      sgnl.spc <- sgnl.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))), ]
-      rfrnc.spc <- rfrnc.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))), ]
-
+      sgnl.spc <-
+        sgnl.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))),]
+      rfrnc.spc <-
+        rfrnc.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))),]
+      
       # make test the same frequency range as reference
-      bp <- c(X$bottom.freq[X$.sgnl.temp == rfrnc], X$top.freq[X$.sgnl.temp == rfrnc])
-
+      bp <-
+        c(X$bottom.freq[X$.sgnl.temp == rfrnc], X$top.freq[X$.sgnl.temp == rfrnc])
+      
       bp <- bp + c(-0.2, 0.2) # add 0.2 kHz buffer
       if (bp[1] < 0) {
         # force 0 if negative
@@ -367,20 +361,20 @@ blur_sp_FUN <-
         bp[2] <-
           ceiling(sampling_rate / 2000) - 1
       } # force lower than nyquist freq if higher
-
+      
       # apply bandpass by shrinking freq range and remove freq column based on reference freq bins
       sgnl.spc <-
         sgnl.spc[rfrnc.spc[, 1] > bp[1] &
-          rfrnc.spc[, 1] < bp[2], 2]
+                   rfrnc.spc[, 1] < bp[2], 2]
       rfrnc.spc <-
         rfrnc.spc[rfrnc.spc[, 1] > bp[1] &
-          rfrnc.spc[, 1] < bp[2], 2]
-
-
+                    rfrnc.spc[, 1] < bp[2], 2]
+      
+      
       # convert envelopes to PMF (probability mass function)
       rfrnc.pmf <- rfrnc.spc / sum(rfrnc.spc)
       sgnl.pmf <- sgnl.spc / sum(sgnl.spc)
-
+      
       # get blur ratio as half the sum of absolute differences between spectra PMFs
       sp.bl.rt <- sum(abs(rfrnc.pmf - sgnl.pmf)) / 2
     }
@@ -407,41 +401,44 @@ plot_blur_FUN <-
     ref_col <- colors[1]
     test_col <- colors[2]
     blur_col <- colors[3]
-
-
+    
+    
     # get names of sound and reference
     sgnl <- X$.sgnl.temp[x]
     rfrnc <- X$reference[x]
-
+    
     # if reference is NA return NA
     if (!is.na(rfrnc)) {
       # extract envelope for sound and model
-      sgnl.energy <- energy_vectors[[which(names(energy_vectors) == sgnl)]]
-      rfrnc.energy <- energy_vectors[[which(names(energy_vectors) == rfrnc)]]
-
+      sgnl.energy <-
+        energy_vectors[[which(names(energy_vectors) == sgnl)]]
+      rfrnc.energy <-
+        energy_vectors[[which(names(energy_vectors) == rfrnc)]]
+      
       # make them the same length as the shortest one
       if (length(sgnl.energy) > length(rfrnc.energy)) {
-        sgnl.energy <- sgnl.energy[1:length(rfrnc.energy)]
+        sgnl.energy <- sgnl.energy[seq_along(rfrnc.energy)]
       }
       if (length(rfrnc.energy) > length(sgnl.energy)) {
-        rfrnc.energy <- rfrnc.energy[1:length(sgnl.energy)]
+        rfrnc.energy <- rfrnc.energy[seq_along(sgnl.energy)]
       }
-
+      
       sampling_rate <- warbleR::read_sound_file(
         X = X,
         index = x,
         path = path,
         header = TRUE
       )$sample.rate
-
+      
       dur <-
         length(sgnl.energy) / sampling_rate
-
+      
       # run band pass
       if (spectr) {
         # make them the same frequency range as reference
-        bp <- c(X$bottom.freq[X$.sgnl.temp == rfrnc], X$top.freq[X$.sgnl.temp == rfrnc])
-
+        bp <-
+          c(X$bottom.freq[X$.sgnl.temp == rfrnc], X$top.freq[X$.sgnl.temp == rfrnc])
+        
         bp <- bp + c(-0.2, 0.2) # add 0.2 kHz buffer
         if (bp[1] < 0) {
           # force 0 if negative
@@ -451,25 +448,28 @@ plot_blur_FUN <-
           bp[2] <-
             ceiling(sampling_rate / 2000) - 1
         } # force lower than nyquist freq if higher
-
+        
         # apply bandpass by shrinking freq range and remove freq column based on reference freq bins
         sgnl.energy <-
           sgnl.energy[rfrnc.energy[, 1] > bp[1] &
-            rfrnc.energy[, 1] < bp[2], 2]
+                        rfrnc.energy[, 1] < bp[2], 2]
         rfrnc.energy <-
           rfrnc.energy[rfrnc.energy[, 1] > bp[1] &
-            rfrnc.energy[, 1] < bp[2], 2]
+                         rfrnc.energy[, 1] < bp[2], 2]
       }
-
+      
       # convert envelopes to PMF (probability mass function)
       rfrnc.pmf <- rfrnc.energy / sum(rfrnc.energy)
       sgn.pmf <- sgnl.energy / sum(sgnl.energy)
-
+      
       # get blur ratio as half the sum of absolute differences between envelope PMFs
       bl.rt <- sum(abs(rfrnc.pmf - sgn.pmf)) / 2
-
+      
       img_name <- paste0(
-        if (spectr) "spectrum_blur_ratio_" else "blur_ratio_",
+        if (spectr)
+          "spectrum_blur_ratio_"
+        else
+          "blur_ratio_",
         X$sound.id[x],
         "-",
         rfrnc,
@@ -477,7 +477,7 @@ plot_blur_FUN <-
         sgnl,
         ".jpeg"
       )
-
+      
       # plot
       warbleR:::img_wrlbr_int(
         filename = img_name,
@@ -487,23 +487,38 @@ plot_blur_FUN <-
         units = "cm",
         res = res
       )
-
-
+      
+      
       # matrix for layout
       page_layout <- matrix(
         c(
-          0.06, 0.4, 0, 0.562, # bottom left spectrogram
-          0.06, 0.4, 0.562, 1, # top left spectrogram
-          0.4, 1, 0, 1, # right pannel with blur ratio
-          0, 0.06, 0.1, 1
+          0.06,
+          0.4,
+          0,
+          0.562,
+          # bottom left spectrogram
+          0.06,
+          0.4,
+          0.562,
+          1,
+          # top left spectrogram
+          0.4,
+          1,
+          0,
+          1,
+          # right pannel with blur ratio
+          0,
+          0.06,
+          0.1,
+          1
         ),
         nrow = 4,
         byrow = TRUE
       )
-
+      
       # testing layout screens
       # ss <- split.screen(figs = page_layout)
-      # for(i in 1:nrow(page_layout))
+      # for(i in seq_len(nrow(page_layout)))
       # {screen(i)
       #   par( mar = rep(0, 4))
       #   plot(0.5, xlim = c(0,1), ylim = c(0,1), type = "n", axes = FALSE, xlab = "", ylab = "", xaxt = "n", yaxt = "n")
@@ -514,29 +529,27 @@ plot_blur_FUN <-
       # save par settings
       oldpar <- par(no.readonly = TRUE)
       on.exit(par(oldpar))
-
+      
       # close if open any screen
       invisible(close.screen(all.screens = TRUE))
-
+      
       # split screen
       split.screen(page_layout)
-
+      
       ## plot spectros
-
+      
       # index of reference
       rf.indx <-
         which(paste(X$sound.files, X$selec, sep = "-") == rfrnc)
-
+      
       # freq limit of reference
       flm <- c(X$bottom.freq[rf.indx], X$top.freq[rf.indx])
-
+      
       # set frequency limits
       if (is.character(flim)[1]) {
         flm <-
-          c(
-            flm[1] + as.numeric(flim[1]),
-            flm[2] + as.numeric(flim[2])
-          )
+          c(flm[1] + as.numeric(flim[1]),
+            flm[2] + as.numeric(flim[2]))
       } else {
         flm <- flim
       }
@@ -544,7 +557,7 @@ plot_blur_FUN <-
       if (flm[1] < 0) {
         flm[1] <- 0
       }
-
+      
       #####
       # end for sound and reference
       rf.info <-
@@ -555,12 +568,12 @@ plot_blur_FUN <-
           path = path
         )
       rf.dur <- rf.info$samples / rf.info$sample.rate
-
+      
       # fix upper frequency in flim
       if (flm[2] > rf.info$sample.rate / 2000) {
         flm[2] <- rf.info$sample.rate / 2000
       }
-
+      
       sgnl.info <-
         warbleR::read_sound_file(
           X = X,
@@ -569,11 +582,11 @@ plot_blur_FUN <-
           path = path
         )
       sgnl.dur <- sgnl.info$samples / sgnl.info$sample.rate
-
+      
       # calculate margin for spectrogram, before and after
       mar.rf.af <-
         mar.rf.bf <- (X$end[rf.indx] - X$start[rf.indx]) / 4
-
+      
       # start for sound and reference
       strt.sgnl <- X$start[x] - mar.rf.bf
       if (strt.sgnl < 0) {
@@ -583,7 +596,7 @@ plot_blur_FUN <-
       if (strt.rf < 0) {
         strt.rf <- 0
       }
-
+      
       end.sgnl <- X$end[x] + mar.rf.af
       if (end.sgnl > sgnl.dur) {
         end.sgnl <- sgnl.dur
@@ -592,7 +605,7 @@ plot_blur_FUN <-
       if (end.rf > rf.dur) {
         end.rf <- rf.dur
       }
-
+      
       # extract clip reference and sound
       clp.sgnl <-
         warbleR::read_sound_file(
@@ -610,12 +623,12 @@ plot_blur_FUN <-
           to = end.rf,
           path = path
         )
-
-
+      
+      
       # frequency axis for spectrograms
       screen(4)
       par(mar = c(0, 0, 0, 0), new = TRUE)
-
+      
       plot(
         1,
         frame.plot = FALSE,
@@ -623,7 +636,7 @@ plot_blur_FUN <-
         yaxt = "n",
         xaxt = "n"
       )
-
+      
       text(
         x = 1,
         y = 1,
@@ -631,12 +644,12 @@ plot_blur_FUN <-
         srt = 90,
         cex = 1.2
       )
-
-
+      
+      
       # sound at bottom left
       screen(1)
       par(mar = c(3, 2, 0.15, 0.3))
-
+      
       warbleR:::spectro_wrblr_int2(
         wave = clp.sgnl,
         f = clp.sgnl@samp.rate,
@@ -655,48 +668,50 @@ plot_blur_FUN <-
         collevels = collevels,
         palette = palette
       )
-
+      
       at_freq <-
         pretty(seq(0, clp.sgnl@samp.rate / 2000, length.out = 10)[-10], n = 10)
       axis(2,
-        at = at_freq,
-        labels =
-          c(at_freq[-length(at_freq)], "")
-      )
-
+           at = at_freq,
+           labels =
+             c(at_freq[-length(at_freq)], ""))
+      
       # plot time ticks
       at_time <-
         pretty(seq(0, duration(clp.sgnl), length.out = 10)[-10], n = 4)
       axis(1,
-        at = at_time,
-        labels = c(at_time[c(-length(at_time))], "")
-      )
-
+           at = at_time,
+           labels = c(at_time[c(-length(at_time))], ""))
+      
       # add x axis label
-      mtext(
-        text = "Time (s)",
-        side = 1,
-        line = 2
-      )
-
-
-
+      mtext(text = "Time (s)",
+            side = 1,
+            line = 2)
+      
+      
+      
       # lines showing position of sound
       abline(
-        v = if (!spectr) c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf) else NULL,
-        h = if (spectr) bp else NULL,
+        v = if (!spectr)
+          c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf)
+        else
+          NULL,
+        h = if (spectr)
+          bp
+        else
+          NULL,
         col =
           "white",
         lty = 2
       )
-
+      
       # add box with sound color
       box(col = adjustcolor(test_col, 0.6), lwd = 3)
-
+      
       # reference at top left
       screen(2)
       par(mar = c(0, 2, 0.3, 0.3))
-
+      
       warbleR:::spectro_wrblr_int2(
         wave = clp.rfnc,
         f = clp.rfnc@samp.rate,
@@ -715,39 +730,47 @@ plot_blur_FUN <-
         collevels = collevels,
         palette = palette
       )
-
-
+      
+      
       # add box with reference color
       box(col = adjustcolor(ref_col, 0.6), lwd = 3)
-
+      
       # lines showing position of sound
       abline(
-        v = if (!spectr) c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf) else NULL,
-        h = if (spectr) bp else NULL,
+        v = if (!spectr)
+          c(mar.rf.bf, X$end[x] - X$start[x] + mar.rf.bf)
+        else
+          NULL,
+        h = if (spectr)
+          bp
+        else
+          NULL,
         col =
           "white",
         lty = 2
       )
-
+      
       at_freq <-
         pretty(seq(0, clp.rfnc@samp.rate / 2000, length.out = 10)[-10], n = 10)
       axis(2,
-        at = at_freq,
-        labels =
-          c(at_freq[-length(at_freq)], "")
-      )
-
+           at = at_freq,
+           labels =
+             c(at_freq[-length(at_freq)], ""))
+      
       # plot envelopes
       screen(3)
-
+      
       # set image margins
-      par(mar = c(4, 1, 4, if (spectr) 4.2 else 3.2))
-
+      par(mar = c(4, 1, 4, if (spectr)
+        4.2
+        else
+          3.2))
+      
       # plot envelope
       if (!spectr) {
         # time values for plots
         time.vals <- seq(0, dur, length.out = length(sgnl.energy))
-
+        
         # reference envelope first
         plot(
           time.vals,
@@ -763,14 +786,21 @@ plot_blur_FUN <-
           xaxs = "i",
           yaxs = "i"
         )
-
+        
         # add background color
-        rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = adjustcolor("#DEF5E5FF", 0.4), border = NA)
-
+        rect(
+          par("usr")[1],
+          par("usr")[3],
+          par("usr")[2],
+          par("usr")[4],
+          col = adjustcolor("#DEF5E5FF", 0.4),
+          border = NA
+        )
+        
         # white envelope polygon
         # add 0s at star and end so polygon doesnt twist
         sgn.pmf[c(1, nrow(sgn.pmf))] <- 0
-
+        
         # add polygon with envelope shape
         polygon(
           x = time.vals,
@@ -778,14 +808,12 @@ plot_blur_FUN <-
           col = "white",
           border = NA
         )
-
+        
         # add x axis label
-        mtext(
-          text = "Time (s)",
-          side = 1,
-          line = 2.5
-        )
-
+        mtext(text = "Time (s)",
+              side = 1,
+              line = 2.5)
+        
         # add title
         mtext(
           text = paste("Sound ID:", X$sound.id[x]),
@@ -800,7 +828,7 @@ plot_blur_FUN <-
           col = ref_col,
           cex = 1
         )
-
+        
         mtext(
           text = paste("Test sound:", sgnl),
           side = 3,
@@ -808,15 +836,13 @@ plot_blur_FUN <-
           col = test_col,
           cex = 1
         )
-
+        
         # add y axis
         axis(side = 4, labels = FALSE)
-        mtext(
-          text = "Amplitude (PMF)",
-          side = 4,
-          line = 1
-        )
-
+        mtext(text = "Amplitude (PMF)",
+              side = 4,
+              line = 1)
+        
         # blur region
         polygon(
           x = c(time.vals, rev(time.vals)),
@@ -824,23 +850,21 @@ plot_blur_FUN <-
           col = adjustcolor(blur_col, 0.2),
           border = NA
         )
-
+        
         # add sound envelope
         lines(time.vals,
-          sgn.pmf,
-          col = adjustcolor(test_col, 0.7),
-          lwd = 1.4
-        )
+              sgn.pmf,
+              col = adjustcolor(test_col, 0.7),
+              lwd = 1.4)
         # add sound envelope
         lines(time.vals,
-          rfrnc.pmf,
-          col = adjustcolor(ref_col, 0.7),
-          lwd = 1.4
-        )
-
+              rfrnc.pmf,
+              col = adjustcolor(ref_col, 0.7),
+              lwd = 1.4)
+        
         # get plotting area limits
         usr <- par("usr")
-
+        
         # and blu ratio value
         text(
           x = ((usr[1] + usr[2]) / 2) + usr[1],
@@ -849,13 +873,13 @@ plot_blur_FUN <-
           cex = 1
         )
       }
-
+      
       # spectrum
       if (spectr) {
         # create time values for area calculation
         f.vals <-
           seq(bp[1], bp[2], length.out = length(rfrnc.pmf))
-
+        
         # reference spectrum first
         plot(
           x = rfrnc.pmf,
@@ -864,24 +888,29 @@ plot_blur_FUN <-
           xlab = "",
           ylab = "",
           col = ref_col,
-          xlim = c(
-            min(rfrnc.pmf, sgn.pmf),
-            max(rfrnc.pmf, sgn.pmf) * 1.1
-          ),
+          xlim = c(min(rfrnc.pmf, sgn.pmf),
+                   max(rfrnc.pmf, sgn.pmf) * 1.1),
           cex.main = 0.8,
           lwd = 1.2,
           yaxt = "n",
           xaxs = "i",
           yaxs = "i"
         )
-
+        
         # add background color
-        rect(par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4], col = adjustcolor("#DEF5E5FF", 0.4), border = NA)
-
+        rect(
+          par("usr")[1],
+          par("usr")[3],
+          par("usr")[2],
+          par("usr")[4],
+          col = adjustcolor("#DEF5E5FF", 0.4),
+          border = NA
+        )
+        
         # white envelope polygon
         # add 0s at star and end so polygon doesnt twist
         rfrnc.pmf[c(1, nrow(rfrnc.pmf))] <- 0
-
+        
         # add polygon with spectrum shape
         polygon(
           x = rfrnc.pmf,
@@ -890,12 +919,10 @@ plot_blur_FUN <-
           border = NA
         )
         # add x axis label
-        mtext(
-          text = "Power spectrum (PMF)",
-          side = 1,
-          line = 2.5
-        )
-
+        mtext(text = "Power spectrum (PMF)",
+              side = 1,
+              line = 2.5)
+        
         # add title
         mtext(
           text = paste("Sound ID:", X$sound.id[x]),
@@ -917,22 +944,19 @@ plot_blur_FUN <-
           col = test_col,
           cex = 1
         )
-
+        
         # add y axis
         axis(side = 4)
-        mtext(
-          text = "Frequency (kHz)",
-          side = 4,
-          line = 2
-        )
-
+        mtext(text = "Frequency (kHz)",
+              side = 4,
+              line = 2)
+        
         # add sound spectrum
         lines(sgn.pmf,
-          f.vals,
-          col = test_col,
-          lwd = 1.2
-        )
-
+              f.vals,
+              col = test_col,
+              lwd = 1.2)
+        
         # sound spectrum on top
         polygon(
           y = c(f.vals, rev(f.vals)),
@@ -940,24 +964,22 @@ plot_blur_FUN <-
           col = adjustcolor(blur_col, 0.2),
           border = NA
         )
-
+        
         # add sound envelope
         lines(sgn.pmf,
-          f.vals,
-          col = adjustcolor(test_col, 0.7),
-          lwd = 1.4
-        )
+              f.vals,
+              col = adjustcolor(test_col, 0.7),
+              lwd = 1.4)
         # add sound envelope
         lines(rfrnc.pmf,
-          f.vals,
-          col = adjustcolor(ref_col, 0.7),
-          lwd = 1.4
-        )
-
-
+              f.vals,
+              col = adjustcolor(ref_col, 0.7),
+              lwd = 1.4)
+        
+        
         # get plotting area limits
         usr <- par("usr")
-
+        
         # and blu ratio value
         text(
           x = ((usr[1] + usr[2]) / 2),
@@ -965,14 +987,14 @@ plot_blur_FUN <-
           paste("Spectrum blur ratio:", round(bl.rt, 2)),
           cex = 1
         )
-
+        
         # index of reference
         rf.indx <-
           which(paste(X$sound.files, X$selec, sep = "-") == rfrnc)
-
+        
         # freq limit of reference
         # flim <- c(X$bottom.freq[rf.indx], X$top.freq[rf.indx])
-
+        
         # end for sound and reference
         rf.info <-
           warbleR::read_sound_file(
@@ -982,7 +1004,7 @@ plot_blur_FUN <-
             path = path
           )
         rf.dur <- rf.info$samples / rf.info$sample.rate
-
+        
         sgnl.info <-
           warbleR::read_sound_file(
             X = X,
@@ -991,11 +1013,11 @@ plot_blur_FUN <-
             path = path
           )
         sgnl.dur <- sgnl.info$samples / sgnl.info$sample.rate
-
+        
         # calculate margin for spectrogram, before and after
         mar.rf.af <-
           mar.rf.bf <- (X$end[rf.indx] - X$start[rf.indx]) / 4
-
+        
         # start for sound and reference
         strt.sgnl <- X$start[x] - mar.rf.bf
         if (strt.sgnl < 0) {
@@ -1005,8 +1027,8 @@ plot_blur_FUN <-
         if (strt.rf < 0) {
           strt.rf <- 0
         }
-
-
+        
+        
         end.sgnl <- X$end[x] + mar.rf.af
         if (end.sgnl > sgnl.dur) {
           end.sgnl <- sgnl.dur
@@ -1015,7 +1037,7 @@ plot_blur_FUN <-
         if (end.rf > rf.dur) {
           end.rf <- rf.dur
         }
-
+        
         # extract clip reference and sound
         clp.sgnl <-
           warbleR::read_sound_file(
@@ -1034,7 +1056,7 @@ plot_blur_FUN <-
             path = path
           )
       }
-
+      
       # close graph
       dev.off()
     }
@@ -1043,15 +1065,14 @@ plot_blur_FUN <-
 # function to extract envelopes from wave objects
 env_FUN <- function(X, y, env.smooth, ovlp, wl, path) {
   # load clip
-  clp <- warbleR::read_sound_file(
-    X = X,
-    index = which(X$.sgnl.temp == y),
-    path = path
-  )
-
+  clp <- warbleR::read_sound_file(X = X,
+                                  index = which(X$.sgnl.temp == y),
+                                  path = path)
+  
   # define bandpass
-  bp <- c(X$bottom.freq[X$.sgnl.temp == y], X$top.freq[X$.sgnl.temp == y])
-
+  bp <-
+    c(X$bottom.freq[X$.sgnl.temp == y], X$top.freq[X$.sgnl.temp == y])
+  
   # bandpass filter
   clp <- seewave::ffilter(
     clp,
@@ -1062,14 +1083,12 @@ env_FUN <- function(X, y, env.smooth, ovlp, wl, path) {
     wl = wl,
     output = "Wave"
   )
-
+  
   # calculate envelope
   nv <-
-    warbleR::envelope(
-      x = clp@left,
-      ssmooth = env.smooth
-    )
-
+    warbleR::envelope(x = clp@left,
+                      ssmooth = env.smooth)
+  
   return(nv)
 }
 
@@ -1077,11 +1096,11 @@ env_FUN <- function(X, y, env.smooth, ovlp, wl, path) {
 # y and z are the sound.files+selec names of the sounds and reference sound (model)
 env_cor_FUN <- function(X, x, envs, cor.method) {
   # if names are the same return NA
-
+  
   # get names of sound and reference
   sgnl <- X$.sgnl.temp[x]
   rfrnc <- X$reference[x]
-
+  
   # if reference is NA return NA
   if (is.na(rfrnc)) {
     envcor <- NA
@@ -1089,7 +1108,7 @@ env_cor_FUN <- function(X, x, envs, cor.method) {
     # extract envelope for sound and model
     sgnl.env <- envs[[which(names(envs) == sgnl)]]
     mdl.env <- envs[[which(names(envs) == rfrnc)]]
-
+    
     # define short and long envelope for sliding one (short) over the other (long)
     if (length(mdl.env) > length(sgnl.env)) {
       lg.env <- mdl.env
@@ -1098,18 +1117,18 @@ env_cor_FUN <- function(X, x, envs, cor.method) {
       lg.env <- sgnl.env
       shrt.env <- mdl.env
     }
-
+    
     # get length of shortest minus 1 (1 if same length so it runs a single correlation)
     shrt.lgth <- length(shrt.env) - 1
-
+    
     # steps for sliding one sound over the other
     stps <- length(lg.env) - shrt.lgth
-
+    
     # calculate correlations at each step
-    cors <- vapply(1:stps, function(x) {
+    cors <- vapply(seq_along(stps), function(x) {
       cor(lg.env[x:(x + shrt.lgth)], shrt.env, method = cor.method)
     }, FUN.VALUE = numeric(1))
-
+    
     # return maximum correlation
     envcor <- max(cors, na.rm = TRUE)
   }
@@ -1127,7 +1146,7 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
       to = X$end[X$.sgnl.temp == y],
       path = path
     )
-
+  
   noise_clp <-
     warbleR::read_sound_file(
       X = X,
@@ -1136,14 +1155,15 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
       to = X$start[X$.sgnl.temp == y] - 0.001,
       path = path
     )
-
+  
   # add band-pass frequency filter
   if (!is.null(bp)) {
     # filter to bottom and top freq range
     if (bp[1] == "freq.range") {
-      bp <- c(X$bottom.freq[X$.sgnl.temp == y], X$top.freq[X$.sgnl.temp == y])
+      bp <-
+        c(X$bottom.freq[X$.sgnl.temp == y], X$top.freq[X$.sgnl.temp == y])
     }
-
+    
     clp <-
       seewave::ffilter(
         clp,
@@ -1155,7 +1175,7 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
         wl = wl,
         output = "Wave"
       )
-
+    
     noise_clp <-
       seewave::ffilter(
         noise_clp,
@@ -1168,7 +1188,7 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
         output = "Wave"
       )
   }
-
+  
   # get mean envelopes
   sig_env <-
     mean(seewave::env(
@@ -1177,7 +1197,7 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
       envt = "hil",
       plot = FALSE
     ))
-
+  
   return(sig_env)
 }
 
@@ -1187,7 +1207,7 @@ spctr_cor_FUN <- function(y, specs, X, cor.method) {
   # get names of sound and reference
   sgnl <- X$.sgnl.temp[y]
   rfrnc <- X$reference[y]
-
+  
   # if reference is NA return NA
   if (is.na(rfrnc)) {
     cor.spctr <- NA
@@ -1195,22 +1215,22 @@ spctr_cor_FUN <- function(y, specs, X, cor.method) {
     # extract envelope for sound and model
     sgnl.spctr <- specs[[which(names(specs) == sgnl)]]
     mdl.spctr <- specs[[which(names(specs) == rfrnc)]]
-
+    
     ### filter to freq range of sounds and remove freq column
     # get range as lowest bottom and highest top
     frng <-
       c(min(X$bottom.freq[X$.sgnl.temp %in% c(sgnl, rfrnc)]), max(X$top.freq[X$.sgnl.temp %in% c(sgnl, rfrnc)]))
     sgnl.spctr <-
       sgnl.spctr[sgnl.spctr[, 1] > frng[1] &
-        sgnl.spctr[, 1] < frng[2], 2]
+                   sgnl.spctr[, 1] < frng[2], 2]
     mdl.spctr <-
       mdl.spctr[mdl.spctr[, 1] > frng[1] &
-        mdl.spctr[, 1] < frng[2], 2]
-
+                  mdl.spctr[, 1] < frng[2], 2]
+    
     # get correlation assuming they have same length
     cor.spctr <- cor(sgnl.spctr, mdl.spctr, method = cor.method)
   }
-
+  
   return(cor.spctr)
 }
 
@@ -1218,7 +1238,7 @@ exc_att_FUN <- function(y, X, tp, gn) {
   # get names of sound and reference
   sgnl <- X$.sgnl.temp[y]
   rfrnc <- X$reference[y]
-
+  
   # if reference is NA return NA
   if (is.na(rfrnc)) {
     ea <- NA
@@ -1227,15 +1247,15 @@ exc_att_FUN <- function(y, X, tp, gn) {
     sig_env_REF <- X$sig_env[X$.sgnl.temp == rfrnc]
     dist_REF <- X$distance[X$.sgnl.temp == rfrnc]
     dist_SIG <- X$distance[y]
-
+    
     ks <- X$sig_env[y] / sig_env_REF
-
+    
     # type Dabelsteen
     if (tp == "Dabelsteen") {
       ea <-
         (-20 * log(ks)) - (6 / (2 * (dist_SIG - dist_REF))) + gn
     }
-
+    
     if (tp == "Darden") {
       # EA = g - 20 log(d / 10) - 20 log(k)
       ea <-
@@ -1256,7 +1276,7 @@ report_assertions2 <- function(collection) {
   checkmate::assertClass(collection, "AssertCollection")
   if (!collection$isEmpty()) {
     msgs <- collection$getMessages()
-
+    
     # modfied to get more informative message
     msgs <-
       gsub(
@@ -1265,7 +1285,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "Variable 'names(X)': Names",
@@ -1273,7 +1293,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "Variable 'transect column': Names must include the elements {'transect'}, but is missing elements {'transect'}.",
@@ -1281,7 +1301,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "the elements ",
@@ -1289,7 +1309,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "elements ",
@@ -1297,7 +1317,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "Variable",
@@ -1305,7 +1325,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "must be disjunct from {'reference'}, but has {'reference'}.",
@@ -1313,7 +1333,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "Argument 'X$distance'",
@@ -1321,7 +1341,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "Argument 'transect column': Names must include the elements {'transect'}, but is missing elements {'transect'}",
@@ -1329,7 +1349,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "but is missing {'reference'}",
@@ -1337,7 +1357,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
+    
     msgs <-
       gsub(
         pattern = "Argument 'transect values'",
@@ -1345,12 +1365,11 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
-
-
+    
+    
     context <- "\n %i argument check(s) failed:"
     err <- c(sprintf(context, length(msgs)), strwrap(msgs,
-      prefix = " * "
-    ))
+                                                     prefix = " * "))
     stop(simpleError(paste0(err, collapse = "\n"), call = sys.call(1L)))
   }
   invisible(TRUE)
@@ -1432,10 +1451,10 @@ assert_deprecated <-
 check_arguments <- function(fun, args) {
   # make function name a character
   fun <- as.character(fun)
-
+  
   # create object to store check results
   check_collection <- checkmate::makeAssertCollection()
-
+  
   ### check arguments
   if (any(names(args) == "X")) {
     if (fun != "noise_profile") {
@@ -1450,7 +1469,7 @@ check_arguments <- function(fun, args) {
         add = check_collection,
         .var.name = "X"
       )
-
+      
       checkmate::assert_multi_class(
         x = args$X,
         classes = c(
@@ -1461,10 +1480,10 @@ check_arguments <- function(fun, args) {
         add = check_collection,
         .var.name = "X"
       )
-
+      
       # default columns
       cols <- c("sound.files", "selec", "start", "end", "sound.id")
-
+      
       # overwrite for other functions
       if (fun == "master_sound_file") {
         cols <- c("sound.files", "selec", "start", "end")
@@ -1482,16 +1501,14 @@ check_arguments <- function(fun, args) {
         "plot_degradation"
       )) {
         cols <-
-          c(
-            "sound.files",
+          c("sound.files",
             "selec",
             "start",
             "end",
             "sound.id",
             "distance",
-            "reference"
-          )
-
+            "reference")
+        
         checkmate::assert_numeric(
           x = args$X$distance,
           any.missing = FALSE,
@@ -1501,7 +1518,7 @@ check_arguments <- function(fun, args) {
           add = check_collection,
           .var.name = "X$distance"
         )
-
+        
         assert_several_distances(
           x = args$X,
           fun = fun,
@@ -1509,17 +1526,15 @@ check_arguments <- function(fun, args) {
           .var.name = "X$distances"
         )
       }
-
-
+      
+      
       if (fun == "set_reference_sounds") {
-        cols <- c(
-          "sound.files",
-          "selec",
-          "start",
-          "end",
-          "sound.id",
-          "distance"
-        )
+        cols <- c("sound.files",
+                  "selec",
+                  "start",
+                  "end",
+                  "sound.id",
+                  "distance")
         checkmate::assert_numeric(
           x = args$X$distance,
           any.missing = FALSE,
@@ -1530,39 +1545,40 @@ check_arguments <- function(fun, args) {
           .var.name = "X$distance"
         )
       }
-
+      
       checkmate::assert_names(
         x = names(args$X),
         type = "unique",
         must.include = cols,
         add = check_collection,
-        disjunct.from = if (fun == "set_reference_sounds") "reference" else NULL,
+        disjunct.from = if (fun == "set_reference_sounds")
+          "reference"
+        else
+          NULL,
         .var.name = "names(X)"
       )
-      try(
-        checkmate::assert_data_frame(
-          x = args$X[, cols],
-          any.missing = TRUE,
-          add = check_collection,
-          .var.name = "X"
-        ),
-        silent = TRUE
-      )
-
+      try(checkmate::assert_data_frame(
+        x = args$X[, cols],
+        any.missing = TRUE,
+        add = check_collection,
+        .var.name = "X"
+      ),
+      silent = TRUE)
+      
       assert_unique_sels(
         x = args$X,
         fun = fun,
         add = check_collection,
         .var.name = "X"
       )
-
+      
       assert_unique_sound.id(
         x = args$X,
         fun = fun,
         add = check_collection,
         .var.name = "X"
       )
-
+      
       if (!fun %in% c(
         "plot_aligned_sounds",
         "degrad_catalog",
@@ -1577,7 +1593,9 @@ check_arguments <- function(fun, args) {
             )
           }
         } else {
-          if (!fun %in% c("find_markers", "align_test_files", "set_reference_sounds")) {
+          if (!fun %in% c("find_markers",
+                          "align_test_files",
+                          "set_reference_sounds")) {
             warning2("assuming all sound files have the same sampling rate")
           }
         }
@@ -1592,7 +1610,7 @@ check_arguments <- function(fun, args) {
       )
     }
   }
-
+  
   if (any(names(args) == "envelopes")) {
     checkmate::assert_logical(
       x = args$envelopes,
@@ -1603,7 +1621,7 @@ check_arguments <- function(fun, args) {
       any.missing = FALSE
     )
   }
-
+  
   if (any(names(args) == "spectra")) {
     checkmate::assert_logical(
       x = args$spectra,
@@ -1614,7 +1632,7 @@ check_arguments <- function(fun, args) {
       any.missing = FALSE
     )
   }
-
+  
   if (any(names(args) == "sampling.rate")) {
     checkmate::assert_number(
       x = args$sampling.rate,
@@ -1625,7 +1643,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "shuffle")) {
     checkmate::assert_logical(
       x = args$shuffle,
@@ -1635,7 +1653,7 @@ check_arguments <- function(fun, args) {
       .var.name = "shuffle"
     )
   }
-
+  
   if (any(names(args) == "seed")) {
     checkmate::assert_number(
       x = args$seed,
@@ -1644,8 +1662,8 @@ check_arguments <- function(fun, args) {
       null.ok = TRUE
     )
   }
-
-
+  
+  
   if (any(names(args) == "srt")) {
     checkmate::assert_number(
       x = args$srt,
@@ -1654,7 +1672,7 @@ check_arguments <- function(fun, args) {
       null.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "sig2")) {
     checkmate::assert_number(
       x = args$sig2,
@@ -1664,7 +1682,7 @@ check_arguments <- function(fun, args) {
       null.ok = TRUE
     )
   }
-
+  
   if (any(names(args) == "fm")) {
     checkmate::assert_logical(
       x = args$fm,
@@ -1674,7 +1692,7 @@ check_arguments <- function(fun, args) {
       .var.name = "fm"
     )
   }
-
+  
   if (any(names(args) == "am")) {
     checkmate::assert_logical(
       x = args$am,
@@ -1684,7 +1702,7 @@ check_arguments <- function(fun, args) {
       .var.name = "am"
     )
   }
-
+  
   if (any(names(args) == "frequencies")) {
     checkmate::assert_numeric(
       x = args$frequencies,
@@ -1696,7 +1714,7 @@ check_arguments <- function(fun, args) {
       .var.name = "frequencies"
     )
   }
-
+  
   if (any(names(args) == "durations")) {
     checkmate::assert_numeric(
       x = args$durations,
@@ -1708,7 +1726,7 @@ check_arguments <- function(fun, args) {
       .var.name = "durations"
     )
   }
-
+  
   if (any(names(args) == "am.amps")) {
     checkmate::assert_numeric(
       x = args$am.amps,
@@ -1721,7 +1739,7 @@ check_arguments <- function(fun, args) {
       .var.name = "am.amps"
     )
   }
-
+  
   if (any(names(args) == "hrm.freqs")) {
     checkmate::assert_numeric(
       x = args$hrm.freqs,
@@ -1734,7 +1752,7 @@ check_arguments <- function(fun, args) {
       .var.name = "hrm.freqs"
     )
   }
-
+  
   if (any(names(args) == "noise.ref")) {
     checkmate::assert_character(
       x = args$noise.ref,
@@ -1753,7 +1771,7 @@ check_arguments <- function(fun, args) {
       .var.name = "noise.ref"
     )
   }
-
+  
   if (any(names(args) == "label")) {
     checkmate::assert_logical(
       x = args$label,
@@ -1763,7 +1781,7 @@ check_arguments <- function(fun, args) {
       .var.name = "label"
     )
   }
-
+  
   if (any(names(args) == "fast.spec")) {
     checkmate::assert_logical(
       x = args$fast.spec,
@@ -1773,7 +1791,7 @@ check_arguments <- function(fun, args) {
       .var.name = "fast.spec"
     )
   }
-
+  
   if (any(names(args) == "width")) {
     if (fun == "plot_degradation") {
       checkmate::assert_numeric(
@@ -1797,7 +1815,7 @@ check_arguments <- function(fun, args) {
       )
     }
   }
-
+  
   if (any(names(args) == "height")) {
     if (fun == "plot_degradation") {
       checkmate::assert_numeric(
@@ -1821,7 +1839,7 @@ check_arguments <- function(fun, args) {
       )
     }
   }
-
+  
   if (any(names(args) == "env.smooth")) {
     checkmate::assert_number(
       x = args$env.smooth,
@@ -1832,7 +1850,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "res")) {
     checkmate::assert_number(
       x = args$res,
@@ -1843,7 +1861,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "dest.path")) {
     checkmate::assert_directory(
       x = args$dest.path,
@@ -1852,7 +1870,7 @@ check_arguments <- function(fun, args) {
       .var.name = "dest.path"
     )
   }
-
+  
   if (any(names(args) == "flim")) {
     checkmate::assert_vector(
       x = args$flim,
@@ -1864,7 +1882,7 @@ check_arguments <- function(fun, args) {
       .var.name = "flim"
     )
   }
-
+  
   if (any(names(args) == "mar")) {
     if (fun == "plot_degradation") {
       checkmate::assert_numeric(
@@ -1888,7 +1906,7 @@ check_arguments <- function(fun, args) {
       )
     }
   }
-
+  
   if (any(names(args) == "duration")) {
     checkmate::assert_number(
       x = args$duration,
@@ -1899,7 +1917,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "collevels")) {
     checkmate::assert_numeric(
       x = args$collevels,
@@ -1911,7 +1929,7 @@ check_arguments <- function(fun, args) {
       .var.name = "collevels"
     )
   }
-
+  
   if (any(names(args) == "palette")) {
     checkmate::assert_function(
       x = args$palette,
@@ -1920,7 +1938,7 @@ check_arguments <- function(fun, args) {
       .var.name = "palette"
     )
   }
-
+  
   if (any(names(args) == "PSD")) {
     checkmate::assert_logical(
       x = args$PSD,
@@ -1930,7 +1948,7 @@ check_arguments <- function(fun, args) {
       .var.name = "PSD"
     )
   }
-
+  
   if (any(names(args) == "norm")) {
     checkmate::assert_logical(
       x = args$norm,
@@ -1940,7 +1958,7 @@ check_arguments <- function(fun, args) {
       .var.name = "norm"
     )
   }
-
+  
   if (any(names(args) == "dB")) {
     checkmate::assert_character(
       x = args$dB,
@@ -1959,7 +1977,7 @@ check_arguments <- function(fun, args) {
       .var.name = "dB"
     )
   }
-
+  
   if (any(names(args) == "averaged")) {
     checkmate::assert_logical(
       x = args$averaged,
@@ -1969,8 +1987,8 @@ check_arguments <- function(fun, args) {
       .var.name = "averaged"
     )
   }
-
-
+  
+  
   if (any(names(args) == "frequency")) {
     checkmate::assert_number(
       x = args$frequency,
@@ -1981,7 +1999,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "temp")) {
     # lowest is absolute 0 and upper is plank number
     checkmate::assert_number(
@@ -1994,7 +2012,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "rh")) {
     checkmate::assert_number(
       x = args$rh,
@@ -2006,7 +2024,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "pa")) {
     checkmate::assert_number(
       x = args$pa,
@@ -2017,7 +2035,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "dist")) {
     checkmate::assert_number(
       x = args$dist,
@@ -2028,7 +2046,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "dist0")) {
     checkmate::assert_number(
       x = args$dist0,
@@ -2039,7 +2057,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "hab.att.coef")) {
     checkmate::assert_number(
       x = args$hab.att.coef,
@@ -2049,7 +2067,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "spl.cutoff")) {
     checkmate::assert_number(
       x = args$spl.cutoff,
@@ -2063,39 +2081,31 @@ check_arguments <- function(fun, args) {
   # if (any(names(args) == "files"))
   #   if (!is.null(args$files))
   #   checkmate::assert_file_exists(x = args$files, access = "r", extension = c("mp3", "wav", "wac", "flac"), add = check_collection, .var.name = "files")
-
+  
   if (any(names(args) == "output")) {
-    assert_deprecated(
-      x = args$output,
-      add = check_collection,
-      .var.name = "output"
-    )
+    assert_deprecated(x = args$output,
+                      add = check_collection,
+                      .var.name = "output")
   }
-
+  
   if (fun != "manual_realign" & any(names(args) == "marker")) {
-    assert_deprecated(
-      x = args$marker,
-      add = check_collection,
-      .var.name = "marker"
-    )
+    assert_deprecated(x = args$marker,
+                      add = check_collection,
+                      .var.name = "marker")
   }
-
+  
   if (any(names(args) == "parallel")) {
-    assert_deprecated(
-      x = args$parallel,
-      add = check_collection,
-      .var.name = "parallel"
-    )
+    assert_deprecated(x = args$parallel,
+                      add = check_collection,
+                      .var.name = "parallel")
   }
-
+  
   if (any(names(args) == "template.rows")) {
-    assert_deprecated(
-      x = args$template.rows,
-      add = check_collection,
-      .var.name = "template.rows"
-    )
+    assert_deprecated(x = args$template.rows,
+                      add = check_collection,
+                      .var.name = "template.rows")
   }
-
+  
   if (any(names(args) == "cores")) {
     checkmate::assert_integerish(
       args$cores,
@@ -2108,7 +2118,7 @@ check_arguments <- function(fun, args) {
       null.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "pb")) {
     checkmate::assert_logical(
       x = args$pb,
@@ -2117,7 +2127,7 @@ check_arguments <- function(fun, args) {
       .var.name = "pb"
     )
   }
-
+  
   if (any(names(args) == "path")) {
     checkmate::assert_directory(
       x = args$path,
@@ -2126,7 +2136,7 @@ check_arguments <- function(fun, args) {
       .var.name = "path"
     )
   }
-
+  
   if (any(names(args) == "hop.size")) {
     checkmate::assert_number(
       x = args$hop.size,
@@ -2135,7 +2145,7 @@ check_arguments <- function(fun, args) {
       .var.name = "hop.size"
     )
   }
-
+  
   if (any(names(args) == "wl")) {
     checkmate::assert_number(
       x = args$wl,
@@ -2145,7 +2155,7 @@ check_arguments <- function(fun, args) {
       na.ok = FALSE
     )
   }
-
+  
   if (any(names(args) == "bp")) {
     if (is.numeric(args$bp)) {
       checkmate::assert_numeric(
@@ -2172,7 +2182,7 @@ check_arguments <- function(fun, args) {
       )
     }
   }
-
+  
   if (any(names(args) == "img")) {
     checkmate::assert_logical(
       x = args$img,
@@ -2181,7 +2191,7 @@ check_arguments <- function(fun, args) {
       .var.name = "img"
     )
   }
-
+  
   if (any(names(args) == "col")) {
     checkmate::assert_character(
       x = args$col,
@@ -2191,8 +2201,8 @@ check_arguments <- function(fun, args) {
       all.missing = FALSE
     )
   }
-
-
+  
+  
   if (any(names(args) == "palette")) {
     checkmate::assert_function(
       x = args$palette,
@@ -2201,7 +2211,7 @@ check_arguments <- function(fun, args) {
       .var.name = "palette"
     )
   }
-
+  
   if (any(names(args) == "ovlp")) {
     checkmate::assert_numeric(
       x = args$ovlp,
@@ -2215,8 +2225,8 @@ check_arguments <- function(fun, args) {
       .var.name = "ovlp"
     )
   }
-
-
+  
+  
   if (any(names(args) == "only.sels")) {
     checkmate::assert_logical(
       x = args$only.sels,
@@ -2225,7 +2235,7 @@ check_arguments <- function(fun, args) {
       .var.name = "only.sels"
     )
   }
-
+  
   if (any(names(args) == "method")) {
     checkmate::assert_choice(
       x = args$method,
@@ -2234,7 +2244,7 @@ check_arguments <- function(fun, args) {
       .var.name = "method",
       choices = c(1, 2)
     )
-
+    
     if (args$method == 2) {
       checkmate::assert_names(
         x = names(args$X),
@@ -2243,7 +2253,7 @@ check_arguments <- function(fun, args) {
         add = check_collection,
         .var.name = "transect column"
       )
-
+      
       if (!is.null(args$X$transect)) {
         checkmate::assert_vector(
           x = args$X$transect,
@@ -2256,7 +2266,7 @@ check_arguments <- function(fun, args) {
       }
     }
   }
-
+  
   if (any(names(args) == "cor.method")) {
     checkmate::assert_character(
       x = args$cor.method,
@@ -2275,7 +2285,7 @@ check_arguments <- function(fun, args) {
       .var.name = "cor.method"
     )
   }
-
+  
   if (any(names(args) == "wn")) {
     checkmate::assert_character(
       x = args$wn,
@@ -2301,6 +2311,6 @@ check_arguments <- function(fun, args) {
       .var.name = "wn"
     )
   }
-
+  
   return(check_collection)
 }

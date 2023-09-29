@@ -1,7 +1,8 @@
 test_that("using extended table and method 1", {
   data("test_sounds_est")
   
-  X <- test_sounds_est[test_sounds_est$sound.files != "master.wav", ]
+  X <-
+    test_sounds_est[test_sounds_est$sound.files != "master.wav",]
   
   X <- set_reference_sounds(X, method = 1)
   
@@ -18,18 +19,18 @@ test_that("using extended table and method 1", {
 })
 
 test_that("using data frame and method 2", {
-  
   data("test_sounds_est")
   
   # set temporary directory
-  td <- tempdir()  
+  td <- tempdir()
   
   for (i in unique(test_sounds_est$sound.files)[-1])
     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
   
   options(sound.files.path = td, pb = FALSE)
   
-  X <- as.data.frame(test_sounds_est[test_sounds_est$sound.files != "master.wav", ])
+  X <-
+    as.data.frame(test_sounds_est[test_sounds_est$sound.files != "master.wav",])
   
   X <- set_reference_sounds(X, method = 2)
   

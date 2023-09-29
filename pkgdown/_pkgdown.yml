@@ -1,41 +1,55 @@
-template:
-  bootstrap: 5
-  
-destination: reference
-
 # website will be referenced on https://pkgs.rstudio.com/
 # Open a PR in https://github.com/rstudio/pkgs.rstudio.com
 url: https://marce10.github.io/baRulho
 
 template:
-  package: tidytemplate
   bootstrap: 5
-  bslib:
-    primary: "#096B72"
-    navbar-background: "#e6f3fc"
-  trailing_slash_redirect: true
-   twitter:
-      creator: "@araya_salas"
-      card: summary
       
 reference:
 - title: Prepare acoustic data
   desc: >
     Functions that format acoustic data for playback experiments
   contents:
-  - align_test_files
-  - master_sound_files
+  - master_sound_file
+  - synth_sounds
 
 - title: Aligning test sound files
   desc: >
     Aligning test sounds to determine their time position
   contents:
   - align_test_files
-  - master_sound_files
+  - auto_realign
+  - find_markers
+  - manual_realign
+  - plot_aligned_sounds
 
 - title: Quantify degradation
   desc: >
     Functions that format acoustic data for playback experiments
   contents:
-  - align_test_files
-  - master_sound_files
+  - attenuation
+  - blur_ratio
+  - detection_distance
+  - envelope_correlation
+  - excess_attenuation
+  - plot_blur_ratio
+  - plot_degradation
+  - set_reference_sounds
+  - signal_to_noise_ratio
+  - spcc
+  - spectrum_blur_ratio
+  - spectrum_correlation
+  - tail_to_signal_ratio
+
+
+- title: Built in datasets
+  desc: >
+    Datasets included in baRulho
+  contents:
+  - master_est
+  - test_sounds_est
+  
+- title: Additional functions
+  contents:
+  - noise_profile
+  

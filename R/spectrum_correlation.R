@@ -5,7 +5,8 @@
 #' pb = getOption("pb", TRUE), cor.method = "pearson",
 #' spec.smooth = getOption("spec.smooth", 5), output = NULL,
 #' hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
-#' ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."))
+#' ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."),
+#' n.bins = 100)
 #' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
@@ -20,6 +21,7 @@
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
+#' @param n.bins Numeric vector of length 1 specifying the number of frequency bins to use for representing power spectra. Default is 100. If null the raw power spectrum is used (note that this can result in high RAM memory usage for large data sets). Power spectrum values are interpolated using \code{\link[stats]{approx}}.
 #' @return Object 'X' with two additional columns, 'reference' and 'spectrum.correlation', containing the id of the sound used as reference and the computed frequency spectrum correlation coefficients, respectively.
 #' @export
 #' @name spectrum_correlation
@@ -60,7 +62,8 @@ spectrum_correlation <-
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 70),
-           path = getOption("sound.files.path", ".")) {
+           path = getOption("sound.files.path", "."),
+           n.bins = 100) {
     # check arguments
     arguments <- as.list(base::match.call())
     
@@ -126,7 +129,8 @@ spectrum_correlation <-
                        wln = wl,
                        Q = X,
                        pth = path,
-                       ovl = ovlp) {
+                       ovl = ovlp,
+                       nb = n.bins) {
           spctr_FUN(
             y = x,
             spec.smooth = ssmth,
@@ -134,7 +138,8 @@ spectrum_correlation <-
             X = Q,
             meanspc = TRUE,
             path = pth,
-            ovlp = ovl
+            ovlp = ovl,
+            n.bins = nb
           )
         }
       )

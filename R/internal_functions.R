@@ -251,7 +251,7 @@ detection_distance_ohn_int <-
 ## function to measure blur ratio
 
 spctr_FUN <-
-  function(y, spec.smooth, wl, X, path, meanspc = FALSE, ovlp) {
+  function(y, spec.smooth, wl, X, path, meanspc = FALSE, ovlp, n.bins) {
     # load clip
     clp <- warbleR::read_sound_file(X = X,
                                     index = which(X$.sgnl.temp == y),
@@ -280,6 +280,23 @@ spctr_FUN <-
     clp.spc[, 2] <-
       warbleR::envelope(x = clp.spc[, 2],
                         ssmooth = spec.smooth)
+    
+    # thin
+    if (!is.null(n.bins)) {
+      
+      # reduce size of envelope
+      clp.spc_list <-
+        stats::approx(
+          x = clp.spc[, 1],
+          y = clp.spc[, 2],
+          n = n.bins,
+          method = "linear"
+        )
+    
+      # make it a matrix
+      clp.spc <- cbind(clp.spc_list[[1]], clp.spc_list[[2]])
+      
+      }  
     
     return(clp.spc)
   }
@@ -1090,18 +1107,18 @@ env_FUN <- function(X, y, env.smooth, ovlp, wl, path, n.samples = 100) {
                       ssmooth = env.smooth)
   
   # thin
-  # if (thinning < 1) {
-  #   if (length(nv) * thinning < 30) stop2("thinning is too high, no enough samples left for at least 1 sound file")
-  #   
-  #   # reduce size of envelope
-  #   nv2 <-
-  #     stats::approx(
-  #       x = seq(0, duration(clp), length.out = length(nv)),
-  #       y = nv,
-  #       n = round(length(nv) * thinning),
-  #       method = "linear"
-  #     )$y
-  #   }
+  if (!is.null(n.samples)) {
+    
+    # reduce size of envelope
+    nv <-
+      stats::approx(
+        x = seq_along(nv),
+        y = nv,
+        n = n.samples,
+        method = "linear"
+      )$y
+  }
+  
   return(nv)
 }
 
@@ -2131,7 +2148,10 @@ check_arguments <- function(fun, args) {
       null.ok = FALSE
     )
   }
+ 
   
+  
+   
   if (any(names(args) == "pb")) {
     checkmate::assert_logical(
       x = args$pb,
@@ -2147,6 +2167,16 @@ check_arguments <- function(fun, args) {
       access = "r",
       add = check_collection,
       .var.name = "path"
+    )
+  }
+
+  if (any(names(args) == "n.samples")) {
+    checkmate::assert_number(
+      x = args$n.samples, 
+      lower = 10,
+      null.ok = TRUE,
+      add = check_collection,
+      .var.name = "n.samples"
     )
   }
   

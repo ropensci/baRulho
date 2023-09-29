@@ -9,7 +9,8 @@ pb = getOption("pb", TRUE),
 spec.smooth = getOption("spec.smooth", 5),
 output = NULL, spectra = FALSE, res = 150,
 hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
- ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."))
+ ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."),
+ n.bins = 100)
 }
 \arguments{
 \item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
@@ -37,6 +38,8 @@ is NULL. If supplied, 'hop.size' is ignored. Applied to both spectra and spectro
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Applied to both spectra and spectrograms on image files.}
 
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
+
+\item{n.bins}{Numeric vector of length 1 specifying the number of frequency bins to use for representing power spectra. Default is 100. If null the raw power spectrum is used (note that this can result in high RAM memory usage for large data sets). Power spectrum values are interpolated using \code{\link[stats]{approx}}.}
 }
 \value{
 Object 'X' with an additional column, 'spectrum.blur.ratio', containing the computed spectrum blur ratio values. If \code{spectra = TRUE} the output would include power spectra for all sounds as attributes ('attributes(X)$spectra').

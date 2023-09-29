@@ -152,8 +152,7 @@ envelope_correlation <-
                  nvs = envs,
                  cm = cor.method,
                  Q = X) {
-          # env_FUN(X = Q, y = x, env.smooth = ssmth, ovlp = ovl, wl = wln, path = pth)
-          
+           
           env_cor_FUN(X = Q,
                       x,
                       envs = nvs,

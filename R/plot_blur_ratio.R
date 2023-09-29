@@ -8,7 +8,7 @@
 #' ovlp = getOption("ovlp", 70), palette = viridis::viridis,
 #' collevels = seq(-120, 0, 5), dest.path = getOption("dest.path", "."),
 #' path = getOption("sound.files.path", "."),
-#' colors = viridis::viridis(3))
+#' colors = viridis::viridis(3), n.samples = 100)
 #' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param type Character vector of length 1 indicating the type of blur ratio to plot. The two options are 'envelope' (for regular blur ratio as in \code{\link{blur_ratio}}, default) and 'spectrum' (for spectrum blur ratio as in \code{\link{spectrum_blur_ratio}}).
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
@@ -28,6 +28,7 @@
 #' @param dest.path Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @param colors Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).
+#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples to use for representing amplitude envelopes. Default is 100. If null the raw amplitude envelope is used (note that this can result in high RAM memory usage for large data sets). 
 #' @return It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showing spectrograms of both sounds and the overlaid amplitude envelopes (or power spectra if \code{spectrum = TRUE}) as probability mass functions (PMF). Spectrograms are shown within the frequency range of the reference sound.
 #' @export
 #' @name plot_blur_ratio
@@ -68,7 +69,8 @@ plot_blur_ratio <-
            collevels = seq(-120, 0, 5),
            dest.path = getOption("dest.path", "."),
            path = getOption("sound.files.path", "."),
-           colors = viridis::viridis(3)) {
+           colors = viridis::viridis(3),
+           n.samples = 100) {
     # check arguments
     arguments <- as.list(base::match.call())
     
@@ -138,14 +140,16 @@ plot_blur_ratio <-
                          ovl = ovlp,
                          Q = X,
                          wln = wl,
-                         pth = path) {
+                         pth = path,
+                         n.samp = n.samples) {
             env_FUN(
               X = Q,
               y = x,
               env.smooth = ssmth,
               ovlp = ovl,
               wl = wln,
-              path = pth
+              path = pth,
+              n.samples = n.samp
             )
           }
         )

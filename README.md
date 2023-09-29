@@ -19,6 +19,7 @@ version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
 [![Codecov test
 coverage](https://codecov.io/gh/maRce10/baRulho/branch/master/graph/badge.svg)](https://app.codecov.io/gh/maRce10/baRulho?branch=master)
+[![R-CMD-check](https://github.com/maRce10/baRulho/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/maRce10/baRulho/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 <img src="reference/figures/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>

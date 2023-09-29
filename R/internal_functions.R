@@ -1063,7 +1063,7 @@ plot_blur_FUN <-
   }
 
 # function to extract envelopes from wave objects
-env_FUN <- function(X, y, env.smooth, ovlp, wl, path) {
+env_FUN <- function(X, y, env.smooth, ovlp, wl, path, n.samples = 100) {
   # load clip
   clp <- warbleR::read_sound_file(X = X,
                                   index = which(X$.sgnl.temp == y),
@@ -1089,6 +1089,19 @@ env_FUN <- function(X, y, env.smooth, ovlp, wl, path) {
     warbleR::envelope(x = clp@left,
                       ssmooth = env.smooth)
   
+  # thin
+  if (thinning < 1) {
+    if (length(nv) * thinning < 30) stop2("thinning is too high, no enough samples left for at least 1 sound file")
+    
+    # reduce size of envelope
+    nv2 <-
+      stats::approx(
+        x = seq(0, duration(clp), length.out = length(nv)),
+        y = nv,
+        n = round(length(nv) * thinning),
+        method = "linear"
+      )$y
+    }
   return(nv)
 }
 

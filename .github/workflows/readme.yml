@@ -2,10 +2,11 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - main
+    - main
+    - master
     paths:
       - README.Rmd
-      - .github/workflows/main.yml
+      - .github/workflows/readme.yml
   schedule:
     - cron:  '0 12 * * *'
 

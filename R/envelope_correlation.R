@@ -113,7 +113,6 @@ envelope_correlation <-
       write(file = "", x = "Computing amplitude envelopes (step 1 out of 2):")
     
     # calculate all envelopes apply function
-    # calculate all envelops apply function
     envs <-
       warbleR:::pblapply_wrblr_int(
         pbar = pb,

@@ -45,7 +45,7 @@ jobs:
         run: yarn build:with-prefix
         env:
           PATH_PREFIX: '/baRulho'
-`         SITE_URL: 'https://marce10.github.io/baRulho'
+          SITE_URL: 'https://marce10.github.io/baRulho'
           CI: true
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4.3.3

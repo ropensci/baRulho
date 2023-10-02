@@ -136,7 +136,7 @@ synth_sounds <-
             nharmonics:1
           },
           diff.fun = if (eg$fm[x] == "fm") {
-            "BB"
+            "GBM"
           } else {
             "pure.tone"
           },

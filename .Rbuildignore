@@ -11,6 +11,7 @@ README\.Rmd$
 ^pkgcheck\.yaml$
 .github
 ^codemeta\.json$
+^package\.json$
 ^appveyor\.yml$
 ^\.github$
 ^CONTRIBUTING\.md$

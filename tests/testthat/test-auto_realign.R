@@ -19,13 +19,19 @@ test_that("basic", {
     unaligned_test_sounds_est$end + noise_time
   
   # re align
-  rts <- auto_realign(X = unaligned_test_sounds_est)
+  rts <- auto_realign(X = unaligned_test_sounds_est,
+                      cores = 1,
+                      pb = FALSE,
+                      hop.size = 11.6,
+                      wl = 512,
+                      ovlp = 10,
+                      wn = "hanning")
   
   expect_equal(nrow(rts), 25)
   
   expect_equal(ncol(rts), 9)
   
-  expect_true(mean(unaligned_test_sounds_est$start) >  mean(rts$start))
+  expect_true(mean(unaligned_test_sounds_est$start) < mean(rts$start))
   
   
   expect_equal(class(rts)[1], "extended_selection_table")

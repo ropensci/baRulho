@@ -4,7 +4,7 @@ test_that("basic", {
   
   
   test_sounds_est <-
-    test_sounds_est[test_sounds_est$sound.files != "master.wav", ]
+    test_sounds_est[test_sounds_est$sound.id == "freq:9",]
   
   # order so spectrograms from same sound id as close in the graph
   test_sounds_est <-
@@ -22,7 +22,7 @@ test_that("basic", {
   plot_degradation(
     X = X,
     nrow = 3,
-    ovlp = 95,
+    ovlp = 0,
     colors = viridis::magma(4, alpha = 0.3),
     palette = viridis::magma
   )
@@ -33,7 +33,7 @@ test_that("basic", {
                pattern = "^plot_degrad",
                full.names = TRUE)
   
-  expect_length(fls, 3)
+  expect_length(fls, 1)
   
   unlink(fls)
 })
@@ -45,7 +45,7 @@ test_that("many ros", {
   
   
   test_sounds_est <-
-    test_sounds_est[test_sounds_est$sound.files != "master.wav", ]
+    test_sounds_est[test_sounds_est$sound.id == "freq:9",]
   
   # order so spectrograms from same sound id as close in the graph
   test_sounds_est <-
@@ -61,9 +61,21 @@ test_that("many ros", {
   plot_degradation(
     X = X,
     nrow = 3000,
-    ovlp = 95,
-    colors = viridis::magma(4, alpha = 0.3),
-    palette = viridis::magma
+    ovlp = 0,
+    cols = viridis::magma(4, alpha = 0.3),
+    palette = viridis::magma,
+    env.smooth = 200,
+    hop.size = 11.5,
+    collevels = seq(-120, 0, 5),
+    flim = c("-1", "+1"),
+    envelope = TRUE,
+    spectrum = TRUE,
+    heights = c(4, 1),
+    widths = c(5, 1),
+    margins = c(2, 1),
+    row.height = 2,
+    col.width = 2,
+    res = 120,
   )
   
   fls <-

@@ -8,7 +8,7 @@ synth_sounds(replicates = 1, frequencies, durations, nharmonics = 1,
 fm = FALSE, am = FALSE, am.amps = rep(c(1:4, 3:2), length.out = 11),
 mar = 0.05, seed = NULL, sig2 = 0.3, shuffle = FALSE,
 hrm.freqs = c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10),
-sampling.rate = 44.1)
+sampling.rate = 44.1, pb = TRUE)
 }
 \arguments{
 \item{replicates}{Numeric vector of length 1 indicating the number of replicates for each treatment combination. Default is 1. Useful for measuring variation in transmission parameters.}
@@ -37,6 +37,8 @@ frequency harmonic will be simulated.}
 \item{hrm.freqs}{Numeric vector with the frequencies of the harmonics relative to the fundamental frequency. The default values are c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10).}
 
 \item{sampling.rate}{Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.}
+
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 }
 \value{
 An extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The table contains columns for each of the varying features a 'treatment' column (useful to tell the acoustic features of each sound) and a 'replicate' column indicating the replicates for each 'treatment'.

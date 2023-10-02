@@ -23,7 +23,8 @@ test_that("using extended table and both marker", {
   
   pks <-
     find_markers(X = master_est,
-                 test.files = unique(test_sounds_est$sound.files)[2])
+                 test.files = unique(test_sounds_est$sound.files)[2], 
+                 pb = FALSE)
   
   alg.tests <- align_test_files(X = master_est, Y = pks, pb = FALSE)
   
@@ -60,7 +61,8 @@ test_that("using data frame and start marker", {
     find_markers(
       X = master_est,
       markers = "start_marker",
-      test.files = unique(test_sounds_est$sound.files)[2]
+      test.files = unique(test_sounds_est$sound.files)[2], 
+      pb = FALSE
     )
   
   alg.tests <- align_test_files(X = master_est, Y = pks)

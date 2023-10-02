@@ -26,7 +26,7 @@
 #' @param gain Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @return Object 'X' with two additional columns, 'reference' and 'excess.attenuation', containing the id of the sound used as reference and the computed excess attenuation values, respectively.
+#' @return Object 'X' with an additional column,  'excess.attenuation', containing the id of the sound used as reference and the computed excess attenuation values, respectively.
 #' @export
 #' @name excess_attenuation
 #' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents power loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation.

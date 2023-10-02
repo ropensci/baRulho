@@ -4,9 +4,9 @@ test_that("using extended table and method 1", {
   X <-
     test_sounds_est[test_sounds_est$sound.files != "master.wav",]
   
-  X <- set_reference_sounds(X)
+  X <- set_reference_sounds(X, pb = FALSE)
   
-  ec <- spectrum_correlation(X = X)
+  ec <- spectrum_correlation(X = X, pb = FALSE)
   
   expect_equal(sum(is.na(ec$spectrum.correlation)), 9)
   
@@ -33,9 +33,15 @@ test_that("using data frame and method 2", {
   X <-
     as.data.frame(test_sounds_est[test_sounds_est$sound.files != "master.wav",])
   
-  X <- set_reference_sounds(X, method = 2)
+  X <- set_reference_sounds(X, method = 2, pb = FALSE)
   
-  expect_warning(ec <- spectrum_correlation(X = X))
+  expect_warning(ec <- spectrum_correlation(X = X,
+                                            cores = 1,
+                                            pb = FALSE,
+                                            cor.method = "pearson",
+                                            spec.smooth = 5,
+                                            path = td,
+                                            n.bins = 100))
   
   expect_equal(sum(is.na(ec$spectrum.correlation)), 13)
   

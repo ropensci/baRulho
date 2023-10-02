@@ -27,7 +27,7 @@
 #' @param envelope Character string vector with the method to calculate amplitude envelopes (in which SPL is measured, used required if 'spl' is not supplied), as in \code{\link[seewave]{env}}. Must be either 'abs' (absolute envelope, default) or 'hil' (Hilbert transformation).
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start and end points of selection over which to measure background noise. This is required to subtract background noise sound pressure level (so only needed when 'subtract.bgn = TRUE').
-#' @return Object 'X' with two additional columns, 'reference' and 'detection.distance',
+#' @return Object 'X' with an additional column,  'detection.distance',
 #' containing the id of the sound used as reference and the computed detection distances, respectively.
 #' @export
 #' @name detection_distance

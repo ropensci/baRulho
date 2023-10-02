@@ -44,7 +44,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only u
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
 }
 \value{
-Object 'X' with two additional columns, 'reference' and 'excess.attenuation', containing the id of the sound used as reference and the computed excess attenuation values, respectively.
+Object 'X' with an additional column,  'excess.attenuation', containing the id of the sound used as reference and the computed excess attenuation values, respectively.
 }
 \description{
 \code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.

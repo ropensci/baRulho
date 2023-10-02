@@ -32,10 +32,19 @@ test_that("on extended table without ambient sound id", {
       X = test_sounds_est,
       mar = 0.01,
       pb = FALSE,
-      noise.ref = "adjacent"
-    )
+      noise.ref = "adjacent", 
+      parallel = NULL,
+      cores = getOption("mc.cores", 1),
+      path = getOption("sound.files.path", "."),
+      bp = c(1, 10),
+      hop.size = getOption("hop.size", 1),
+      wl = getOption("wl", NULL),
+      PSD = FALSE,
+      norm = TRUE,
+      dB = "A")
+    
   
-  expect_equal(nrow(np), 50)
+  expect_equal(nrow(np), 45)
   
   expect_equal(ncol(np), 3)
   

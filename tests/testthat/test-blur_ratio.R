@@ -4,7 +4,7 @@ test_that("using extended table and method 1", {
   X <-
     test_sounds_est[test_sounds_est$sound.files != "master.wav",]
   
-  X <- set_reference_sounds(X)
+  X <- set_reference_sounds(X, pb = FALSE)
   
   br <- blur_ratio(X = X)
   

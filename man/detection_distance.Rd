@@ -51,7 +51,7 @@ is \code{NULL}. If supplied, 'hop.size' is ignored.}
 the start and end points of selection over which to measure background noise. This is required to subtract background noise sound pressure level (so only needed when 'subtract.bgn = TRUE').}
 }
 \value{
-Object 'X' with two additional columns, 'reference' and 'detection.distance',
+Object 'X' with an additional column,  'detection.distance',
 containing the id of the sound used as reference and the computed detection distances, respectively.
 }
 \description{

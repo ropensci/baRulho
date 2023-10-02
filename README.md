@@ -13,7 +13,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![packageversion](https://img.shields.io/badge/Package%20version-2.1.0-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2023--09--29-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--10--01-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
@@ -22,7 +22,7 @@ coverage](https://codecov.io/gh/maRce10/baRulho/branch/master/graph/badge.svg)](
 [![R-CMD-check](https://github.com/maRce10/baRulho/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/maRce10/baRulho/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-<img src="reference/figures/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
+<img src="man/figures/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
 [baRulho](https://cran.r-project.org/package=baRulho) is intended to
 facilitate acoustic analysis of (animal) sound transmission experiments,
@@ -33,7 +33,7 @@ experimentally test hypotheses related to sound transmission is depicted
 in the following diagram:
 
 <center>
-<img src="reference/figures/analysis_workflow.jpg" alt="analysis workflow" width="80%">
+<img src="man/figures/analysis_workflow.jpg" alt="analysis workflow" width="80%">
 </center>
 
  

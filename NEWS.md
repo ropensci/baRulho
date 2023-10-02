@@ -15,6 +15,7 @@ baRulho 2.1.0
 
 ### MINOR IMPROVEMENTS
 
+* optimize performance in `signal_to_noise_ratio()`
 * `atmospheric_attenuation()` is no longer available (use `attenuation()` instead)
 * Improved documentation for all functions
 * Fix bug in `spcc()` and `excess_attenuation()`

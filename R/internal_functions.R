@@ -1172,17 +1172,8 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
     warbleR::read_sound_file(
       X = X,
       index = which(X$.sgnl.temp == y),
-      from = 0,
+      from = X$start[X$.sgnl.temp == y],
       to = X$end[X$.sgnl.temp == y],
-      path = path
-    )
-  
-  noise_clp <-
-    warbleR::read_sound_file(
-      X = X,
-      index = which(X$.sgnl.temp == y),
-      from = 0,
-      to = X$start[X$.sgnl.temp == y] - 0.001,
       path = path
     )
   
@@ -1205,28 +1196,10 @@ meanenv_FUN <- function(y, wl, ovlp, X, path, bp) {
         wl = wl,
         output = "Wave"
       )
-    
-    noise_clp <-
-      seewave::ffilter(
-        noise_clp,
-        f = noise_clp@samp.rate,
-        from = bp[1] * 1000,
-        ovlp = ovlp,
-        to = bp[2] * 1000,
-        bandpass = TRUE,
-        wl = wl,
-        output = "Wave"
-      )
   }
   
-  # get mean envelopes
   sig_env <-
-    mean(seewave::env(
-      clp,
-      f = clp@samp.rate,
-      envt = "hil",
-      plot = FALSE
-    ))
+    mean(warbleR::envelope(x = clp@left))
   
   return(sig_env)
 }

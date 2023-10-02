@@ -138,6 +138,10 @@ signal_to_noise_ratio <-
       )
     }
     
+    # 'mar' is needed when not using equal duration
+    if (eq.dur & is.null(mar))
+        stop2("'mar' must be supplied when 'eq.dur = FALSE'")
+      
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -146,152 +150,144 @@ signal_to_noise_ratio <-
       cl <- cores
     }
     
-    # calculate all envelops with a apply function
-    envs <-
+    # calculate all RMS of envelopes with a apply function
+    rms_list <-
       warbleR:::pblapply_wrblr_int(
         X = seq_len(nrow(X)),
         pbar = pb,
         cl = cl,
         FUN = function(y) {
-          if (noise.ref == "custom") {
-            # read sound clip
-            signal <-
-              warbleR::read_sound_file(X = X,
-                                       index = y,
-                                       path = path)
-            
-            # add band-pass frequency filter
-            if (!is.null(bp)) {
-              # filter to bottom and top freq range
-              if (bp[1] == "freq.range") {
-                bp <- c(X$bottom.freq[y], X$top.freq[y])
-              }
-              
-              signal <-
-                seewave::ffilter(
-                  signal,
-                  f = sampling_rate,
-                  from = bp[1] * 1000,
-                  ovlp = 0,
-                  to = bp[2] * 1000,
-                  bandpass = TRUE,
-                  wl = wl,
-                  output = "Wave"
-                )
-            }
-            
-            # get RMS for signal
-            sig.env <-
-              seewave::env(signal,
-                           f = sampling_rate,
-                           envt = "abs",
-                           plot = FALSE)
-            
-            bg.env <- NA
-          }
           
-          if (noise.ref == "adjacent") {
-            # set margin to half of signal duration
-            if (eq.dur) {
-              mar <-
-                (X$end[y] - X$start[y])
-            } else if (is.null(mar)) {
-              stop2("'mar' must be provided when 'eq.dur = FALSE'")
-            }
+          # only calculate for non-markers and for ambient only if custom noise.ref
+          if (!X$sound.id[y] %in% c("marker", if (noise.ref != "custom") "ambient")){
             
-            # Read sound files to get sample rate and length
-            r <-
-              warbleR::read_sound_file(
-                X = X,
-                index = y,
-                from = X$start[y] - mar,
-                to = X$end[y],
-                header = TRUE,
-                path = path
-              )
-            
-            # reset time coordinates of sounds if lower than 0 o higher than duration
-            stn <- X$start[y] - mar
-            enn <- X$end[y] + mar
-            mar1 <- mar
-            
-            if (stn < 0) {
-              mar1 <- mar1 + stn
-              stn <- 0
-            }
-            
-            mar2 <- mar1 + X$end[y] - X$start[y]
-            
-            if (enn > r$samples / sampling_rate) {
-              enn <- r$samples / sampling_rate
-            }
-            
-            # read sound and margin
-            noise_sig <-
-              warbleR::read_sound_file(
-                X = X,
-                index = y,
-                from = stn,
-                to = enn,
-                path = path
-              )
-            
-            # add band-pass frequency filter
-            if (!is.null(bp)) {
-              # filter to bottom and top freq range
-              if (bp[1] == "freq.range") {
-                bp <- c(X$bottom.freq[y], X$top.freq[y])
+            if (noise.ref == "custom") {
+              # read sound clip
+              signal <-
+                warbleR::read_sound_file(X = X,
+                                         index = y,
+                                         path = path)
+              
+              # add band-pass frequency filter
+              if (!is.null(bp)) {
+                # filter to bottom and top freq range
+                if (bp[1] == "freq.range") {
+                  bp <- c(X$bottom.freq[y], X$top.freq[y])
+                }
+                
+                signal <-
+                  seewave::ffilter(
+                    signal,
+                    f = sampling_rate,
+                    from = bp[1] * 1000,
+                    ovlp = 0,
+                    to = bp[2] * 1000,
+                    bandpass = TRUE,
+                    wl = wl,
+                    output = "Wave"
+                  )
               }
               
-              noise_sig <-
-                seewave::ffilter(
-                  wave = noise_sig,
-                  f = sampling_rate,
-                  from = bp[1] * 1000,
-                  ovlp = ovlp,
-                  to = bp[2] * 1000,
-                  bandpass = TRUE,
-                  wl = wl,
-                  output = "Wave"
-                )
+              # get RMS for signal
+              sig_rms <- seewave::rms(warbleR::envelope(signal@left))
+              bg_rms <- NA
             }
             
-            
-            # read clip with sound
-            signal <-
-              seewave::cutw(noise_sig,
-                            from = mar1,
-                            to = mar2,
-                            f = sampling_rate)
-            
-            # get envelop for sound
-            sig.env <-
-              seewave::env(signal,
-                           f = sampling_rate,
-                           envt = "hil",
-                           plot = FALSE)
-            
-            # cut ambient noise before sound
-            noise1 <-
-              seewave::cutw(noise_sig,
-                            from = 0,
-                            to = mar1,
-                            f = sampling_rate)
-            
-            # get envelop for background noise
-            bg.env <-
-              seewave::env(noise1,
-                           f = sampling_rate,
-                           envt = "hil",
-                           plot = FALSE)
+            if (noise.ref == "adjacent") {
+              # set margin to half of signal duration
+              if (eq.dur) {
+                mar <-
+                  (X$end[y] - X$start[y])
+              } 
+              
+              # Read sound files to get sample rate and length
+              r <-
+                warbleR::read_sound_file(
+                  X = X,
+                  index = y,
+                  header = TRUE,
+                  path = path
+                )
+              
+              # reset time coordinates of sounds if lower than 0 o higher than duration
+              stn <- X$start[y] - mar
+              enn <- X$end[y] + mar
+              mar1 <- mar
+              
+              if (stn < 0) {
+                mar1 <- mar1 + stn
+                stn <- 0
+              }
+              
+              mar2 <- mar1 + X$end[y] - X$start[y]
+              
+              if (enn > r$samples / sampling_rate) {
+                enn <- r$samples / sampling_rate
+              }
+              
+              # read sound and margin
+              noise_sig <-
+                warbleR::read_sound_file(
+                  X = X,
+                  index = y,
+                  from = stn,
+                  to = enn,
+                  path = path
+                )
+              
+              # add band-pass frequency filter
+              if (!is.null(bp)) {
+                # filter to bottom and top freq range
+                if (bp[1] == "freq.range") {
+                  bp <- c(X$bottom.freq[y], X$top.freq[y])
+                }
+                
+                noise_sig <-
+                  seewave::ffilter(
+                    wave = noise_sig,
+                    f = sampling_rate,
+                    from = bp[1] * 1000,
+                    ovlp = ovlp,
+                    to = bp[2] * 1000,
+                    bandpass = TRUE,
+                    wl = wl,
+                    output = "Wave"
+                  )
+              }
+              
+              
+              # read clip with sound
+              signal <-
+                seewave::cutw(noise_sig,
+                              from = mar1,
+                              to = mar2,
+                              f = sampling_rate)
+              
+              # get RMS for signal
+              sig_rms <- seewave::rms(warbleR::envelope(signal[,1]))
+              
+              # cut ambient noise before sound
+              noise1 <-
+                seewave::cutw(noise_sig,
+                              from = 0,
+                              to = mar1,
+                              f = sampling_rate)
+              
+              # get RMS for background noise
+              bg_rms <- seewave::rms(warbleR::envelope(noise1[,1]))
+                                      }
+          } else {
+            sig_rms <- NA
+            bg_rms <- NA
           }
-          return(list(sig.env = sig.env, bg.env = bg.env))
-        }
+  
+          return(list(sig_rms = sig_rms, bg_rms = bg_rms))
+          }
       )
     
     # add sound file selec column and names to envelopes (weird column name so it does not overwrite user columns)
     X$TEMP....y <-
-      names(envs) <- paste(X$sound.files, X$selec, sep = "-")
+      names(rms_list) <- paste(X$sound.files, X$selec, sep = "-")
     
     # calculate SNR
     X$signal.to.noise.ratio <-
@@ -299,20 +295,19 @@ signal_to_noise_ratio <-
         if (X$sound.id[y] != "ambient") {
           suppressWarnings({
             # sound RMS
-            sig_RMS <- seewave::rms(envs[[X$TEMP....y[y]]]$sig.env)
-            
+            sig_RMS <- rms_list[[X$TEMP....y[y]]]$sig_rms
             # get reference ambient noise RMS
             if (noise.ref == "adjacent") {
-              bg_RMS <- seewave::rms(envs[[X$TEMP....y[y]]]$bg.env)
+              bg_RMS <- rms_list[[X$TEMP....y[y]]]$bg_rms
             } else {
               # get envelopes from ambient selections
-              bg_envs <-
-                lapply(envs[X$TEMP....y[X$sound.files == X$sound.files[y] &
-                                          X$sound.id == "ambient"]], "[", "sig.env")
+              bg_RMS <-
+                lapply(rms_list[X$TEMP....y[X$sound.files == X$sound.files[y] &
+                                          X$sound.id == "ambient"]], "[", "sig_rms")
               
               # get mean RMS from combined envelopes
               bg_RMS <-
-                seewave::rms(unlist(sapply(bg_envs, as.vector)))
+                mean(unlist(bg_RMS))
             }
             
             # Calculate signal-to-noise ratio

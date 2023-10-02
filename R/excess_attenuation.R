@@ -130,15 +130,14 @@ excess_attenuation <-
     target_sgnl_temp <-
       unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
     
-    
     # run loop apply function
     mean_envs <-
       warbleR:::pblapply_wrblr_int(
         X = target_sgnl_temp,
         pbar = pb,
         cl = cl,
-        FUN = function(y) {
-          meanenv_FUN(y, wl, ovlp, X, path, bp)
+        FUN = function(y, wln = wl, ovl = ovlp, Q = X, pth = path, bps = bp) {
+          meanenv_FUN(y, wl = wln, ovlp = ovl, X = Q, path = pth, bp = bps)
         }
       )
     

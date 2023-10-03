@@ -4,9 +4,19 @@
 \name{baRulho-package}
 \alias{baRulho}
 \alias{baRulho-package}
-\title{baRulho: Quantifying (Animal) Sound Degradation}
+\title{baRulho: quantifying acoustic signal degradation}
 \description{
-Intended to facilitate acoustic analysis of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics, including blur ratio, signal-to-noise ratio, excess attenuation and envelope correlation among others (Dabelsteen et al 1993 \doi{10.1121/1.406682}).
+`baRulho` is a package intended to quantify habitat-induced degradation of (animal) acoustic signals.
+}
+\details{
+The main features of the package are:
+  \itemize{
+  \item Loops to apply tasks through sounds referenced in an extended selection table
+  \item The comparison of playback sounds re-recorded at different distances
+  }
+Most functions allow the parallelization of tasks, which distributes the tasks among several processors to improve computational efficiency.
+
+License: GPL (>= 2)
 }
 \seealso{
 Useful links:
@@ -17,7 +27,8 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Marcelo Araya-Salas \email{marcelo.araya@ucr.ac.cr}
+Marcelo Araya-Salas
 
+  Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})
 }
 \keyword{internal}

@@ -71,80 +71,84 @@ noise_profile <-
            averaged = TRUE) {
     # check arguments
     arguments <- as.list(base::match.call())
-    
+
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-    
+
     # check each arguments
     check_results <-
       check_arguments(fun = arguments[[1]], args = arguments)
-    
+
     # report errors
     report_assertions2(check_results)
-    
+
     # if X is not supplied modify noise reference
     if (!is.null(X)) {
       # invert selections so gaps become selections instead if noise.ref != ambient
       if (noise.ref == "custom" &
-          !any(X$sound.id == "ambient")) {
+        !any(X$sound.id == "ambient")) {
         stop2("'noise.ref = custom' but no 'ambient' label found in 'sound.id' column ")
       }
-      
+
       # keep only 'ambient' selections
       if (noise.ref == "custom") {
-        X <- X[X$sound.id == "ambient",]
+        X <- X[X$sound.id == "ambient", ]
       }
-      
+
       if (noise.ref == "adjacent" &
-          is.null(mar)) {
+        is.null(mar)) {
         stop2("'mar' must be supplied when 'noise.ref == 'adjacent''")
       }
     } else
-      # if  no  files and no X get files in path
-      if (is.null(files)) {
-        # check path to working directory
-        if (is.null(path)) {
-          path <- getwd()
-        } else if (!dir.exists(path)) {
-          stop2("'path' provided does not exist")
-        } else {
-          path <- normalizePath(path)
-        }
-        
-        files <-
-          list.files(path = path,
-                     pattern = "\\.wav$",
-                     ignore.case = TRUE)
-        
-        if (length(files) == 0) {
-          stop2("No files found in working directory (alternatively supply 'X')")
-        }
+    # if  no  files and no X get files in path
+    if (is.null(files)) {
+      # check path to working directory
+      if (is.null(path)) {
+        path <- getwd()
+      } else if (!dir.exists(path)) {
+        stop2("'path' provided does not exist")
+      } else {
+        path <- normalizePath(path)
       }
-    
+
+      files <-
+        list.files(
+          path = path,
+          pattern = "\\.wav$",
+          ignore.case = TRUE
+        )
+
+      if (length(files) == 0) {
+        stop2("No files found in working directory (alternatively supply 'X')")
+      }
+    }
+
     # check files
     if (!is.null(files)) {
       if (any(!file.exists(file.path(path, files)))) {
         stop2(paste(paste(files[!file.exists(files)], collapse = "/"), "was (were) not found"))
       }
-      
+
       # created selection table from sound files
       X <-
-        warbleR::selection_table(whole.recs = TRUE,
-                                 pb = FALSE,
-                                 path = path)
-      
+        warbleR::selection_table(
+          whole.recs = TRUE,
+          pb = FALSE,
+          path = path
+        )
+
       # filter sound files in files
-      X <- X[X$sound.files %in% files,]
-      
+      X <- X[X$sound.files %in% files, ]
+
       # add sound column
       X$sound.id <- "ambient"
-      
+
       # set noise.ref to ambient so the whole sound file is measured
       noise.ref <- "custom"
     }
-    
+
     # adjust wl based on hop.size
     if (is.null(wl)) {
       wl <-
@@ -158,12 +162,12 @@ noise_profile <-
           0
         )
     }
-    
+
     # make wl even if odd
     if (!(wl %% 2) == 0) {
       wl <- wl + 1
     }
-    
+
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -171,7 +175,7 @@ noise_profile <-
     } else {
       cl <- cores
     }
-    
+
     # calculate STR
     noise.profiles <-
       warbleR:::pblapply_wrblr_int(pbar = pb, seq_len(nrow(X)), cl = cl, function(y) {
@@ -186,15 +190,15 @@ noise_profile <-
               path = path
             )
         }
-        
+
         if (noise.ref == "adjacent") {
           # reset time coordinates of sounds if lower than 0 o higher than duration
           stn <- X$start[y] - mar
-          
+
           if (stn < 0) {
             stn <- 0
           }
-          
+
           # read ambient noise
           noise.wv <-
             warbleR::read_sound_file(
@@ -205,7 +209,7 @@ noise_profile <-
               path = path
             )
         }
-        
+
         # mean spec
         mspc <-
           meanspec(
@@ -219,32 +223,34 @@ noise_profile <-
             norm = norm,
             dB = dB
           )
-        
+
         # name columns
         colnames(mspc) <- c("freq", "amp")
-        
+
         # add sound file name
         mspc <-
-          data.frame(sound.files = X$sound.files[y],
-                     selec = X$selec[y],
-                     mspc)
-        
+          data.frame(
+            sound.files = X$sound.files[y],
+            selec = X$selec[y],
+            mspc
+          )
+
         # add band-pass frequency filter
         if (!is.null(bp)) {
-          mspc <- mspc[mspc$freq >= bp[1] & mspc$freq <= bp[2],]
+          mspc <- mspc[mspc$freq >= bp[1] & mspc$freq <= bp[2], ]
         }
-        
+
         return(mspc)
       })
-    
+
     # get numbers of rows
     rws <- vapply(noise.profiles, nrow, FUN.VALUE = numeric(1))
-    
+
     # make all the same length if noise.ref is adjacent
     if (length(unique(rws)) > 1 & noise.ref == "adjacent") {
       # gt freq range of minimum
       fr.range <- range(noise.profiles[[which.min(rws)]]$frequency)
-      
+
       # interpolate so all have the same number of frequency bins
       noise.profiles <- lapply(noise.profiles, function(Y) {
         # interpolate
@@ -258,7 +264,7 @@ noise_profile <-
           ),
           method = "linear"
         )
-        
+
         Ydf <-
           data.frame(
             sound.files = Y$sound.files[1],
@@ -266,25 +272,25 @@ noise_profile <-
             freq = Yappr$x,
             amp = Yappr$y
           )
-        
+
         return(Ydf)
       })
     }
-    
+
     # put together in 1 data frame
     noise.profile <- do.call(rbind, noise.profiles)
-    
+
     # get mean by sound file
     if (averaged) {
       noise.profile <-
         aggregate(amp ~ sound.files + freq, data = noise.profile, FUN = mean)
     }
-    
+
     # sort by sound file and freq
     noise.profile <-
-      noise.profile[order(noise.profile$sound.files, noise.profile$freq),]
-    
+      noise.profile[order(noise.profile$sound.files, noise.profile$freq), ]
+
     rownames(noise.profile) <- seq_len(nrow(noise.profile))
-    
+
     return(noise.profile)
   }

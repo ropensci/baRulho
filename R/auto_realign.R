@@ -63,92 +63,92 @@ auto_realign <-
            wn = "hanning") {
     # check arguments
     arguments <- as.list(base::match.call())
-    
+
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-    
+
     # check each arguments
     check_results <-
       check_arguments(fun = arguments[[1]], args = arguments)
-    
+
     # report errors
     report_assertions2(check_results)
-    
-    
+
+
     # set number of processes for printing message
     if (pb) {
       on.exit(options(warbleR.steps = 3), add = TRUE)
-      
+
       options(warbleR.steps = 3)
     }
-    
+
     # adjust wl based on hop.size
     if (is.null(wl)) {
       wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
     }
-    
+
     # make wl even if odd
     if (!(wl %% 2) == 0) {
       wl <- wl + 1
     }
-    
+
     # remove ambient if any from sound types
     sig.types <- setdiff(unique(X$sound.id), "ambient")
-    
+
     # create matrix containing pairwise comparisons of selections (2 columns)
     comp_mats <- lapply(sig.types, function(x) {
       # extract for single sound and order by distance
-      Y <- as.data.frame(X[X$sound.id == x,])
-      
+      Y <- as.data.frame(X[X$sound.id == x, ])
+
       # create selec ID column (unique ID for each selection (row))
       Y$sf.selec <- paste(Y$sound.files, Y$selec, sep = "-")
-      
+
       # create matrix with 2 columns of the selections to be compare
       # comparing to closest distance to source
       cmp.mt <-
         cbind(Y$sf.selec[-which.min(Y$distance)], Y$sf.selec[which.min(Y$distance)])
-      
+
       return(cmp.mt)
     })
-    
+
     # put together in a single
     comp_mat <- do.call(rbind, comp_mats)
-    
+
     # resave X
     Y <- X
-    
+
     # get index of sounds that would be align
     indx.algn <-
       which(paste(Y$sound.files, Y$selec, sep = "-") %in% comp_mat[, 1])
-    
+
     # fix end to include half the duration of the selection at both sides
     attr(Y, "check.results")$end[indx.algn] <- Y$end[indx.algn] <-
       vapply(indx.algn, function(x) {
         wv.info <- warbleR::read_wave(X, index = x, header = TRUE)
         mxdur <- wv.info$samples / wv.info$sample.rate
         new.end <- X$end[x] + (X$end[x] - X$start[x]) * 0.7
-        
+
         if (mxdur < new.end) {
           return(mxdur)
         } else {
           return(new.end)
         }
       }, FUN.VALUE = numeric(1))
-    
+
     # fix start in the same way
     attr(Y, "check.results")$start[indx.algn] <-
       Y$start[indx.algn] <-
       X$start[indx.algn] - (X$end[indx.algn] - X$start[indx.algn]) * 0.7
-    
+
     # make 0 any negatives
     attr(Y, "check.results")$start[Y$start < 0] <-
       Y$start[Y$start < 0] <- 0
-    
+
     # save previous warbleR options
     prev_wl <- .Options$warbleR
-    
+
     on.exit(
       warbleR_options(
         wl = prev_wl$wl,
@@ -158,12 +158,12 @@ auto_realign <-
         pb = prev_wl$pb
       )
     )
-    
+
     # steps for warbleR message
     options("int_warbleR_steps" = c(current = 0, total = 2))
-    
+
     on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
-    
+
     warbleR_options(
       wl = wl,
       ovlp = ovlp,
@@ -173,39 +173,41 @@ auto_realign <-
       compare.matrix = comp_mat,
       X = Y
     )
-    
+
     # run spcc
     xcorrs <- warbleR::cross_correlation(output = "list")
-    
+
     # message
     if (pb) {
       write(file = "", x = "finding peaks and aligning (step 2 out of 2)")
     }
-    
+
     # find peaks and lags
     peaks <-
-      find_peaks_bRlh_int(xc.output = xcorrs,
-                          cores = cores,
-                          max.peak = TRUE)
-    
+      find_peaks_bRlh_int(
+        xc.output = xcorrs,
+        cores = cores,
+        max.peak = TRUE
+      )
+
     # fix start and end in original data set and its attributes
     # start
     attr(X, "check.results")$start[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <-
       X$start[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <-
       peaks$start
-    
+
     # end
     attr(X, "check.results")$end[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <-
       X$end[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] <-
       X$start[paste(X$sound.files, X$selec, sep = "-") %in% comp_mat[, 1]] +
       (peaks$end - peaks$start)
-    
+
     attr(X, "check.results")$duration <-
       attr(X, "check.results")$end - attr(X, "check.results")$start
-    
+
     # fix call attribute
     attributes(X)$call <- base::match.call()
-    
+
     return(X)
   }
 

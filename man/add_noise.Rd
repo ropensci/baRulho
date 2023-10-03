@@ -22,13 +22,12 @@ the start point of the annotation over which to measure ambient noise.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{max.iterations}{Numeric vector of length 1. Specifies the maximum number of iterations that the internal signal-to-noise adjusting routine will run before stoping. Note that in most cases the default maximum number of iterations (1000) is not reached.}
+\item{max.iterations}{Numeric vector of length 1. Specifies the maximum number of iterations that the internal signal-to-noise adjusting routine will run before stopping. Note that in most cases the default maximum number of iterations (1000) is not reached.}
 
-\item{...}{Additional arguments to be passed to \code{\link{signal_to_noise_ratio}}.}
+\item{...}{Additional arguments to be passed internally to \code{\link{signal_to_noise_ratio}}.}
 }
 \value{
-Object 'X' in which the wave objects have been modified to match the target signal-to-noise ratio. It also includes an additional column, 'adjusted.snr',
-with the new signal-to-noise ratio values.
+Object 'X' in which the wave objects have been modified to match the target signal-to-noise ratio. It also includes an additional column, 'adjusted.snr', with the new signal-to-noise ratio values.
 }
 \description{
 \code{add_noise} adds synthetic noise to annotations in extended selection tables
@@ -38,16 +37,8 @@ The function adds synthetic noise to sounds referenced in an extended selection 
 }
 \examples{
 \dontrun{
-  # load example data
-  data("test_sounds_est")
 
-# make it a 'by song' extended selection table
-X <- baRulho:::by_element_est(X = test_sounds_est)
-
-# add noise to the first five rows
-X_noise <- add_noise(X = X[1:5,], mar = 0.2, target.snr = 3)
 }
-
 }
 \references{
 {

@@ -66,19 +66,19 @@ spectrum_correlation <-
            n.bins = 100) {
     # check arguments
     arguments <- as.list(base::match.call())
-    
+
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-    
+
     # check each arguments
     check_results <-
       check_arguments(fun = arguments[[1]], args = arguments)
-    
+
     # report errors
     report_assertions2(check_results)
-    
+
     # adjust wl based on hop.size
     if (is.null(wl)) {
       wl <-
@@ -92,19 +92,19 @@ spectrum_correlation <-
           0
         )
     }
-    
+
     # make wl even if odd
     if (!(wl %% 2) == 0) {
       wl <- wl + 1
     }
-    
+
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
-    
+
     # get names of envelopes involved (those as test with reference or as reference)
     target_sgnl_temp <-
       unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
-    
+
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -112,12 +112,12 @@ spectrum_correlation <-
     } else {
       cl <- cores
     }
-    
+
     # print message
     if (pb) {
       write(file = "", x = "Computing power spectra (step 1 out of 2):")
     }
-    
+
     # calculate all spectra apply function
     specs <-
       warbleR:::pblapply_wrblr_int(
@@ -143,14 +143,14 @@ spectrum_correlation <-
           )
         }
       )
-    
+
     # add sound file selec names to envelopes (weird column name so it does not overwrite user columns)
     names(specs) <- target_sgnl_temp
-    
+
     if (pb) {
       write(file = "", x = "Computing spectrum correlations (step 2 out of 2):")
     }
-    
+
     # calculate all envelops apply function
     X$spectrum.correlation <-
       unlist(warbleR:::pblapply_wrblr_int(
@@ -170,16 +170,16 @@ spectrum_correlation <-
             )
           }
       ))
-    
+
     # remove temporal columns
     X$.sgnl.temp <- NULL
-    
+
     # fix call if not a data frame
     if (!is.data.frame(X)) {
       attributes(X)$call <-
         base::match.call()
     } # fix call attribute
-    
-    
+
+
     return(X)
   }

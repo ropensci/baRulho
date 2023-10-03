@@ -4,8 +4,8 @@
 \alias{add_noise}
 \title{Add synthetic noise}
 \usage{
-add_noise(X, mar = NULL, target.snr = 2, precision = 0.1, 
-cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE), 
+add_noise(X, mar = NULL, target.snr = 2, precision = 0.1,
+cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE),
 max.iterations = 1000, ...)
 }
 \arguments{
@@ -27,8 +27,8 @@ the start point of the annotation over which to measure ambient noise.}
 \item{...}{Additional arguments to be passed to \code{\link{signal_to_noise_ratio}}.}
 }
 \value{
-Object 'X' with an additional column, 'signal.to.noise.ratio',
-with the signal-to-noise ratio values.
+Object 'X' in which the wave objects have been modified to match the target signal-to-noise ratio. It also includes an additional column, 'adjusted.snr',
+with the new signal-to-noise ratio values.
 }
 \description{
 \code{add_noise} adds synthetic noise to annotations in extended selection tables

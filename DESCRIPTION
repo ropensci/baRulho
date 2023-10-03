@@ -26,3 +26,4 @@ Repository: CRANs
 Language: en-US
 Authors@R: person("Marcelo", "Araya-Salas", role = c("aut", "cre"), email = "marcelo.araya@ucr.ac.cr")
 Config/testthat/edition: 3
+Encoding: UTF-8

@@ -31,7 +31,7 @@ find_peaks_bRlh_int <-
         cl = cl,
         FUN = function(i) {
           # extract data for a dyad
-          dat <- xc.output$scores[xc.output$scores$dyad == i,]
+          dat <- xc.output$scores[xc.output$scores$dyad == i, ]
           
           # check xc.output being a autodetec.output object
           if (!(is(xc.output, "xcorr.output") |
@@ -155,8 +155,8 @@ find_peaks_bRlh_int <-
 }
 
 # warning function that doesn't print call
-warning2 <- function(...) {
-  warning(..., call. = FALSE)
+warning2 <- function(x, color = "magenta") {
+  warning(colortext(x, as = color), call. = FALSE)
 }
 
 # message function that changes colors
@@ -251,7 +251,14 @@ detection_distance_ohn_int <-
 ## function to measure blur ratio
 
 spctr_FUN <-
-  function(y, spec.smooth, wl, X, path, meanspc = FALSE, ovlp, n.bins) {
+  function(y,
+           spec.smooth,
+           wl,
+           X,
+           path,
+           meanspc = FALSE,
+           ovlp,
+           n.bins) {
     # load clip
     clp <- warbleR::read_sound_file(X = X,
                                     index = which(X$.sgnl.temp == y),
@@ -283,7 +290,6 @@ spctr_FUN <-
     
     # thin
     if (!is.null(n.bins)) {
-      
       # reduce size of envelope
       clp.spc_list <-
         stats::approx(
@@ -292,11 +298,11 @@ spctr_FUN <-
           n = n.bins,
           method = "linear"
         )
-    
+      
       # make it a matrix
       clp.spc <- cbind(clp.spc_list[[1]], clp.spc_list[[2]])
       
-      }  
+    }
     
     return(clp.spc)
   }
@@ -361,9 +367,9 @@ blur_sp_FUN <-
       
       # make them the same number of rows
       sgnl.spc <-
-        sgnl.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))),]
+        sgnl.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))), ]
       rfrnc.spc <-
-        rfrnc.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))),]
+        rfrnc.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))), ]
       
       # make test the same frequency range as reference
       bp <-
@@ -1080,47 +1086,47 @@ plot_blur_FUN <-
   }
 
 # function to extract envelopes from wave objects
-env_FUN <- function(X, y, env.smooth, ovlp, wl, path, n.samples = 100) {
-  # load clip
-  clp <- warbleR::read_sound_file(X = X,
-                                  index = which(X$.sgnl.temp == y),
-                                  path = path)
-  
-  # define bandpass
-  bp <-
-    c(X$bottom.freq[X$.sgnl.temp == y], X$top.freq[X$.sgnl.temp == y])
-  
-  # bandpass filter
-  clp <- seewave::ffilter(
-    clp,
-    from = bp[1] * 1000,
-    ovlp = ovlp,
-    to = bp[2] * 1000,
-    bandpass = TRUE,
-    wl = wl,
-    output = "Wave"
-  )
-  
-  # calculate envelope
-  nv <-
-    warbleR::envelope(x = clp@left,
-                      ssmooth = env.smooth)
-  
-  # thin
-  if (!is.null(n.samples)) {
+env_FUN <-
+  function(X, y, env.smooth, ovlp, wl, path, n.samples = 100) {
+    # load clip
+    clp <- warbleR::read_sound_file(X = X,
+                                    index = which(X$.sgnl.temp == y),
+                                    path = path)
     
-    # reduce size of envelope
+    # define bandpass
+    bp <-
+      c(X$bottom.freq[X$.sgnl.temp == y], X$top.freq[X$.sgnl.temp == y])
+    
+    # bandpass filter
+    clp <- seewave::ffilter(
+      clp,
+      from = bp[1] * 1000,
+      ovlp = ovlp,
+      to = bp[2] * 1000,
+      bandpass = TRUE,
+      wl = wl,
+      output = "Wave"
+    )
+    
+    # calculate envelope
     nv <-
-      stats::approx(
-        x = seq_along(nv),
-        y = nv,
-        n = n.samples,
-        method = "linear"
-      )$y
+      warbleR::envelope(x = clp@left,
+                        ssmooth = env.smooth)
+    
+    # thin
+    if (!is.null(n.samples)) {
+      # reduce size of envelope
+      nv <-
+        stats::approx(
+          x = seq_along(nv),
+          y = nv,
+          n = n.samples,
+          method = "linear"
+        )$y
+    }
+    
+    return(nv)
   }
-  
-  return(nv)
-}
 
 # function to measure envelope correlation
 # y and z are the sound.files+selec names of the sounds and reference sound (model)
@@ -1283,6 +1289,14 @@ report_assertions2 <- function(collection) {
     # modfied to get more informative message
     msgs <-
       gsub(
+        pattern = "Variable 'cores': Element 1 is not <=",
+        replacement = "The maximum number of cores available in this computer is",
+        x = msgs,
+        fixed = TRUE
+      )
+    
+    msgs <-
+      gsub(
         pattern = "Variable 'X$distances':",
         replacement = "",
         x = msgs,
@@ -1304,6 +1318,7 @@ report_assertions2 <- function(collection) {
         x = msgs,
         fixed = TRUE
       )
+    
     
     msgs <-
       gsub(
@@ -1449,6 +1464,18 @@ check_deprecated <- function(x) {
 assert_deprecated <-
   checkmate::makeAssertionFunction(check_deprecated)
 
+# check if X is an extended selection table
+check_extended_selection_table <- function(x) {
+  if (!is.null(x)) {
+    if (!is_extended_selection_table(x))
+      "'X' must be of class 'extended_selection_table'"
+  } else {
+    TRUE
+  }
+}
+
+assert_extended_selection_table <-
+  checkmate::makeAssertionFunction(check_extended_selection_table)
 
 ## function to check arguments
 check_arguments <- function(fun, args) {
@@ -1464,7 +1491,9 @@ check_arguments <- function(fun, args) {
       checkmate::assert_data_frame(
         x = args$X,
         any.missing = TRUE,
-        min.rows = if (!fun %in% c("tail_to_signal_ratio", "signal_to_noise_ratio")) {
+        min.rows = if (!fun %in% c("tail_to_signal_ratio",
+                                   "signal_to_noise_ratio",
+                                   "add_noise")) {
           2
         } else {
           1
@@ -1473,16 +1502,21 @@ check_arguments <- function(fun, args) {
         .var.name = "X"
       )
       
-      checkmate::assert_multi_class(
-        x = args$X,
-        classes = c(
-          "data.frame",
-          "selection.table",
-          "extended.selection.table"
-        ),
-        add = check_collection,
-        .var.name = "X"
-      )
+      if (fun != "add_noise")
+        checkmate::assert_multi_class(
+          x = args$X,
+          classes = c(
+            "data.frame",
+            "selection.table",
+            "extended.selection.table"
+          ),
+          add = check_collection,
+          .var.name = "X"
+        )
+      else
+        assert_extended_selection_table(x = args$X,
+                                        add = check_collection,
+                                        .var.name = "X")
       
       # default columns
       cols <- c("sound.files", "selec", "start", "end", "sound.id")
@@ -1587,7 +1621,8 @@ check_arguments <- function(fun, args) {
         "degrad_catalog",
         "detection_distance",
         "signal_to_noise_ratio",
-        "tail_to_signal_ratio"
+        "tail_to_signal_ratio",
+        "add_noise"
       )) {
         if (is_extended_selection_table(args$X)) {
           if (length(unique(attr(args$X, "check.results")$sample.rate)) > 1) {
@@ -1598,8 +1633,16 @@ check_arguments <- function(fun, args) {
         } else {
           if (!fun %in% c("find_markers",
                           "align_test_files",
-                          "set_reference_sounds")) {
+                          "set_reference_sounds",
+                          "add_noise")) {
             warning2("assuming all sound files have the same sampling rate")
+          }
+          
+          if (fun == "add_noise") {
+            if (attr(args$X, "by.song")[[1]])
+              stop2(
+                "Extended selection table 'X' must be created 'by element', not 'by song'. Use warbleR::by_element_est(X) to convert it to the right format."
+              )
           }
         }
       }
@@ -2121,10 +2164,10 @@ check_arguments <- function(fun, args) {
       null.ok = FALSE
     )
   }
- 
   
   
-   
+  
+  
   if (any(names(args) == "pb")) {
     checkmate::assert_logical(
       x = args$pb,
@@ -2142,10 +2185,10 @@ check_arguments <- function(fun, args) {
       .var.name = "path"
     )
   }
-
+  
   if (any(names(args) == "n.samples")) {
     checkmate::assert_number(
-      x = args$n.samples, 
+      x = args$n.samples,
       lower = 10,
       null.ok = TRUE,
       add = check_collection,
@@ -2330,3 +2373,114 @@ check_arguments <- function(fun, args) {
   
   return(check_collection)
 }
+
+# repalace with warbleR::by_element version > 1.1.29
+by_element_est <- function(X, mar = 0.1, pb = FALSE, parallel = 1) {
+  # if X is not a data frame
+  if (!is_extended_selection_table(X)) stop2("X is not of class 'extended_selection_table'")
+  
+  # if extended only by song
+  if (!attributes(X)$by.song$by.song) stop2("extended selection tables must be created 'by.song' to be used in song.param()")
+  
+  #### set arguments from options
+  # get function arguments
+  argms <- methods::formalArgs(by_element_est)
+  
+  # get warbleR options
+  opt.argms <- if (!is.null(getOption("warbleR"))) getOption("warbleR") else SILLYNAME <- 0
+  
+  # remove options not as default in call and not in function arguments
+  opt.argms <- opt.argms[!sapply(opt.argms, is.null) & names(opt.argms) %in% argms]
+  
+  # get arguments set in the call
+  call.argms <- as.list(base::match.call())[-1]
+  
+  # remove arguments in options that are in call
+  opt.argms <- opt.argms[!names(opt.argms) %in% names(call.argms)]
+  
+  # set options left
+  if (length(opt.argms) > 0) {
+    for (q in seq_len(length(opt.argms))) {
+      assign(names(opt.argms)[q], opt.argms[[q]])
+    }
+  }
+  
+  # set clusters for windows OS and no soz
+  if (Sys.info()[1] == "Windows" & parallel > 1) {
+    cl <- parallel::makePSOCKcluster(getOption("cl.cores", parallel))
+  } else {
+    cl <- parallel
+  }
+  
+  # extract single wave object per row
+  attributes(X)$wave.objects <- warbleR:::pblapply_wrblr_int(pbar = pb, X = seq_len(nrow(X)), FUN = function(x) {
+    
+    # reset time coordinates of sounds if lower than 0 o higher than duration
+    stn <- X$start[x] - mar
+    enn <- X$end[x] + mar
+    mar1 <- mar
+    
+    if (stn < 0) {
+      mar1 <- mar1 + stn
+      stn <- 0
+    }
+    
+    # get sampling rate
+    r <-
+      warbleR::read_sound_file(
+        X = X,
+        index = x,
+        path = NULL,
+        header = TRUE
+      )
+    
+    mar2 <- mar1 + X$end[x] - X$start[x]
+    
+    if (enn > r$samples / r$sample.rate) {
+      enn <- r$samples / r$sample.rate
+    }
+    
+    # read sound and margin
+    wav <-
+      warbleR::read_sound_file(
+        X = X,
+        index = x,
+        from = stn,
+        to = enn,
+        path = NULL
+      )
+    
+    return(wav)
+  })
+  
+  # fix check results
+  check_res_list <- lapply(seq_len(nrow(X)), function(x) {
+    check_res <- attributes(X)$check.res[attributes(X)$check.res$sound.files == X$sound.files[x] & attributes(X)$check.res$selec == X$selec[x], ]
+    
+    check_res$start <- if (check_res$mar.before < mar) check_res$mar.before else mar
+    check_res$end <- check_res$start + check_res$duration
+    check_res$mar.before <- check_res$start
+    check_res$mar.after <- duration(attributes(X)$wave.objects[[x]]) - check_res$end
+    check_res$sound.files <- paste(X$sound.files[x], X$selec[x], sep = "-")
+    check_res$n.samples <- length(attributes(X)$wave.objects[[x]]@left)
+    check_res$bits <- length(attributes(X)$wave.objects[[x]]@bit)
+    check_res$wave.size <- object.size(attributes(X)$wave.objects[[x]])
+    check_res$selec <- 1
+    return(check_res)
+  })
+  
+  # fix attributes
+  names(attributes(X)$wave.objects) <- X$sound.files <- paste(X$sound.files, X$selec, sep = "-")
+  attributes(X)$check.results <- do.call(rbind, check_res_list)
+  attributes(X)$by.song <- c(by.song = FALSE, song.column = NULL)
+  attributes(X)$call <- base::match.call()
+  attributes(X)$warbleR.version <- packageVersion("warbleR")
+  
+  # fix selec, start and end in X
+  X$selec <- 1
+  X$start <- attributes(X)$check.results$start
+  X$end <- attributes(X)$check.results$end
+  
+  return(X)
+}
+

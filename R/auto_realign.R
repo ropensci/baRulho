@@ -84,7 +84,7 @@ auto_realign <-
       options(warbleR.steps = 3)
     }
     
-    # adjust wl based on hope.size
+    # adjust wl based on hop.size
     if (is.null(wl)) {
       wl <- round(attr(X, "check.results")$sample.rate[1] * hop.size, 0)
     }

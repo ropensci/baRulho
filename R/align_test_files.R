@@ -136,10 +136,8 @@ align_test_files <-
     
     
     # check if any selection exceeds length of recordings
-    # if(exists("wav_dur"))
     wvdr <-
-      wavdur(path = path, files = unique(sync.sls$sound.files)) # else
-    # wvdr <- warbleR::duration_wavs(path = path)
+      wavdur(path = path, files = unique(sync.sls$sound.files)) 
     
     # add duration to data frame
     sync.sls <- merge(sync.sls, wvdr)

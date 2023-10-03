@@ -1,14 +1,14 @@
 #' Measure attenuation as signal-to-noise ratio
 #'
 #' \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.
-#' @usage signal_to_noise_ratio(X, mar, parallel = NULL, cores = getOption("mc.cores", 1),
+#' @usage signal_to_noise_ratio(X, mar = NULL, parallel = NULL, cores = getOption("mc.cores", 1),
 #' pb = getOption("pb", TRUE), eq.dur = FALSE, noise.ref = "adjacent", type = 1,
 #' bp = 'freq.range', output = NULL, hop.size = getOption("hop.size", 1),
 #' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0),
 #' path = getOption("sound.files.path", "."))
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
-#'   the start and end points of selection over which to measure ambient noise.
+#'   the start point of the annotation over which to measure ambient noise.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -100,7 +100,7 @@ signal_to_noise_ratio <-
         header = TRUE
       )$sample.rate
     
-    # adjust wl based on hope.size
+    # adjust wl based on hop.size
     if (is.null(wl)) {
       wl <- round(sampling_rate * hop.size / 1000,
                   0)
@@ -139,7 +139,7 @@ signal_to_noise_ratio <-
     }
     
     # 'mar' is needed when not using equal duration
-    if (eq.dur & is.null(mar))
+    if (!eq.dur & is.null(mar))
         stop2("'mar' must be supplied when 'eq.dur = FALSE'")
       
     # set clusters for windows OS

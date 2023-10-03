@@ -31,6 +31,10 @@
 #'   Maintainer: Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #'
 #' @docType package
-#' @name baRulho
 #' @details License: GPL (>= 2)
+#' @keywords internal
 "_PACKAGE"
+
+## usethis namespace: start
+## usethis namespace: end
+NULL

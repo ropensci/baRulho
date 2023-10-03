@@ -4,7 +4,7 @@ url: https://marce10.github.io/baRulho
 
 template:
   bootstrap: 5
-      
+
 reference:
 - title: Prepare acoustic data
   desc: >
@@ -48,9 +48,8 @@ reference:
   contents:
   - master_est
   - test_sounds_est
-  
+
 - title: Additional functions
   contents:
   - noise_profile
   - add_noise
-  

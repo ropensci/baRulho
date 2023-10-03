@@ -213,7 +213,7 @@ references:
   title: ohun
   abstract: 'ohun: Optimizing Acoustic Signal Detection'
   notes: Depends
-  url: https://marce10.github.io/ohun/
+  url: https://docs.ropensci.org/ohun/
   repository: https://CRAN.R-project.org/package=ohun
   authors:
   - family-names: Araya-Salas

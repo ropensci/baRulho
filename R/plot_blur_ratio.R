@@ -28,7 +28,7 @@
 #' @param dest.path Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @param colors Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).
-#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power dsiributions. Default is 100. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).
+#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power distributions. Default is 100. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).
 #' @return It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showing spectrograms of both sounds and the overlaid amplitude envelopes (or power spectra if \code{spectrum = TRUE}) as probability mass functions (PMF). Spectrograms are shown within the frequency range of the reference sound.
 #' @export
 #' @name plot_blur_ratio

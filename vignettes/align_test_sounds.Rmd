@@ -14,8 +14,10 @@ output:
       smooth_scroll: true
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Synth and align sounds}
+  %\VignetteIndexEntry{Synthesize and align test sounds}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{Rraven}
+  %\VignetteDepends{viridis}
 editor_options: 
   chunk_output_type: console
 ---

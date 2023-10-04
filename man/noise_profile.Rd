@@ -82,7 +82,8 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) ac
 \code{\link{excess_attenuation}}
 
 Other miscellaneous: 
-\code{\link{add_noise}()}
+\code{\link{add_noise}()},
+\code{\link{attenuation}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

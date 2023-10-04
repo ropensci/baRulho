@@ -27,7 +27,6 @@ reference:
   desc: >
     Functions that format acoustic data for playback experiments
   contents:
-  - attenuation
   - blur_ratio
   - detection_distance
   - envelope_correlation
@@ -51,5 +50,6 @@ reference:
 
 - title: Additional functions
   contents:
+  - attenuation
   - add_noise
   - noise_profile

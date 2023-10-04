@@ -18,7 +18,7 @@
 #'   # measure attenuation
 #'   attenuation(f = 2000, dist = 50, dist0 = 1)
 #' }
-#' @family quantify degradation
+#' @family miscellaneous
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2

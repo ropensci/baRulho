@@ -83,7 +83,6 @@ Mathevon, N., Dabelsteen, T., & Blumenrath, S. H. (2005). Are high perches in th
 \code{\link{excess_attenuation}}
 
 Other quantify degradation: 
-\code{\link{attenuation}()},
 \code{\link{blur_ratio}()},
 \code{\link{detection_distance}()},
 \code{\link{envelope_correlation}()},

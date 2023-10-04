@@ -90,7 +90,6 @@ Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) ac
 \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
 
 Other quantify degradation: 
-\code{\link{attenuation}()},
 \code{\link{detection_distance}()},
 \code{\link{envelope_correlation}()},
 \code{\link{plot_blur_ratio}()},

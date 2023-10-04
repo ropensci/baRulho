@@ -83,7 +83,6 @@ Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal voca
 \code{\link{attenuation}}
 
 Other quantify degradation: 
-\code{\link{attenuation}()},
 \code{\link{blur_ratio}()},
 \code{\link{envelope_correlation}()},
 \code{\link{plot_blur_ratio}()},

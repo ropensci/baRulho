@@ -77,7 +77,6 @@ Apol, C.A., Sturdy, C.B. & Proppe, D.S. (2017). Seasonal variability in habitat 
 \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
 
 Other quantify degradation: 
-\code{\link{attenuation}()},
 \code{\link{blur_ratio}()},
 \code{\link{detection_distance}()},
 \code{\link{envelope_correlation}()},

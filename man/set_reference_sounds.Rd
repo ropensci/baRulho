@@ -55,7 +55,6 @@ Y <- set_reference_sounds(X = X, method = 2)
 \code{\link[warbleR]{check_wavs}}, \code{\link[warbleR]{check_sels}}
 
 Other quantify degradation: 
-\code{\link{attenuation}()},
 \code{\link{blur_ratio}()},
 \code{\link{detection_distance}()},
 \code{\link{envelope_correlation}()},

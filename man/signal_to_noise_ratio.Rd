@@ -89,7 +89,6 @@ Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission a
 \code{\link{excess_attenuation}}
 
 Other quantify degradation: 
-\code{\link{attenuation}()},
 \code{\link{blur_ratio}()},
 \code{\link{detection_distance}()},
 \code{\link{envelope_correlation}()},

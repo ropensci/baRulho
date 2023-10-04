@@ -121,7 +121,7 @@ noise_profile <-
         )
 
       if (length(files) == 0) {
-        stop2("No files found in working directory (alternatively supply 'X')")
+        stop2("No files found in working directory")
       }
     }
 

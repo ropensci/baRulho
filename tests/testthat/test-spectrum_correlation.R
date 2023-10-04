@@ -14,7 +14,6 @@ test_that("using extended table and method 1", {
   
   expect_equal(ncol(ec), 11)
   
-  
   expect_equal(class(ec)[1], "extended_selection_table")
   
 })

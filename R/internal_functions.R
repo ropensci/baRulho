@@ -300,6 +300,9 @@ spctr_FUN <-
     # thin
     if (!is.null(n.bins)) {
       # reduce size of envelope
+      
+      # return NA if doesn't have at least 2 non-NA values (need at least two non-NA values to interpolate)
+      if (sum(!is.na(clp.spc[, 2])) >= 2){
       clp.spc_list <-
         stats::approx(
           x = clp.spc[, 1],
@@ -310,6 +313,10 @@ spctr_FUN <-
 
       # make it a matrix
       clp.spc <- cbind(clp.spc_list[[1]], clp.spc_list[[2]])
+      } else {
+        
+        clp.spc <-  cbind(NA, NA)
+      }
     }
 
     return(clp.spc)
@@ -373,6 +380,9 @@ blur_sp_FUN <-
       sgnl.spc <- specs[[which(names(specs) == sgnl)]]
       rfrnc.spc <- specs[[which(names(specs) == rfrnc)]]
 
+      # compute blur ratio only if power distribution have data
+      if (!is.na(sgnl.spc[1, 1]) & !is.na(rfrnc.spc[1, 1])){
+      
       # make them the same number of rows
       sgnl.spc <-
         sgnl.spc[1:(min(c(nrow(sgnl.spc), nrow(rfrnc.spc)))), ]
@@ -408,6 +418,11 @@ blur_sp_FUN <-
 
       # get blur ratio as half the sum of absolute differences between spectra PMFs
       sp.bl.rt <- sum(abs(rfrnc.pmf - sgnl.pmf)) / 2
+      } else {
+        
+        sp.bl.rt <- NA
+      }
+       
     }
     return(sp.bl.rt)
   }
@@ -1265,6 +1280,7 @@ spctr_cor_FUN <- function(y, specs, X, cor.method) {
     sgnl.spctr <- specs[[which(names(specs) == sgnl)]]
     mdl.spctr <- specs[[which(names(specs) == rfrnc)]]
 
+    if (!is.na(sgnl.spctr[1, 1]) & !is.na(mdl.spctr[1, 1])){
     ### filter to freq range of sounds and remove freq column
     # get range as lowest bottom and highest top
     frng <-
@@ -1278,6 +1294,9 @@ spctr_cor_FUN <- function(y, specs, X, cor.method) {
 
     # get correlation assuming they have same length
     cor.spctr <- cor(sgnl.spctr, mdl.spctr, method = cor.method)
+    } else {
+      cor.spctr <- NA
+    }
   }
 
   return(cor.spctr)
@@ -1320,7 +1339,7 @@ rbind2 <- function(...) {
 }
 
 
-## CHECK ARGUMENTS  ###
+### CHECK ARGUMENTS  ###
 report_assertions2 <- function(collection) {
   checkmate::assertClass(collection, "AssertCollection")
   if (!collection$isEmpty()) {
@@ -1343,6 +1362,14 @@ report_assertions2 <- function(collection) {
         fixed = TRUE
       )
 
+    msgs <-
+      gsub(
+        pattern = "Variable 'X$sound.files': ",
+        replacement = "",
+        x = msgs,
+        fixed = TRUE
+      )
+    
     msgs <-
       gsub(
         pattern = "Variable 'names(X)': Names",
@@ -1458,6 +1485,30 @@ check_unique_sound.id <- function(x, fun) {
 
 assert_unique_sels <-
   checkmate::makeAssertionFunction(check_unique_sels)
+
+# check sound files exist
+check_sound_files_found <- function(files, fun) {
+  
+  if (all(!file.exists(files))) {
+    if (!fun != "noise_profile"){
+      "Not a single sound files in 'X$sound.files' can be found. Use 'path' to set the directory where the sound files are found" } else {
+        "Not a single sound files in 'files' can be found. Use 'path' to set the directory where the sound files are found"
+      }
+  } else {
+    if (!all(file.exists(files))) {
+      if (!fun != "noise_profile"){
+      "Some sound files in 'X$sound.files' cannot be found. Make sure all sound files referenced in 'X' are in the 'path' supplied (or current working directory if 'path' was not supplied)" } else {
+        "Some sound files in 'files' cannot be found. Make sure all sound files are in the 'path' supplied (or current working directory if 'path' was not supplied)"
+       }
+      } else {
+    TRUE
+      } 
+  }
+}
+
+assert_sound_files_found <-
+  checkmate::makeAssertionFunction(check_sound_files_found)
+
 
 # check unique sound.id
 check_unique_sound.id <- function(x, fun) {
@@ -1634,6 +1685,21 @@ check_arguments <- function(fun, args) {
         )
       }
 
+      if (!is_extended_selection_table(args$X)){
+        if (!is.null(args$path)){
+        files <- file.path(args$path, unique(args$X$sound.files))} else {
+          if (!is.null(getOption("sound.files.path"))){
+            files <- file.path(getOption("sound.files.path"), unique(args$X$sound.files))} else {
+          files <- unique(args$X$sound.files)}
+      }
+      assert_sound_files_found(files = files, 
+                               fun = fun,
+                               add = check_collection,
+                               .var.name = "X$sound.files"
+      )
+      }
+      
+      
       checkmate::assert_names(
         x = names(args$X),
         type = "unique",
@@ -1812,7 +1878,7 @@ check_arguments <- function(fun, args) {
       any.missing = FALSE,
       all.missing = FALSE,
       unique = TRUE,
-      lower = 0001,
+      lower = 0.001,
       add = check_collection,
       .var.name = "frequencies"
     )
@@ -1824,7 +1890,7 @@ check_arguments <- function(fun, args) {
       any.missing = FALSE,
       all.missing = FALSE,
       unique = TRUE,
-      lower = 0001,
+      lower = 0.001,
       add = check_collection,
       .var.name = "durations"
     )
@@ -2182,9 +2248,27 @@ check_arguments <- function(fun, args) {
     )
   }
   # if (any(names(args) == "files"))
-  #   if (!is.null(args$files))
-  #   checkmate::assert_file_exists(x = args$files, access = "r", extension = c("mp3", "wav", "wac", "flac"), add = check_collection, .var.name = "files")
-
+  #   if (!is.null(args$files)){
+  #     if (is.null(args$path)){
+  #     checkmate::assert_file_exists(x = file.path(args$path, args$files), access = "r", extension = c("mp3", "wav", "wac", "flac"), add = check_collection, .var.name = "files")
+  #       } else {
+  #         checkmate::assert_file_exists(x = args$files, access = "r", extension = c("mp3", "wav", "wac", "flac"), add = check_collection, .var.name = "files")
+  #       }
+  #   }
+  if (any(names(args) == "files")){
+  if (!is.null(args$path)){
+    files <- file.path(args$path, unique(args$files))} else {
+      if (!is.null(getOption("sound.files.path"))){
+        files <- file.path(getOption("sound.files.path"), unique(args$files))} else {
+          files <- unique(args$files)}
+    }
+  assert_sound_files_found(files = files, 
+                           fun = fun,
+                           add = check_collection,
+                           .var.name = "files"
+  )
+  }
+  
   if (any(names(args) == "output")) {
     assert_deprecated(
       x = args$output,

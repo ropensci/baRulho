@@ -8,7 +8,8 @@ test_that("basic", {
     am = TRUE,
     nharmonics = 4,
     shuffle = TRUE,
-    replicates = 3,
+    replicates = 3, 
+    pb = FALSE
   )
   
   expect_equal(nrow(ss), 96)
@@ -29,7 +30,8 @@ test_that("shuffle false", {
     am = TRUE,
     nharmonics = 4,
     shuffle = FALSE,
-    replicates = 3
+    replicates = 3, 
+    pb = FALSE
   )
   
   expect_equal(nrow(ss), 96)

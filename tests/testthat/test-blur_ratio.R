@@ -6,7 +6,7 @@ test_that("using extended table and method 1", {
   
   X <- set_reference_sounds(X, pb = FALSE)
   
-  br <- blur_ratio(X = X)
+  br <- blur_ratio(X = X, pb = FALSE)
   
   expect_equal(sum(is.na(br$blur.ratio)), 9)
   
@@ -28,7 +28,7 @@ test_that("using extended table and method 2 returning envelopes", {
   
   br <- blur_ratio(X = X,
                    envelopes = TRUE,
-                   env.smooth = 140)
+                   env.smooth = 140, pb = FALSE)
   
   expect_equal(sum(is.na(br$blur.ratio)), 13)
   

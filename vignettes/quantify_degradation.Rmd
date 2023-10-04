@@ -16,6 +16,8 @@ vignette: >
   \usepackage[utf8]{inputenc}
   %\VignetteIndexEntry{Quantify degradation}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{viridis}
+  %\VignetteDepends{ggplot2}
 editor_options: 
   chunk_output_type: console
 ---

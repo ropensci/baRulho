@@ -4,5 +4,8 @@ pkgdown_sha: ~
 articles:
   align_test_sounds: align_test_sounds.html
   quantify_degradation: quantify_degradation.html
-last_built: 2023-09-28T19:24Z
+last_built: 2023-10-04T14:07Z
+urls:
+  reference: https://marce10.github.io/baRulho/reference
+  article: https://marce10.github.io/baRulho/articles
 

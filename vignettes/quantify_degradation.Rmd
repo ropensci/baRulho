@@ -497,7 +497,7 @@ Signal-to-noise ratio (SNR) quantifies sound amplitude level in relation to ambi
 ```{r, eval = TRUE}
 
 # run signal to noise ratio
-sa <- signal_to_noise_ratio(test_sounds_est, pb = FALSE, noise.ref = "custom")
+sa <- signal_to_noise_ratio(test_sounds_est, pb = FALSE, noise.ref = "custom", mar = 0.1)
 
 ```
 

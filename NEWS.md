@@ -3,6 +3,7 @@ baRulho 2.1.0
 
 ## NEW FEATURES
 
+* new function `add_noise()` to modifying signal-to-noise ratio by adding synthetic noise
 * new function `manual_realign()` that generates an interactive plot for manual adjustment of time alignments
 * new function `plot_blur_ratio()` that generates plots previously created by `blur_ratio()` and `spectrum_blur_ratio()`
 * new function `plot_degradation()` to visually compare sounds across distances

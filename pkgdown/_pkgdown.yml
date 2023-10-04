@@ -52,3 +52,4 @@ reference:
 - title: Additional functions
   contents:
   - noise_profile
+  - add_noise

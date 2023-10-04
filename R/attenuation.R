@@ -34,16 +34,16 @@ attenuation <-
            hab.att.coef = 0.02) {
     # check arguments
     arguments <- as.list(base::match.call())
-    
+
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-    
+
     # check each arguments
     check_results <-
       check_arguments(fun = arguments[[1]], args = arguments)
-    
+
     # report errors
     report_assertions2(check_results)
     # atmospheric attenuation
@@ -51,35 +51,35 @@ attenuation <-
     To1 <- 273.16
     To <- 293.15
     temp <- temp + 273.15
-    
-    psat <- pr * 10 ** (-6.8346 * (To1 / temp) ** 1.261 + 4.6151)
-    
+
+    psat <- pr * 10**(-6.8346 * (To1 / temp)**1.261 + 4.6151)
+
     h <- rh * (psat / pa)
-    
+
     fr0 <- (pa / pr) * (24 + 4.04e4 * h * ((0.02 + h) / (0.391 + h)))
-    
+
     frN <-
-      (pa / pr) * sqrt(temp / To) * (9 + 280 * h * exp(-4.170 * ((temp / To) **
-                                                                   (-1 / 3) - 1)))
-    
-    
-    z <- 0.1068 * exp(-3352 / temp) / (frN + frequency ** 2 / frN)
-    
+      (pa / pr) * sqrt(temp / To) * (9 + 280 * h * exp(-4.170 * ((temp / To)**
+        (-1 / 3) - 1)))
+
+
+    z <- 0.1068 * exp(-3352 / temp) / (frN + frequency**2 / frN)
+
     y <-
-      (temp / To) ** (-5 / 2) * (0.01275 * exp(-2239.1 / temp) * 1 / (fr0 + frequency **
-                                                                        2 / fr0) + z)
-    
-    
+      (temp / To)**(-5 / 2) * (0.01275 * exp(-2239.1 / temp) * 1 / (fr0 + frequency**
+        2 / fr0) + z)
+
+
     atm_att_coef <-
-      8.686 * frequency ** 2 * ((1.84e-11 * 1 / (pa / pr) * sqrt(temp / To)) + y)
+      8.686 * frequency**2 * ((1.84e-11 * 1 / (pa / pr) * sqrt(temp / To)) + y)
     atm_att <- atm_att_coef * (dist - dist0)
-    
+
     geom_att <- -20 * log10(dist0 / dist)
-    
+
     hab_att <- hab.att.coef * frequency * (1 / 1000) * (dist - dist0)
-    
+
     total_att <- geom_att + atm_att + hab_att
-    
+
     outdf <-
       data.frame(
         frequency = frequency,
@@ -89,7 +89,7 @@ attenuation <-
         habitat.attenuation = hab_att,
         combined.attenuation = total_att
       )
-    
+
     return(outdf)
   }
 

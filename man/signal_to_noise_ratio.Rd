@@ -4,17 +4,17 @@
 \alias{signal_to_noise_ratio}
 \title{Measure attenuation as signal-to-noise ratio}
 \usage{
-signal_to_noise_ratio(X, mar, parallel = NULL, cores = getOption("mc.cores", 1),
+signal_to_noise_ratio(X, mar = NULL, parallel = NULL, cores = getOption("mc.cores", 1),
 pb = getOption("pb", TRUE), eq.dur = FALSE, noise.ref = "adjacent", type = 1,
 bp = 'freq.range', output = NULL, hop.size = getOption("hop.size", 1),
 wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0),
 path = getOption("sound.files.path", "."))
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).}
+\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
-the start and end points of selection over which to measure ambient noise.}
+the start point of the annotation over which to measure ambient noise.}
 
 \item{parallel}{DEPRECATED. Use 'cores' instead.}
 

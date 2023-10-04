@@ -7,7 +7,7 @@
 #' hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
 #' ovlp = getOption("ovlp", 70), path = getOption("sound.files.path", "."),
 #' n.bins = 100)
-#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
+#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' If \code{NULL} (default) then the current working directory is used.
@@ -66,20 +66,20 @@ spectrum_correlation <-
            n.bins = 100) {
     # check arguments
     arguments <- as.list(base::match.call())
-    
+
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-    
+
     # check each arguments
     check_results <-
       check_arguments(fun = arguments[[1]], args = arguments)
-    
+
     # report errors
     report_assertions2(check_results)
-    
-    # adjust wl based on hope.size
+
+    # adjust wl based on hop.size
     if (is.null(wl)) {
       wl <-
         round(
@@ -92,19 +92,19 @@ spectrum_correlation <-
           0
         )
     }
-    
+
     # make wl even if odd
     if (!(wl %% 2) == 0) {
       wl <- wl + 1
     }
-    
+
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
-    
+
     # get names of envelopes involved (those as test with reference or as reference)
     target_sgnl_temp <-
       unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
-    
+
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -112,12 +112,12 @@ spectrum_correlation <-
     } else {
       cl <- cores
     }
-    
+
     # print message
     if (pb) {
       write(file = "", x = "Computing power spectra (step 1 out of 2):")
     }
-    
+
     # calculate all spectra apply function
     specs <-
       warbleR:::pblapply_wrblr_int(
@@ -143,14 +143,14 @@ spectrum_correlation <-
           )
         }
       )
-    
+
     # add sound file selec names to envelopes (weird column name so it does not overwrite user columns)
     names(specs) <- target_sgnl_temp
-    
+
     if (pb) {
       write(file = "", x = "Computing spectrum correlations (step 2 out of 2):")
     }
-    
+
     # calculate all envelops apply function
     X$spectrum.correlation <-
       unlist(warbleR:::pblapply_wrblr_int(
@@ -170,16 +170,16 @@ spectrum_correlation <-
             )
           }
       ))
-    
+
     # remove temporal columns
     X$.sgnl.temp <- NULL
-    
+
     # fix call if not a data frame
     if (!is.data.frame(X)) {
       attributes(X)$call <-
         base::match.call()
     } # fix call attribute
-    
-    
+
+
     return(X)
   }

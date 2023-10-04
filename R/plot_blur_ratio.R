@@ -9,7 +9,7 @@
 #' collevels = seq(-120, 0, 5), dest.path = getOption("dest.path", "."),
 #' path = getOption("sound.files.path", "."),
 #' colors = viridis::viridis(3), n.samples = 100)
-#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
+#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param type Character vector of length 1 indicating the type of blur ratio to plot. The two options are 'envelope' (for regular blur ratio as in \code{\link{blur_ratio}}, default) and 'spectrum' (for spectrum blur ratio as in \code{\link{spectrum_blur_ratio}}).
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
@@ -28,7 +28,7 @@
 #' @param dest.path Character string containing the directory path where the image files will be saved. If NULL (default) then the folder containing the sound files will be used instead.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @param colors Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).
-#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power dsiributions. Default is 100. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets). 
+#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power distributions. Default is 100. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).
 #' @return It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showing spectrograms of both sounds and the overlaid amplitude envelopes (or power spectra if \code{spectrum = TRUE}) as probability mass functions (PMF). Spectrograms are shown within the frequency range of the reference sound.
 #' @export
 #' @name plot_blur_ratio
@@ -73,20 +73,20 @@ plot_blur_ratio <-
            n.samples = 100) {
     # check arguments
     arguments <- as.list(base::match.call())
-    
+
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-    
+
     # check each arguments
     check_results <-
       check_arguments(fun = arguments[[1]], args = arguments)
-    
+
     # report errors
     report_assertions2(check_results)
-    
-    # adjust wl based on hope.size
+
+    # adjust wl based on hop.size
     if (is.null(wl)) {
       wl <-
         round(
@@ -99,26 +99,26 @@ plot_blur_ratio <-
           0
         )
     }
-    
+
     # make wl even if odd
     if (!(wl %% 2) == 0) {
       wl <- wl + 1
     }
-    
+
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
     } else {
       cl <- cores
     }
-    
+
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
-    
+
     # get names of envelopes involved (those as test with reference or as reference)
     target_sgnl_temp <-
       unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
-    
+
     # print message
     if (pb) {
       if (type == "envelope") {
@@ -127,7 +127,7 @@ plot_blur_ratio <-
         write(file = "", x = "Computing power spectra (step 1 out of 2):")
       }
     }
-    
+
     # calculate all envelops apply function
     if (type == "envelope") {
       energy_vectors <-
@@ -154,7 +154,7 @@ plot_blur_ratio <-
           }
         )
     }
-    
+
     if (type == "spectrum") {
       # calculate all spectra apply function
       energy_vectors <-
@@ -179,17 +179,17 @@ plot_blur_ratio <-
           }
         )
     }
-    
-    
-    
+
+
+
     # add sound file selec column as names to envelopes
     names(energy_vectors) <- target_sgnl_temp
-    
+
     # set options to run loops
     if (pb) {
       write(file = "", x = "Producing images (step 2 out of 2):")
     }
-    
+
     # plot blur ratio
     catch_out <-
       warbleR:::pblapply_wrblr_int(
@@ -199,10 +199,11 @@ plot_blur_ratio <-
         FUN = function(x,
                        rs = res,
                        en.vctr = energy_vectors,
-                       spct = if (type == "envelope")
+                       spct = if (type == "envelope") {
                          FALSE
-                       else
-                         TRUE,
+                       } else {
+                         TRUE
+                       },
                        wle = wl,
                        colvs = collevels,
                        pl = palette,

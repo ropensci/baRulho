@@ -1766,6 +1766,12 @@ check_arguments <- function(fun, args) {
                 "Extended selection table 'X' must be created 'by element', not 'by song'. Use warbleR::by_element_est(X) to convert it to the right format."
               )
             }
+            if (!is.null(args$X$start)) {
+                if (any(args$X$start == 0))
+                  stop2(
+                    "Some annotations have no margin in which to measure background noise (X$start == 0)"
+                  )
+              }
           }
         }
       }

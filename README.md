@@ -4,6 +4,8 @@ baRulho: quantifying degradation of (animal) sounds
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 <!-- badges: start -->
 
+[![Status at rOpenSci Software Peer
+Review](https://badges.ropensci.org/609_status.svg)](https://github.com/ropensci/software-review/issues/609)
 [![lifecycle](https://img.shields.io/badge/lifecycle-maturing-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![Dependencies](https://tinyverse.netlify.com/badge/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Project Status: Active The project has reached a stable, usable state
@@ -13,7 +15,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![packageversion](https://img.shields.io/badge/Package%20version-2.1.0-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2023--10--01-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--10--05-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
@@ -101,10 +103,10 @@ how to install/troubleshoot these external dependencies.
 
 The packages [seewave](https://cran.r-project.org/package=seewave) and
 [tuneR](https://cran.r-project.org/package=seewave) provide a huge
-variety of functions for acoustic analysis and manipulation. They moslty
-works on wave objects already imported into the R environment. The
+variety of functions for acoustic analysis and manipulation. They mostly
+work on wave objects already imported into the R environment. The
 package [warbleR](https://cran.r-project.org/package=warbleR) provides
-functions to visualize and measure sounds alreay referenced in
+functions to visualize and measure sounds already referenced in
 annotation tables, similar to
 [baRulho](https://marce10.github.io/baRulho/). The package
 [Rraven](https://cran.r-project.org/package=Rraven) facilitates the

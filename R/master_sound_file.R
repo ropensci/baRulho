@@ -425,5 +425,8 @@ master_sound_file <-
       )
     )
 
+    # add a unique selec id to each annotation
+    sel.tab$selec <- seq_len(nrow(sel.tab))
+    
     return(sel.tab)
   }

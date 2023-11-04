@@ -197,7 +197,10 @@ plot_degradation(test_sounds_est)
 
 ```
 
-<center><img src="plot_degradation_p1.jpeg" alt="degradation plot"></center>
+
+```{r, echo=FALSE, out.width="60%", fig.align='center'}
+knitr::include_graphics("plot_degradation_p1.jpeg")
+```
 
 &nbsp;
 

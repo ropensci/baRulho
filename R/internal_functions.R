@@ -1483,8 +1483,8 @@ check_unique_sound.id <- function(x, fun) {
   }
 }
 
-assert_unique_sels <-
-  checkmate::makeAssertionFunction(check_unique_sels)
+assert_unique_sound.id <-
+  checkmate::makeAssertionFunction(check_unique_sound.id)
 
 # check sound files exist
 check_sound_files_found <- function(files, fun) {
@@ -1569,6 +1569,38 @@ check_extended_selection_table <- function(x) {
 
 assert_extended_selection_table <-
   checkmate::makeAssertionFunction(check_extended_selection_table)
+
+check_est_by_element <- function(x) {
+  if (!is.null(x)) {
+    if (is_extended_selection_table(x)) {
+      if (attr(x, "by.song")[[1]]){ 
+        "Extended selection table 'X' must be created 'by element', not 'by song'. Use warbleR::by_element_est(X) to convert it to the right format"
+        }
+      }
+  } else {
+    TRUE
+  }
+}
+
+assert_est_by_element <-
+  checkmate::makeAssertionFunction(check_est_by_element)
+
+
+check_no_margin <- function(x) {
+  if (!is.null(x)) {
+    if (is_extended_selection_table(x)) {
+          if (any(x$start == 0))
+         "Some annotations have no margin in which to measure background noise (X$start == 0)"
+        
+      }
+    }
+   else {
+    TRUE
+  }
+}
+
+assert_no_margin <-
+  checkmate::makeAssertionFunction(check_no_margin)
 
 ## function to check arguments
 check_arguments <- function(fun, args) {
@@ -1698,6 +1730,22 @@ check_arguments <- function(fun, args) {
                                .var.name = "X$sound.files"
       )
       }
+      if (fun == "add_noise") {
+        
+        assert_est_by_element(x = args$X,
+                              add = check_collection,
+                              .var.name = "X")
+      }
+      
+      
+      if (fun %in% c("add_noise", "signal_to_noise_ratio")) {
+        
+        assert_no_margin(x = args$X,
+                              add = check_collection,
+                              .var.name = "X")
+      }
+      
+      assert_no_margin
       
       
       checkmate::assert_names(
@@ -1758,20 +1806,6 @@ check_arguments <- function(fun, args) {
             "add_noise"
           )) {
             warning2("assuming all sound files have the same sampling rate")
-          }
-
-          if (fun == "add_noise") {
-            if (attr(args$X, "by.song")[[1]]) {
-              stop2(
-                "Extended selection table 'X' must be created 'by element', not 'by song'. Use warbleR::by_element_est(X) to convert it to the right format."
-              )
-            }
-            if (!is.null(args$X$start)) {
-                if (any(args$X$start == 0))
-                  stop2(
-                    "Some annotations have no margin in which to measure background noise (X$start == 0)"
-                  )
-              }
           }
         }
       }

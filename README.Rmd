@@ -16,7 +16,7 @@ editor_options:
 
 <img src="man/figures/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
-[baRulho](https://cran.r-project.org/package=baRulho) is intended to facilitate acoustic analysis of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. A common sequence of steps to experimentally test hypotheses related to sound transmission is depicted in the following diagram:
+[baRulho](https://cran.r-project.org/package=baRulho) is intended to facilitate the implementation of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. A common sequence of steps to experimentally test hypotheses related to sound transmission is depicted in the following diagram:
 
  <center><img src="man/figures/analysis_workflow.jpg" alt="analysis workflow" width="80%"></center>
 

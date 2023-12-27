@@ -112,194 +112,76 @@ plot_degradation <-
            ...) {
     # check arguments
     arguments <- as.list(base::match.call())
-
+    
     # add objects to argument names
     for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
+      try(arguments[[i]] <- get(i), silent = TRUE)
     }
-
+    
     # check each arguments
     check_results <-
-      check_arguments(fun = arguments[[1]], args = arguments)
-
+      .check_arguments(fun = arguments[[1]], args = arguments)
+    
     # report errors
-    report_assertions2(check_results)
-
+    .report_assertions(check_results)
+    
     # set colors
     bg_titles <- cols[1]
     env_fill <- cols[2]
     spc_fill <- cols[3]
     bg_sp_env <- cols[4]
-
+    
     # adjust wl based on hop.size
-    if (is.null(wl)) {
-      wl <-
-        round(
-          read_sound_file(
-            X,
-            index = 1,
-            header = TRUE,
-            path = path
-          )$sample.rate * hop.size / 1000,
-          0
-        )
-    }
-
-    # make wl even if odd
-    if (!(wl %% 2) == 0) {
-      wl <- wl + 1
-    }
-
+    wl <- .adjust_wl(wl, X, hop.size, path)
+    
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
     } else {
       cl <- cores
     }
-
+    
     # remove ambient sounds
-    X <- X[X$sound.id != "ambient", ]
-
+    X <- X[X$sound.id != "ambient",]
+    
     # stop if more than 1 sample per distance but no transect info
     if (any(table(X$sound.id, X$distance)) > 1 &
-      is.null(X$transect)) {
-      stop2(
+        is.null(X$transect)) {
+      .stop(
         "There are more than 1 test sound per sound.id/distance combination but no 'transect' column to group by transect"
       )
     }
-
+    
     # stop if there are more than 1 sample for distance sound id and transect combination (only 1 samp)
     if (!is.null(X$transect)) {
       if (any(table(X$sound.id, X$distance, X$transect)) > 1) {
-        stop2("There is more than 1 test sound per sound.id/distance/transect combination")
+        .stop("There is more than 1 test sound per sound.id/distance/transect combination")
       }
     }
-
+    
     if (is.null(X$transect)) {
       transects <- X$transect <- 1
     } else {
       transects <- unique(X$transect)
     }
-
+    
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
-
-    X_df <- as.data.frame(X)
-
-    # calculate time and freq ranges based on all recs
-    rangs <- lapply(seq_len(nrow(X)), function(i) {
-      r <- read_sound_file(
-        X = X,
-        path = path,
-        index = i,
-        header = TRUE
-      )
-      f <- r$sample.rate
-
-      # change mar to mar (if provided)
-      adj.mar <- (X$end[i] - X$start[i]) * (margins[2] / margins[1])
-
-      t <- c(X$start[i] - adj.mar, X$end[i] + adj.mar)
-
-      if (t[1] < 0) {
-        t[1] <- 0
-      }
-
-      if (t[2] > r$samples / f) {
-        t[2] <- r$samples / f
-      }
-
-      return(data.frame(mardur = t[2] - t[1]))
-    })
-
-    rangs <- do.call(rbind, rangs)
-
+    
     # for each sound fix start and end based on margin
-    X$mar.end <- X$mar.start <- NA
-    for (u in seq_len(nrow(X))) {
-      dur <- X$end[u] - X$start[u]
-      if (dur < max(rangs$mardur)) {
-        X$mar.end[u] <- (max(rangs$mardur) - dur) / 2
-        X$mar.start[u] <- (max(rangs$mardur) - dur) / 2
-        if (X$start[u] - X$mar.start[u] < 0) {
-          X$mar.end[u] <-
-            X$mar.end[u] + abs(X$start[u] - X$mar.start[u])
-          X$mar.start[u] <- X$start[u]
-        }
-      }
-    }
-
-    # create data subsets (element in list) with all the copies of a sound id in transect, also including its reference if it comes from another transect
-    # add text break if longer than 17 characters
-    tailored_sound_id <-
-      vapply(as.character(X_df$sound.id), function(x) {
-        if (nchar(x) > 15) {
-          paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x)))
-        } else {
-          x
-        }
-      }, FUN.VALUE = character(1))
-
-    X_df$sound.id.transect <-
-      paste(tailored_sound_id, X$transect, sep = "\n")
-
-    soundid_X_list <-
-      lapply(unique(X_df$sound.id.transect), function(x) {
-        Y <-
-          X_df[X_df$.sgnl.temp %in% (unique(X_df$reference[X_df$sound.id.transect == x])) |
-            X_df$sound.id.transect == x, ]
-        Y <- Y[order(Y$distance), ]
-        return(Y)
-      })
-
+    X <- .fix_margins(X, i, path, margins)
+    
     # get unique distances and maximum number of columns (distances) for any sound id
     distances <- sort(unique(X$distance))
     ncol <- length(distances)
-
-    # remove those with only 1 test sound which is a reference (i.e. lowest distance)
-    soundid_X_list <-
-      lapply(soundid_X_list, function(x) {
-        if (nrow(x) == 1 & x$distance[1] == min(distances)) {
-          x <- NULL
-        }
-
-        return(x)
-      })
-
-    # add numeric id to each subset
-    soundid_X_list <-
-      lapply(seq_along(soundid_X_list), function(x) {
-        if (!is.null(soundid_X_list[[x]])) {
-          soundid_X_list[[x]]$seq_number <- x
-        }
-        return(soundid_X_list[[x]])
-      })
-
-
-    # put all into a single data frame
-    soundid_X <- do.call(rbind, soundid_X_list)
-
-    # sort by sound id as in X
-    # Create a factor with desired order
-    factor_order <-
-      factor(soundid_X$sound.id, levels = unique(X$sound.id))
-
-    # Sort
-    soundid_X <- soundid_X[order(factor_order), ]
-
-    # add page in which will be printed each subset
-    soundid_X$page <-
-      as.numeric(cut(soundid_X$seq_number, breaks = nrow * 0:max(soundid_X$seq_number)))
-
-    # add seq number to know which will be plotted together
-    soundid_X$sound.id.seq <-
-      paste(soundid_X$sound.id, soundid_X$seq_number, sep = "-")
-
+    
+    soundid_X <- .prep_data_plot_degrad(X, distances, nrow)
+    
     # adjust nrow if less sound.id.seq than nrow
     if (nrow > length(unique(soundid_X$sound.id.seq))) {
       nrow <- length(unique(soundid_X$sound.id.seq))
     }
-
+    
     # set image size fixing height for when only 1 row
     img_width <- ncol * col.width
     img_heigth <- nrow * row.height * if (nrow == 1) {
@@ -307,547 +189,47 @@ plot_degradation <-
     } else {
       1
     }
-
+    
     # set basic layout for all pages
-    # spectrogram panels
-    # vertical lines
-    # 0.9 is total space for side panels (freq and sound id labels)
-    # 0.5 is space for freq panel and 0.4 for sound id pannel
-    verticals <- seq(
-      from = (1 / (ncol + 0.9)) * 0.5,
-      to = 1 - ((1 / (ncol + 0.9)) * 0.4),
-      length.out = ncol + 1
-    )
-
-    # left margin
-    spec_lf <- rep(verticals[-length(verticals)], times = nrow)
-
-    # right margin
-    spec_rg <- rep(verticals[-1], times = nrow)
-
-    # horizontal lines
-    # 0.7 is total space for top and bottom panels (time and distance labels)
-    # 0.4 is space for time panel and 0.3 for distance pannel
-
-    horizontals <- seq(
-      from = 1 - ((1 / (nrow + 0.7)) * 0.3),
-      to = (1 / (nrow + 0.7)) * 0.4,
-      length.out = nrow + 1
-    )
-
-    # bottom margin
-    spec_btm <- rep(horizontals[-1], each = ncol)
-
-    # top margin
-    spec_tp <- rep(horizontals[-length(horizontals)], each = ncol)
-
-    # put together in a matrix
-    spec_m <- cbind(spec_lf, spec_rg, spec_btm, spec_tp)
-
-    # add additional panels for spectra and/or envelopes
-    if (spectrum | envelope) {
-      spec_m_list <- lapply(seq_len(nrow(spec_m)), function(y) {
-        psp <- envel <- spectr <- spec_m[y, ]
-
-        if (envelope) {
-          psp[3] <-
-            envel[4] <-
-            spectr[3] <-
-            spectr[3] + ((spectr[4] - spectr[3]) / (heights[1] / heights[2]))
-        }
-
-        if (spectrum) {
-          psp[2] <-
-            envel[1] <-
-            spectr[1] <-
-            spectr[1] + ((spectr[2] - spectr[1]) / (widths[1] / widths[2]))
-        }
-
-        m <-
-          matrix(
-            c(spectr, if (spectrum) {
-              psp
-            }, if (envelope) {
-              envel
-            }),
-            ncol = 4,
-            byrow = TRUE
-          )
-
-        return(m)
-      })
-
-      spec_m <- do.call(rbind, spec_m_list)
-    }
-
-    ## label panels
-    # left margin
-    lab_lf <-
-      c(rep(max(verticals), each = nrow), verticals[-length(verticals)], 0, 0)
-
-    # right margin
-    lab_rg <-
-      c(rep(1, each = nrow), verticals[-1], min(verticals), 1)
-
-    # bottom margin
-    lab_btm <-
-      c(horizontals[-1], rep(max(horizontals), ncol), min(horizontals), 0)
-
-    # top margin
-    lab_tp <-
-      c(
-        horizontals[-length(horizontals)],
-        rep(1, ncol),
-        max(horizontals),
-        min(horizontals)
-      )
-
-    # put together in a matrix
-    lab_m <- cbind(lab_lf, lab_rg, lab_btm, lab_tp)
-
-    # single data frame with all panels
-    page_layout <- rbind(spec_m, lab_m)
-
-    # testing layout screens
-    # ss <- split.screen(figs = page_layout)
-    # for(i in seq_len(nrow(page_layout)))
-    # {screen(i)
-    #   par( mar = rep(0, 4))
-    #   plot(0.5, xlim = c(0,1), ylim = c(0,1), type = "n", axes = FALSE, xlab = "", ylab = "", xaxt = "n", yaxt = "n")
-    #   box()
-    #   text(x = 0.5, y = 0.5, labels = i)
-    # }
-
+    page_layout <- .page_layout(ncol, nrow, spectrum, envelope, heights, widths)
+    
     close.screen(all.screens = TRUE)
-
+    
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
     } else {
       cl <- cores
     }
-
+    
     out <-
-      warbleR:::pblapply_wrblr_int(X = sort(unique(soundid_X$page)), pbar = pb, cl = cl, function(x, flm = flim) {
-        # extract data subset for a page
-        Y <- soundid_X[soundid_X$page == x, ]
-
-
-        # start graphic device
-        warbleR:::img_wrlbr_int(
-          filename = paste0("plot_degradation_p", x, ".jpeg"),
-          path = dest.path,
-          width = img_width,
-          height = img_heigth,
-          units = "in",
-          res = res,
-        )
-
-        # set panel layout
-        invisible(close.screen(all.screens = TRUE))
-        suppressWarnings(catch <- split.screen(figs = page_layout))
-
-        # frequency label
-        par(mar = c(0, 0, 0, 0), new = TRUE)
-
-        # activate screen for frequency axis label
-        screen((nrow * ncol * (sum(
-          c(envelope, spectrum)
-        ) + 1)) + nrow + ncol + 1)
-
-        par(mar = c(0, 0, 0, 0), new = TRUE)
-
-        plot(
-          1,
-          frame.plot = FALSE,
-          type = "n",
-          yaxt = "n",
-          xaxt = "n"
-        )
-
-        text(
-          x = 0.8,
-          y = 1,
-          "Frequency (kHz)",
-          srt = 90,
-          cex = 1.2
-        )
-
-        # activate screen for time label
-        par(mar = c(0, 0, 0, 0), new = TRUE)
-
-        screen((nrow * ncol * (sum(
-          c(envelope, spectrum)
-        ) + 1)) + nrow + ncol + 2)
-
-        par(mar = c(0, 0, 0, 0), new = TRUE)
-
-        plot(
-          1,
-          frame.plot = FALSE,
-          type = "n",
-          yaxt = "n",
-          xaxt = "n"
-        )
-
-        text(
-          x = 1,
-          y = 0.75,
-          "Time (s)",
-          cex = 1.2
-        )
-
-
-        # get combination of distances and sound id to loop over it
-        grd <-
-          expand.grid(
-            distance = distances,
-            sound.id.seq = unique(Y$sound.id.seq)
-          )
-
-
-        # add screen number for spectrogram
-        grd$screen <-
-          seq(
-            from = 1,
-            to = nrow * ncol * (sum(c(
-              envelope, spectrum
-            )) + 1),
-            by = sum(spectrum, envelope) + 1
-          )[seq_len(nrow(grd))]
-
-        grd$.sgnl.temp <- vapply(seq_len(nrow(grd)), function(o) {
-          sgnl <- Y$.sgnl.temp[Y$distance == grd$distance[o] &
-            Y$sound.id.seq == grd$sound.id.seq[o]]
-          if (length(sgnl) == 0) {
-            sgnl <- NA
-          }
-          return(sgnl)
-        }, FUN.VALUE = character(1))
-
-        # start with empty signal id vector so it can be recorded with prev_sgnl (this is needed for adding frequency labels when the spectrogram at the left side is missing)
-        sgnl <- NA
-
-        # loop to create spectrograms
-        for (i in grd$screen) {
-          prev_sgnl <- sgnl
-
-          # get id of signal
-          sgnl <- grd$.sgnl.temp[grd$screen == i]
-
-          # if signal exists
-          if (!is.na(sgnl)) {
-            # get row index for signals in X
-            indx <- which(X$.sgnl.temp == sgnl)
-
-            # read wave
-            wave <-
-              read_wave(
-                X = X,
-                index = indx,
-                from = X$start[indx] - X$mar.start[indx],
-                to = X$end[indx] + X$mar.end[indx],
-                path = path
-              )
-
-            # set frequency limits
-            if (is.character(flm)) {
-              fl <-
-                c(
-                  min(Y$bottom.freq[Y$.sgnl.temp == sgnl]) + as.numeric(flm[1]),
-                  max(Y$top.freq[Y$.sgnl.temp == sgnl]) + as.numeric(flm[2])
-                )
-            } else {
-              fl <- flm
-            }
-            # fix if lower than 0
-            if (fl[1] < 0) {
-              fl[1] <- 0
-            }
-
-            # fix higher if above nyquist frequency
-            if (fl[2] > wave@samp.rate / 2000) {
-              fl[2] <- wave@samp.rate / 2000
-            }
-
-
-            par(mar = c(0, 0, 0, 0), new = TRUE)
-
-            # start screen
-            screen(i)
-            par(mar = c(0, 0, 0, 0), new = TRUE)
-            curr_dist <- grd$distance[grd$screen == i]
-
-            # plot spectrogram
-            warbleR:::spectro_wrblr_int2(
-              wave = wave,
-              palette = palette,
-              axisX = FALSE,
-              axisY = FALSE,
-              grid = FALSE,
-              collevels = collevels,
-              flim = fl,
-              wl = wl
-            )
-
-            # add vertical lines
-            # add dotted lines
-            abline(
-              v = c(X$mar.start[indx], X$end[indx] - X$start[indx] + X$mar.start[indx]),
-              col = "white",
-              lty = 3,
-              lwd = 1.5
-            )
-
-            if (spectrum) {
-              # set screen
-              i <- i + 1
-              screen(i)
-              par(
-                mar = c(0, 0, 0, 0),
-                new = TRUE
-              )
-
-              # get power spectrum
-              spc <- spec(wave = wave, plot = FALSE)
-
-              # smooth
-              spc[, 2] <-
-                warbleR::envelope(x = spc[, 2], ssmooth = env.smooth)
-
-              # filter to flim
-              spc <- spc[spc[, 1] > fl[1] & spc[, 1] < fl[2], ]
-
-              # set white plot
-              plot(
-                x = spc[, 2],
-                y = spc[, 1],
-                type = "l",
-                frame.plot = FALSE,
-                yaxt = "n",
-                xaxt = "n",
-                col = spc_fill,
-                xaxs = "i",
-                yaxs = "i"
-              )
-
-              # add background color
-              rect(
-                min(spc[, 2]),
-                min(spc[, 1]),
-                max(spc[, 2]),
-                max(spc[, 1]),
-                col = "white",
-                border = NA
-              )
-              rect(
-                min(spc[, 2]),
-                min(spc[, 1]),
-                max(spc[, 2]),
-                max(spc[, 1]),
-                col = bg_sp_env,
-                border = NA
-              )
-
-              # add 0s at star and end so polygon doesnt twist
-              spc[c(1, nrow(spc)), 2] <- 0
-
-              # add polygon with spectrum shape
-              polygon(spc[, 2:1], col = spc_fill, border = NA)
-
-              box()
-
-              par(
-                mar = c(0, 0, 0, 0),
-                bg =  "#FFFFFF00",
-                new = TRUE
-              )
-            }
-
-            # plot frequency ticks
-            if (page_layout[i, 1] == min(page_layout[seq_along(nrow * ncol * (sum(c(
-              envelope, spectrum
-            )) + 1)), 1]) |
-              is.na(prev_sgnl) & curr_dist > distances[1]) {
-              at_freq <-
-                pretty(seq(0, wave@samp.rate / 2000, length.out = 10)[-10], n = 10)
-              axis(2,
-                at = at_freq,
-                labels = if (envelope) {
-                  at_freq
-                } else {
-                  c(at_freq[-length(at_freq)], "")
-                }
-              )
-            }
-
-            # plot amplitude envelope
-            if (envelope) {
-              # set screen
-              i <- i + 1
-              screen(i)
-
-              # get power spectrum
-              envlp <-
-                warbleR::envelope(
-                  x = seewave::ffilter(
-                    wave = wave,
-                    from = fl[1] * 1000,
-                    to = fl[2] * 1000
-                  ),
-                  ssmooth = env.smooth
-                )
-              # punt in a matrix including time
-              envlp <-
-                cbind(seq(0, duration(wave), along.with = envlp), envlp)
-
-
-              # set graphic parameters
-              par(
-                mar = c(0, 0, 0, 0),
-                new = TRUE
-              )
-
-
-              # set white plot
-              plot(
-                x = envlp[, 1],
-                y = envlp[, 2],
-                type = "l",
-                frame.plot = FALSE,
-                yaxt = "n",
-                xaxt = "n",
-                col = spc_fill,
-                xaxs = "i",
-                yaxs = "i"
-              )
-
-              # add background color
-              rect(
-                0,
-                min(envlp[, 2]),
-                max(envlp[, 2]),
-                max(envlp[, 2]),
-                max(envlp[, 2]),
-                col = "white",
-                border = NA
-              )
-              rect(
-                0,
-                min(envlp[, 2]),
-                max(envlp[, 2]),
-                max(envlp[, 2]),
-                col = bg_sp_env,
-                border = NA
-              )
-
-              # add 0s at star and end so polygon doesnt twist
-              envlp[c(1, nrow(envlp)), 2] <- 0
-
-              # add polygon with envelope shape
-              polygon(envlp,
-                col = spc_fill,
-                border = NA
-              )
-              box()
-            } else if (spectrum) {
-              par(mar = c(0, 0, 0, 0), bg = "#FFFFFF00")
-              screen(i - 1)
-            }
-
-            # plot time ticks
-            at_time <-
-              pretty(seq(0, duration(wave), length.out = 10)[-10], n = 4)
-            axis(1,
-              at = at_time,
-              labels = if (spectrum & !anyNA(grd$.sgnl.temp)) {
-                at_time
-              } else {
-                c("", at_time[c(-1, -length(at_time))], "")
-              }
-            )
-          }
-        }
-
-        # plot distance labels
-        dist_labs <- paste(distances, "m")
-
-        # add labels
-        for (e in seq_len(ncol) + ((nrow * (ncol) * (sum(
-          c(envelope, spectrum)
-        ) + 1)) + nrow)) {
-          # activate screen
-          screen(e)
-          par(
-            mar = c(0, 0, 0, 0),
-            new = TRUE
-          )
-
-          plot(
-            1,
-            frame.plot = FALSE,
-            type = "n",
-            yaxt = "n",
-            xaxt = "n"
-          )
-
-          # add background color
-          rect(0, 0, 2, 2, col = "white", border = NA)
-          rect(0, 0, 2, 2, col = bg_titles, border = NA)
-
-          text(
-            x = 1,
-            y = 1,
-            dist_labs[e - ((nrow * (ncol) * (sum(
-              c(envelope, spectrum)
-            ) + 1)) + nrow)],
-            cex = 1.2,
-            col = "white",
-            font = 2
-          )
-          box()
-        }
-        # get sound id transect labels
-        soundid_transect_labs <-
-          unique(Y$sound.id.transect[!Y$.sgnl.temp %in% Y$reference])
-
-        # plot sound id transect labels
-        for (e in (seq_len(nrow) + (nrow * ncol * (sum(
-          c(envelope, spectrum)
-        ) + 1)))[seq_along(soundid_transect_labs)]) {
-          # activate screen
-          screen(e)
-          par(
-            mar = c(0, 0, 0, 0),
-            new = TRUE
-          )
-
-          plot(
-            1,
-            frame.plot = FALSE,
-            type = "n",
-            yaxt = "n",
-            xaxt = "n"
-          )
-
-          # add background color
-          rect(0, 0, 2, 2, col = "white", border = NA)
-          rect(0, 0, 2, 2, col = bg_titles, border = NA)
-
-          text(
-            x = 1,
-            y = 1,
-            soundid_transect_labs[e - (nrow * ncol * (sum(c(
-              envelope, spectrum
-            )) + 1))],
-            font = 2,
-            srt = 270,
-            cex = 1.2,
-            col = "white"
-          )
-          box()
-        }
-        cs <- close.screen(all.screens = TRUE)
-        try(grDevices::dev.off(), silent = TRUE)
-      })
+      warbleR:::pblapply_wrblr_int(
+        X = sort(unique(soundid_X$page)),
+        pbar = pb,
+        cl = cl,
+        FUN = .plot_degrad,
+        X,
+        soundid_X,
+        flim,
+        path,
+        dest.path,
+        img_width,
+        img_heigth,
+        res,
+        page_layout,
+        nrow,
+        ncol,
+        envelope,
+        spectrum,
+        distances,
+        wl,
+        spc_fill,
+        bg_sp_env,
+        bg_titles,
+        ovlp,
+        collevels, 
+        env.smooth,
+        palette,
+        ...
+      )
   }

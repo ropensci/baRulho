@@ -5,8 +5,7 @@ baRulho: quantifying degradation of (animal) sounds
 <!-- badges: start -->
 
 [![Status at rOpenSci Software Peer
-Review](https://badges.ropensci.org/609_status.svg)](https://github.com/ropensci/software-review/issues/609)
-[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+Review](https://badges.ropensci.org/609_status.svg)](https://github.com/ropensci/software-review/issues/609)[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![Dependencies](https://tinyverse.netlify.com/badge/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Project Status: Active The project has reached a stable, usable state
 and is being actively
@@ -15,7 +14,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![packageversion](https://img.shields.io/badge/Package%20version-2.1.0-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2023--10--05-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2023--12--10-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
@@ -27,10 +26,10 @@ coverage](https://codecov.io/gh/maRce10/baRulho/branch/master/graph/badge.svg)](
 <img src="man/figures/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
 [baRulho](https://cran.r-project.org/package=baRulho) is intended to
-facilitate acoustic analysis of (animal) sound transmission experiments,
-which typically aim to quantify changes in signal structure when
-transmitted in a given habitat by broadcasting and re-recording animal
-sounds at increasing distances. A common sequence of steps to
+facilitate the implementation of (animal) sound transmission
+experiments, which typically aim to quantify changes in signal structure
+when transmitted in a given habitat by broadcasting and re-recording
+animal sounds at increasing distances. A common sequence of steps to
 experimentally test hypotheses related to sound transmission is depicted
 in the following diagram:
 
@@ -111,7 +110,7 @@ annotation tables, similar to
 [baRulho](https://marce10.github.io/baRulho/). The package
 [Rraven](https://cran.r-project.org/package=Rraven) facilitates the
 exchange of data between R and [Raven sound analysis
-software](https://ravensoundsoftware.com) ([Cornell Lab of
+software](https://www.ravensoundsoftware.com/) ([Cornell Lab of
 Ornithology](https://www.birds.cornell.edu/home)) and can be very
 helpful for incorporating Raven as the annotating tool into acoustic
 analysis workflow in R. The package

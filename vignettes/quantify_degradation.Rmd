@@ -68,7 +68,6 @@ The input data should contain some additional information. [baRulho](https://mar
 s
 ```{r,eval=FALSE}
 
-
 # load packages
 library(baRulho)
 library(viridis)

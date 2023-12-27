@@ -5,11 +5,11 @@
 \title{Measure blur ratio in the time domain}
 \usage{
 blur_ratio(X, parallel = NULL, cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE),  
+pb = getOption("pb", TRUE),
 env.smooth = getOption("env.smooth", 200),
-output = NULL, envelopes = FALSE, 
+output = NULL, envelopes = FALSE,
 hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
-ovlp = getOption("ovlp", 70), n.samples = 100, 
+ovlp = getOption("ovlp", 70), n.samples = 100,
 path = getOption("sound.files.path", "."))
 }
 \arguments{
@@ -52,7 +52,7 @@ Blur ratio measures the degradation of sound as a change in sound power in the t
 {
   # load example data
   data("test_sounds_est")
-  
+
  # add reference to X
  X <- set_reference_sounds(X = test_sounds_est)
   blur_ratio(X = X)

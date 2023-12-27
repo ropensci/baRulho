@@ -22,7 +22,7 @@
 #' data("test_sounds_est")
 #'
 #' # make it a 'by song' extended selection table
-#' X <- baRulho:::by_element_est(X = test_sounds_est)
+#' X <- warbleR::by_element_est(X = test_sounds_est)
 #'
 #' # add noise to the first five rows
 #' X_noise <- add_noise(X = X[1:5, ], mar = 0.2, target.snr = 3)
@@ -45,132 +45,41 @@ add_noise <-
            ...) {
     # check arguments
     arguments <- as.list(base::match.call())
-
+    
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       # use try to avoid errors with argumets from dots (...)
       try(arguments[[i]] <- get(i), silent = TRUE)
     }
-
+    
     # check each arguments
     check_results <-
-      check_arguments(fun = arguments[[1]], args = arguments)
-
+      .check_arguments(fun = arguments[[1]], args = arguments)
+    
     # report errors
-    report_assertions2(check_results)
-
+    .report_assertions(check_results)
+    
     # get index number
     target_rows <- which(!X$sound.id %in% c("ambient", "marker"))
-
+    
     wav_snr_list <-
       warbleR:::pblapply_wrblr_int(
         pbar = pb,
         X = target_rows,
         cl = cores,
-        FUN = function(x) {
-          # extract selection as single extended selection table
-          X_x <- X[x, ]
-
-          # normalize wave object
-          attributes(X_x)$wave.objects[[1]] <-
-            normalize(attributes(X_x)$wave.objects[[1]], unit = "1")
-
-          # estimate current snr
-          snr <-
-            signal_to_noise_ratio(X_x, mar = mar, pb = FALSE)$signal.to.noise.ratio
-
-          if (snr > target.snr) {
-            # reset time coordinates of sounds if lower than 0 o higher than duration
-            stn <- X$start[x] - mar
-            mar1 <- mar
-
-            if (stn < 0) {
-              mar1 <- mar1 + stn
-              stn <- 0
-            }
-
-            # read sound and margin
-            wav <-
-              warbleR::read_sound_file(
-                X = X_x,
-                index = 1,
-                from = 0,
-                to = Inf,
-                path = NULL
-              )
-
-            # start point for adding noise (a 1/10 of signal amplitude)
-            prop_noise <- 0.3
-
-            prop_noise_vector <- vector()
-            snr_vector <- vector()
-
-            seed <- 0
-            while (all(snr > target.snr + precision |
-              snr < target.snr - precision) &
-              length(prop_noise_vector) < max.iterations) {
-              seed <- seed + 1
-              set.seed(seed)
-              noise_wav <-
-                runif(length(wav@left),
-                  min = -1 * prop_noise,
-                  max = prop_noise
-                )
-
-              attributes(X_x)$wave.objects[[1]] <- wav + noise_wav
-
-              snr <-
-                signal_to_noise_ratio(
-                  X = X_x,
-                  mar = mar,
-                  pb = FALSE
-                )$signal.to.noise.ratio
-
-              prop_noise_vector[length(prop_noise_vector) + 1] <-
-                prop_noise
-              snr_vector[length(snr_vector) + 1] <- snr
-
-              # increase constant to modify noise level when output snr higher than target
-              if (snr > target.snr + precision) {
-                prop_noise <- prop_noise * 1.3
-              }
-
-              # decrease constant to modify noise level when output snr lower than target
-              if (snr < target.snr - precision) {
-                prop_noise <- prop_noise / 1.3
-              }
-            }
-
-            # adjust SNR using best SNR
-            set.seed(which.min(abs(snr_vector - target.snr)))
-            prop_noise <-
-              prop_noise_vector[which.min(abs(snr_vector - target.snr))]
-            attributes(X_x)$wave.objects[[1]] <- wav +
-              runif(length(wav@left),
-                min = -1 * prop_noise,
-                max = prop_noise
-              )
-            snr <-
-              snr_vector[which.min(abs(snr_vector - target.snr))]
-            modified <- TRUE
-          } else {
-            modified <- FALSE
-          }
-          seed <- NA
-
-          return(list(
-            wave = attributes(X_x)$wave.objects[[1]],
-            snr = snr,
-            modified = modified
-          ))
-        }
+        FUN = .add_noise,
+        mar = mar,
+        target.snr = target.snr,
+        precision = precision,
+        max.iterations = max.iterations,
+        Y = X
       )
-
+    
     names(wav_snr_list) <- target_rows
-
+    
     # add empty column to fill with adjusted SNR values
     X$adjusted.snr <- NA
-
+    
     # add modified waves to original extended selection table
     for (i in target_rows) {
       attributes(X)$wave.objects[[i]] <-
@@ -178,24 +87,22 @@ add_noise <-
       X$adjusted.snr[i] <-
         wav_snr_list[[which(target_rows == i)]]$snr
     }
-
+    
     # check if some were not modified
     if (any(!sapply(wav_snr_list, "[[", 3))) {
       n_wavs <- sum(!sapply(wav_snr_list, "[[", 3))
-
-      cli::cli_alert_warning(
-        text = colortext(
-          paste0(
-            "Warning: {n_wavs} wave{?s} already have a signal-to-noise ratio lower than ",
-            target.snr,
-            " (the target SNR) and w{?as/ere} not modified (run signal_to_noise_ratio(X, mar = ",
-            mar,
-            ") to spot {?it/them})"
-          ),
-          as = "magenta"
+      
+      cli::cli_alert_warning(text = .colortext(
+        paste0(
+          "Warning: {n_wavs} wave{?s} already have a signal-to-noise ratio lower than ",
+          target.snr,
+          " (the target SNR) and w{?as/ere} not modified (run signal_to_noise_ratio(X, mar = ",
+          mar,
+          ") to spot {?it/them})"
         ),
-        wrap = TRUE
-      )
+        as = "magenta"
+      ),
+      wrap = TRUE)
     }
     return(X)
   }

@@ -15,7 +15,7 @@
 #' @param am Logical to control if both amplitude modulated sounds and non-modulated sounds are synthesize. If \code{FALSE} (default) only non-modulated sounds are synthesized.
 #' @param am.amps Numeric vector with the relative amplitude for each time step to simulate amplitude modulation (only applied to the fundamental frequency). The default value (\code{rep(c(1:4, 3:2), length.out = 11)}) has 2 amplitude peaks (although only applied if 'am = TRUE')
 #' @param mar Numeric vector with the duration of margins of silence around sounds in seconds. Default is \code{0.05}.
-#' @param seed Numeric vector of length 1. This allows users to get the same results in different runs (using \code{\link[base:Random]{set.seed}} internally). Default is \code{NULL}.
+#' @param seed Numeric vector of length 1. This allows users to get the same results in different runs (using \code{\link[base:Random]{se.seed}} internally). Default is \code{NULL}.
 #' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
 #' @param sig2 Numeric vector of length 1 defining the sigma value of the brownian motion model (used for simulating frequency modulation). Default is 0.3.
 #' @param shuffle Logical to control if the position of sounds is randomized. Having all sounds from the same treatment in a sequence can be problematic if an environmental noise masks them. Hence 'shuffle' is useful to avoid having sounds from the same treatment next to each other. Default is \code{FALSE}.
@@ -84,14 +84,14 @@ synth_sounds <-
     
     # check each arguments
     check_results <-
-      check_arguments(fun = arguments[[1]], args = arguments)
+      .check_arguments(fun = arguments[[1]], args = arguments)
     
     # report errors
-    report_assertions2(check_results)
+    .report_assertions(check_results)
     
     
     if (am & length(am.amps) < 2) {
-      stop2("if 'am = TRUE' 'am.amps' must have more than 1 value 'length(am.amps) > 1'")
+      .stop("if 'am = TRUE' 'am.amps' must have more than 1 value 'length(am.amps) > 1'")
     }
     
     # set number of steps (default is 10)
@@ -112,15 +112,15 @@ synth_sounds <-
     
     # remove levels when treatments not included
     if (!fm) {
-      eg <- eg[eg$fm == "no.fm",]
+      eg <- eg[eg$fm == "no.fm", ]
     }
     
     if (!am) {
-      eg <- eg[eg$am == "no.am",]
+      eg <- eg[eg$am == "no.am", ]
     }
     
     if (nharmonics == 1) {
-      eg <- eg[eg$harmonics == "no.harmonics",]
+      eg <- eg[eg$harmonics == "no.harmonics", ]
     }
     
     # create temporary directory
@@ -129,64 +129,27 @@ synth_sounds <-
     
     # simulate songs
     sim.songs <-
-      warbleR:::pblapply_wrblr_int(seq_len(nrow(eg)), pbar = pb, function(x) {
-        sm.sng <- warbleR::simulate_songs(
-          n = length(frequencies),
-          durs = eg$dur[x],
-          freqs = frequencies,
-          samp.rate = sampling.rate,
-          gaps = mar * 3 / 2,
-          am.amps = if (eg$am[x] == "no.am") {
-            1
-          } else {
-            am.amps
-          },
-          harms = if (eg$harm[x] == "no.harm") {
-            1
-          } else {
-            nharmonics
-          },
-          harm.amps = if (eg$harm[x] == "no.harm") {
-            1
-          } else {
-            nharmonics:1
-          },
-          diff.fun = if (eg$fm[x] == "fm") {
-            "GBM"
-          } else {
-            "pure.tone"
-          },
-          selec.table = TRUE,
-          sig2 = sig2,
-          steps = steps,
-          file.name = paste(eg[x,], collapse = "_"),
-          bgn = 0,
-          seed = seed,
-          path = temp_dir,
-          hrm.freqs = hrm.freqs
-        )
-        
-        # add freq room if pure tone
-        if (eg$fm[x] == "no.fm") {
-          sm.sng$selec.table$bottom.freq <-
-            sm.sng$selec.table$bottom.freq - 0.2
-          sm.sng$selec.table$top.freq <-
-            sm.sng$selec.table$top.freq + 0.2
-        }
-        
-        sm.sng$selec.table$bottom.freq[sm.sng$selec.table$bottom.freq < 0] <-
-          0.1
-        
-        sm.sng$selec.table$sim.freq <- as.character(frequencies)
-        
-        return(sm.sng)
-      })
-    
+      warbleR:::pblapply_wrblr_int(
+        seq_len(nrow(eg)),
+        pbar = pb,
+        FUN = .sim_song,
+        temp_dir = temp_dir,
+        eg = eg,
+        frequencies = frequencies,
+        steps = steps,
+        am.amps = am.amps,
+        nharmonics = nharmonics,
+        mar = mar,
+        sig2 = sig2,
+        seed = seed,
+        hrm.freqs = hrm.freqs,
+        sampling.rate = sampling.rate
+      )
     
     # name with parameters
     names(sim.songs) <-
       vapply(seq_len(nrow(eg)), function(x) {
-        paste(eg[x,], collapse = "_")
+        paste(eg[x, ], collapse = "_")
       }, FUN.VALUE = character(1))
     
     # extract select tables
@@ -194,10 +157,10 @@ synth_sounds <-
       X$selec.table
     })
     
-    sim.song.st <- do.call(rbind2, sim.song.sts)
+    sim.song.st <- do.call(.bind, sim.song.sts)
     
     if (shuffle) {
-      sim.song.st <- sim.song.st[sample(seq_len(nrow(sim.song.st))),]
+      sim.song.st <- sim.song.st[sample(seq_len(nrow(sim.song.st))), ]
     }
     
     # make a single extended selection table for simulation
@@ -239,72 +202,19 @@ synth_sounds <-
     
     # replicate treatments
     if (replicates > 1) {
-      rep_est_list <- lapply(seq_len(replicates), function(x) {
-        Y <- sim_sounds_est
-        Y$selec <- x
-        attr(Y, "check.results")$selec <- x
-        return(Y)
-      })
-      
-      sim_sounds_est <- rep_est_list[[1]]
-      
-      for (i in 2:replicates) {
-        suppressWarnings(sim_sounds_est <-
-                           rbind(sim_sounds_est, rep_est_list[[i]]))
-      }
+      sim_sounds_est <-
+        .rep_synth_sound(
+          y = seq_len(replicates),
+          sim_sounds_est = sim_sounds_est,
+          replicates = replicates
+        )
     }
     
-    # rename sound files
-    sim_sounds_est <-
-      warbleR::rename_est_waves(X = sim_sounds_est,
-                                new.sound.files = paste0("synthetic_sound_", seq_along(unique(
-                                  sim_sounds_est$sound.files
-                                ))))
-    
-    sim_sounds_est$old.sound.file.name <- NULL
-    
-    # add single treatment column
-    dur_label <- if (length(durations) > 1) {
-      paste0("dur:", sim_sounds_est$duration)
-    } else {
-      NULL
-    }
-    freq_label <- if (length(frequencies) > 1) {
-      paste0("freq:", sim_sounds_est$frequency)
-    } else {
-      NULL
-    }
-    freq_dur_label <- paste(dur_label, freq_label, sep = ";")
-    
-    sim_sounds_est$treatment <- if (ncol(sim_sounds_est) > 8) {
-      sim_sounds_est$treatment <-
-        paste(freq_dur_label,
-              apply(sim_sounds_est[, 9:ncol(sim_sounds_est)], 1, paste, collapse = ";"),
-              sep = ";")
-    } else {
-      freq_dur_label
-    }
-    
-    # add treatment column
-    sim_sounds_est$treatment <-
-      gsub("^;", "", sim_sounds_est$treatment)
-    
-    # add sound id column (a unique identifier for each sound)
-    sim_sounds_est$replicate <- 1
-    
-    for (i in 2:nrow(sim_sounds_est)) {
-      sim_sounds_est$replicate[i] <-
-        sum(sim_sounds_est$treatment[1:i] == sim_sounds_est$treatment[i])
-    }
-    
-    sim_sounds_est$sound.id <-
-      paste(sim_sounds_est$treatment, sim_sounds_est$replicate, sep = "_")
-    
-    # reset row names
-    rownames(sim_sounds_est) <- seq_len(nrow(sim_sounds_est))
+  # label columns output table
+    sim_sounds_est <- .label_synth_est(sim_sounds_est, durations, frequencies)
     
     # fix call attribute
     attributes(sim_sounds_est)$call <- base::match.call()
     
     return(sim_sounds_est)
-  }
+}

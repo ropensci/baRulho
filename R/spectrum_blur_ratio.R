@@ -30,7 +30,7 @@
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
-#'   
+#'
 #' # add reference to X
 #' X <- set_reference_sounds(X = test_sounds_est)
 #'
@@ -94,13 +94,16 @@ spectrum_blur_ratio <-
     
     # check each arguments
     check_results <-
-      check_arguments(fun = arguments[[1]], args = arguments)
+      .check_arguments(fun = arguments[[1]], args = arguments)
     
     # report errors
-    report_assertions2(check_results)
+    .report_assertions(check_results)
     
     # total number of steps depending on whether envelopes are returned
-    steps <- if (spectra) 3 else 2
+    steps <- if (spectra)
+      3
+    else
+      2
     
     # get sampling rate
     sampling_rate <-
@@ -113,16 +116,7 @@ spectrum_blur_ratio <-
     
     
     # adjust wl based on hop.size
-    if (is.null(wl)) {
-      wl <-
-        round(sampling_rate * hop.size / 1000,
-              0)
-    }
-    
-    # make wl even if odd
-    if (!(wl %% 2) == 0) {
-      wl <- wl + 1
-    }
+    wl <- .adjust_wl(wl, X, hop.size, path)
     
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
@@ -141,10 +135,8 @@ spectrum_blur_ratio <-
     
     # print message
     if (pb)
-      write(
-        file = "",
-        x = paste0("Computing power spectra (step 1 out of ", steps, "):")
-      )
+      write(file = "",
+            x = paste0("Computing power spectra (step 1 out of ", steps, "):"))
     
     # calculate all spectra apply function
     specs <-
@@ -158,7 +150,7 @@ spectrum_blur_ratio <-
                        Q = X,
                        pth = path,
                        nb = n.bins) {
-          spctr_FUN(
+          .spctr(
             y,
             spec.smooth = ssmth,
             wl = wln,
@@ -186,18 +178,20 @@ spectrum_blur_ratio <-
         X = seq_len(nrow(X)),
         pbar = pb,
         cl = cl,
-        FUN = function(x, 
+        FUN = function(x,
                        Q = X,
                        wle = wl,
                        ovp = ovlp,
                        spcs = specs,
                        sr = sampling_rate) {
-          blur_sp_FUN(x,
-                      X = Q,
-                      ovlp = ovp,
-                      wl = wle,
-                      specs = spcs,
-                      sampling_rate = sr)
+          .blur_sp(
+            x,
+            X = Q,
+            ovlp = ovp,
+            wl = wle,
+            specs = spcs,
+            sampling_rate = sr
+          )
         }
       ))
     

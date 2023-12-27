@@ -54,7 +54,7 @@ Spectral blur ratio measures the degradation of sound as a function of the chang
 {
   # load example data
   data("test_sounds_est")
-  
+
 # add reference to X
 X <- set_reference_sounds(X = test_sounds_est)
 

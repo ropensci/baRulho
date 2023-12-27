@@ -5,7 +5,7 @@
 \title{Create a master sound file}
 \usage{
 master_sound_file(X, file.name, dest.path = getOption("dest.path", "."),
-overwrite = FALSE, delay = 1, gap.duration = 1, amp.marker = 2, flim = c(0, 4), 
+overwrite = FALSE, delay = 1, gap.duration = 1, amp.marker = 2, flim = c(0, 4),
 cex = 14, path = getOption("sound.files.path", "."))
 }
 \arguments{

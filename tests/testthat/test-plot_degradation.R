@@ -23,7 +23,7 @@ test_that("basic", {
     X = X,
     nrow = 3,
     ovlp = 0,
-    colors = viridis::magma(4, alpha = 0.3),
+    cols = viridis::magma(4, alpha = 0.3),
     palette = viridis::magma
   )
   

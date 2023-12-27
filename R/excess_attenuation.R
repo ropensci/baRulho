@@ -78,38 +78,22 @@ excess_attenuation <-
            path = getOption("sound.files.path", ".")) {
     # check arguments
     arguments <- as.list(base::match.call())
-
+    
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-
+    
     # check each arguments
     check_results <-
-      check_arguments(fun = arguments[[1]], args = arguments)
-
+      .check_arguments(fun = arguments[[1]], args = arguments)
+    
     # report errors
-    report_assertions2(check_results)
-
+    .report_assertions(check_results)
+    
     # adjust wl based on hop.size
-    if (is.null(wl)) {
-      wl <-
-        round(
-          read_sound_file(
-            X,
-            index = 1,
-            header = TRUE,
-            path = path
-          )$sample.rate * hop.size / 1000,
-          0
-        )
-    }
-
-    # make wl even if odd
-    if (!(wl %% 2) == 0) {
-      wl <- wl + 1
-    }
-
+    wl <- .adjust_wl(wl, X, hop.size, path)
+    
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -117,35 +101,45 @@ excess_attenuation <-
     } else {
       cl <- cores
     }
-
+    
     if (pb) {
-      write(
-        file = "",
-        x = paste0("Computing amplitude envelopes (step 1 out of 2):")
-      )
+      write(file = "",
+            x = paste0("Computing amplitude envelopes (step 1 out of 2):"))
     }
-
+    
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
-
+    
     # get names of envelopes involved (those as test with reference or as reference)
     target_sgnl_temp <-
       unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
-
+    
     # run loop apply function
     mean_envs <-
       warbleR:::pblapply_wrblr_int(
         X = target_sgnl_temp,
         pbar = pb,
         cl = cl,
-        FUN = function(y, wln = wl, ovl = ovlp, Q = X, pth = path, bps = bp) {
-          meanenv_FUN(y, wl = wln, ovlp = ovl, X = Q, path = pth, bp = bps)
+        FUN = function(y,
+                       wln = wl,
+                       ovl = ovlp,
+                       Q = X,
+                       pth = path,
+                       bps = bp) {
+          mean.env(
+            y,
+            wl = wln,
+            ovlp = ovl,
+            X = Q,
+            path = pth,
+            bp = bps
+          )
         }
       )
-
+    
     # add sound file selec column as names to envelopes
     names(mean_envs) <- target_sgnl_temp
-
+    
     # put in a data frame
     X$sig_env <- vapply(seq_len(nrow(X)), function(x) {
       w <- if (any(names(mean_envs) == X$.sgnl.temp[x])) {
@@ -155,17 +149,15 @@ excess_attenuation <-
       }
       return(w)
     }, FUN.VALUE = numeric(1))
-
+    
     # split by sound ID
     # sigtype_list <- split(X, X$sound.id)
-
+    
     if (pb) {
-      write(
-        file = "",
-        x = paste0("Computing excess attenuation (step 2 out of 2):")
-      )
+      write(file = "",
+            x = paste0("Computing excess attenuation (step 2 out of 2):"))
     }
-
+    
     # calculate excess attenuation
     X$excess.attenuation <-
       unlist(warbleR:::pblapply_wrblr_int(
@@ -173,20 +165,20 @@ excess_attenuation <-
         pbar = pb,
         cl = cl,
         FUN = function(x) {
-          exc_att_FUN(y = x, X, type, gain)
+          .exc_att(y = x, X, type, gain)
         }
       ))
-
-
+    
+    
     # remove temporal column
     X$.sgnl.temp <- X$sig_env <- NULL
-
+    
     # fix call if not a data frame
     if (!is.data.frame(X)) {
       attributes(X)$call <-
         base::match.call()
     } # fix call attribute
-
-
+    
+    
     return(X)
   }

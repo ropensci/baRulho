@@ -8,8 +8,8 @@ manual_realign(X, Y, hop.size = getOption("hop.size", 11.6),
 wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0),
 path = getOption("sound.files.path", "."), collevels = seq(-120, 0, 5),
 palette = viridis::viridis, duration = 2, mar = 0.2, step.lengths = c(5, 30),
-flim = NULL, label.col = "white",  ext.window = TRUE, width = 10, 
-height = 5, srt = 0, cex = 1, fast.spec = TRUE, 
+flim = NULL, label.col = "white",  ext.window = TRUE, width = 10,
+height = 5, srt = 0, cex = 1, fast.spec = TRUE,
 marker = "start_marker", grid = 0.2, ...)
 }
 \arguments{
@@ -95,15 +95,15 @@ This function allows the interactive adjustment of the alignment of test sound f
 
   # align all test sounds
   alg.tests <- align_test_files(X = master_est, Y = markers, pb = FALSE)
-  
+
   # add error to alignment
   lag <- (as.numeric(as.factor(alg.tests$sound.files)) - 2) / 30
   alg.tests$start <- alg.tests$start + lag
   alg.tests$end <- alg.tests$end + lag
-  
+
   \dontrun{
-  realigned_est <- manual_realign(X = alg.tests, Y = master_df, duration = 2, 
-  ovlp = 50, hop.size = 14, collevels = seq(-140, 0, 5), palette = mako, 
+  realigned_est <- manual_realign(X = alg.tests, Y = master_df, duration = 2,
+  ovlp = 50, hop.size = 14, collevels = seq(-140, 0, 5), palette = mako,
   ext.window = F)
  }
 }

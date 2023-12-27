@@ -6,6 +6,7 @@ author:
 date:  "`r Sys.Date()`"
 output:
   rmarkdown::html_document:
+    df_print: kable
     self_contained: yes
     toc: true
     toc_depth: 3
@@ -15,25 +16,12 @@ output:
 vignette: >
   \usepackage[utf8]{inputenc}
   %\VignetteIndexEntry{Synthesize and align test sounds}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{Rraven}
   %\VignetteDepends{viridis}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
-
-<!-- <script> -->
-<!--    $(document).ready(function() { -->
-<!--      $head = $('#header'); -->
-<!--      $head.prepend('<img src=\"logo.png\"/>') -->
-<!--    }); -->
-<!-- </script> -->
-
-<!-- &nbsp;  -->
-
-
-<!-- <center>![warbleR logo](logo.png)</center> -->
-</center>
 
 &nbsp; 
 ```{r, eval = TRUE, echo = FALSE, message=FALSE}
@@ -46,10 +34,7 @@ knitr::opts_chunk$set(dpi = 70,
 
 # load package
 library(baRulho)
-library(kableExtra)
-
-# also set a working directory, for this example we will use a temporary directory
-td <- tempdir()
+# library(kableExtra)
 
 opts_chunk$set(
   tidy = TRUE,
@@ -59,7 +44,7 @@ opts_chunk$set(
 )
 ```
 
-<img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
+<img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width = "25%" height="25%"/>
 
 
 This vignette shows deals with two things: how to create synthetic sounds for playback experiments and how to align re-recorded sounds to their reference once playback has been conducted. Here is some terms that will be used in this vignettes and throughout the package.
@@ -159,7 +144,7 @@ synth_est2 <- synth_sounds(
 synth_wav2 <- Rraven::exp_est(
   X = synth_est2,
   single.file = TRUE,
-  path = td,
+  path = tempdir(),
   wave.object = TRUE
 )
 
@@ -201,10 +186,10 @@ kbl <- kable(
 )
 
 kbl <-
-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 
-kbl <- scroll_box(kbl, width = "800px", height = "300px")
+kbl <- kableExtra::scroll_box(kbl, width = "800px", height = "300px")
 
 kbl
 ```
@@ -212,7 +197,7 @@ kbl
 
 As this is an extended selection table, the 'sound.files' column refers to Wave objects included as attributes instead of files in a directory:
 
-```{r}
+```{r, eval = TRUE}
 # check name of wave objects
 names(attributes(synth_est2)$wave.objects)
 ```
@@ -224,31 +209,29 @@ names(attributes(synth_est2)$wave.objects)
 The function `master_sound_file()` creates a master sound file (as you probably guessed) for playback experiments. The function takes wave objects from an data frame or (extended) selection table containing the model sounds and concatenates them in a single sound file (with some silence in between sounds which length can be modified). `master_sound_file()` adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds, which streamlines quantification of acoustic degradation. 
 The following example shows how to create a master sound file using the synthetic sounds generated above. For the synthetic sounds we need to add a little space between the top and bottom frequency because `sim_songs()` make those values exactly the same for pure tones: 
 
-```{r, eval = FALSE, echo = TRUE}
-
+```{r master sound file, eval = TRUE, echo = TRUE}
 
 # create master sound file
 synth_master_annotations <- master_sound_file(
   X = synth_est,
   file.name = "synthetic_master",
-  dest.path = td,
+  dest.path = tempdir(),
   gap.duration = 0.15
 )
 
-check_sels(synth_master_annotations, path = td)
 ```
 
 &nbsp;
 
-The function saves the master sound file as a wave file and returns a selection table in the R environment with the time and frequency 'coordinates' of the sounds in that file. We can look at the spectrogram of the output file using the [warbleR](https://cran.r-project.org/package=warbleR) function `spectrograms()` as follows:
+The function saves the master sound file as a wave file and returns a selection table in the R environment with the time and frequency 'coordinates' of the sounds in that file. We can look at the spectrogram of the output file using the [warbleR](https://cran.r-project.org/package=warbleR) function `spectrograms()` as follows (the image is save as a jpeg file in the temporary directory `tempdir()`:
 
 ```{r, eval=FALSE, echo=TRUE}
 
 # plot spectro (saved in working directory)
 spectrograms(
   X = synth_master_annotations,
-  path = td,
-  dest.path = td,
+  path = tempdir(),
+  dest.path = tempdir(),
   by.song = "sound.files",
   xl = 3,
   collevels = seq(-60, 0, 5),
@@ -258,7 +241,7 @@ spectrograms(
 
 ```
 
- <img src="synthetic_master.wav.jpeg" alt="spectrogram of master file">
+<img src="synthetic_master.wav.jpeg" alt="spectrogram of master file">
 
 The function can also create a master sound file from sounds found in sound files and from several sounds files, as is likely the case with recordings collected in the field. The following example shows how to create a master sound file using several sound files. The code uses the example data and recordings from the package [warbleR](https://cran.r-project.org/package=warbleR):
 
@@ -275,24 +258,24 @@ data(list = c(
 ))
 
 # save sound files to temporary folder
-writeWave(Phae.long1, file.path(td, "Phae.long1.wav"))
-writeWave(Phae.long2, file.path(td, "Phae.long2.wav"))
-writeWave(Phae.long3, file.path(td, "Phae.long3.wav"))
-writeWave(Phae.long4, file.path(td, "Phae.long4.wav"))
+writeWave(Phae.long1, file.path(tempdir(), "Phae.long1.wav"))
+writeWave(Phae.long2, file.path(tempdir(), "Phae.long2.wav"))
+writeWave(Phae.long3, file.path(tempdir(), "Phae.long3.wav"))
+writeWave(Phae.long4, file.path(tempdir(), "Phae.long4.wav"))
 
 # make an extended selection table
 est <- selection_table(
   X = lbh_selec_table,
   extended = TRUE,
   confirm.extended = FALSE,
-  path = td
+  path = tempdir()
 )
 
 # create master sound file
 master_annotations <- master_sound_file(
   X = est,
   file.name = "example_master",
-  dest.path = td,
+  dest.path = tempdir(),
   gap.duration = 0.3
 )
 ```
@@ -305,7 +288,7 @@ Again, we can look at the spectrogram of the output file:
 
 spectrograms(
   master_annotations,
-  path = td,
+  path = tempdir(),
   by.song = "sound.files",
   xl = 3,
   collevels = seq(-60, 0, 5),
@@ -316,12 +299,12 @@ spectrograms(
 
  <img src="example_master.wav.jpeg" alt="spectrogram of master file">
 
-Note that the output could also be exported to [Raven sound analysis software](https://ravensoundsoftware.com/software/raven-pro) ([Cornell Lab of Ornithology](https://www.birds.cornell.edu/home)) for visualization or further manipulation using the function `exp_raven()` from the [Rraven](https://cran.r-project.org/package=Rraven) package. `exp_raven()` exports selections in the R environment to a '.txt' file that can be read in Raven:
+Note that the output could also be exported to [Raven sound analysis software](https://www.ravensoundsoftware.com/software/raven-pro/) ([Cornell Lab of Ornithology](https://www.birds.cornell.edu/home)) for visualization or further manipulation using the function `exp_raven()` from the [Rraven](https://cran.r-project.org/package=Rraven) package. `exp_raven()` exports selections in the R environment to a '.txt' file that can be read in Raven:
  
 
 ```{r, eval = FALSE}
 
-Rraven::exp_raven(master_annotations, path = td,
+Rraven::exp_raven(master_annotations, path = tempdir(),
                   file.name = "example_master_selection_table")
 ```
 
@@ -335,7 +318,7 @@ Both sound files and annotations can be visualized in Raven ( acoustic analysis 
 
 Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details on how to export data from R to Raven. 
 
-Note that the start and end markers are placed at relatively low amplitudes so they are less affected by degradation. The frequency range of markers can be set with argument `flim`. The relative amplitude of markers can also be adjusted with the `amp.marker` argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than sounds. These two features should increases the chances of being "detected" at further distances regardless of the amplitude of sounds. 
+Note that the start and end markers are placed at relatively low frequencies so they are less affected by degradation. The frequency range of markers can be set with argument `flim`. The relative amplitude of markers can also be adjusted with the `amp.marker` argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than sounds. These two features should increases the chances of detecting the markers at further distances. 
 
 # Align re-recorded sounds
 
@@ -374,18 +357,18 @@ Now we will save those files in a temporary working directory (those objects are
 
 # first remove any other wave file in the temporary working directory (dont do it with yourd data!)
 unlink(list.files(
-  path = td,
+  path = tempdir(),
   full.names = TRUE,
   pattern = ".wav"
 ))
 
 # save master sound file
 writeWave(object = attr(master_est, "wave.objects")[[1]],
-          file.path(td, "master.wav"))
+          file.path(tempdir(), "master.wav"))
 
 # save test sound files
 for (i in unique(test_sounds_est$sound.files)) {
-  writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
+  writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(tempdir(), i))
 }
 
 # make annotations a data frame
@@ -396,7 +379,7 @@ master_annotations <- as.data.frame(master_est)
 To find the location of the start marker on the test sound files we use the functions `find_markers()` to run a cross-correlation of one or more markers across the test files in order to determine the exact time in which each marker is found: 
 
 ```{r, eval = FALSE}
-options(sound.files.path = td)
+options(sound.files.path = tempdir())
 
 markers_position <- find_markers(X = master_annotations)
 
@@ -406,7 +389,7 @@ markers_position
 ```{r, eval = TRUE, echo=FALSE, results='asis'}
 
 # set path globally (so no need to write it each time)
-options(sound.files.path = td)
+options(sound.files.path = tempdir())
 
 markers_position <- find_markers(X = master_annotations, pb = FALSE)
 
@@ -420,7 +403,7 @@ kbl <-
   )
 
 kbl <-
-  kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+  kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
 kbl
 ```
@@ -470,9 +453,9 @@ print(TRUE)
 
 kbl <- kable(aligned_tests, align = "c", row.names = F, format = "html", escape = F)
 
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+kbl <- kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
 
-kbl <- scroll_box(kbl, width = "800px", height = "300px")
+kbl <- kableExtra::scroll_box(kbl, width = "800px", height = "300px")
 
 kbl
 ```
@@ -528,7 +511,6 @@ We can simulate a aligned data set in which test sound are slightly off their po
 
 ```{r}
 
-
 unaligned_test_sounds_est <- test_sounds_est
 set.seed(123)
 noise_time <-
@@ -550,6 +532,7 @@ Now we can re-aligned test sounds:
 
 # re align
 rts <- auto_realign(X = unaligned_test_sounds_est)
+
 ```
 
 This is how the sounds look before and after being aligned:

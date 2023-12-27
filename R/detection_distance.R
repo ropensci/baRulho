@@ -71,42 +71,27 @@ detection_distance <-
            mar = NULL) {
     # check arguments
     arguments <- as.list(base::match.call())
-
+    
     # add objects to argument names
     for (i in names(arguments)[-1]) {
       arguments[[i]] <- get(i)
     }
-
+    
     # check each arguments
-    check_results <- check_arguments(fun = arguments[[1]], args = arguments)
-
+    check_results <-
+      .check_arguments(fun = arguments[[1]], args = arguments)
+    
     # report errors
-    report_assertions2(check_results)
-
+    .report_assertions(check_results)
+    
     # error if no mar supplied when subtract.bgn
     if (is.null(mar) & subtract.bgn) {
-      stop2("'mar' must be supplied when 'subtract.bgn = TRUE'")
+      .stop("'mar' must be supplied when 'subtract.bgn = TRUE'")
     }
-
+    
     # adjust wl based on hop.size
-    if (is.null(wl)) {
-      wl <-
-        round(
-          read_sound_file(
-            X,
-            index = 1,
-            header = TRUE,
-            path = path
-          )$sample.rate * hop.size / 1000,
-          0
-        )
-    }
-
-    # make wl even if odd
-    if (!(wl %% 2) == 0) {
-      wl <- wl + 1
-    }
-
+    wl <- .adjust_wl(wl, X, hop.size, path)
+    
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -114,7 +99,7 @@ detection_distance <-
     } else {
       cl <- cores
     }
-
+    
     # print message
     if (pb) {
       if (is.null(spl)) {
@@ -123,14 +108,15 @@ detection_distance <-
         write(file = "", x = "Computing peak frequency (step 1 out of 2):")
       }
     }
-
+    
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
-
+    
     # get names of envelopes involved (those as test with reference or as reference)
-    target_sgnl_temp <- unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
-
-
+    target_sgnl_temp <-
+      unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
+    
+    
     # calculate all spectra apply function
     peak_freq_list <-
       warbleR:::pblapply_wrblr_int(
@@ -139,12 +125,10 @@ detection_distance <-
         cl = cl,
         FUN = function(y, wl) {
           # load clip
-          clp <- warbleR::read_sound_file(
-            X = X,
-            index = which(X$.sgnl.temp == y),
-            path = path
-          )
-
+          clp <- warbleR::read_sound_file(X = X,
+                                          index = which(X$.sgnl.temp == y),
+                                          path = path)
+          
           # calculate spectrum
           clp.spc <-
             seewave::spec(
@@ -153,19 +137,19 @@ detection_distance <-
               plot = FALSE,
               wl = wl
             )
-
+          
           # get peak frequency
           peak_freq <-
             seewave::fpeaks(clp.spc, nmax = 1, plot = FALSE)
-
+          
           if (is.null(spl)) {
             # get amplitude
             sigamp <-
               seewave::rms(seewave::env(clp, envt = envelope, plot = FALSE))
-
+            
             # convert to dB
             signaldb <- 20 * log10(sigamp)
-
+            
             # remove background SPL
             if (subtract.bgn) {
               bg.noise <-
@@ -180,7 +164,7 @@ detection_distance <-
                   },
                   to = X$start[X$.sgnl.temp == y]
                 )
-
+              
               noiseamp <-
                 seewave::rms(seewave::env(
                   bg.noise,
@@ -189,7 +173,7 @@ detection_distance <-
                   plot = FALSE
                 ))
               noisedb <- 20 * log10(noiseamp)
-
+              
               # remove noise SPL from signal SPL
               signaldb <-
                 warbleR:::lessdB(signal.noise = signaldb, noise = noisedb)
@@ -199,63 +183,18 @@ detection_distance <-
           }
           # put output together
           output <- list(spl = signaldb, peakf = peak_freq[1, 1])
-
+          
           return(output)
         }
       )
-
+    
     # add sound file selec names to spectra
     names(peak_freq_list) <- target_sgnl_temp
-
-    ## function to measure detection distance
-    detection_dist_FUN <-
-      function(x,
-               spl.cutoff,
-               temp,
-               rh,
-               pa,
-               hab.att.coef,
-               max.distance,
-               resolution,
-               spl,
-               ...) {
-        # get names of sound and reference
-        sgnl <- X$.sgnl.temp[x]
-        rfrnc <- X$reference[x]
-
-        # if sounds are the same or the selection is noise return NA
-        # if reference is NA return NA
-        if (is.na(rfrnc)) {
-          detect_dist <- NA
-        } else {
-          # extract spectrum for sound and model
-          sgnl.spl <-
-            peak_freq_list[[which(names(peak_freq_list) == sgnl)]]$spl
-          rfrnc.pkf <-
-            peak_freq_list[[which(names(peak_freq_list) == rfrnc)]]$peakf
-
-          # get detection distance
-          detect_dist <-
-            detection_distance_ohn_int(
-              spl.cutoff = spl.cutoff,
-              spl = sgnl.spl,
-              frequency = rfrnc.pkf * 1000,
-              distance = X$distance[x],
-              temp = temp,
-              rh = rh,
-              pa = pa,
-              hab.att.coef = hab.att.coef,
-              max.distance = max.distance,
-              resolution = resolution
-            )
-        }
-        return(detect_dist)
-      }
-
+    
     if (pb) {
       write(file = "", x = "Computing detection distance (step 2 out of 2):")
     }
-
+    
     # get detection distance
     # calculate all spectra apply function
     X$detection.distance <-
@@ -272,8 +211,10 @@ detection_distance <-
                        hab.att.coefe = hab.att.coef,
                        max.distancee = max.distance,
                        resolutione = resolution,
+                       Y = X,
+                       pfl = peak_freq_list,
                        ...) {
-          detection_dist_FUN(
+          .detection_dist(
             x,
             wl = wle,
             spl.cutoff = spl.cutoffe,
@@ -283,22 +224,25 @@ detection_distance <-
             hab.att.coef = hab.att.coefe,
             max.distance = max.distancee,
             resolution = resolution,
+            X = Y,
+            peak_freq_list = pfl,
             ...
           )
         }
       ))
-
+    
     # make NAs those sounds in which the reference is itself (only happens when method = 2) or is ambient noise
-    X$reference[X$reference == X$.sgnl.temp | X$sound.id == "ambient"] <- NA
-
+    X$reference[X$reference == X$.sgnl.temp |
+                  X$sound.id == "ambient"] <- NA
+    
     # remove temporal columns
     X$.sgnl.temp <- NULL
-
+    
     # fix call if not a data frame
     if (!is.data.frame(X)) {
       attributes(X)$call <-
         base::match.call()
     } # fix call attribute
-
+    
     return(X)
   }

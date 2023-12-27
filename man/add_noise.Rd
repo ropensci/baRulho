@@ -41,7 +41,7 @@ The function adds synthetic noise to sounds referenced in an extended selection 
 data("test_sounds_est")
 
 # make it a 'by song' extended selection table
-X <- baRulho:::by_element_est(X = test_sounds_est)
+X <- warbleR::by_element_est(X = test_sounds_est)
 
 # add noise to the first five rows
 X_noise <- add_noise(X = X[1:5, ], mar = 0.2, target.snr = 3)

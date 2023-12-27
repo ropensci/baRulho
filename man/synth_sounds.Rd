@@ -28,7 +28,7 @@ frequency harmonic will be simulated.}
 
 \item{mar}{Numeric vector with the duration of margins of silence around sounds in seconds. Default is \code{0.05}.}
 
-\item{seed}{Numeric vector of length 1. This allows users to get the same results in different runs (using \code{\link[base:Random]{set.seed}} internally). Default is \code{NULL}.}
+\item{seed}{Numeric vector of length 1. This allows users to get the same results in different runs (using \code{\link[base:Random]{se.seed}} internally). Default is \code{NULL}.}
 
 \item{sig2}{Numeric vector of length 1 defining the sigma value of the brownian motion model (used for simulating frequency modulation). Default is 0.3.}
 

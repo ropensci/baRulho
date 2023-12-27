@@ -2,11 +2,11 @@
 #'
 #' \code{blur_ratio} measures blur ratio in sounds referenced in an extended selection table.
 #' @usage blur_ratio(X, parallel = NULL, cores = getOption("mc.cores", 1),
-#' pb = getOption("pb", TRUE),  
+#' pb = getOption("pb", TRUE),
 #' env.smooth = getOption("env.smooth", 200),
-#' output = NULL, envelopes = FALSE, 
+#' output = NULL, envelopes = FALSE,
 #' hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
-#' ovlp = getOption("ovlp", 70), n.samples = 100, 
+#' ovlp = getOption("ovlp", 70), n.samples = 100,
 #' path = getOption("sound.files.path", "."))
 #' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
@@ -31,7 +31,7 @@
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
-#'   
+#'
 #'  # add reference to X
 #'  X <- set_reference_sounds(X = test_sounds_est)
 #'   blur_ratio(X = X)
@@ -87,34 +87,26 @@ blur_ratio <-
     
     # check each arguments
     check_results <-
-      check_arguments(fun = arguments[[1]], args = arguments)
+      .check_arguments(fun = arguments[[1]], args = arguments)
     
     # report errors
-    report_assertions2(check_results)
+    .report_assertions(check_results)
     
     # total number of steps depending on whether envelopes are returned
-    steps <- if (envelopes) 3 else 2
+    steps <- if (envelopes)
+      3
+    else
+      2
     
     # get sampling rate assuming is the same for all sound files
-    sampling.rate <- read_sound_file(
-      X,
-      index = 1,
-      header = TRUE,
-      path = path
-    )$sample.rate
+    sampling.rate <- read_sound_file(X,
+                                     index = 1,
+                                     header = TRUE,
+                                     path = path)$sample.rate
     
     # adjust wl based on hop.size
-    if (is.null(wl)) {
-      wl <-
-        round(
-          sampling.rate * hop.size / 1000,
-          0
-        )
-    }
+    wl <- .adjust_wl(wl, X, hop.size, path)
     
-    # make wl even if odd
-    if (!(wl %% 2) == 0)
-      wl <- wl + 1
     
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
@@ -127,11 +119,15 @@ blur_ratio <-
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
     
     # get names of envelopes involved (those as test with reference or as reference)
-    target_sgnl_temp <- unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
+    target_sgnl_temp <-
+      unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
     
     # print message
     if (pb)
-      write(file = "", x = paste0("Computing amplitude envelopes (step 1 out of ", steps, "):"))
+      write(
+        file = "",
+        x = paste0("Computing amplitude envelopes (step 1 out of ", steps, "):")
+      )
     
     # calculate all envelops apply function
     envs <-
@@ -139,17 +135,32 @@ blur_ratio <-
         pbar = pb,
         X = target_sgnl_temp,
         cl = cl,
-        FUN = function(x, ssmth = env.smooth, ovl = ovlp, Q = X, wln = wl, pth = path, n.samp = n.samples){
-                       env_FUN(X = Q, y = x, env.smooth = ssmth, ovlp = ovl, wl = wln, path = pth, n.samples = n.samp) 
-}
-)
+        FUN = function(x,
+                       ssmth = env.smooth,
+                       ovl = ovlp,
+                       Q = X,
+                       wln = wl,
+                       pth = path,
+                       n.samp = n.samples) {
+          .env(
+            X = Q,
+            y = x,
+            env.smooth = ssmth,
+            ovlp = ovl,
+            wl = wln,
+            path = pth,
+            n.samples = n.samp
+          )
+        }
+      )
     
     # add sound file selec column as names to envelopes
     names(envs) <- target_sgnl_temp
     
     # set options to run loops
     if (pb)
-      write(file = "", x = paste0("Computing blur ratio (step 2 out of ", steps, "):"))
+      write(file = "",
+            x = paste0("Computing blur ratio (step 2 out of ", steps, "):"))
     
     # get blur ratio
     # calculate all envelops apply function
@@ -164,7 +175,7 @@ blur_ratio <-
                        wle = wl,
                        ovp = ovlp,
                        sr = sampling.rate) {
-          blur_FUN(
+          .blur(
             x,
             X = Q,
             envs = nvs,
@@ -173,16 +184,14 @@ blur_ratio <-
             sampling.rate = sr
           )
         }
-      )
-      )
+      ))
     
-
+    
     # remove temporal column
     X$.sgnl.temp <- NULL
     
     # convert to list instead of extended selection table, add envelopes
     if (envelopes) {
-      
       if (pb)
         write(file = "", x = "Saving envelopes (step 3 out of 3):")
       

@@ -240,6 +240,7 @@ manual_realign <-
         prev.plot
       }
       
+      # plot lower panel
       rp <- .responsive_panel(
         X,
         rerec_files,
@@ -270,7 +271,6 @@ manual_realign <-
       step_sum <- onn$step_sum
       step_sum_vector <- onn$step_sum_vector
       i <- onn$i
-      
       
       # stop
       if (xy$x > min(rp$xs) &

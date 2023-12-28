@@ -2890,7 +2890,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
     rect(0, 0, 2, 2, col = "white", border = NA)
     rect(0, 0, 2, 2, col = "#366A9FFF", border = NA)
     
-    bottom_lab <-
+      bottom_lab <-
       vapply(as.character(W$sound.files[1]), function(x) {
         if (nchar(x) > 15)
           paste0(substr(x, 0, 15), "\n", substr(x, 16, nchar(x))) else
@@ -2971,6 +2971,8 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
       flim <-
         c(0, wave@samp.rate / 2000.1)
     } # use 2000.1 to avoid errors at the highest of nyquist frequency
+
+
     
     # plot spectrogram
     warbleR:::spectro_wrblr_int2(
@@ -2988,6 +2990,28 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
       fast.spec = fast.spec,
       ...
     )
+      
+    # add white rectangle at the begining if spectrogram shorter than view range
+    if (from_stp < 0)
+      rect(
+        par("usr")[1],
+        par("usr")[3],
+        abs(from_stp),
+        par("usr")[4],
+        col = "white",
+        border = NA
+      )
+  
+    # add white rectangle at the end if spectrogram shorter than view range
+  if (to_stp > wave_dur)
+      rect(
+        par("usr")[2] - to_stp + wave_dur,
+        par("usr")[3],
+        par("usr")[2],
+        par("usr")[4],
+        col = "white",
+        border = NA
+      )
     
     # plot grid
     if (grid > 0)
@@ -3250,6 +3274,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
           xy$y < max(rp$grYs$`short right`)) {
         step_sum <- step_sum - min(step.lengths / 1000)
         step_sum_vector[i] <- step_sum
+       
         break
       }
       

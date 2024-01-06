@@ -21,7 +21,7 @@
 #' # load example data
 #' data("test_sounds_est")
 #'
-#' # make it a 'by song' extended selection table
+#' # make it a 'by element' extended selection table
 #' X <- warbleR::by_element_est(X = test_sounds_est)
 #'
 #' # add noise to the first five rows

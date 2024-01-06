@@ -96,7 +96,7 @@ Transmission experiments tend to follow a common experimental design in which mo
 
  - **'sound.id': ID of sounds used to identify same sounds at different distances and transects**
  - **'distance': refers to the distance from the source at which each sound was recorded**
- - **'transect' identify sounds (rows) from the same transect**. Each distance is replicated once within a transect.  
+ - **'transect': identify sounds (rows) from the same transect**. Each distance is replicated once within a transect.  
  
  
  

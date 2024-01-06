@@ -21,9 +21,6 @@
 #' @seealso \code{\link{manual_realign}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
 #' @examples
 #' {
-#'   # set temporary directory
-#'   td <- tempdir()
-#'
 #'   # load example data
 #'   data("master_est")
 #'
@@ -32,20 +29,22 @@
 #'   # This doesn't have to be done with your own data as you will
 #'   # have them as sound files already.
 #'   for (i in unique(test_sounds_est$sound.files)[1:2]) {
-#'     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
+#'     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], 
+#'               file.path(tempdir(), i))
 #'   }
 #'
 #'   # save master file
-#'   writeWave(object = attr(master_est, "wave.objects")[[1]], file.path(td, "master.wav"))
+#'   writeWave(object = attr(master_est, "wave.objects")[[1]], 
+#'         file.path(tempdir(), "master.wav"))
 #'
-#'   # set path and no progress bar in global options
-#'   options(sound.files.path = td, pb = FALSE, dest.path = td)
-#'
-#'   # get marker position
-#'   markers <- find_markers(X = master_est, test.files = unique(test_sounds_est$sound.files)[2])
+#'   # get marker position for the first test file
+#'     markers <- find_markers(X = master_est,
+#'     test.files = unique(test_sounds_est$sound.files)[1],
+#'     path = tempdir())
 #'
 #'   # align all test sounds
-#'   alg.tests <- align_test_files(X = master_est, Y = markers, pb = FALSE)
+#'   alg.tests <- align_test_files(X = master_est, Y = markers, 
+#'   path = tempdir())
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @references {

@@ -86,7 +86,7 @@ align_test_files <-
                      FUN = rank) <= 1,]
     }
     
-    if (pb & is_extended_selection_table(X)) {
+    if (pb & warbleR::is_extended_selection_table(X)) {
       write(file = "",
             x = paste0("Aligning test sound files (step 1 out of 2):"))
     }
@@ -183,7 +183,7 @@ align_test_files <-
     # remove duration column and marker
     sync.sls$duration <- NULL
     
-    if (is_extended_selection_table(X)) {
+    if (warbleR::is_extended_selection_table(X)) {
       if (pb) {
         write(
           file = "",

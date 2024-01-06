@@ -1218,8 +1218,8 @@
   return(envcor)
 }
 
-# function to extract mean envelopes
-mean.env <- function(y, wl, ovlp, X, path, bp) {
+# function to extract mean envelopes or RMS of envelopes
+.mean.env <- function(y, wl, ovlp, X, path, bp, rms = FALSE) {
   # read sound clip
   clp <-
     warbleR::read_sound_file(
@@ -1251,8 +1251,11 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
       )
   }
   
-  sig_env <-
-    mean(warbleR::envelope(x = clp@left))
+  
+  sig_env <-   if (!rms)
+    mean(warbleR::envelope(x = clp@left)) else
+      seewave::rms(warbleR::envelope(x = clp@left))
+  
   
   return(sig_env)
 }
@@ -1294,7 +1297,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
   return(cor.spctr)
 }
 
-.exc_att <- function(y, X, tp, gn) {
+.exc_att <- function(y, X) {
   # get names of sound and reference
   sgnl <- X$.sgnl.temp[y]
   rfrnc <- X$reference[y]
@@ -1308,20 +1311,10 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
     dist_REF <- X$distance[X$.sgnl.temp == rfrnc]
     dist_SIG <- X$distance[y]
     
-    ks <- X$sig_env[y] / sig_env_REF
-    
-    # type Dabelsteen
-    if (tp == "Dabelsteen") {
-      ea <-
-        (-20 * log(ks)) - (6 / (2 * (dist_SIG - dist_REF))) + gn
-    }
-    
-    if (tp == "Darden") {
-      # EA = g - 20 log(d / 10) - 20 log(k)
-      ea <-
-        gn - 20 * log10(dist_SIG / 10) - 20 * log(ks)
-    }
+      # excess attenuation = (total attenuation - spheric spreading attenuation) 
+      ea <- (-20 * log10(sig_env_REF / X$sig_env[y])) - (20 * log10(1 / dist_SIG))
   }
+  
   return(ea)
 }
 
@@ -1785,7 +1778,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
   
   # adjust wl based on hop.size
   if (is.null(wl)) {
-    wl <- if (is_extended_selection_table(X))
+    wl <- if (warbleR::is_extended_selection_table(X))
       round(attr(X, "check.results")$sample.rate[1] * hop.size, 0) else
       round(
         read_sound_file(
@@ -3305,7 +3298,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
       X$end[X$sound.files == u] + step_sum_vector[u]
     
     # fix internally for extended selection tables
-    if (is_selection_table(X) | is_extended_selection_table(X)) {
+    if (is_selection_table(X) | warbleR::is_extended_selection_table(X)) {
       attributes(X)$check.res$start[attributes(X)$check.res$sound.files == u] <-
         attributes(X)$check.res$start[X$sound.files == u] + step_sum_vector[u]
       attributes(X)$check.res$end[attributes(X)$check.res$sound.files == u] <-
@@ -3319,6 +3312,110 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
   
   return(X)
 }
+
+# make markers for master sound files used by master_sound_file()
+.make_markers <- function(X, flim, sampling_rate, cex){
+  
+  # remove plots at the end
+  on.exit(try(dev.off(), silent = TRUE))
+  
+  # check if ghost script is installed
+  gsexe <- tools::find_gs_cmd()
+  
+  # warning if ghostscript not found
+  if (!nzchar(gsexe)) {
+    .message(paste(
+      cli::cli_text(
+        .colortext(
+          "warning: GhostScript was not found. It produces clearer start and end marker. You can download it from {.url https://ghostscript.com}. ",
+          as = "red"
+        )
+      ),
+      .colortext("Using 'png()' instead.", as = "red")
+    ))
+  }
+  
+  # set frequency range for markers
+  if (is.null(flim)) {
+    flim <- c(0, attr(X, "check.results")$sample.rate[1] / 2)
+  }
+  
+  # list with markers
+  mrkrs <- lapply(c("*start+", "+end*-"), FUN = .text_to_wave, gsexe, flim, sampling_rate, cex)
+  names(mrkrs) <- c("strt_mrkr", "end_mrkr")
+  
+  return(mrkrs)
+}
+
+# create wave objects from text
+.text_to_wave <- function(text, gsexe, flim, samp_rate, cex){
+  
+  temp_file <- paste0(tempfile(fileext = ".png"))
+  
+  # remove image file
+  on.exit(unlink(temp_file))
+  
+  # save par settings
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(
+    mar =  oldpar$mar,
+    mfcol =  oldpar$mfcol,
+    mfrow =  oldpar$mfrow
+  ), add = TRUE)
+  
+  # save image of start marker in temporary directory
+  if (!nzchar(gsexe)) {
+    grDevices::png(filename = temp_file,
+                   pointsize = 10)
+  }
+  
+  
+  # remove margins in graphic device
+  par(mar = rep(0, 4),
+      mfrow = c(1, 1),
+      mfcol = c(1, 1))
+  
+  # empty plot
+  plot(
+    0,
+    type = "n",
+    axes = FALSE,
+    ann = FALSE,
+    xlim = c(0, 1),
+    ylim = c(0, 1)
+  )
+  
+  # add text
+  text(
+    x = 0.5,
+    y = 0.5,
+    labels = text,
+    cex = cex,
+    font = 2
+  )
+  
+  # save image of start marker in temporary directory
+  if (nzchar(gsexe)) {
+      grDevices::dev2bitmap(temp_file,
+                          type = "pngmono",
+                          res = 30)
+  } else dev.off()
+  
+  
+  # close graph
+  
+  # make image of start marker
+  mrkr <-
+    warbleR::image_to_wave(
+      file = temp_file,
+      plot = FALSE,
+      flim = flim,
+      samp.rate = samp_rate / 1000
+    )
+
+  return(mrkr)
+}
+
 
 ### CHECK ARGUMENTS  ###
 .report_assertions <- function(collection) {
@@ -3541,7 +3638,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
 # check if X is an extended selection table
 .check_extended_selection_table <- function(x) {
   if (!is.null(x)) {
-    if (!is_extended_selection_table(x)) {
+    if (!warbleR::is_extended_selection_table(x)) {
       "'X' must be of class 'extended_selection_table'"
     }
   } else {
@@ -3554,7 +3651,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
 
 .check_est_by_element <- function(x) {
   if (!is.null(x)) {
-    if (is_extended_selection_table(x)) {
+    if (warbleR::is_extended_selection_table(x)) {
       if (attr(x, "by.song")[[1]]) {
         "Extended selection table 'X' must be created 'by element', not 'by song'. Use warbleR::by_element_est(X) to convert it to the right format"
       }
@@ -3570,7 +3667,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
 
 .check_est_by_song <- function(x) {
   if (!is.null(x)) {
-    if (is_extended_selection_table(x)) {
+    if (warbleR::is_extended_selection_table(x)) {
       if (!attr(x, "by.song")[[1]]) {
         "Extended selection table must be created 'by song', not 'by element' to be used in manual_realign()"
       }
@@ -3585,7 +3682,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
 
 .check_no_margin <- function(x) {
   if (!is.null(x)) {
-    if (is_extended_selection_table(x)) {
+    if (warbleR::is_extended_selection_table(x)) {
       if (any(x$start == 0))
         "Some annotations have no margin in which to measure background noise (X$start == 0)"
       
@@ -3750,7 +3847,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
   ### check arguments
   if (any(names(args) == "X")) {
     
-    if (!is_extended_selection_table(args$X)) {
+    if (!warbleR::is_extended_selection_table(args$X)) {
       if (!is.null(args$path)) {
         files <- file.path(args$path, unique(args$X$sound.files))
       } else {
@@ -3921,7 +4018,7 @@ mean.env <- function(y, wl, ovlp, X, path, bp) {
         "tail_to_signal_ratio",
         "add_noise"
       )) {
-        if (is_extended_selection_table(args$X)) {
+        if (warbleR::is_extended_selection_table(args$X)) {
           if (length(unique(attr(args$X, "check.results")$sample.rate)) > 1) {
             .stop(
               "all wave objects in the extended selection table must have the same sampling rate (they can be homogenized using warbleR::resample_est())"

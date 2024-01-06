@@ -1,5 +1,4 @@
 test_that("basic", {
-  data("test_sounds_est")
   
   # load example data
   data("test_sounds_est")

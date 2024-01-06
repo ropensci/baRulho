@@ -68,7 +68,7 @@ set_reference_sounds <-
     ## logical to control whether references are added
     add_refs <- TRUE
     
-    if (!is_extended_selection_table(X) & !is_selection_table(X)) {
+    if (!warbleR::is_extended_selection_table(X) & !is_selection_table(X)) {
       # print message
       if (pb) {
         write(file = "", x = "Checking annotations (step 1 out of 2):")
@@ -106,7 +106,7 @@ set_reference_sounds <-
       
       # add column with names of the reference sounds to be compared against
       if (is.null(X$reference)) {
-        if (pb & !is_extended_selection_table(X) & !is_selection_table(X)) {
+        if (pb & !warbleR::is_extended_selection_table(X) & !is_selection_table(X)) {
           write(file = "", x = "Computing references (step 2 out of 2):")
         }
         

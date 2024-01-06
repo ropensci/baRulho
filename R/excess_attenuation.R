@@ -2,20 +2,13 @@
 #'
 #' \code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.
 #' @usage excess_attenuation(X, parallel = NULL, cores = getOption("mc.cores", 1),
-#' pb = getOption("pb", TRUE),  type = "Dabelsteen",
-#'  output = NULL, hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL),
-#'  ovlp = getOption("ovlp", 50), gain = 0, bp = "freq.range",
+#' pb = getOption("pb", TRUE), output = NULL, hop.size = getOption("hop.size", 1), 
+#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 50), bp = "freq.range",
 #'  path = getOption("sound.files.path", "."))
 #' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param type Character vector of length 1 to indicate the 'type' of excess attenuation to be used. Two types are available:
-#' \itemize{
-#' \item \code{Dabelsteen}: as described by Dabelsteen & Mathevon (2002): -20 x log(k) - 6/(2 x re-recorded distance) + gain. 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. This is the default approach.
-#' \item \code{Darden}: as described by Darden et al. (2008): microphone_gain - 20 x log(reference distance / re-recorded distance) - 20 x log(k). 'k' is the ratio of the mean amplitude envelopes of the re-recorded and reference sounds. Microphone gain is the microphone gain of the reference and re-recorded sounds.
-#' }
-#' If gain is not supplied (see 'gain' argument) gain is set as 0, which results in a relative measure of excess attenuation comparable only within the same experiment or between experiments with the same recording equipment and recording volume.
 #' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
@@ -23,14 +16,12 @@
 #' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.
 #' @param ovlp Numeric vector of length 1 specifying the percent overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering.
-#' @param gain Numeric vector of length 1 with the combined gain of the microphone and recorder (in dB). Default is 0, which results in a relative measure of excess attenuation comparable only within the same experiment, but not across experiments. Only used for \code{type = "Marten"}.
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return Object 'X' with an additional column,  'excess.attenuation', containing the id of the sound used as reference and the computed excess attenuation values, respectively.
 #' @export
 #' @name excess_attenuation
-#' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents power loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation.
-#' The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two approaches for computing excess attenuation are provided (see 'type' argument).
+#' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents power loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation. The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two approaches for computing excess attenuation are provided (see 'type' argument).
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
@@ -68,14 +59,13 @@ excess_attenuation <-
            parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           type = "Dabelsteen",
            output = NULL,
            hop.size = getOption("hop.size", 1),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 50),
-           gain = 0,
            bp = "freq.range",
            path = getOption("sound.files.path", ".")) {
+    
     # check arguments
     arguments <- as.list(base::match.call())
     
@@ -126,13 +116,14 @@ excess_attenuation <-
                        Q = X,
                        pth = path,
                        bps = bp) {
-          mean.env(
+          .mean.env(
             y,
             wl = wln,
             ovlp = ovl,
             X = Q,
             path = pth,
-            bp = bps
+            bp = bps, 
+            rms = TRUE
           )
         }
       )
@@ -165,7 +156,7 @@ excess_attenuation <-
         pbar = pb,
         cl = cl,
         FUN = function(x) {
-          .exc_att(y = x, X, type, gain)
+          .exc_att(y = x, X)
         }
       ))
     

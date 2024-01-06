@@ -25,7 +25,7 @@ reference:
 
 - title: Quantify degradation
   desc: >
-    Functions that format acoustic data for playback experiments
+    Functions for quantifying degradation metrics
   contents:
   - blur_ratio
   - detection_distance

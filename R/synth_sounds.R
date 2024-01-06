@@ -94,6 +94,10 @@ synth_sounds <-
       .stop("if 'am = TRUE' 'am.amps' must have more than 1 value 'length(am.amps) > 1'")
     }
     
+    if (any(frequencies >= sampling.rate / 2)) {
+      .stop("some frequencies are higher than the nyquist frequency (sampling.rate / 2)")
+    }
+    
     # set number of steps (default is 10)
     steps <- if (length(am.amps) > 2) {
       length(am.amps)
@@ -162,6 +166,13 @@ synth_sounds <-
     if (shuffle) {
       sim.song.st <- sim.song.st[sample(seq_len(nrow(sim.song.st))), ]
     }
+    
+    if (any(sim.song.st$top.freq > sampling.rate / 2)){
+    sim.song.st$top.freq[sim.song.st$top.freq >= sampling.rate / 2] <- (sampling.rate / 2)
+    
+    .warning("Some sounds had a top frequency higher than the nyquist frequency (sampling.rate / 2) and their frequency range was truncated")
+    }
+    
     
     # make a single extended selection table for simulation
     sim_sounds_est <-

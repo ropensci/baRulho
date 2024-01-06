@@ -15,9 +15,9 @@ output:
 vignette: >
   \usepackage[utf8]{inputenc}
   %\VignetteIndexEntry{Quantify degradation}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{viridis}
   %\VignetteDepends{ggplot2}
+  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
 ---
@@ -66,7 +66,7 @@ There are a few important things to keep in mind about functions for quantifying
 
 The input data should contain some additional information. [baRulho](https://marce10.github.io/baRulho/) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
 s
-```{r,eval=FALSE}
+```{r,eval=TRUE}
 
 # load packages
 library(baRulho)
@@ -80,10 +80,6 @@ data("test_sounds_est")
 
 
 ```{r, eval = TRUE, echo = FALSE}
-# load packages
-library(viridis)
-library(baRulho)
-library(ggplot2)
 
 options(pb = FALSE)
 
@@ -693,6 +689,7 @@ ggplot(np, aes(
   labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
   coord_flip() +
   theme_classic()
+
 ```
 
 

@@ -238,7 +238,7 @@ spectrum_blur_ratio <-
     }
     
     # return data frame
-    if (is_extended_selection_table(X) | is_selection_table(X)) {
+    if (warbleR::is_extended_selection_table(X) | is_selection_table(X)) {
       attributes(X)$call <- base::match.call()
     }
     return(X)

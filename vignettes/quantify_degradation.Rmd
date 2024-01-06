@@ -43,7 +43,6 @@ editor_options:
 library(knitr)
 library(kableExtra)
 opts_chunk$set(
-  tidy = TRUE,
   fig.align = "center",
   message = FALSE,
   warning = FALSE
@@ -269,7 +268,7 @@ envs$distance <- as.factor(envs$distance)
 # plot
 ggplot(envs, aes(x = time, y = amp, col = distance)) +
   geom_line() + facet_wrap( ~ sound.id) +
-  scale_color_manual(values = viridis::viridis(4)) +
+  scale_color_viridis_d(alpha = 0.7) +
   labs(x = "Time (s)", y = "Amplitude (PMF)") +
   theme_classic()
 

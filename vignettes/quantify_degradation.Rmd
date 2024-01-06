@@ -81,8 +81,6 @@ data("test_sounds_est")
 
 ```{r, eval = TRUE, echo = FALSE}
 
-options(pb = FALSE)
-
 kbl <- kable(test_sounds_est, align = "c", row.names = F, format = "html", escape = F)
 
 kbl <- column_spec(kbl, 7:9, background = "#ccebff", bold = TRUE)
@@ -178,9 +176,6 @@ The function `plot_degradation()` aims to simplify the visual inspection of soun
 
 ```{r, eval = FALSE}
 
-# set path where images will be saved (will be used by all image creating function)
-options(dest.path = tempdir())
-
 # sort to order panels
 test_sounds_est <-
   test_sounds_est[order(test_sounds_est$sound.id,
@@ -188,7 +183,7 @@ test_sounds_est <-
                         decreasing = FALSE),]
 
 # create plots
-plot_degradation(test_sounds_est)
+plot_degradation(test_sounds_est, dest.path = tempdir())
 
 ```
 
@@ -245,22 +240,11 @@ The output data frame is simply the input data with an additional column ('blur.
 
 The function `plot_blur_ratio()` can be used to generate image files (in 'jpeg' format) for each comparison showing spectrograms of both sounds and the overlaid amplitude envelopes (as probability mass functions (PMF)). 
 
-```{r, eval = FALSE}
-
-# set path in which to save images
-options(dest.path = td)
+```{r, eval = TRUE}
 
 # plot blur ratio
-plot_blur_ratio(X = test_sounds_est)
+plot_blur_ratio(X = test_sounds_est, dest.path = tempdir())
 
-```
-
-```{r, eval = FALSE, echo = FALSE}
-
-sbr <- blur_ratio(test_sounds_est, dest.path = tempdir())
-
-# make the gif here
-# https://ezgif.com
 ```
 
 Output image files (in the working directory) look like these ones:
@@ -497,7 +481,11 @@ Signal-to-noise ratio (SNR) quantifies sound amplitude level in relation to ambi
 ```{r, eval = TRUE}
 
 # run signal to noise ratio
-sa <- signal_to_noise_ratio(test_sounds_est, pb = FALSE, noise.ref = "custom", mar = 0.1)
+sa <-
+  signal_to_noise_ratio(test_sounds_est,
+                        pb = FALSE,
+                        noise.ref = "custom",
+                        mar = 0.1)
 
 ```
 
@@ -643,8 +631,9 @@ The output data is actually an average of several frequency spectra for each sou
 
 ```{r, eval = TRUE, warning = FALSE}
 
-np <- noise_profile(X = test_sounds_est[test_sounds_est$distance > 5,],
-                    mar = 0.1, averaged = FALSE)
+np <-
+  noise_profile(X = test_sounds_est[test_sounds_est$distance > 5, ],
+                mar = 0.1, averaged = FALSE)
 
 # make a column containing sound file and selection
 np$sf.sl <- paste(np$sound.files, np$selec)
@@ -660,6 +649,7 @@ ggplot(np, aes(
   labs(x = "Frequency (kHz)", y = "Amplitude (dBA)") +
   coord_flip() +
   theme_classic()
+
 ```
 
 Note that we can limit the frequency range by using a bandpass filter ('bp' argument). In addition, the argument 'hop.size', which control the size of the time windows, affects the precision in the frequency domain. We can get a better precision by increasing 'hop.size' (or 'wl'):

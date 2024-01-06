@@ -50,7 +50,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
@@ -61,7 +61,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
@@ -78,7 +78,7 @@ references:
     given-names: Thierry
   - family-names: Simonis
     given-names: Caroline
-  year: '2023'
+  year: '2024'
 - type: software
   title: tuneR
   abstract: 'tuneR: Analysis of Music and Speech'
@@ -100,7 +100,7 @@ references:
   - family-names: Ellis
     given-names: Daniel P. W.
   - name: Underbit Technologies
-  year: '2023'
+  year: '2024'
 - type: software
   title: fftw
   abstract: 'fftw: Fast FFT and DCT Based on the FFTW Library'
@@ -110,7 +110,7 @@ references:
   - family-names: Mersmann
     given-names: Olaf
     email: olafm@p-value.net
-  year: '2023'
+  year: '2024'
 - type: software
   title: methods
   abstract: 'R: A Language and Environment for Statistical Computing'
@@ -119,7 +119,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
 - type: software
@@ -132,7 +132,7 @@ references:
   - family-names: Garnier
     given-names: Simon
     email: garnier@njit.edu
-  year: '2023'
+  year: '2024'
 - type: software
   title: Sim.DiffProc
   abstract: 'Sim.DiffProc: Simulation of Diffusion Processes'
@@ -146,7 +146,7 @@ references:
   - family-names: Boukhetala
     given-names: Kamal
     email: kboukhetala@usthb.dz
-  year: '2023'
+  year: '2024'
 - type: software
   title: png
   abstract: 'png: Read and write PNG images'
@@ -157,7 +157,7 @@ references:
   - family-names: Urbanek
     given-names: Simon
     email: Simon.Urbanek@r-project.org
-  year: '2023'
+  year: '2024'
 - type: software
   title: checkmate
   abstract: 'checkmate: Fast and Versatile Argument Checks'
@@ -169,7 +169,7 @@ references:
     given-names: Michel
     email: michellang@gmail.com
     orcid: https://orcid.org/0000-0001-9754-0393
-  year: '2023'
+  year: '2024'
 - type: software
   title: cli
   abstract: 'cli: Helpers for Developing Command Line Interfaces'
@@ -180,7 +180,7 @@ references:
   - family-names: Csárdi
     given-names: Gábor
     email: csardi.gabor@gmail.com
-  year: '2023'
+  year: '2024'
 - type: software
   title: 'R: A Language and Environment for Statistical Computing'
   notes: Depends
@@ -189,7 +189,7 @@ references:
   - name: R Core Team
   location:
     name: Vienna, Austria
-  year: '2023'
+  year: '2024'
   institution:
     name: R Foundation for Statistical Computing
   version: '>= 3.2.1'
@@ -207,7 +207,7 @@ references:
   - family-names: Smith-Vidaurre
     given-names: Grace
     email: gsmithvi@gmail.com
-  year: '2023'
+  year: '2024'
   version: '>= 1.1.29'
 - type: software
   title: ohun
@@ -220,8 +220,8 @@ references:
     given-names: Marcelo
     email: marcelo.araya@ucr.ac.cr
     orcid: https://orcid.org/0000-0003-3594-619X
-  year: '2023'
-  version: '>= 1.0.0'
+  year: '2024'
+  version: '>= 1.0.1'
 - type: software
   title: rmarkdown
   abstract: 'rmarkdown: Dynamic Documents for R'
@@ -264,7 +264,7 @@ references:
     given-names: Richard
     email: rich@posit.co
     orcid: https://orcid.org/0000-0003-3925-190X
-  year: '2023'
+  year: '2024'
 - type: software
   title: ggplot2
   abstract: 'ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics'
@@ -299,7 +299,7 @@ references:
   - family-names: Dunnington
     given-names: Dewey
     orcid: https://orcid.org/0000-0002-9415-4582
-  year: '2023'
+  year: '2024'
 - type: software
   title: knitr
   abstract: 'knitr: A General-Purpose Package for Dynamic Report Generation in R'
@@ -311,7 +311,7 @@ references:
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2023'
+  year: '2024'
 - type: software
   title: kableExtra
   abstract: 'kableExtra: Construct Complex Table with ''kable'' and Pipe Syntax'
@@ -323,7 +323,7 @@ references:
     given-names: Hao
     email: haozhu233@gmail.com
     orcid: https://orcid.org/0000-0002-3386-6076
-  year: '2023'
+  year: '2024'
 - type: software
   title: testthat
   abstract: 'testthat: Unit Testing for R'
@@ -334,7 +334,7 @@ references:
   - family-names: Wickham
     given-names: Hadley
     email: hadley@posit.co
-  year: '2023'
+  year: '2024'
   version: '>= 3.0.0'
 - type: software
   title: covr
@@ -346,7 +346,7 @@ references:
   - family-names: Hester
     given-names: Jim
     email: james.f.hester@gmail.com
-  year: '2023'
+  year: '2024'
 - type: software
   title: formatR
   abstract: 'formatR: Format R Code Automatically'
@@ -358,7 +358,7 @@ references:
     given-names: Yihui
     email: xie@yihui.name
     orcid: https://orcid.org/0000-0003-0645-5666
-  year: '2023'
+  year: '2024'
 - type: software
   title: Rraven
   abstract: 'Rraven: Connecting R and ''Raven'' Sound Analysis Software'
@@ -370,4 +370,4 @@ references:
     given-names: Marcelo
     email: marcelo.araya@ucr.ac.cr
     orcid: https://orcid.org/0000-0003-3594-619X
-  year: '2023'
+  year: '2024'

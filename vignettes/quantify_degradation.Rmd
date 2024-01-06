@@ -275,12 +275,12 @@ ggplot(envs, aes(x = time, y = amp, col = distance)) +
 
 ```
 
-The `env.smooth` argument could change envelope shapes and related measurements. The following code sets `env.smooth = 800`:
+The `env.smooth` argument could change envelope shapes and related measurements. The following code sets `env.smooth = 800` which produces smoother envelopes:
 
 ```{r}
 
 # get envelopes
-br <- blur_ratio(X = test_sounds_est, envelopes = TRUE)
+br <- blur_ratio(X = test_sounds_est, envelopes = TRUE, env.smooth = 800)
 envs <- attributes(br)$envelopes
 
 envs$distance <- as.factor(envs$distance)

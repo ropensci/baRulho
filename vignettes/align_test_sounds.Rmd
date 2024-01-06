@@ -471,7 +471,7 @@ baRulho::plot_aligned_sounds(
 
 ## Manually fixing alignment
 
-In some cases alignments might not be totally accurate. The function `manual_realign()` allows users to interactively adjust the alignment of test sound files produced by \code{\link{align_test_files}}. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assessing and adjusting their alignment:
+In some cases alignments might not be totally accurate. The function `manual_realign()` allows users to interactively adjust the alignment of test sound files produced by `align_test_files()`. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assessing and adjusting their alignment:
 
 ```{r, eval = FALSE}
 

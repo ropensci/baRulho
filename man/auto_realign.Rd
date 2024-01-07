@@ -59,7 +59,7 @@ This function uses spectrographic cross-correlation to align the position in tim
 
   # re align
 
-  auto_realign(X = unaligned_test_sounds_est)
+  realigned_est <- auto_realign(X = unaligned_test_sounds_est)
 }
 
 }

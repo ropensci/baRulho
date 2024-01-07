@@ -50,6 +50,8 @@
 #'
 #'   if (requireNamespace("ggplot2", quietly = TRUE)){
 #'   # plot
+#'   library(ggplot2)
+#'   
 #'   ggplot(spctr[spctr$freq > 0.3, ], aes(y = amp, x = freq,
 #'   col = distance)) +
 #'   geom_line() +

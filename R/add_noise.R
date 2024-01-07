@@ -1,13 +1,12 @@
 #' Add synthetic noise
 #'
 #' \code{add_noise} adds synthetic noise to annotations in extended selection tables
+#' @inheritParams template_params
 #' @param X Object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package), generated 'by element', with the reference to the test sounds (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start point of the annotation over which to measure ambient noise.
 #' @param target.snr numeric vector of length 1. Specifies the desired signal-to-noise ratio. Must be lower that the current signal-to-noise ratio. Annotations showing a signal-to-noise ratio higher than 'target.snr' will remain unchanged. Must be supplied.
 #' @param precision  numeric vector of length 1. Specifies the precision of the adjusted signal-to-noise ratio (in dB).
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param max.iterations Numeric vector of length 1. Specifies the maximum number of iterations that the internal signal-to-noise adjusting routine will run before stopping. Note that in most cases the default maximum number of iterations (1000) is not reached.
 #' @param ... Additional arguments to be passed internally to \code{\link{signal_to_noise_ratio}}.
 #' @return Object 'X' in which the wave objects have been modified to match the target signal-to-noise ratio. It also includes an additional column, 'adjusted.snr', with the new signal-to-noise ratio values.

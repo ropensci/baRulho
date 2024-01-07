@@ -50,7 +50,7 @@ to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} t
 \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
 }}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}
 
 \item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
@@ -59,10 +59,10 @@ to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} t
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 }
 \value{
 Object 'X' with an additional column, 'signal.to.noise.ratio',

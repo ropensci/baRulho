@@ -34,17 +34,17 @@ manual_realign(
 
 \item{Y}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 1. 6ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.}
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0.}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 
 \item{collevels}{A numeric vector of length 3. Specifies levels to partition the amplitude range of the spectrogram (in dB). The more levels the higher the resolution of the spectrogram. Default is seq(-120, 0, 1).}
 
-\item{palette}{Color palette function for spectrogram. Default is  \code{\link[viridis]{viridis}}. See \code{\link[seewave]{spectro}} for more palettes. Palettes as \code{\link[monitoR:specCols]{gray.2}} may work better when \code{fast.spec = TRUE}.}
+\item{palette}{Color palette function for spectrogram. Default is  \code{\link[viridis]{viridis}}. See \code{\link[seewave]{spectro}} for more palettes. Palettes as \code{\link[monitoR:specCols]{gray.2}} may work better when \code{fast.spec = TRUE} (an argument that can be passed to the internal spectrogram function using "...").}
 
 \item{duration}{A numeric vector of length 1. Specifies the overall duration of the clip that will be plotted. Notice that only the initial part of the test files are plotted as this is enough to tell the precision of the alignment.}
 

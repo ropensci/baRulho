@@ -1,14 +1,13 @@
 #' Align test sound files
 #'
 #' \code{align_test_files} aligns test (re-recorded) sound files.
+#' @inheritParams template_params
 #' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.
 #' @param Y object of class 'data.frame' with the output of \code{\link{find_markers}}. This object contains the position of markers in the re-recorded sound files. If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used.
 #' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found.
 #' @param by.song Logical argument to indicate if the extended selection table should be created by song (see 'by.song' \code{\link[warbleR]{selection_table}} argument). Default is \code{TRUE}.
 #' @param marker Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is \code{NULL}. DEPRECATED.
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param ...	Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.
 #' @return An object of the same class than 'X' with the aligned sounds from test (re-recorded) sound files.
 #' @export

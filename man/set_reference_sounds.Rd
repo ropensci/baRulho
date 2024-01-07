@@ -25,7 +25,7 @@ set_reference_sounds(
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 }
 \value{
 An object similar to 'X' with one additional column, 'reference', with the ID of the sounds to be used as reference by degradation-quantifying functions in downstream analyses. The ID is created as \code{paste(X$sound.files, X$selec, sep = "-")}.

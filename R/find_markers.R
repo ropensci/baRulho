@@ -1,13 +1,12 @@
 #' Find acoustic markers on test sound files
 #'
 #' \code{find_markers} find acoustic markers on test (re-recorded) sound files using spectrographic cross-correlation.
+#' @inheritParams template_params
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. Required.
 #' @param template.rows Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.
 #' @param markers Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one marker is recommended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).
 #' @param test.files Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the marker(s). If not supplied all sound files in 'path' are used instead.
 #' @param path Character string containing the directory path where test (re-recorded) sound files are found.
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param ...	Additional arguments to be passed to \code{\link[ohun]{template_correlator}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).
 #' @return A data frame with test file names, marker id, maximum cross-correlation score for each marker and the start and end where it was detected. If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two markers in the test-files against that in the master sound file. In a perfect detection the value must be 0.
 #' @export

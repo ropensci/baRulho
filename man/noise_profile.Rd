@@ -42,8 +42,7 @@ the start and end points of selection over which to measure ambient noise. Requi
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{path}{Character string containing the directory path where the sound files are located.
-If \code{NULL} (default) then the current working directory is used.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
 

@@ -1,6 +1,7 @@
 #' Create a master sound file
 #'
 #' \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
+#' @inheritParams template_params
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the model sounds. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass. An optional 'sound.id' column can be included to use a custom label for each sound in the output. This column must contain a unique id for each sound (labels cannot repeated). If not supplied the function will make it by combining the sound file and selection columns.
 #' @param file.name Character string indicating the name of the sound file.
 #' @param dest.path Character string containing the directory path where the sound file will be saved.
@@ -11,7 +12,6 @@
 #' @param amp.marker Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of sounds, so it is picked up at further distances. Default is 2.
 #' @param flim Numeric vector of length 2 to control the frequency range in which the markers would be found. If \code{NULL} markers would be display across the whole frequency range. Default is c(0, 4).
 #' @param cex Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.
-#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return A .wav file in 'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.
 #' @export
 #' @name master_sound_file

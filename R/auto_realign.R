@@ -1,14 +1,10 @@
 #' Fix misaligned start and end of test sounds
 #'
 #' \code{auto_realign} fixes misaligned start and end of test sounds in an extended selection table using spectrographic cross-correlation
+#' @inheritParams template_params
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.
 #' @param parallel DEPRECATED. Use 'cores' instead.
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
-#' is NULL. If supplied, 'hop.size' is ignored.
-#' @param ovlp Numeric vector of length 1 specifying \% of overlap between two
+#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
 #' slow down the function but produce more accurate results.
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.

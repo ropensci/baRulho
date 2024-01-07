@@ -32,15 +32,15 @@ plot_aligned_sounds(
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 1. 6ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
@@ -58,7 +58,7 @@ similar to other acoustic analysis software packages.}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to the start of the first annotation to be included in the plot.}
 
-\item{dest.path}{Character string containing the directory path where the image files will be save. If not supplied files will be save in the current working directory.}
+\item{dest.path}{Character string containing the directory path where the image files will be saved. If not supplied the current working directory will be used instead.}
 
 \item{flim}{A numeric vector of length 2 indicating the highest and lowest frequency limits (kHz) of the spectrogram, as in \code{\link[seewave]{spectro}}. Default is \code{NULL} which will plot spectrograms in the full frequency range (0 - nyquist frequency).}
 

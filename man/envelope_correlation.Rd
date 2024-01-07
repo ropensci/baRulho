@@ -23,8 +23,7 @@ envelope_correlation(
 
 \item{parallel}{DEPRECATED. Use 'cores' instead.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-If \code{NULL} (default) then the current working directory is used.}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
@@ -36,13 +35,12 @@ If \code{NULL} (default) then the current working directory is used.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
-is NULL. If supplied, 'hop.size' is ignored.}
+\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 }
 \value{
 Object 'X' with an additional column,  'envelope.correlation', containing the id of the sound used as reference and the computed envelope correlation coefficients, respectively.

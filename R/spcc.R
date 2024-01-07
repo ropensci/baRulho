@@ -1,20 +1,14 @@
 #' Measure spectrographic cross-correlation as a measure of sound distortion
 #'
 #' \code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
-#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
+#' @inheritParams template_params
 #' @param parallel DEPRECATED. Use 'cores' instead.
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
-#' is \code{NULL}. If supplied, 'hop.size' is ignored.
 #' @param ovlp Numeric vector of length 1 specifying \% of overlap between two
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
 #' slow down the function but produce more accurate results.
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.
-#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return Object 'X' with an additional column,  'cross.correlation', containing the id of the sound used as reference and the computed spectrogram cross-correlation coefficients, respectively.
 #' @export
 #' @name spcc

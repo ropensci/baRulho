@@ -1,12 +1,11 @@
 #' Measure attenuation as signal-to-noise ratio
 #'
 #' \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.
+#' @inheritParams template_params
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start point of the annotation over which to measure ambient noise.
 #' @param parallel DEPRECATED. Use 'cores' instead.
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param eq.dur Logical. Controls whether the ambient noise segment that is measured has the same duration
 #' to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.
 #' @param noise.ref Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available:
@@ -21,14 +20,12 @@
 #'  (\code{20 * log10(rms(env(S))/rms(env(N)))}) as described by Darden (2008).
 #' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
 #' }
-#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.
 #' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.
-#' @param ovlp Numeric vector of length 1 specifying the percent overlap between two
+#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.
-#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @return Object 'X' with an additional column, 'signal.to.noise.ratio',
 #' with the signal-to-noise ratio values.
 #' @export

@@ -1,14 +1,8 @@
 #' Measure detection distance of sound
 #'
 #' \code{detection_distance} detection distance of sounds.
-#' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
+#' @inheritParams template_params
 #' @param output Character vector of length 1 to determine if an extended selection table (DEPRECATED. Now the output format mirrors the class of the input 'X'.
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
-#' is \code{NULL}. If supplied, 'hop.size' is ignored.
-#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
 #' @param spl A numeric vector of length 1 specifying the sound pressure level of sounds. If not supplied then it will be measured from the sounds  themselves.
 #' @param spl.cutoff A numeric vector of length 1 specifying the sound pressure level cutoff to define if the sound is no longer detected. Ideally it should be estimated based on the sound detection threshold of the species.
 #' @param temp Numeric vector of length 1 with frequency (in Celsius). Default is 20.

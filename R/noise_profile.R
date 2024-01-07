@@ -1,6 +1,7 @@
 #' Measure full spectrum sound noise profiles
 #'
 #' \code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.
+#' @inheritParams template_params
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.
 #' @param files Character vector with names of wave files to be analyzed. Files must be found in 'path' supplied (or in the working directory if 'path' is not supplied). Default is \code{NULL}.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
@@ -11,10 +12,6 @@
 #' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column).
 #' }
 #' @param parallel DEPRECATED. Use 'cores' instead.
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
-#' @param path Character string containing the directory path where the sound files are located.
-#' If \code{NULL} (default) then the current working directory is used.
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default

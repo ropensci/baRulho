@@ -46,12 +46,12 @@ end of the sound over which to measure tail power.}
 
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
+Note that lower values will increase time resolution, which is more important for amplitude calculations.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percent overlap between two
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 }
 \value{
 Object 'X' with an additional column, 'tail.to.signal.ratio',

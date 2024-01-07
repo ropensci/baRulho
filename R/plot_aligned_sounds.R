@@ -1,15 +1,12 @@
 #' Plot spectrograms to check test sound files alignment
 #'
 #' \code{plot_aligned_sounds} plots spectrograms to visually inspect alignment precision on test sound files.
+#' @inheritParams template_params
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 1. 6ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-#' @param ovlp Numeric vector of length 1 specifying the percent overlap between two
+#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0.
-#' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.
-#' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
-#' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param collevels A numeric vector of length 3. Specifies levels to partition the
 #'   amplitude range of the spectrogram (in dB). The more levels the higher the
 #'   resolution of the spectrogram. Default is seq(-40, 0, 1). seq(-115, 0, 1) will produces spectrograms
@@ -18,7 +15,6 @@
 #' \code{\link[seewave]{spectro}} for more palettes. Palettes as \code{\link[monitoR:specCols]{gray.2}} may work better when \code{fast.spec = TRUE}.
 #' @param duration A numeric vector of length 1. Specifies the overall duration of the clip that will be plotted. Notice that only the initial part of the test files are plotted as this is enough to tell the precision of the alignment.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to the start of the first annotation to be included in the plot.
-#' @param dest.path Character string containing the directory path where the image files will be save. If not supplied files will be save in the current working directory.
 #' @param flim A numeric vector of length 2 indicating the highest and lowest frequency limits (kHz) of the spectrogram, as in \code{\link[seewave]{spectro}}. Default is \code{NULL} which will plot spectrograms in the full frequency range (0 - nyquist frequency).
 #' @param col Character string controlling the color of lines and sound ID labels.
 #' @param width Numeric vector of length 1. Single value (in inches) indicating the width of the output image files. Default is 7.

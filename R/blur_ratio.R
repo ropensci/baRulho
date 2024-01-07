@@ -33,7 +33,7 @@
 #'   data("test_sounds_est")
 #'
 #'  # add reference to X
-#'  X <- set_reference_sounds(X = test_sounds_est)
+#'   X <- set_reference_sounds(X = test_sounds_est)
 #'   blur_ratio(X = X)
 #'
 #'   # using method 2

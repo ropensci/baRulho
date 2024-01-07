@@ -40,7 +40,7 @@
 #'
 #'   # re align
 #'
-#'   auto_realign(X = unaligned_test_sounds_est)
+#'   realigned_est <- auto_realign(X = unaligned_test_sounds_est)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

@@ -16,7 +16,7 @@
 ## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB.
 #' @examples {
 #'   # measure attenuation
-#'   attenuation(f = 2000, dist = 50, dist0 = 1)
+#'   attenuation(frequency = 2000, dist = 50, dist0 = 1)
 #' }
 #' @family miscellaneous
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})

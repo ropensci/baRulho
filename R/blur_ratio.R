@@ -38,7 +38,7 @@
 #'
 #'   # using method 2
 #' X <- set_reference_sounds(X = test_sounds_est, method = 2)
-#'   # blur_ratio(X = X)
+#'   blur_ratio(X = X)
 #'
 #'   # get envelopes
 #'   br <- blur_ratio(X = X, envelopes = TRUE)

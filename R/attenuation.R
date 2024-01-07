@@ -2,11 +2,11 @@
 #'
 #' \code{attenuation} estimates atmospheric attenuation and atmospheric absorption.
 #' @param frequency Numeric vector of length 1 with frequency (in Hertz).
+#' @param dist0 Numeric vector of length 1 with distance (m) for the reference SPL.
+#' @param dist Numeric vector of length 1 with distance (m) over which a sound propagates.
 #' @param temp Numeric vector of length 1 with frequency (in Celsius). Default is 20.
 #' @param rh Numeric vector of length 1 with relative humidity (in percentage). Default is 60.
 #' @param pa Numeric vector of length 1 with atmospheric (barometric) pressure in Pa (standard: 101325, default). Used for atmospheric attenuation.
-#' @param dist Numeric vector of length 1 with distance (m) over which a sound propagates.
-#' @param dist0 Numeric vector of length 1 with distance (m) for the reference SPL.
 #' @param hab.att.coef Attenuation coefficient of the habitat (in dB/kHz/m).
 #' @return Returns the geometric, atmospheric and habitat attenuation (in dB) as well as the combined attenuation.
 #' @export
@@ -25,11 +25,11 @@
 
 attenuation <-
   function(frequency,
+           dist0,
+           dist,
            temp = 20,
            rh = 60,
            pa = 101325,
-           dist0,
-           dist,
            hab.att.coef = 0.02) {
     # check arguments
     arguments <- as.list(base::match.call())

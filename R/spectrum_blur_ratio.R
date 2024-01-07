@@ -48,7 +48,7 @@
 #'   # make distance a factor for plotting
 #'   spctr$distance <- as.factor(spctr$distance)
 #'
-#'   \dontrun{
+#'   if (requireNamespace("ggplot2", quietly = TRUE)){
 #'   # plot
 #'   ggplot(spctr[spctr$freq > 0.3, ], aes(y = amp, x = freq,
 #'   col = distance)) +

@@ -96,6 +96,11 @@ This function allows the interactive adjustment of the alignment of test sound f
   alg.tests$start <- alg.tests$start + lag
   alg.tests$end <- alg.tests$end + lag
 
+  if(interactive()){
+  realigned_est <- manual_realign(X = alg.tests, Y = master_est, duration = 2,
+  ovlp = 50, hop.size = 14, collevels = seq(-140, 0, 5), palette = viridis::mako,
+  ext.window = FALSE)
+ }
 }
 }
 \references{

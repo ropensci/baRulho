@@ -68,11 +68,11 @@ X <- set_reference_sounds(X = test_sounds_est, method = 2)
   # make distance a factor for plotting
   envs$distance <- as.factor(envs$distance)
 
-  \dontrun{
+  if (requireNamespace("ggplot2", quietly = TRUE)){
   # plot
   ggplot(envs, aes(x= time, y = amp, col = distance)) +
   geom_line() + facet_wrap(~ sound.id) +
-  scale_color_manual(values = viridis::viridis(4)) +
+  scale_color_viridis_d() +
   labs(x = "Time (s)", y = "Amplitude (PMF)") +
   theme_classic()
   }

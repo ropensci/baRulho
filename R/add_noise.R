@@ -1,9 +1,6 @@
 #' Add synthetic noise
 #'
 #' \code{add_noise} adds synthetic noise to annotations in extended selection tables
-#' @usage add_noise(X, mar = NULL, target.snr = 2, precision = 0.1,
-#' cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE),
-#' max.iterations = 1000, ...)
 #' @param X Object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package), generated 'by element', with the reference to the test sounds (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start point of the annotation over which to measure ambient noise.

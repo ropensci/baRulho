@@ -1,13 +1,6 @@
 #' Plot spectrograms to check test sound files alignment
 #'
 #' \code{plot_aligned_sounds} plots spectrograms to visually inspect alignment precision on test sound files.
-#' @usage plot_aligned_sounds(X, hop.size = getOption("hop.size", 11.6),
-#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 50),
-#' path = getOption("sound.files.path", "."), cores = getOption("mc.cores", 1),
-#' pb = getOption("pb", TRUE), collevels = seq(-120, 0, 5),
-#' palette = viridis::viridis, duration = 2,
-#' mar = 0.2, dest.path = getOption("dest.path", "."), flim = NULL, col = "white", width = 7,
-#' height = 4, res = 100, label = TRUE, fast.spec = FALSE, srt = 0, cex = 1, ...)
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 1. 6ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default

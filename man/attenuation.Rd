@@ -4,7 +4,15 @@
 \alias{attenuation}
 \title{Estimate attenuation of sound pressure level}
 \usage{
-attenuation(frequency, temp = 20, rh = 60, pa = 101325, dist0, dist, hab.att.coef = 0.02)
+attenuation(
+  frequency,
+  temp = 20,
+  rh = 60,
+  pa = 101325,
+  dist0,
+  dist,
+  hab.att.coef = 0.02
+)
 }
 \arguments{
 \item{frequency}{Numeric vector of length 1 with frequency (in Hertz).}

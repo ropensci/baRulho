@@ -4,14 +4,25 @@
 \alias{plot_blur_ratio}
 \title{Measure blur ratio in the time domain}
 \usage{
-plot_blur_ratio(X, type = "envelope", cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), env.smooth = getOption("env.smooth", 200),
-spec.smooth = getOption("spec.smooth", 5), res = 150, flim = c("-1", "+1"),
-hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
-ovlp = getOption("ovlp", 70), palette = viridis::viridis,
-collevels = seq(-120, 0, 5), dest.path = getOption("dest.path", "."),
-path = getOption("sound.files.path", "."),
-colors = viridis::viridis(3), n.samples = 100)
+plot_blur_ratio(
+  X,
+  type = "envelope",
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  env.smooth = getOption("env.smooth", 200),
+  spec.smooth = getOption("spec.smooth", 5),
+  res = 150,
+  flim = c("-1", "+1"),
+  hop.size = getOption("hop.size", 11.6),
+  wl = getOption("wl", NULL),
+  ovlp = getOption("ovlp", 70),
+  palette = viridis::viridis,
+  collevels = seq(-120, 0, 5),
+  dest.path = getOption("dest.path", "."),
+  path = getOption("sound.files.path", "."),
+  colors = viridis::viridis(3),
+  n.samples = 100
+)
 }
 \arguments{
 \item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}

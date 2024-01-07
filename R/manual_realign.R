@@ -1,13 +1,6 @@
 #' Plot spectrograms to check test sound files alignment
 #'
 #' \code{manual_realign} plots spectrograms to visually inspect alignment precision on test sound files.
-#' @usage manual_realign(X, Y, hop.size = getOption("hop.size", 11.6),
-#' wl = getOption("wl", NULL), ovlp = getOption("ovlp", 0),
-#' path = getOption("sound.files.path", "."), collevels = seq(-120, 0, 5),
-#' palette = viridis::viridis, duration = 2, mar = 0.2, step.lengths = c(5, 30),
-#' flim = NULL, label.col = "white",  ext.window = TRUE, width = 10,
-#' height = 5, srt = 0, cex = 1, fast.spec = TRUE,
-#' marker = "start_marker", grid = 0.2, ...)
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
 #' @param Y object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 1. 6ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.

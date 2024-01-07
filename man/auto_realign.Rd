@@ -4,9 +4,16 @@
 \alias{auto_realign}
 \title{Fix misaligned start and end of test sounds}
 \usage{
-auto_realign(X, parallel = NULL, cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), hop.size = getOption("hop.size", 11.6),
-wl = getOption("wl", NULL), ovlp = getOption("ovlp", 90), wn = 'hanning')
+auto_realign(
+  X,
+  parallel = NULL,
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  hop.size = getOption("hop.size", 11.6),
+  wl = getOption("wl", NULL),
+  ovlp = getOption("ovlp", 90),
+  wn = "hanning"
+)
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.}

@@ -4,9 +4,16 @@
 \alias{find_markers}
 \title{Find acoustic markers on test sound files}
 \usage{
-find_markers(X, template.rows = NULL, markers = c("start_marker", "end_marker"),
-test.files = NULL, path = getOption("sound.files.path", "."), pb = getOption("pb", TRUE),
-cores = getOption("mc.cores", 1),...)
+find_markers(
+  X,
+  template.rows = NULL,
+  markers = c("start_marker", "end_marker"),
+  test.files = NULL,
+  path = getOption("sound.files.path", "."),
+  pb = getOption("pb", TRUE),
+  cores = getOption("mc.cores", 1),
+  ...
+)
 }
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. Required.}

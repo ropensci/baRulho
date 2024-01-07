@@ -1,9 +1,6 @@
 #' Set reference for test sounds
 #'
 #' \code{set_reference_sounds} set rows to be used as reference for each test sound.
-#' @usage set_reference_sounds(X, method = getOption("method", 1),
-#' cores =  getOption("mc.cores", 1), pb =  getOption("pb", TRUE),
-#' path = getOption("sound.files.path", "."))
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances (and transects if more than 1) and 8) "distance": distance (numeric) at which each test sound was re-recorded. A 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'. 'X' can only have 1 copy for any given sound id in a distance or a transect-distance combination (if column 'transect' is supplied). In addition, 'selec' column values in 'X' cannot be duplicated within a sound file ('sound.files' column) as this combination is used to refer to specific rows in the output 'reference' column.
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.

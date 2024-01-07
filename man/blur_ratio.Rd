@@ -77,6 +77,8 @@ X <- set_reference_sounds(X = test_sounds_est, method = 2)
 
   if (requireNamespace("ggplot2", quietly = TRUE)){
   # plot
+  library(ggplot2)
+  
   ggplot(envs, aes(x= time, y = amp, col = distance)) +
   geom_line() + facet_wrap(~ sound.id) +
   scale_color_viridis_d() +

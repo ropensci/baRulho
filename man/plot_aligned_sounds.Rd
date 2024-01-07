@@ -4,13 +4,30 @@
 \alias{plot_aligned_sounds}
 \title{Plot spectrograms to check test sound files alignment}
 \usage{
-plot_aligned_sounds(X, hop.size = getOption("hop.size", 11.6),
-wl = getOption("wl", NULL), ovlp = getOption("ovlp", 50),
-path = getOption("sound.files.path", "."), cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), collevels = seq(-120, 0, 5),
-palette = viridis::viridis, duration = 2,
-mar = 0.2, dest.path = getOption("dest.path", "."), flim = NULL, col = "white", width = 7,
-height = 4, res = 100, label = TRUE, fast.spec = FALSE, srt = 0, cex = 1, ...)
+plot_aligned_sounds(
+  X,
+  hop.size = getOption("hop.size", 11.6),
+  wl = getOption("wl", NULL),
+  ovlp = getOption("ovlp", 50),
+  path = getOption("sound.files.path", "."),
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  collevels = seq(-120, 0, 5),
+  palette = viridis::viridis,
+  duration = 2,
+  mar = 0.2,
+  dest.path = getOption("dest.path", "."),
+  flim = NULL,
+  col = "white",
+  width = 7,
+  height = 4,
+  res = 100,
+  label = TRUE,
+  fast.spec = FALSE,
+  srt = 0,
+  cex = 1,
+  ...
+)
 }
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.}

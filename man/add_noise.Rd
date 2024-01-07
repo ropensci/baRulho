@@ -4,9 +4,16 @@
 \alias{add_noise}
 \title{Add synthetic noise}
 \usage{
-add_noise(X, mar = NULL, target.snr = 2, precision = 0.1,
-cores = getOption("mc.cores", 1), pb = getOption("pb", TRUE),
-max.iterations = 1000, ...)
+add_noise(
+  X,
+  mar = NULL,
+  target.snr = 2,
+  precision = 0.1,
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  max.iterations = 1000,
+  ...
+)
 }
 \arguments{
 \item{X}{Object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package), generated 'by element', with the reference to the test sounds (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).}

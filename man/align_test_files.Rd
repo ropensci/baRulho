@@ -4,9 +4,17 @@
 \alias{align_test_files}
 \title{Align test sound files}
 \usage{
-align_test_files(X, Y, output = NULL, path = getOption("sound.files.path", "."),
-by.song = TRUE, marker = NULL, cores = getOption("mc.cores", 1),
-pb = getOption("pb", TRUE), ...)
+align_test_files(
+  X,
+  Y,
+  output = NULL,
+  path = getOption("sound.files.path", "."),
+  by.song = TRUE,
+  marker = NULL,
+  cores = getOption("mc.cores", 1),
+  pb = getOption("pb", TRUE),
+  ...
+)
 }
 \arguments{
 \item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.}

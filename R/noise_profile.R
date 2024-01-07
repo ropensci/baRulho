@@ -1,11 +1,6 @@
 #' Measure full spectrum sound noise profiles
 #'
 #' \code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.
-#' @usage noise_profile(X = NULL, files = NULL, mar = NULL,
-#' noise.ref = "adjacent", parallel = NULL, cores = getOption("mc.cores", 1),
-#' pb = getOption("pb", TRUE), path = getOption("sound.files.path", "."),
-#' bp = NULL, hop.size = getOption("hop.size", 1), wl = getOption("wl", NULL),
-#' PSD = FALSE, norm = TRUE, dB = "A", averaged = TRUE)
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.
 #' @param files Character vector with names of wave files to be analyzed. Files must be found in 'path' supplied (or in the working directory if 'path' is not supplied). Default is \code{NULL}.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to

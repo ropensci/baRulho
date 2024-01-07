@@ -4,11 +4,22 @@
 \alias{synth_sounds}
 \title{Create synthetic sounds}
 \usage{
-synth_sounds(replicates = 1, frequencies, durations, nharmonics = 1,
-fm = FALSE, am = FALSE, am.amps = rep(c(1:4, 3:2), length.out = 11),
-mar = 0.05, seed = NULL, sig2 = 0.3, shuffle = FALSE,
-hrm.freqs = c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10),
-sampling.rate = 44.1, pb = TRUE)
+synth_sounds(
+  replicates = 1,
+  frequencies,
+  durations,
+  nharmonics = 1,
+  fm = FALSE,
+  am = FALSE,
+  am.amps = rep(c(1:4, 3:2), length.out = 11),
+  mar = 0.05,
+  seed = NULL,
+  sig2 = 0.3,
+  shuffle = FALSE,
+  hrm.freqs = c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10),
+  sampling.rate = 44.1,
+  pb = TRUE
+)
 }
 \arguments{
 \item{replicates}{Numeric vector of length 1 indicating the number of replicates for each treatment combination. Default is 1. Useful for measuring variation in transmission parameters.}

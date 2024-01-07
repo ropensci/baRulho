@@ -1,14 +1,6 @@
 #' Save multipanel plots with reference and test sounds
 #'
 #' \code{plot_degradation} creates multipanel plots (as image files) with reference and test sounds by distance and transect.
-#' @usage plot_degradation(X, nrow = 4, env.smooth = getOption("env.smooth", 200),
-#' hop.size = getOption("hop.size", 11.6), wl = getOption("wl", NULL),
-#' ovlp = getOption("ovlp", 70),  path = getOption("sound.files.path", "."),
-#' dest.path = getOption("dest.path", "."), cores = getOption("mc.cores", 1),
-#' pb = getOption("pb", TRUE), collevels = seq(-120, 0, 5),
-#' palette = viridis::viridis, flim = c("-1", "+1"), envelope = TRUE, spectrum = TRUE,
-#' heights = c(4, 1), widths = c(5, 1), margins = c(2, 1), row.height = 2, col.width = 2,
-#' cols = viridis::mako(4, alpha = 0.3), res = 120, ...)
 #' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
 #' @param nrow Numeric vector of length 1 with the number of rows per image file. Default is 4. This would be dynamically adjusted if more rows than needed are set.
 #' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope and power spectrum calculations (used internally by \code{\link[seewave]{env}}). Default is 200.

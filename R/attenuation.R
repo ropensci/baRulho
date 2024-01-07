@@ -1,7 +1,6 @@
 #' Estimate attenuation of sound pressure level
 #'
 #' \code{attenuation} estimates atmospheric attenuation and atmospheric absorption.
-#' @usage attenuation(frequency, temp = 20, rh = 60, pa = 101325, dist0, dist, hab.att.coef = 0.02)
 #' @param frequency Numeric vector of length 1 with frequency (in Hertz).
 #' @param temp Numeric vector of length 1 with frequency (in Celsius). Default is 20.
 #' @param rh Numeric vector of length 1 with relative humidity (in percentage). Default is 60.

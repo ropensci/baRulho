@@ -11,7 +11,7 @@
 #' @return Returns the geometric, atmospheric and habitat attenuation (in dB) as well as the combined attenuation.
 #' @export
 #' @name attenuation
-#' @details Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. Modified from http://www.sengpielaudio.com
+#' @details Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. The function is modified from http://www.sengpielaudio.com
 ## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB.
 #' @examples {
 #'   # measure attenuation
@@ -45,30 +45,32 @@ attenuation <-
     
     # report errors
     .report_assertions(check_results)
-    # atmospheric attenuation
-    pr <- 101325
-    To1 <- 273.16
-    To <- 293.15
-    temp <- temp + 273.15
     
+    # atmospheric attenuation
+    pr <- 101325 # reference ambient atmospheric pressure: 101.325 kPa
+    To1 <- 273.16  # triple-point isotherm temp: 273.16 K
+    To <- 293.15 #  reference temperature in K: 293.15 K (20°C)
+    temp <- temp + 273.15 # celcius to farenheit
+    
+    #saturation vapor pressure equals
     psat <- pr * 10 ** (-6.8346 * (To1 / temp) ** 1.261 + 4.6151)
     
+    # molar concentration of water vapor, as a percentage
     h <- rh * (psat / pa)
     
+    # oxygen relaxation frequency
     fr0 <-
       (pa / pr) * (24 + 4.04e4 * h * ((0.02 + h) / (0.391 + h)))
     
+    # nitrogen relaxation frequency
     frN <-
       (pa / pr) * sqrt(temp / To) * (9 + 280 * h * exp(-4.170 * ((temp / To) **
                                                                    (-1 / 3) - 1)))
-    
-    
     z <- 0.1068 * exp(-3352 / temp) / (frN + frequency ** 2 / frN)
     
     y <-
       (temp / To) ** (-5 / 2) * (0.01275 * exp(-2239.1 / temp) * 1 / (fr0 + frequency **
                                                                         2 / fr0) + z)
-    
     
     atm_att_coef <-
       8.686 * frequency ** 2 * ((1.84e-11 * 1 / (pa / pr) * sqrt(temp / To)) + y)
@@ -94,5 +96,5 @@ attenuation <-
     return(outdf)
   }
 
-##### modified from  http://www.sengpielaudio.com
+##### modified from  http://www.sengpielaudio.com, http://www.sengpielaudio.com/calculator-air.htm
 ## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB

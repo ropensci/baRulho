@@ -2,10 +2,8 @@
 #'
 #' \code{spectrum_correlation} measures frequency spectrum correlation of sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param spec.smooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.
-#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
 #' @param n.bins Numeric vector of length 1 specifying the number of frequency bins to use for representing power spectra. Default is 100. If null the raw power spectrum is used (note that this can result in high RAM memory usage for large data sets). Power spectrum values are interpolated using \code{\link[stats]{approx}}.

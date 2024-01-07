@@ -2,9 +2,7 @@
 #'
 #' \code{blur_ratio} measures blur ratio in sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200.
-#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'. To obtain the amplitude envelopes use 'envelopes = TRUE'.
 #' @param envelopes Logical to control if envelopes are returned (as attributes, 'attributes(X)$envelopes'). Default is \code{FALSE}.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Used for applying bandpass filtering.

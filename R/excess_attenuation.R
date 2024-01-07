@@ -2,8 +2,6 @@
 #'
 #' \code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param parallel DEPRECATED. Use 'cores' instead.
-#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is \code{NULL}. If supplied, 'hop.size' is ignored.
@@ -29,7 +27,7 @@
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @seealso \code{\link{spcc_distortion}}; \code{\link{envelope_correlation}}
+#' @seealso \code{\link{spcc}}; \code{\link{envelope_correlation}}
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
 #'

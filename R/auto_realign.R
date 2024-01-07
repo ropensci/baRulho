@@ -3,7 +3,6 @@
 #' \code{auto_realign} fixes misaligned start and end of test sounds in an extended selection table using spectrographic cross-correlation
 #' @inheritParams template_params
 #' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.
-#' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
 #' slow down the function but produce more accurate results.
@@ -194,12 +193,3 @@ auto_realign <-
     
     return(X)
   }
-
-##############################################################################################################
-#' alternative name for \code{\link{auto_realign}}
-#'
-#' @keywords internal
-#' @details see \code{\link{auto_realign}} for documentation. \code{\link{spcc_align}} will be deprecated in future versions.
-#' @export
-
-spcc_align <- auto_realign

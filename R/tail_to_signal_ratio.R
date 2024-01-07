@@ -5,8 +5,6 @@
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   end of the sound over which to measure tail power.
-#' @param parallel DEPRECATED. Use 'cores' instead.
-#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param type Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 #' \itemize{

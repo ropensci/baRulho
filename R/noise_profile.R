@@ -11,7 +11,6 @@
 #' \item \code{adjacent}: measure ambient noise right before the sound (using argument 'mar' to define duration of ambient noise segments).
 #' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column).
 #' }
-#' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default

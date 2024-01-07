@@ -2,7 +2,6 @@
 #'
 #' \code{detection_distance} detection distance of sounds.
 #' @inheritParams template_params
-#' @param output Character vector of length 1 to determine if an extended selection table (DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param spl A numeric vector of length 1 specifying the sound pressure level of sounds. If not supplied then it will be measured from the sounds  themselves.
 #' @param spl.cutoff A numeric vector of length 1 specifying the sound pressure level cutoff to define if the sound is no longer detected. Ideally it should be estimated based on the sound detection threshold of the species.
 #' @param temp Numeric vector of length 1 with frequency (in Celsius). Default is 20.

@@ -2,9 +2,7 @@
 #'
 #' \code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
-#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'.
 #' @param ovlp Numeric vector of length 1 specifying \% of overlap between two
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
 #' slow down the function but produce more accurate results.
@@ -136,13 +134,3 @@ spcc <-
     
     return(X)
   }
-
-
-##############################################################################################################
-#' alternative name for \code{\link{spcc}}
-#'
-#' @keywords internal
-#' @details see \code{\link{spcc}} for documentation. \code{\link{spcc_distortion}} will be deprecated in future versions.
-#' @export
-
-spcc_distortion <- spcc

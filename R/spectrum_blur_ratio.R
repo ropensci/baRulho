@@ -2,9 +2,7 @@
 #'
 #' \code{spectrum_blur_ratio} measures blur ratio of frequency spectra from sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param parallel DEPRECATED. Use 'cores' instead.
 #' @param spec.smooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.
-#' @param output DEPRECATED. Now the output format mirrors the class of the input 'X'. To obtain the power spectra use 'spectra = TRUE'.
 #' @param spectra Logical to control if power spectra are returned (as attributes). Default is \code{FALSE}.
 #' @param res Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default

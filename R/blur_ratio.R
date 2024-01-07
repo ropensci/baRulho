@@ -51,7 +51,7 @@
 #'   # plot
 #'   ggplot(envs, aes(x= time, y = amp, col = distance)) +
 #'   geom_line() + facet_wrap(~ sound.id) +
-#'   scale_color_manual(values = viridis::viridis(4)) +
+#'   scale_color_viridis_d() +
 #'   labs(x = "Time (s)", y = "Amplitude (PMF)") +
 #'   theme_classic()
 #'   }

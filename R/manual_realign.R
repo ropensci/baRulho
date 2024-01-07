@@ -68,7 +68,7 @@
 #'
 #'   if(interactive()){
 #'   realigned_est <- manual_realign(X = alg.tests, Y = master_est, duration = 2,
-#'   ovlp = 50, hop.size = 14, collevels = seq(-140, 0, 5), palette = mako,
+#'   ovlp = 50, hop.size = 14, collevels = seq(-140, 0, 5), palette = viridis::mako,
 #'   ext.window = FALSE)
 #'  }
 #' }

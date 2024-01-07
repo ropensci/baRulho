@@ -47,7 +47,7 @@
 #'   # make distance a factor for plotting
 #'   envs$distance <- as.factor(envs$distance)
 #'
-#'   \dontrun{
+#'   if (requireNamespace("ggplot2", quietly = TRUE)){
 #'   # plot
 #'   ggplot(envs, aes(x= time, y = amp, col = distance)) +
 #'   geom_line() + facet_wrap(~ sound.id) +

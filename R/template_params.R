@@ -6,6 +6,7 @@
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.
 #' @param dest.path Character string containing the directory path where the image files will be saved. If not supplied the current working directory will be used instead.
+#' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.
 #' 
 #' @name template_params
 NULL

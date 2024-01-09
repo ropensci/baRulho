@@ -6,7 +6,6 @@
 \usage{
 find_markers(
   X,
-  template.rows = NULL,
   markers = c("start_marker", "end_marker"),
   test.files = NULL,
   path = getOption("sound.files.path", "."),
@@ -17,8 +16,6 @@ find_markers(
 }
 \arguments{
 \item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. Required.}
-
-\item{template.rows}{Numeric vector with the index of the rows from 'X' to be used as templates. DEPRECATED.}
 
 \item{markers}{Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one marker is recommended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).}
 

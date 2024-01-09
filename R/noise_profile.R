@@ -49,7 +49,6 @@ noise_profile <-
            files = NULL,
            mar = NULL,
            noise.ref = "adjacent",
-           parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            path = getOption("sound.files.path", "."),

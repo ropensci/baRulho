@@ -7,14 +7,12 @@
 signal_to_noise_ratio(
   X,
   mar = NULL,
-  parallel = NULL,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   eq.dur = FALSE,
   noise.ref = "adjacent",
   type = 1,
   bp = "freq.range",
-  output = NULL,
   hop.size = getOption("hop.size", 1),
   wl = getOption("wl", NULL),
   ovlp = getOption("ovlp", 0),
@@ -26,8 +24,6 @@ signal_to_noise_ratio(
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
 the start point of the annotation over which to measure ambient noise.}
-
-\item{parallel}{DEPRECATED. Use 'cores' instead.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
@@ -51,8 +47,6 @@ to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} t
 }}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}
-
-\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 

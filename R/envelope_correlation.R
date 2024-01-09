@@ -37,12 +37,10 @@
 
 envelope_correlation <-
   function(X,
-           parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            cor.method = "pearson",
            env.smooth = getOption("env.smooth", 200),
-           output = NULL,
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 70),

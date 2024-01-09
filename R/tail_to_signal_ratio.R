@@ -50,12 +50,10 @@
 
 tail_to_signal_ratio <- function(X,
                                  mar,
-                                 parallel = NULL,
                                  cores = getOption("mc.cores", 1),
                                  pb = getOption("pb", TRUE),
                                  type = 1,
                                  bp = "freq.range",
-                                 output = NULL,
                                  hop.size = getOption("hop.size", 1),
                                  wl = getOption("wl", NULL),
                                  ovlp = getOption("ovlp", 0),

@@ -6,7 +6,6 @@
 #' @param ovlp Numeric vector of length 1 specifying \% of overlap between two
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
 #' slow down the function but produce more accurate results.
-#' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.
 #' @return Object 'X' with an additional column,  'cross.correlation', containing the id of the sound used as reference and the computed spectrogram cross-correlation coefficients, respectively.
 #' @export
 #' @name spcc
@@ -33,11 +32,9 @@
 
 spcc <-
   function(X,
-           parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            cor.method = "pearson",
-           output = NULL,
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 90),

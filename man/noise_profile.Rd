@@ -9,7 +9,6 @@ noise_profile(
   files = NULL,
   mar = NULL,
   noise.ref = "adjacent",
-  parallel = NULL,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   path = getOption("sound.files.path", "."),
@@ -35,8 +34,6 @@ the start and end points of selection over which to measure ambient noise. Requi
 \item \code{adjacent}: measure ambient noise right before the sound (using argument 'mar' to define duration of ambient noise segments).
 \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column).
 }}
-
-\item{parallel}{DEPRECATED. Use 'cores' instead.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 

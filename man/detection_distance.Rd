@@ -8,7 +8,6 @@ detection_distance(
   X,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  output = NULL,
   hop.size = getOption("hop.size", 11.6),
   wl = getOption("wl", NULL),
   path = getOption("sound.files.path", "."),
@@ -31,8 +30,6 @@ detection_distance(
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
-
-\item{output}{Character vector of length 1 to determine if an extended selection table (DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 

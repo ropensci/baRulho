@@ -44,7 +44,6 @@
 
 find_markers <-
   function(X,
-           template.rows = NULL,
            markers = c("start_marker", "end_marker"),
            test.files = NULL,
            path = getOption("sound.files.path", "."),

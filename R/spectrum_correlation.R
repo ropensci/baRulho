@@ -38,12 +38,10 @@
 
 spectrum_correlation <-
   function(X,
-           parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            cor.method = "pearson",
            spec.smooth = getOption("spec.smooth", 5),
-           output = NULL,
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 70),

@@ -7,7 +7,6 @@
 align_test_files(
   X,
   Y,
-  output = NULL,
   path = getOption("sound.files.path", "."),
   by.song = TRUE,
   marker = NULL,
@@ -20,8 +19,6 @@ align_test_files(
 \item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package). This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.}
 
 \item{Y}{object of class 'data.frame' with the output of \code{\link{find_markers}}. This object contains the position of markers in the re-recorded sound files. If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used.}
-
-\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'.}
 
 \item{path}{Character string containing the directory path where test (re-recorded) sound files are found.}
 
@@ -42,7 +39,7 @@ An object of the same class than 'X' with the aligned sounds from test (re-recor
 \code{align_test_files} aligns test (re-recorded) sound files.
 }
 \details{
-The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). The function outputs an 'extended selection table' by default.
+The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used. The function outputs an 'extended selection table' by default.
 }
 \examples{
 {

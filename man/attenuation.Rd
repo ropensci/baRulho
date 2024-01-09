@@ -6,26 +6,26 @@
 \usage{
 attenuation(
   frequency,
+  dist0,
+  dist,
   temp = 20,
   rh = 60,
   pa = 101325,
-  dist0,
-  dist,
   hab.att.coef = 0.02
 )
 }
 \arguments{
 \item{frequency}{Numeric vector of length 1 with frequency (in Hertz).}
 
+\item{dist0}{Numeric vector of length 1 with distance (m) for the reference SPL.}
+
+\item{dist}{Numeric vector of length 1 with distance (m) over which a sound propagates.}
+
 \item{temp}{Numeric vector of length 1 with frequency (in Celsius). Default is 20.}
 
 \item{rh}{Numeric vector of length 1 with relative humidity (in percentage). Default is 60.}
 
 \item{pa}{Numeric vector of length 1 with atmospheric (barometric) pressure in Pa (standard: 101325, default). Used for atmospheric attenuation.}
-
-\item{dist0}{Numeric vector of length 1 with distance (m) for the reference SPL.}
-
-\item{dist}{Numeric vector of length 1 with distance (m) over which a sound propagates.}
 
 \item{hab.att.coef}{Attenuation coefficient of the habitat (in dB/kHz/m).}
 }
@@ -36,7 +36,7 @@ Returns the geometric, atmospheric and habitat attenuation (in dB) as well as th
 \code{attenuation} estimates atmospheric attenuation and atmospheric absorption.
 }
 \details{
-Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. Modified from http://www.sengpielaudio.com
+Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. The function is modified from http://www.sengpielaudio.com
 }
 \examples{
 {

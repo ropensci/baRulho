@@ -61,11 +61,9 @@
 
 spectrum_blur_ratio <-
   function(X,
-           parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            spec.smooth = getOption("spec.smooth", 5),
-           output = NULL,
            spectra = FALSE,
            res = 150,
            hop.size = getOption("hop.size", 11.6),

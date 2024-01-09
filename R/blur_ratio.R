@@ -53,11 +53,9 @@
 
 blur_ratio <-
   function(X,
-           parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            env.smooth = getOption("env.smooth", 200),
-           output = NULL,
            envelopes = FALSE,
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),

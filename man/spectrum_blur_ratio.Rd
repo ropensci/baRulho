@@ -6,11 +6,9 @@
 \usage{
 spectrum_blur_ratio(
   X,
-  parallel = NULL,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   spec.smooth = getOption("spec.smooth", 5),
-  output = NULL,
   spectra = FALSE,
   res = 150,
   hop.size = getOption("hop.size", 11.6),
@@ -23,15 +21,11 @@ spectrum_blur_ratio(
 \arguments{
 \item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
 
-\item{parallel}{DEPRECATED. Use 'cores' instead.}
-
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
 \item{spec.smooth}{Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.}
-
-\item{output}{DEPRECATED. Now the output format mirrors the class of the input 'X'. To obtain the power spectra use 'spectra = TRUE'.}
 
 \item{spectra}{Logical to control if power spectra are returned (as attributes). Default is \code{FALSE}.}
 

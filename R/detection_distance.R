@@ -41,7 +41,6 @@ detection_distance <-
   function(X,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           output = NULL,
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            path = getOption("sound.files.path", "."),

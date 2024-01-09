@@ -49,7 +49,6 @@
 align_test_files <-
   function(X,
            Y,
-           output = NULL,
            path = getOption("sound.files.path", "."),
            by.song = TRUE,
            marker = NULL,

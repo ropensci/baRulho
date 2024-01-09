@@ -46,10 +46,8 @@
 
 excess_attenuation <-
   function(X,
-           parallel = NULL,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           output = NULL,
            hop.size = getOption("hop.size", 1),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 50),

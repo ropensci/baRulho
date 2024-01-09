@@ -33,7 +33,6 @@ test_that("on extended table without ambient sound id", {
       mar = 0.01,
       pb = FALSE,
       noise.ref = "adjacent", 
-      parallel = NULL,
       cores = getOption("mc.cores", 1),
       path = getOption("sound.files.path", "."),
       bp = c(1, 10),

@@ -20,7 +20,7 @@
 #' @import viridis
 #' @import Sim.DiffProc
 #' @import png
-#' @importFrom rlang arg_match
+#' @importFrom rlang arg_match check_installed
 #' @importFrom stats cor aggregate approx ave na.omit complete.cases runif
 #' @importFrom cli style_bold style_italic make_ansi_style num_ansi_colors
 #' @importFrom checkmate assert_logical assert_character assert_integerish assert_numeric assert_multi_class assert_list assert_function assert_class assert_directory assert_data_frame assert_names makeAssertCollection makeAssertionFunction reportAssertions

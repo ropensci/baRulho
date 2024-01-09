@@ -9,7 +9,7 @@ tail_to_signal_ratio(
   mar,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  type = 1,
+  tsr.formula = 1,
   bp = "freq.range",
   hop.size = getOption("hop.size", 1),
   wl = getOption("wl", NULL),
@@ -27,11 +27,11 @@ end of the sound over which to measure tail power.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{type}{Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
+\item{tsr.formula}{Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 \itemize{
 \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
-\item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the sound. So type 2 actually measures tail-to-noise ratio.
+\item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the sound. So tsr.formula 2 actually measures tail-to-noise ratio.
 }}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}
@@ -55,7 +55,7 @@ with the tail-to-signal ratio values.
 \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of sounds referenced in an extended selection table.
 }
 \details{
-Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
+Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing reverberations are provided (see 'tsr.formula' argument). Note that 'tsr.formula' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
 }
 \examples{
 {
@@ -69,8 +69,8 @@ Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberat
   # using margin for noise of 0.01
   tsr <- tail_to_signal_ratio(X = test_sounds_est, mar = 0.01)
 
-  # use type 2 which is equivalent to tail-to-noise ratio
-  tsr <- tail_to_signal_ratio(X = test_sounds_est, mar = 0.01, type = 2)
+  # use tsr.formula 2 which is equivalent to tail-to-noise ratio
+  tsr <- tail_to_signal_ratio(X = test_sounds_est, mar = 0.01, tsr.formula = 2)
 }
 
 }

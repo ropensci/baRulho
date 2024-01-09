@@ -84,7 +84,7 @@ creating function for customizing graphical output. The function is a modified
 version of \code{\link[seewave]{spectro}}, so it takes the same arguments.}
 }
 \value{
-Image files in jpeg format with spectrograms in the working directory, one for each sound file in 'X'.
+Image files in jpeg format with spectrograms in the working directory, one for each sound file in 'X'. It also returns the file path of the images invisibly.
 }
 \description{
 \code{plot_aligned_sounds} plots spectrograms to visually inspect alignment precision on test sound files.

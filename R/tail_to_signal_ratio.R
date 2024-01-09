@@ -6,11 +6,11 @@
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   end of the sound over which to measure tail power.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
-#' @param type Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
+#' @param tsr.formula Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 #' \itemize{
 #' \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
 #'  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
-#' \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the sound. So type 2 actually measures tail-to-noise ratio.
+#' \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the sound. So tsr.formula 2 actually measures tail-to-noise ratio.
 #' }
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
@@ -21,7 +21,7 @@
 #' with the tail-to-signal ratio values.
 #' @export
 #' @name tail_to_signal_ratio
-#' @details Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing reverberations are provided (see 'type' argument). Note that 'type' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
+#' @details Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing reverberations are provided (see 'tsr.formula' argument). Note that 'tsr.formula' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
 #' @examples {
 #'   # load example data
 #'
@@ -33,8 +33,8 @@
 #'   # using margin for noise of 0.01
 #'   tsr <- tail_to_signal_ratio(X = test_sounds_est, mar = 0.01)
 #'
-#'   # use type 2 which is equivalent to tail-to-noise ratio
-#'   tsr <- tail_to_signal_ratio(X = test_sounds_est, mar = 0.01, type = 2)
+#'   # use tsr.formula 2 which is equivalent to tail-to-noise ratio
+#'   tsr <- tail_to_signal_ratio(X = test_sounds_est, mar = 0.01, tsr.formula = 2)
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
@@ -52,7 +52,7 @@ tail_to_signal_ratio <- function(X,
                                  mar,
                                  cores = getOption("mc.cores", 1),
                                  pb = getOption("pb", TRUE),
-                                 type = 1,
+                                 tsr.formula = 1,
                                  bp = "freq.range",
                                  hop.size = getOption("hop.size", 1),
                                  wl = getOption("wl", NULL),
@@ -126,7 +126,7 @@ tail_to_signal_ratio <- function(X,
           )
         
         # read sound
-        if (type == 1) {
+        if (tsr.formula == 1) {
           signal <-
             warbleR::read_sound_file(X = X,
                                      index = y,
@@ -134,7 +134,7 @@ tail_to_signal_ratio <- function(X,
         }
         
         # read background noise right before the sound
-        if (type == 2) {
+        if (tsr.formula == 2) {
           signal <-
             warbleR::read_sound_file(
               X = X,
@@ -178,7 +178,7 @@ tail_to_signal_ratio <- function(X,
         }
         
         
-        # get RMS for sound (or noise if type 2)
+        # get RMS for sound (or noise if tsr.formula 2)
         sig.env <-
           seewave::env(signal,
                        f = sampling_rate,

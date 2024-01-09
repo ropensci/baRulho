@@ -7,7 +7,7 @@
 #'   the start point of the annotation over which to measure ambient noise.
 #' @param eq.dur Logical. Controls whether the ambient noise segment that is measured has the same duration
 #' to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.
-#' @param type Integer vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
+#' @param snr.formula Integer vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
 #' , N = background noise):
 #' \itemize{
 #' \item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
@@ -53,7 +53,7 @@ signal_to_noise_ratio <-
            pb = getOption("pb", TRUE),
            eq.dur = FALSE,
            noise.ref = c("adjacent", "custom"),
-           type = 1,
+           snr.formula = 1,
            bp = "freq.range",
            hop.size = getOption("hop.size", 1),
            wl = getOption("wl", NULL),
@@ -159,7 +159,7 @@ signal_to_noise_ratio <-
         FUN = .snr,
         W = X,
         noise.ref = noise.ref,
-        type = type,
+        type = snr.formula,
         rms_list = rms_list,
         FUN.VALUE = numeric(1)
       )

@@ -187,7 +187,7 @@ plot_degradation <-
       cl <- cores
     }
     
-    file_names <-
+    file_paths <-
       warbleR:::pblapply_wrblr_int(
         X = sort(unique(soundid_X$page)),
         pbar = pb,

@@ -39,7 +39,7 @@ plot_degradation(
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored.}
+\item{wl}{a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
 consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files.}
@@ -82,7 +82,7 @@ creating function for customizing graphical output. The function is a modified
 version of \code{\link[seewave]{spectro}}, so it takes the same arguments.}
 }
 \value{
-One ore more image files with a multipanel figure of spectrograms of test sound by distance, sound id and transect.
+One ore more image files with a multipanel figure of spectrograms of test sound by distance, sound id and transect. It also returns the file path of the images invisibly.
 }
 \description{
 \code{plot_degradation} creates multipanel plots (as image files) with reference and test sounds by distance and transect.

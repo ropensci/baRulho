@@ -22,7 +22,7 @@
 #' @param ... Additional arguments to be passed to the internal spectrogram
 #' creating function for customizing graphical output. The function is a modified
 #' version of \code{\link[seewave]{spectro}}, so it takes the same arguments.
-#' @return One ore more image files with a multipanel figure of spectrograms of test sound by distance, sound id and transect.
+#' @return One ore more image files with a multipanel figure of spectrograms of test sound by distance, sound id and transect. It also returns the file path of the images invisibly.
 #' @export
 #' @name plot_degradation
 #' @details The function aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded.
@@ -187,7 +187,7 @@ plot_degradation <-
       cl <- cores
     }
     
-    out <-
+    file_names <-
       warbleR:::pblapply_wrblr_int(
         X = sort(unique(soundid_X$page)),
         pbar = pb,
@@ -217,4 +217,16 @@ plot_degradation <-
         palette,
         ...
       )
+    
+    # message to let know users where the files has been saved
+    .message(
+      paste0(
+        "The image files has been saved in the directory path '",
+        normalizePath(dest.path),
+        "'"
+      )
+    )
+    
+    # return file names without printing them
+    invisible(unlist(file_paths))
   }

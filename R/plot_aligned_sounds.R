@@ -28,7 +28,7 @@
 #' @param ... Additional arguments to be passed to the internal spectrogram
 #' creating function for customizing graphical output. The function is a modified
 #' version of \code{\link[seewave]{spectro}}, so it takes the same arguments.
-#' @return Image files in jpeg format with spectrograms in the working directory, one for each sound file in 'X'.
+#' @return Image files in jpeg format with spectrograms in the working directory, one for each sound file in 'X'. It also returns the file path of the images invisibly.
 #' @export
 #' @name plot_aligned_sounds
 #' @details This functions aims to simplify the evaluation of the alignment of test sound files from  \code{\link{align_test_files}}. The function creates a single spectrogram for each sound file (saved at 'dest.path'). Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The plots include vertical lines denoting the start and end of each sound as well as the sound ID ('sound.id' column in 'X'). Note that no plot is created in the R graphic device.
@@ -102,7 +102,7 @@ plot_aligned_sounds <-
     }
     
     # run loop
-    out <-
+    file_paths <-
       warbleR:::pblapply_wrblr_int(
         pbar = pb,
         X = X_by_sound_file,
@@ -188,6 +188,20 @@ plot_aligned_sounds <-
           }
           
           dev.off()
+        
+        return(file.path(dest.path, paste0("plot_align_", gsub(".wav", "", Y$sound.files[1]), ".jpeg")))  
         }
       )
+    
+    # message to let know users where the files has been saved
+    .message(
+      paste0(
+        "The image files has been saved in the directory path '",
+        normalizePath(dest.path),
+        "'"
+      )
+    )
+    
+    # return file names without printing them
+    invisible(unlist(file_paths, use.names = FALSE))
   }

@@ -1129,7 +1129,12 @@
       
       # close graph
       dev.off()
+      
+      return(file.path(dest.path, img_name)) 
+    } else {
+      return(NULL)
     }
+ 
   }
 
 # function to extract envelopes from wave objects
@@ -2410,6 +2415,8 @@
   }
   cs <- close.screen(all.screens = TRUE)
   try(grDevices::dev.off(), silent = TRUE)
+  
+  return(file.path(dest.path, paste0("plot_degradation_p", x, ".jpeg")))
 }
 
 # prepare data, used by plot_degradation

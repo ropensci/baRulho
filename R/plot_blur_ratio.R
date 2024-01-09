@@ -1,6 +1,6 @@
-#' Measure blur ratio in the time domain
+#' Plot blur ratio 
 #'
-#' \code{plot_blur_ratio} measures blur ratio in sounds referenced in an extended selection table.
+#' \code{plot_blur_ratio} plots time and frequency blur ratio in sounds referenced in an extended selection table.
 #' @inheritParams template_params
 #' @param type Character vector of length 1 indicating the type of blur ratio to plot. The two options are 'envelope' (for regular blur ratio as in \code{\link{blur_ratio}}, default) and 'spectrum' (for spectrum blur ratio as in \code{\link{spectrum_blur_ratio}}).
 #' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200.
@@ -40,7 +40,7 @@
 
 plot_blur_ratio <-
   function(X,
-           type = "envelope",
+           type = c("envelope", "spectrum"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            env.smooth = getOption("env.smooth", 200),
@@ -56,6 +56,10 @@ plot_blur_ratio <-
            path = getOption("sound.files.path", "."),
            colors = viridis::viridis(3),
            n.samples = 100) {
+    
+    # assign a value to type
+    type <- rlang::arg_match(type)
+    
     # check arguments
     arguments <- as.list(base::match.call())
     

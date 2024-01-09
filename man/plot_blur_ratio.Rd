@@ -2,11 +2,11 @@
 % Please edit documentation in R/plot_blur_ratio.R
 \name{plot_blur_ratio}
 \alias{plot_blur_ratio}
-\title{Measure blur ratio in the time domain}
+\title{Plot blur ratio}
 \usage{
 plot_blur_ratio(
   X,
-  type = "envelope",
+  type = c("envelope", "spectrum"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   env.smooth = getOption("env.smooth", 200),
@@ -65,7 +65,7 @@ plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viri
 It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showing spectrograms of both sounds and the overlaid amplitude envelopes (or power spectra if \code{spectrum = TRUE}) as probability mass functions (PMF). Spectrograms are shown within the frequency range of the reference sound.
 }
 \description{
-\code{plot_blur_ratio} measures blur ratio in sounds referenced in an extended selection table.
+\code{plot_blur_ratio} plots time and frequency blur ratio in sounds referenced in an extended selection table.
 }
 \details{
 The function generates image files (in 'jpeg' format) for each possible blur ratio estimation in 'X'. The image files show the spectrograms of both sounds and the overlaid power distribution (either amplitude envelopes or power spectrum, see argument 'type') as probability mass functions (PMF). The output graphs highlight the mismatch between the compared distribution which represent the estimated blur ratio returned by either \code{\link{blur_ratio}} or \code{\link{spectrum_blur_ratio}}. Spectrograms are shown within the frequency range of the reference sound and also show dotted lines with the time (type = "envelope") or frequency range (type = "spectrum") in which energy distributions where computed.

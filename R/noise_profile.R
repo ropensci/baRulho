@@ -48,7 +48,7 @@ noise_profile <-
   function(X = NULL,
            files = NULL,
            mar = NULL,
-           noise.ref = "adjacent",
+           noise.ref = c("adjacent", "custom"),
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            path = getOption("sound.files.path", "."),
@@ -57,8 +57,15 @@ noise_profile <-
            wl = getOption("wl", NULL),
            PSD = FALSE,
            norm = TRUE,
-           dB = "A",
+           dB = c("A", "B", "C", "D", "ITU", "max0"),
            averaged = TRUE) {
+
+    # assign a value to dB
+    dB <- rlang::arg_match(dB)
+    
+    # assign a value to noise.ref
+    noise.ref <- rlang::arg_match(noise.ref)
+    
     # check arguments
     arguments <- as.list(base::match.call())
     

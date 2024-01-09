@@ -6,7 +6,7 @@
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   end of the sound over which to measure tail power.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
-#' @param type Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
+#' @param type Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 #' \itemize{
 #' \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
 #'  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).

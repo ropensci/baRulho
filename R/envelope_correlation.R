@@ -3,7 +3,6 @@
 #' \code{envelope_correlation} measures amplitude envelope correlation of sounds referenced in an extended selection table.
 #' @inheritParams template_params
 #' @param X The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.
-#' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param env.smooth Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}).
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
@@ -39,12 +38,16 @@ envelope_correlation <-
   function(X,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           cor.method = "pearson",
+           cor.method = c("pearson", "spearman", "kendall"),
            env.smooth = getOption("env.smooth", 200),
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 70),
            path = getOption("sound.files.path", ".")) {
+    
+    # assign a value to cor.method
+    cor.method <- rlang::arg_match(cor.method)
+    
     # check arguments
     arguments <- as.list(base::match.call())
     

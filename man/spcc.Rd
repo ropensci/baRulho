@@ -8,7 +8,7 @@ spcc(
   X,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  cor.method = "pearson",
+  cor.method = c("pearson", "spearman", "kendall"),
   hop.size = getOption("hop.size", 11.6),
   wl = getOption("wl", NULL),
   ovlp = getOption("ovlp", 90),

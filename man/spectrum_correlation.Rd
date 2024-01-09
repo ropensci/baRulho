@@ -8,7 +8,7 @@ spectrum_correlation(
   X,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  cor.method = "pearson",
+  cor.method = c("pearson", "spearman", "kendall"),
   spec.smooth = getOption("spec.smooth", 5),
   hop.size = getOption("hop.size", 11.6),
   wl = getOption("wl", NULL),

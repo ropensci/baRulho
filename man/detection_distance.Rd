@@ -20,7 +20,7 @@ detection_distance(
   max.distance = 1000,
   resolution = 0.1,
   subtract.bgn = TRUE,
-  envelope = "abs",
+  envelope = c("abs", "hil"),
   mar = NULL
 )
 }

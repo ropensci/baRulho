@@ -10,7 +10,7 @@ signal_to_noise_ratio(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   eq.dur = FALSE,
-  noise.ref = "adjacent",
+  noise.ref = c("adjacent", "custom"),
   type = 1,
   bp = "freq.range",
   hop.size = getOption("hop.size", 1),
@@ -34,11 +34,11 @@ to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} t
 
 \item{noise.ref}{Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available:
 \itemize{
-\item \code{adjacent}: measure ambient noise right before the sound (using argument 'mar' to define duration of ambient noise segments).
+\item \code{adjacent}: measure ambient noise right before test sounds (using argument 'mar' to define duration of ambient noise segments).
 \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column). Those segments will be used to apply the same ambient noise reference to all sounds in a sound file. Therefore, at least one 'ambient' selection for each sound file must be provided. If several 'ambient' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
 }}
 
-\item{type}{Numeric vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
+\item{type}{Integer vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
 , N = background noise):
 \itemize{
 \item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square

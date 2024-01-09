@@ -8,7 +8,7 @@ envelope_correlation(
   X,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
-  cor.method = "pearson",
+  cor.method = c("pearson", "spearman", "kendall"),
   env.smooth = getOption("env.smooth", 200),
   hop.size = getOption("hop.size", 11.6),
   wl = getOption("wl", NULL),

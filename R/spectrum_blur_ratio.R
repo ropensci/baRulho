@@ -37,7 +37,7 @@
 #'
 #'   
 #'   # plot
-#'   rlang::check_installed("ggplot2"))
+#'   rlang::check_installed("ggplot2")
 #'   library(ggplot2)
 #'   
 #'   ggplot(spctr[spctr$freq > 0.3, ], aes(y = amp, x = freq,

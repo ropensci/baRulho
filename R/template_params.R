@@ -7,6 +7,12 @@
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.
 #' @param dest.path Character string containing the directory path where the image files will be saved. If not supplied the current working directory will be used instead.
 #' @param wn A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.
+#' @param noise.ref Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available:
+#' \itemize{
+#' \item \code{adjacent}: measure ambient noise right before test sounds (using argument 'mar' to define duration of ambient noise segments).
+#' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column). Those segments will be used to apply the same ambient noise reference to all sounds in a sound file. Therefore, at least one 'ambient' selection for each sound file must be provided. If several 'ambient' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
+#' }
+#' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' 
 #' @name template_params
 NULL

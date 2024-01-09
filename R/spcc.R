@@ -2,7 +2,6 @@
 #'
 #' \code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param ovlp Numeric vector of length 1 specifying \% of overlap between two
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
 #' slow down the function but produce more accurate results.
@@ -34,12 +33,16 @@ spcc <-
   function(X,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           cor.method = "pearson",
+           cor.method = c("pearson", "spearman", "kendall"),
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 90),
            wn = "hanning",
            path = getOption("sound.files.path", ".")) {
+    
+    # assign a value to cor.method
+    cor.method <- rlang::arg_match(cor.method)
+    
     # check arguments
     arguments <- as.list(base::match.call())
     

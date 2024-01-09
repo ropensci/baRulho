@@ -1436,7 +1436,7 @@
            path,
            eq.dur,
            ovlp,
-           bp = bp) {
+           bp) {
     # only calculate for non-markers and for ambient only if custom noise.ref
     if (!Y$sound.id[y] %in% c("marker", if (noise.ref != "custom")
       "ambient")) {
@@ -3938,7 +3938,7 @@
             "sound.id",
             "distance",
             "reference")
-        
+       
         checkmate::assert_numeric(
           x = args$X$distance,
           any.missing = FALSE,

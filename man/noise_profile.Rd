@@ -8,7 +8,7 @@ noise_profile(
   X = NULL,
   files = NULL,
   mar = NULL,
-  noise.ref = "adjacent",
+  noise.ref = c("adjacent", "custom"),
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   path = getOption("sound.files.path", "."),
@@ -17,7 +17,7 @@ noise_profile(
   wl = getOption("wl", NULL),
   PSD = FALSE,
   norm = TRUE,
-  dB = "A",
+  dB = c("A", "B", "C", "D", "ITU", "max0"),
   averaged = TRUE
 )
 }

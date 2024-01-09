@@ -27,7 +27,7 @@ end of the sound over which to measure tail power.}
 
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
-\item{type}{Numeric. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
+\item{type}{Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 \itemize{
 \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).

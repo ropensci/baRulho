@@ -2,7 +2,6 @@
 #'
 #' \code{spectrum_correlation} measures frequency spectrum correlation of sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param cor.method Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).
 #' @param spec.smooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
@@ -40,13 +39,17 @@ spectrum_correlation <-
   function(X,
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
-           cor.method = "pearson",
+           cor.method = c("pearson", "spearman", "kendall"),
            spec.smooth = getOption("spec.smooth", 5),
            hop.size = getOption("hop.size", 11.6),
            wl = getOption("wl", NULL),
            ovlp = getOption("ovlp", 70),
            path = getOption("sound.files.path", "."),
            n.bins = 100) {
+    
+    # assign a value to cor.method
+    cor.method <- rlang::arg_match(cor.method)
+    
     # check arguments
     arguments <- as.list(base::match.call())
     

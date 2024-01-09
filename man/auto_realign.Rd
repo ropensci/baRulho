@@ -2,23 +2,23 @@
 % Please edit documentation in R/auto_realign.R
 \name{auto_realign}
 \alias{auto_realign}
-\title{Fix misaligned start and end of test sounds}
+\title{Fix small misalignments in the time position test sounds}
 \usage{
 auto_realign(
   X,
-  parallel = NULL,
+  Y,
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   hop.size = getOption("hop.size", 11.6),
   wl = getOption("wl", NULL),
   ovlp = getOption("ovlp", 90),
-  wn = "hanning"
+  wn = c("hanning", "hamming", "bartlett", "blackman", "flattop", "rectangle")
 )
 }
 \arguments{
 \item{X}{object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.}
 
-\item{parallel}{DEPRECATED. Use 'cores' instead.}
+\item{Y}{object of class 'extended_selection_table' (a class created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.}
 
 \item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
 
@@ -29,8 +29,7 @@ auto_realign(
 \item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
-slow down the function but produce more accurate results.}
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values slow down the function but produce more accurate results.}
 
 \item{wn}{A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.}
 }
@@ -38,34 +37,34 @@ slow down the function but produce more accurate results.}
 Object 'X' in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
 }
 \description{
-\code{auto_realign} fixes misaligned start and end of test sounds in an extended selection table using spectrographic cross-correlation
+\code{auto_realign} fixes small misalignments in the time position of test sounds in an extended selection table using spectrographic cross-correlation
 }
 \details{
-This function uses spectrographic cross-correlation to align the position in time of sounds with regard to a reference sound. The sound recorded at the closest distance to the source is used as reference. Precise alignment is crucial for downstream measures of sound degradation. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment.
+Precise alignment is crucial for downstream measures of sound degradation. This function uses spectrographic cross-correlation to align the position in time of test sounds. The master sound file is used as reference. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment. Note that this function only works to further improve alignments if the estimated position of the test sound is already close to the actual position. Note that both 'X' and 'Y' must be extended selection tables sensu \code{\link[warbleR]{selection_table}}.
 }
 \examples{
 {
   # load example data
   data("test_sounds_est")
-
+  data("master_est")
+  
   # create "unaligned_test_sounds_est" by
-  # adding noise to "test_sounds_est" start and end
+  # adding error to "test_sounds_est" start and end
   unaligned_test_sounds_est <- test_sounds_est
   set.seed(123)
-  noise_time <- sample(c(0.005, -0.005, 0.006, -0.006, 0, 0.002, -0.002),
-    nrow(unaligned_test_sounds_est),
-    replace = TRUE
-  )
+  noise_time <- sample(c(0.009, -0.01, 0.03, -0.03, 0, 0.07, -0.007),
+  sum(unaligned_test_sounds_est$distance != 0),
+  replace = TRUE)
+  
+  attr(unaligned_test_sounds_est, "check.res")$start <- 
+  unaligned_test_sounds_est$start <- 
+  unaligned_test_sounds_est$start + noise_time
+  attr(unaligned_test_sounds_est, "check.res")$end <- 
+  unaligned_test_sounds_est$end  <- 
+  unaligned_test_sounds_est$end + noise_time
 
-  attr(unaligned_test_sounds_est, "check.res")$start <-
-    unaligned_test_sounds_est$start <- unaligned_test_sounds_est$start + noise_time
-
-  attr(unaligned_test_sounds_est, "check.res")$end <- unaligned_test_sounds_est$end <-
-    unaligned_test_sounds_est$end + noise_time
-
-  # re align
-
-  realigned_est <- auto_realign(X = unaligned_test_sounds_est)
+# re align
+realigned_est <- auto_realign(X = unaligned_test_sounds_est, Y = master_est)
 }
 
 }

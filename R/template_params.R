@@ -2,7 +2,7 @@
 #' @param cores Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).
 #' @param pb Logical argument to control if progress bar is shown. Default is \code{TRUE}.
 #' @param path Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored.
+#' @param wl a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number.
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.
 #' @param dest.path Character string containing the directory path where the image files will be saved. If not supplied the current working directory will be used instead.

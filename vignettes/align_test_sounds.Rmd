@@ -224,7 +224,7 @@ synth_master_annotations <- baRulho::master_sound_file(
 
 &nbsp;
 
-The function saves the master sound file as a wave file and returns a selection table in the R environment with the time and frequency 'coordinates' of the sounds in that file. We can look at the spectrogram of the output file using the [seewave](https://cran.r-project.org/package=seewave) function `spectro()` as follows (the image is save as a jpeg file in the temporary directory `tempdir()`:
+The function saves the master sound file as a wave file and returns a selection table in the R environment with the time and frequency 'coordinates' of the sounds in that file (be careful when playing the master sound file as it can be shocking for some audiences!). We can look at the spectrogram of the output file using the [seewave](https://cran.r-project.org/package=seewave) function `spectro()` as follows:
 
 ```{r spectro master 1, eval = TRUE, fig.height=4, out.width="100%"}
 

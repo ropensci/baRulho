@@ -326,7 +326,7 @@ Both sound files and annotations can be visualized in Raven ( acoustic analysis 
 
 &nbsp;
 
-Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details on how to export data from R to Raven. 
+Take a look at the [Rraven vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html) for more details on how to export and import data from R to Raven. 
 
 Note that the start and end markers are placed at relatively low frequencies so they are less affected by degradation. The frequency range of markers can be set with argument `flim`. The relative amplitude of markers can also be adjusted with the `amp.marker` argument. Amplitude of markers will be multiplied by the value supplied so markers will be louder than sounds. These two features should increases the chances of detecting the markers at further distances. 
 
@@ -388,6 +388,16 @@ for (i in unique(test_sounds_est$sound.files)) {
 master_annotations <- as.data.frame(master_est)
 ```
 &nbsp;
+
+The annotations needed for aligning test sound must share the following structure:
+
+```{r}
+master_annotations
+```
+
+&nbsp;
+
+Note the 'sound.id' column which contains a unique identifier for each sound. This will be used to label their counterparts in the test sound files. Users can import annotations from [Raven](https://www.ravensoundsoftware.com/software/raven-pro/) using the [Rraven](https://cran.r-project.org/package=Rraven) package ([see this vignette](https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html)).
 
 To find the location of the start marker on the test sound files we use the functions `find_markers()` to run a cross-correlation of one or more markers across the test files in order to determine the exact time in which each marker is found: 
 

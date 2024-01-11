@@ -35,12 +35,12 @@ in the following diagram:
 
 <div class="figure" style="text-align: center">
 
-<img src="man/figures/analysis_workflow.png" alt="Figure 1. Diagram depicting a typical workflow of experiments working on signal tranmission and degradation. Nodes with black font indicate steps that can be conducted using baRulho functions. Blue nodes denote the functions that can be used at those steps." width="100%" />
+<img src="man/figures/analysis_workflow.png" alt="Figure 1. Diagram depicting a typical workflow for a experiment working on signal tranmission and degradation. Nodes with black font indicate steps that can be conducted using baRulho functions. Blue nodes denote the functions that can be used at those steps." width="100%" />
 <p class="caption">
-Figure 1. Diagram depicting a typical workflow of experiments working on
-signal tranmission and degradation. Nodes with black font indicate steps
-that can be conducted using baRulho functions. Blue nodes denote the
-functions that can be used at those steps.
+Figure 1. Diagram depicting a typical workflow for a experiment working
+on signal tranmission and degradation. Nodes with black font indicate
+steps that can be conducted using baRulho functions. Blue nodes denote
+the functions that can be used at those steps.
 </p>
 
 </div>

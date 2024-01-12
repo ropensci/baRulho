@@ -298,7 +298,7 @@ ggplot(envs, aes(x = time, y = amp, col = distance)) +
 
 ```
 
-The `env.smooth` argument could change envelope shapes and related measurements. The following code sets `env.smooth = 800` which produces smoother envelopes:
+The `env.smooth` argument could change envelope shapes and related measurements, as higher values tend to smooth the envelopes. The following code sets `env.smooth = 800` which produces smoother envelopes:
 
 ```{r}
 

@@ -94,11 +94,9 @@ kbl
  
 Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. The structure of the data must indicate the transect and distance within that transect for each sound. Hence, besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also includes the following columns:
 
- - **'sound.id': ID of sounds used to identify same sounds at different distances and transects**
- - **'distance': refers to the distance from the source at which each sound was recorded**
- - **'transect': identify sounds (rows) from the same transect**. Each distance is replicated once within a transect.  
- 
- 
+ - **'sound.id'**: ID of sounds used to identify same sounds at different distances and transects.
+ - **'distance'**: refers to the distance from the source at which each sound was recorded.
+ - **'transect'**: identify sounds (rows) from the same transect. Each distance is replicated once within a transect.  
  
 Importantly, each sound ID can have only one sample at each distance/transect combination.
 The combined information from these columns is used to identify the reference sounds for each test sound. The function `set_reference_sounds()` does exactly that. There are two possible experimental designs when defining reference sounds (which is controlled by the argument 'method' in `set_reference_sounds()`):
@@ -173,8 +171,7 @@ The function adds the column 'reference' which is then used by downstream functi
 The function `plot_degradation()` aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved as JPEG files in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect. Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional):
 
 
-```{r, eval = FALSE}
-
+```{r, eval = TRUE}
 # sort to order panels
 test_sounds_est <-
   test_sounds_est[order(test_sounds_est$sound.id,
@@ -182,13 +179,20 @@ test_sounds_est <-
                         decreasing = FALSE),]
 
 # create plots
-plot_degradation(test_sounds_est, dest.path = tempdir())
+degrad_imgs <- plot_degradation(test_sounds_est, dest.path = tempdir())
+```
+
+These are the paths to some of the image files:
+```{r, eval = TRUE}
+
+degrad_imgs
 
 ```
 
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
 
-```{r, echo=FALSE, out.width="60%", fig.align='center'}
-knitr::include_graphics("plot_degradation_p1.jpeg")
+knitr::include_graphics(degrad_imgs[1])
+
 ```
 
 &nbsp;
@@ -240,9 +244,14 @@ The output data frame is simply the input data with an additional column ('blur.
 The function `plot_blur_ratio()` can be used to generate image files (in 'jpeg' format) for each comparison showing spectrograms of both sounds and the overlaid amplitude envelopes (as probability mass functions (PMF)). 
 
 ```{r, eval = TRUE}
-
 # plot blur ratio
-plot_blur_ratio(X = test_sounds_est, dest.path = tempdir())
+blur_imgs <- plot_blur_ratio(X = test_sounds_est, dest.path = tempdir())
+```
+
+These are the paths to some of the image files:
+```{r, eval = TRUE}
+
+head(blur_imgs)
 
 ```
 
@@ -290,6 +299,7 @@ ggplot(envs, aes(x = time, y = amp, col = distance)) +
   scale_color_viridis_d(alpha = 0.7) +
   labs(x = "Time (s)", y = "Amplitude (PMF)") +
   theme_classic()
+
 ```
 
 &nbsp;
@@ -520,7 +530,7 @@ Tail-to-signal ratio (TSR) is used to quantify reverberations. Specifically TSR 
 ```{r, eval = TRUE}
 
 # run tail to signal ratio
-tsr <- tail_to_signal_ratio(test_sounds_est, type = 1, mar = 0.05)
+tsr <- tail_to_signal_ratio(test_sounds_est, tsr.formula = 1, mar = 0.05)
 
 ```
 
@@ -548,7 +558,7 @@ kbl
 
 &nbsp;
 
-### Spectrogram distortion
+### Spectrogram correlation
 
 Finally, the function `spcc()` measures spectrogram cross-correlation as a metric of sound distortion of sounds. Values close to 1 means very similar spectrograms (i.e. little sound distortion). The function is a wrapper on [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()`. It can be run as follows:
 

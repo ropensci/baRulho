@@ -220,7 +220,7 @@ knitr::include_graphics(degrad_imgs[1])
 
 &nbsp;
 
-Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded. Before  This is one the plots generated using the example data.
+Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded. 
 
 ### Blur ratio
  

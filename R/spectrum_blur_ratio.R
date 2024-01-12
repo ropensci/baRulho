@@ -185,8 +185,8 @@ spectrum_blur_ratio <-
     # remove temporal columns
     X$.sgnl.temp <- NULL
     
-    if (pb)
-      write(file = "", x = "Saving envelopes (step 3 out of 3):")
+    if (pb & spectra)
+      write(file = "", x = "Saving spectra (step 3 out of 3):")
     
     
     # convert to list instead of extended selection table, add envelopes

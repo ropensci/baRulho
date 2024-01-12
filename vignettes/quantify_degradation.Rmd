@@ -39,14 +39,43 @@ editor_options:
 
 ```{r eval= TRUE, echo=FALSE}
 
-
 library(knitr)
-library(kableExtra)
-opts_chunk$set(
-  fig.align = "center",
-  message = FALSE,
-  warning = FALSE
-)
+
+# create custom printing method
+.print_df <- function(x, highlight = NULL, height = "300px", row.names = FALSE, ...) {
+  kbl <- kableExtra::kable(
+    as.data.frame(x)
+    ,
+    align = "c",
+    row.names = row.names,
+    format = "html",
+    escape = F
+  )
+  
+  if (!is.null(highlight))
+    kbl <-
+      kableExtra::column_spec(
+        kbl,
+        column = which(names(x) %in% highlight),
+        background = "#ccebff",
+        bold = TRUE
+      )
+  
+  kbl <-
+    kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
+  
+  
+  kbl <-
+    kableExtra::scroll_box(kbl, width = "800px", height = height)
+  
+  asis_output(kbl)
+}
+
+
+opts_chunk$set(fig.align = "center",
+               message = FALSE,
+               warning = FALSE)
+
 ```
 
 <img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
@@ -64,8 +93,8 @@ There are a few important things to keep in mind about functions for quantifying
 ## Required data structure
 
 The input data should contain some additional information. [baRulho](https://marce10.github.io/baRulho/) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
-s
-```{r,eval=TRUE}
+
+```{r,eval=FALSE}
 
 # load packages
 library(baRulho)
@@ -75,20 +104,24 @@ library(ggplot2)
 # load example data
 data("test_sounds_est")
 
+test_sounds_est
 ```
+
 
 
 ```{r, eval = TRUE, echo = FALSE}
 
-kbl <- kable(test_sounds_est, align = "c", row.names = F, format = "html", escape = F)
+# load packages
+library(baRulho)
+library(viridis)
+library(ggplot2)
 
-kbl <- column_spec(kbl, 7:9, background = "#ccebff", bold = TRUE)
+# load example data
+data("test_sounds_est")
 
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 12)
 
-kbl <- scroll_box(kbl, height = "400px")
+.print_df(test_sounds_est, highlight = c("sound.id", "transect", "distance"))
 
-kbl
 ```
 &nbsp;
  
@@ -125,13 +158,10 @@ table(test_sounds_est$sound.id, test_sounds_est$distance)
 
 ```{r, eval = TRUE, echo=FALSE}
 
-tb <- table(test_sounds_est$sound.id, test_sounds_est$distance)
+tb <- as.data.frame.matrix(table(test_sounds_est$sound.id, test_sounds_est$distance))
 
-kbl <- kable(tb, align = "c", row.names = TRUE, format = "html", escape = F)
+.print_df(tb, height = NULL, row.names = TRUE)
 
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 12)
-
-kbl
 ```
 
 
@@ -152,15 +182,8 @@ test_sounds_est
 
 ```{r, echo = FALSE}
 
-kbl <- kable(test_sounds_est, align = "c", row.names = F, format = "html", escape = F)
+.print_df(test_sounds_est, highlight = c("reference"))
 
-kbl <- column_spec(kbl, 10, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 &nbsp;
 
@@ -206,7 +229,6 @@ Blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}
 
-
 # run blur ratio
 br <- blur_ratio(X = test_sounds_est)
 
@@ -227,15 +249,8 @@ br
 
 ```{r, echo = FALSE}
 
-kbl <- kable(br, align = "c", row.names = F, format = "html", escape = F)
+.print_df(br, highlight = c("blur.ratio"))
 
-kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 &nbsp;
 
@@ -341,15 +356,7 @@ sbr
 
 ```{r, echo = FALSE}
 
-kbl <- kable(sbr, align = "c", row.names = F, format = "html", escape = F)
-
-kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
+.print_df(sbr, highlight = c("spectrum.blur.ratio"))
 ```
 &nbsp;
 
@@ -397,15 +404,8 @@ ea
 
 ```{r, echo = FALSE}
 
-kbl <- kable(ea, align = "c", row.names = F, format = "html", escape = F)
+.print_df(ea, highlight = c("excess.attenuation"))
 
-kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 
 &nbsp;
@@ -433,15 +433,8 @@ ec
 
 ```{r, echo = FALSE}
 
-kbl <- kable(ec, align = "c", row.names = F, format = "html", escape = F)
+.print_df(ea, highlight = c("envelope.correlation"))
 
-kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 
 &nbsp;
@@ -468,15 +461,8 @@ sc
 
 ```{r, echo = FALSE}
 
-kbl <- kable(sc, align = "c", row.names = F, format = "html", escape = F)
+.print_df(sc, highlight = c("spectrum.correlation"))
 
-kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 
 &nbsp;
@@ -490,7 +476,7 @@ Signal-to-noise ratio (SNR) quantifies sound amplitude level in relation to ambi
 ```{r, eval = TRUE}
 
 # run signal to noise ratio
-sa <-
+snr <-
   signal_to_noise_ratio(test_sounds_est,
                         pb = FALSE,
                         noise.ref = "custom",
@@ -502,21 +488,13 @@ The output is also similar to the other functions:
 
 ```{r, eval = FALSE}
 # print output
-sa
+snr
 ```
 
 ```{r, echo = FALSE}
 
+.print_df(snr, highlight = c("signal.to.noise.ratio"))
 
-kbl <- kable(sa, align = "c", row.names = F, format = "html", escape = F)
-
-kbl <- column_spec(kbl, 9, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 
 &nbsp;
@@ -544,16 +522,8 @@ tsr
 
 ```{r, echo = FALSE}
 
+.print_df(tsr, highlight = c("tail.to.signal.ratio"))
 
-kbl <- kable(tsr, align = "c", row.names = F, format = "html", escape = F)
-
-kbl <- column_spec(kbl, 9, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 
 &nbsp;
@@ -565,7 +535,7 @@ Finally, the function `spcc()` measures spectrogram cross-correlation as a metri
 ```{r, eval = TRUE}
 
 # run spcc
-spd <- spcc(X = test_sounds_est, wl = 512)
+sc <- spcc(X = test_sounds_est, wl = 512)
 
 ```
 
@@ -573,20 +543,13 @@ And again, the output is similar to other functions:
 
 ```{r, eval = FALSE}
 # print output
-spd
+sc
 ```
 
 ```{r, echo = FALSE}
 
-kbl <- kable(spd, align = "c", row.names = F, format = "html", escape = F)
+.print_df(sc, highlight = c("cross.correlation"))
 
-kbl <- column_spec(kbl, 11, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 
 &nbsp;
@@ -613,15 +576,8 @@ head(np, 20)
 
 ```{r, echo = FALSE}
 
-kbl <- kable(np[1:20, ], align = "c", row.names = F, format = "html", escape = F)
+.print_df(np[1:20, ], highlight = c("freq", "amp"))
 
-kbl <- column_spec(kbl, 2:3, background = "#ccebff", bold = TRUE)
-
-kbl <- kable_styling(kbl, bootstrap_options = "striped", font_size = 10)
-
-kbl <- scroll_box(kbl, height = "400px")
-
-kbl
 ```
 
 This can be graphically represented as follows:

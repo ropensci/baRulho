@@ -53,7 +53,7 @@ Precise alignment is crucial for downstream measures of sound degradation. This 
   unaligned_test_sounds_est <- test_sounds_est
   set.seed(123)
   noise_time <- sample(c(0.009, -0.01, 0.03, -0.03, 0, 0.07, -0.007),
-  sum(unaligned_test_sounds_est$distance != 0),
+  nrow(unaligned_test_sounds_est),
   replace = TRUE)
   
   attr(unaligned_test_sounds_est, "check.res")$start <- 

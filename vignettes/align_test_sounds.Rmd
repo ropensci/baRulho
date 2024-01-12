@@ -29,7 +29,7 @@ editor_options:
 library(knitr)
 
 # create custom printing method
-.print_df <- function(x, ...) {
+.print_df <- function(x, highlight = NULL, ...) {
   kbl <- kableExtra::kable(
     head(as.data.frame(x))
     ,
@@ -39,9 +39,12 @@ library(knitr)
     escape = F
   )
   
+  if (!is.null(highlight))
+  kbl <- column_spec(kbl, column = which(names(x) %in% highlight), background = "#ccebff", bold = TRUE)
+  
   kbl <-
     kableExtra::kable_styling(kbl, bootstrap_options = "striped", font_size = 14)
-  
+
   
   kbl <-
     kableExtra::scroll_box(kbl, width = "800px", height = "300px")

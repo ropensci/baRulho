@@ -3720,7 +3720,7 @@
 ## function to check arguments
 .check_arguments <- function(fun, args) {
   # make function name a character
-  fun <- as.character(fun)
+  fun <- as.character(fun)[1]
   
   # create object to store check results
   check_collection <- checkmate::makeAssertCollection()

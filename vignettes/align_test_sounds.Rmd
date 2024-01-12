@@ -130,7 +130,7 @@ synth_wav <- Rraven::exp_est(X = synth_est,
 
 # plot spectro
 seewave::spectro(
-  synth_wav,
+  wave = synth_wav,
   scale = FALSE,
   palette = viridis,
   grid = FALSE,
@@ -628,4 +628,5 @@ Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic s
 ```{r session info, echo=F}
 
 sessionInfo()
+
 ```

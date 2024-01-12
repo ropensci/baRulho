@@ -16,13 +16,24 @@ editor_options:
 
 <img src="man/figures/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
-[baRulho](https://cran.r-project.org/package=baRulho) is intended to facilitate the implementation of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. These experiments aim to answer research questions such as: How habitat structure has shaped the transmission properties of animal acoustic signals? Which acoustic features are shaped by selection for improving transmission? What is the active space of a acoustic signal? A common sequence of steps to experimentally test hypotheses related to sound transmission is depicted in the following diagram:
+[baRulho](https://cran.r-project.org/package=baRulho) is intended to facilitate the implementation of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. 
 
-```{r, echo=FALSE, out.width="100%", fig.align='center', fig.cap= "Figure 1. Diagram depicting a typical workflow for a experiment working on signal tranmission and degradation. Nodes with black font indicate steps that can be conducted using baRulho functions. Blue nodes denote the functions that can be used at those steps."}
+These experiments aim to answer research questions such as: 
+
+- How habitat structure has shaped the transmission properties of animal acoustic signals? 
+- Which acoustic features are shaped by selection for improving transmission? 
+- Which features are more degraded in different habitats? 
+- How far a acoustic signals can be detected? 
+
+A common sequence of steps to experimentally test hypotheses related to sound transmission is depicted in the following diagram:
+
+```{r, echo=FALSE, out.width="100%", fig.align='center'}
 
 knitr::include_graphics("man/figures/analysis_workflow.png")
 
 ```
+
+_Diagram depicting a typical workflow for a experiment working on signal transmission and degradation. Nodes with black font indicate steps that can be conducted using baRulho functions. Blue nodes denote the functions that can be used at those steps._
 
 &nbsp;
 

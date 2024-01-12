@@ -60,7 +60,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only us
 }
 \value{
 Object 'X' with an additional column, 'signal.to.noise.ratio',
-with the signal-to-noise ratio values.
+with the signal-to-noise ratio values (in dB).
 }
 \description{
 \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.

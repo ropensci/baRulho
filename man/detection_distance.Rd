@@ -61,8 +61,8 @@ detection_distance(
 the start and end points of selection over which to measure background noise. This is required to subtract background noise sound pressure level (so only needed when 'subtract.bgn = TRUE').}
 }
 \value{
-Object 'X' with an additional column,  'detection.distance',
-containing the id of the sound used as reference and the computed detection distances, respectively.
+Object 'X' with an additional column, 'detection.distance',
+containing the computed detection distances (in m).
 }
 \description{
 \code{detection_distance} detection distance of sounds.

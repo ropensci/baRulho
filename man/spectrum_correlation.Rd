@@ -40,7 +40,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
 \item{n.bins}{Numeric vector of length 1 specifying the number of frequency bins to use for representing power spectra. Default is 100. If null the raw power spectrum is used (note that this can result in high RAM memory usage for large data sets). Power spectrum values are interpolated using \code{\link[stats]{approx}}.}
 }
 \value{
-Object 'X' with an additional column,  'spectrum.correlation', containing the id of the sound used as reference and the computed frequency spectrum correlation coefficients, respectively.
+Object 'X' with an additional column,  'spectrum.correlation', containing the computed frequency spectrum correlation coefficients.
 }
 \description{
 \code{spectrum_correlation} measures frequency spectrum correlation of sounds referenced in an extended selection table.

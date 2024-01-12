@@ -40,7 +40,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Used f
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 }
 \value{
-Object 'X' with an additional column,  'blur.ratio', containing containing the id of the sound used as reference and the computed blur ratio values, respectively. If \code{envelopes = TRUE} the output would include amplitude envelopes for all sounds as attributes ('attributes(X)$envelopes').
+Object 'X' with an additional column,  'blur.ratio', containing the computed blur ratio values. If \code{envelopes = TRUE} the output would include amplitude envelopes for all sounds as attributes ('attributes(X)$envelopes').
 }
 \description{
 \code{blur_ratio} measures blur ratio in sounds referenced in an extended selection table.

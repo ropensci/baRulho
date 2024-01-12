@@ -14,7 +14,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![packageversion](https://img.shields.io/badge/Package%20version-2.1.0-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2024--01--11-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2024--01--12-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
@@ -29,21 +29,26 @@ coverage](https://codecov.io/gh/maRce10/baRulho/branch/master/graph/badge.svg)](
 facilitate the implementation of (animal) sound transmission
 experiments, which typically aim to quantify changes in signal structure
 when transmitted in a given habitat by broadcasting and re-recording
-animal sounds at increasing distances. A common sequence of steps to
-experimentally test hypotheses related to sound transmission is depicted
-in the following diagram:
+animal sounds at increasing distances.
 
-<div class="figure" style="text-align: center">
+These experiments aim to answer research questions such as:
 
-<img src="man/figures/analysis_workflow.png" alt="Figure 1. Diagram depicting a typical workflow for a experiment working on signal tranmission and degradation. Nodes with black font indicate steps that can be conducted using baRulho functions. Blue nodes denote the functions that can be used at those steps." width="100%" />
-<p class="caption">
-Figure 1. Diagram depicting a typical workflow for a experiment working
-on signal tranmission and degradation. Nodes with black font indicate
-steps that can be conducted using baRulho functions. Blue nodes denote
-the functions that can be used at those steps.
-</p>
+- How habitat structure has shaped the transmission properties of animal
+  acoustic signals?
+- Which acoustic features are shaped by selection for improving
+  transmission?
+- Which features are more degraded in different habitats?
+- How far a acoustic signals can be detected?
 
-</div>
+A common sequence of steps to experimentally test hypotheses related to
+sound transmission is depicted in the following diagram:
+
+<img src="man/figures/analysis_workflow.png" width="100%" style="display: block; margin: auto;" />
+
+*Diagram depicting a typical workflow for a experiment working on signal
+transmission and degradation. Nodes with black font indicate steps that
+can be conducted using baRulho functions. Blue nodes denote the
+functions that can be used at those steps.*
 
  
 

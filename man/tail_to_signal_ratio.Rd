@@ -49,13 +49,13 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only us
 }
 \value{
 Object 'X' with an additional column, 'tail.to.signal.ratio',
-with the tail-to-signal ratio values.
+with the tail-to-signal ratio values (in dB).
 }
 \description{
 \code{tail_to_signal_ratio} measures reverberations as tail-to-signal ratio of sounds referenced in an extended selection table.
 }
 \details{
-Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing reverberations are provided (see 'tsr.formula' argument). Note that 'tsr.formula' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio.
+Tail-to-signal ratio (TSR) measures the ratio of power in the tail of reverberations to that in the test sound. A general margin in which reverberation tail will be measured must be specified. The function will measure TSR within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing reverberations are provided (see 'tsr.formula' argument). Note that 'tsr.formula' 2 is not equivalent to the original description of TSR in Dabelsteen et al. (1993) and  is better referred to as tail-to-noise ratio. Tail-to-signal ratio values are typically negative as signals tend to have higher power than that in the reverberating tail.
 }
 \examples{
 {

@@ -37,7 +37,7 @@ consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.}
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 }
 \value{
-Object 'X' with an additional column,  'envelope.correlation', containing the id of the sound used as reference and the computed envelope correlation coefficients, respectively.
+Object 'X' with an additional column, 'envelope.correlation', containing the computed envelope correlation coefficients.
 }
 \description{
 \code{envelope_correlation} measures amplitude envelope correlation of sounds referenced in an extended selection table.

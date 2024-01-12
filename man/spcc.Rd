@@ -38,7 +38,7 @@ slow down the function but produce more accurate results.}
 \item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
 }
 \value{
-Object 'X' with an additional column,  'cross.correlation', containing the id of the sound used as reference and the computed spectrogram cross-correlation coefficients, respectively.
+Object 'X' with an additional column, 'cross.correlation', containing the computed spectrogram cross-correlation coefficients.
 }
 \description{
 \code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.

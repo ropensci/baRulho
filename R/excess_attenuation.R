@@ -8,7 +8,7 @@
 #' Note that lower values will increase time resolution, which is more important for amplitude calculations.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering.
-#' @return Object 'X' with an additional column,  'excess.attenuation', containing the computed excess attenuation values.
+#' @return Object 'X' with an additional column,  'excess.attenuation', containing the computed excess attenuation values (in dB).
 #' @export
 #' @name excess_attenuation
 #' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents power loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). Low values indicate little additional attenuation. The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two approaches for computing excess attenuation are provided (see 'type' argument).

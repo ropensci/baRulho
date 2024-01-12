@@ -202,10 +202,10 @@ plot_blur_ratio <-
           )
         }
       )
-    # message to let know users where the files has been saved
+    # message to let know users where the files have been saved
     .message(
       paste0(
-        "The image files has been saved in the directory path '",
+        "The image files have been saved in the directory path '",
         normalizePath(dest.path),
         "'"
       )

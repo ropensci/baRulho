@@ -178,7 +178,7 @@ plot_degradation <-
     # set basic layout for all pages
     page_layout <- .page_layout(ncol, nrow, spectrum, envelope, heights, widths)
     
-    close.screen(all.screens = TRUE)
+    try(close.screen(all.screens = TRUE), silent = TRUE)
     
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
@@ -218,10 +218,10 @@ plot_degradation <-
         ...
       )
     
-    # message to let know users where the files has been saved
+    # message to let know users where the files have been saved
     .message(
       paste0(
-        "The image files has been saved in the directory path '",
+        "The image files have been saved in the directory path '",
         normalizePath(dest.path),
         "'"
       )

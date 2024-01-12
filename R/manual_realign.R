@@ -176,7 +176,7 @@ manual_realign <-
     fill_col <- "#FF993399"
     
     # # set panel layout
-    invisible(close.screen(all.screens = TRUE))
+    try(close.screen(all.screens = TRUE), silent = TRUE)
     suppressWarnings(catch <- split.screen(figs = page_layout))
     
     # reset graphic parameterswhen function is don

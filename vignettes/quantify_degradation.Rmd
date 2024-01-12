@@ -526,6 +526,8 @@ tsr
 
 ```
 
+Tail-to-signal ratio values are typically negative as signals tend to have higher power than that in the reverberating tail.
+
 &nbsp;
 
 ### Spectrogram correlation

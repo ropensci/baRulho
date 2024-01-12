@@ -499,7 +499,7 @@ snr
 
 &nbsp;
 
-Note that this function does not compare sounds to references, so no reference column is added.
+Negative values can occur when the background noise measured has higher power than the signal. Note that this function does not compare sounds to references, so no reference column is added.
 
 ### Tail-to-signal ratio
 

@@ -371,7 +371,7 @@ Now we will save those files in a temporary working directory (those objects are
 ```{r}
 
 
-# first remove any other wave file in the temporary working directory (dont do it with yourd data!)
+# first remove any other wave file in the temporary working directory (dont do it with your data!)
 unlink(list.files(
   path = tempdir(),
   full.names = TRUE,
@@ -445,21 +445,13 @@ aligned_tests <-
 
 &nbsp;
 
-The function returns an object of the same class of the input object 'X'. In this case 'X' is an `extended_selection_table` created 'by.song' (see '?selection_table()'):
-```{r, eval = FALSE}
+The function returns an object of the same class of the input object 'X'. In this case 'X' is an `data.frame`:
+```{r, eval = TRUE}
 
-warbleR::is_extended_selection_table(aligned_tests)
+is.data.frame(aligned_tests)
 
 aligned_tests
 ```
-
-```{r, eval = TRUE, echo = FALSE}
-
-print(TRUE)
-```
-&nbsp;
-
-This format is similar to data frames, although it also contains all the acoustic data as attributes so there is no need to refer to sound files in a directory any more.  [baRulho](https://marce10.github.io/baRulho/) functions that quantify degradation can take data frames, selection tables and extended selection tables.  
 
 We can check the precision of the alignment by looking at the spectrograms. The function `plot_aligned_sounds()` can create spectrograms to visually inspect alignment precision on test sound files. The spectrograms are saved as individual JPEG image files (in 'dest.path' if supplied). One file is created for each sound file:
 

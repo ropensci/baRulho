@@ -4792,8 +4792,20 @@
       lower = 2,
       add = check_collection,
       .var.name = "wl",
-      na.ok = FALSE
+      na.ok = FALSE, 
+      null.ok = TRUE
     )
+    
+    checkmate::assert_integerish(      
+      x = args$wl,
+      lower = 2,
+      add = check_collection,
+      .var.name = "wl",
+      na.ok = FALSE, 
+      len = 1, 
+      null.ok = TRUE
+)
+    
   }
   return(check_collection)
 }

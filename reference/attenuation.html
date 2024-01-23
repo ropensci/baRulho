@@ -58,13 +58,29 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">attenuation</span><span class="op">(</span><span class="va">frequency</span>, temp <span class="op">=</span> <span class="fl">20</span>, rh <span class="op">=</span> <span class="fl">60</span>, pa <span class="op">=</span> <span class="fl">101325</span>, <span class="va">dist0</span>, <span class="va">dist</span>, hab.att.coef <span class="op">=</span> <span class="fl">0.02</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">attenuation</span><span class="op">(</span></span>
+<span>  <span class="va">frequency</span>,</span>
+<span>  <span class="va">dist0</span>,</span>
+<span>  <span class="va">dist</span>,</span>
+<span>  temp <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  rh <span class="op">=</span> <span class="fl">60</span>,</span>
+<span>  pa <span class="op">=</span> <span class="fl">101325</span>,</span>
+<span>  hab.att.coef <span class="op">=</span> <span class="fl">0.02</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>frequency</dt>
 <dd><p>Numeric vector of length 1 with frequency (in Hertz).</p></dd>
+
+
+<dt>dist0</dt>
+<dd><p>Numeric vector of length 1 with distance (m) for the reference SPL.</p></dd>
+
+
+<dt>dist</dt>
+<dd><p>Numeric vector of length 1 with distance (m) over which a sound propagates.</p></dd>
 
 
 <dt>temp</dt>
@@ -79,14 +95,6 @@
 <dd><p>Numeric vector of length 1 with atmospheric (barometric) pressure in Pa (standard: 101325, default). Used for atmospheric attenuation.</p></dd>
 
 
-<dt>dist0</dt>
-<dd><p>Numeric vector of length 1 with distance (m) for the reference SPL.</p></dd>
-
-
-<dt>dist</dt>
-<dd><p>Numeric vector of length 1 with distance (m) over which a sound propagates.</p></dd>
-
-
 <dt>hab.att.coef</dt>
 <dd><p>Attenuation coefficient of the habitat (in dB/kHz/m).</p></dd>
 
@@ -99,7 +107,7 @@
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. Modified from http://www.sengpielaudio.com</p>
+    <p>Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. The function is modified from http://www.sengpielaudio.com</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -120,7 +128,7 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="co"># measure attenuation</span></span></span>
-<span class="r-in"><span>  <span class="fu">attenuation</span><span class="op">(</span>f <span class="op">=</span> <span class="fl">2000</span>, dist <span class="op">=</span> <span class="fl">50</span>, dist0 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">attenuation</span><span class="op">(</span>frequency <span class="op">=</span> <span class="fl">2000</span>, dist <span class="op">=</span> <span class="fl">50</span>, dist0 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   frequency dist geometric.attenuation atmopheric.attenuation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1      2000   50               33.9794              0.4547757</span>

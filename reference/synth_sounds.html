@@ -58,11 +58,22 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synth_sounds</span><span class="op">(</span>replicates <span class="op">=</span> <span class="fl">1</span>, <span class="va">frequencies</span>, <span class="va">durations</span>, nharmonics <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>fm <span class="op">=</span> <span class="cn">FALSE</span>, am <span class="op">=</span> <span class="cn">FALSE</span>, am.amps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>,</span>
-<span>mar <span class="op">=</span> <span class="fl">0.05</span>, seed <span class="op">=</span> <span class="cn">NULL</span>, sig2 <span class="op">=</span> <span class="fl">0.3</span>, shuffle <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>hrm.freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">8</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span>,</span>
-<span>sampling.rate <span class="op">=</span> <span class="fl">44.1</span>, pb <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">synth_sounds</span><span class="op">(</span></span>
+<span>  replicates <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  <span class="va">frequencies</span>,</span>
+<span>  <span class="va">durations</span>,</span>
+<span>  nharmonics <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  fm <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  am <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  am.amps <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">11</span><span class="op">)</span>,</span>
+<span>  mar <span class="op">=</span> <span class="fl">0.05</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sig2 <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  shuffle <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  hrm.freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">8</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span>,</span>
+<span>  sampling.rate <span class="op">=</span> <span class="fl">44.1</span>,</span>
+<span>  pb <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -101,7 +112,7 @@ frequency harmonic will be simulated.</p></dd>
 
 
 <dt>seed</dt>
-<dd><p>Numeric vector of length 1. This allows users to get the same results in different runs (using <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></code> internally). Default is <code>NULL</code>.</p></dd>
+<dd><p>Numeric vector of length 1. This allows users to get the same results in different runs (using <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">se.seed</a></code> internally). Default is <code>NULL</code>.</p></dd>
 
 
 <dt>sig2</dt>

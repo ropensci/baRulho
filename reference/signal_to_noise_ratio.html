@@ -58,11 +58,20 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">signal_to_noise_ratio</span><span class="op">(</span><span class="va">X</span>, mar <span class="op">=</span> <span class="cn">NULL</span>, parallel <span class="op">=</span> <span class="cn">NULL</span>, cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>, eq.dur <span class="op">=</span> <span class="cn">FALSE</span>, noise.ref <span class="op">=</span> <span class="st">"adjacent"</span>, type <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>bp <span class="op">=</span> <span class="st">'freq.range'</span>, output <span class="op">=</span> <span class="cn">NULL</span>, hop.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"hop.size"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>wl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"wl"</span>, <span class="cn">NULL</span><span class="op">)</span>, ovlp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ovlp"</span>, <span class="fl">0</span><span class="op">)</span>,</span>
-<span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sound.files.path"</span>, <span class="st">"."</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">signal_to_noise_ratio</span><span class="op">(</span></span>
+<span>  <span class="va">X</span>,</span>
+<span>  mar <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  eq.dur <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  noise.ref <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"adjacent"</span>, <span class="st">"custom"</span><span class="op">)</span>,</span>
+<span>  snr.formula <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  bp <span class="op">=</span> <span class="st">"freq.range"</span>,</span>
+<span>  hop.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"hop.size"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  wl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"wl"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  ovlp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ovlp"</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sound.files.path"</span>, <span class="st">"."</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -74,10 +83,6 @@
 <dt>mar</dt>
 <dd><p>numeric vector of length 1. Specifies the margins adjacent to
 the start point of the annotation over which to measure ambient noise.</p></dd>
-
-
-<dt>parallel</dt>
-<dd><p>DEPRECATED. Use 'cores' instead.</p></dd>
 
 
 <dt>cores</dt>
@@ -94,13 +99,13 @@ to that of the sound (if <code>TRUE</code>. Default is <code>FALSE</code>). If <
 
 
 <dt>noise.ref</dt>
-<dd><p>Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available:</p><ul><li><p><code>adjacent</code>: measure ambient noise right before the sound (using argument 'mar' to define duration of ambient noise segments).</p></li>
+<dd><p>Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available:</p><ul><li><p><code>adjacent</code>: measure ambient noise right before test sounds (using argument 'mar' to define duration of ambient noise segments).</p></li>
 <li><p><code>custom</code>: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column). Those segments will be used to apply the same ambient noise reference to all sounds in a sound file. Therefore, at least one 'ambient' selection for each sound file must be provided. If several 'ambient' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.</p></li>
 </ul></dd>
 
 
-<dt>type</dt>
-<dd><p>Numeric vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
+<dt>snr.formula</dt>
+<dd><p>Integer vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
 , N = background noise):</p><ul><li><p><code>1</code>: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
  (<code>20 * log10(rms(env(S))/rms(env(N)))</code>) as described by Darden (2008).</p></li>
 <li><p><code>2</code>: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (<code>20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))</code>, as described by Dabelsteen et al (1993).</p></li>
@@ -108,11 +113,7 @@ to that of the sound (if <code>TRUE</code>. Default is <code>FALSE</code>). If <
 
 
 <dt>bp</dt>
-<dd><p>Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default) the function uses the 'bottom.freq' and 'top.freq' as the bandpass range.</p></dd>
-
-
-<dt>output</dt>
-<dd><p>DEPRECATED. Now the output format mirrors the class of the input 'X'.</p></dd>
+<dd><p>Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.</p></dd>
 
 
 <dt>hop.size</dt>
@@ -125,12 +126,12 @@ is NULL. Ignored if <code>bp = NULL</code>. If supplied, 'hop.size' is ignored. 
 
 
 <dt>ovlp</dt>
-<dd><p>Numeric vector of length 1 specifying the percent overlap between two
+<dd><p>Numeric vector of length 1 specifying the percentage of overlap between two
 consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="external-link">spectro</a></code>. Default is 0. Only used for bandpass filtering.</p></dd>
 
 
 <dt>path</dt>
-<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.</p></dd>
+<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -138,7 +139,7 @@ consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectr
     
 
 <p>Object 'X' with an additional column, 'signal.to.noise.ratio',
-with the signal-to-noise ratio values.</p>
+with the signal-to-noise ratio values (in dB).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -197,10 +198,10 @@ with the signal-to-noise ratio values.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">... 4 more column(s) (sound.id, transect, distance, signal.to.noise.ratio)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;"> and 19 more row(s)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">* 6 wave object(s) (as attributes): </span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">master.wav10m_closed.wav10m_open.wav1m_open.wav30m_closed.wav30m_open.wav</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">* 5 wave object(s) (as attributes): </span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">10m_closed.wav, 10m_open.wav, 1m_open.wav, 30m_closed.wav, 30m_open.wav</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">* A data frame (check.results) generated by check_sels() (as attribute)</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">* A data frame (check.results) with 25 rows generated by check_sels() (as attribute)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555; font-weight: bold;">Additional information:</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #555555;">* The selection table was created</span><span style="color: #555555; font-weight: bold; font-style: italic;"> by song </span><span style="color: #555555;">(see 'class_extended_selection_table')</span></span>

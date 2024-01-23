@@ -58,18 +58,31 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">detection_distance</span><span class="op">(</span><span class="va">X</span>, cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
-<span>pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>, output <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>hop.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"hop.size"</span>, <span class="fl">11.6</span><span class="op">)</span>, wl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"wl"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
-<span>path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sound.files.path"</span>, <span class="st">"."</span><span class="op">)</span>, spl <span class="op">=</span> <span class="cn">NULL</span>, spl.cutoff <span class="op">=</span> <span class="cn">NULL</span>, temp <span class="op">=</span> <span class="fl">20</span>,</span>
-<span>rh <span class="op">=</span> <span class="fl">60</span>, pa <span class="op">=</span> <span class="fl">101325</span>, hab.att.coef <span class="op">=</span> <span class="fl">0.02</span>, max.distance <span class="op">=</span> <span class="fl">1000</span>,</span>
-<span>resolution <span class="op">=</span> <span class="fl">0.1</span>, subtract.bgn <span class="op">=</span> <span class="cn">TRUE</span>, envelope <span class="op">=</span> <span class="st">"abs"</span>, mar <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">detection_distance</span><span class="op">(</span></span>
+<span>  <span class="va">X</span>,</span>
+<span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  hop.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"hop.size"</span>, <span class="fl">11.6</span><span class="op">)</span>,</span>
+<span>  wl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"wl"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sound.files.path"</span>, <span class="st">"."</span><span class="op">)</span>,</span>
+<span>  spl <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  spl.cutoff <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  temp <span class="op">=</span> <span class="fl">20</span>,</span>
+<span>  rh <span class="op">=</span> <span class="fl">60</span>,</span>
+<span>  pa <span class="op">=</span> <span class="fl">101325</span>,</span>
+<span>  hab.att.coef <span class="op">=</span> <span class="fl">0.02</span>,</span>
+<span>  max.distance <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  resolution <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  subtract.bgn <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  envelope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"abs"</span>, <span class="st">"hil"</span><span class="op">)</span>,</span>
+<span>  mar <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>X</dt>
-<dd><p>The output of <code><a href="set_reference_sounds.html">set_reference_sounds</a></code> which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function <code><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></code> from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See <code><a href="set_reference_sounds.html">set_reference_sounds</a></code> for more details on the structure of 'X'.</p></dd>
+<dd><p>The output of <code><a href="set_reference_sounds.html">set_reference_sounds</a></code> which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function <code><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></code> from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See <code><a href="set_reference_sounds.html">set_reference_sounds</a></code> for more details on the structure of 'X'.</p></dd>
 
 
 <dt>cores</dt>
@@ -80,21 +93,16 @@
 <dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.</p></dd>
 
 
-<dt>output</dt>
-<dd><p>Character vector of length 1 to determine if an extended selection table (DEPRECATED. Now the output format mirrors the class of the input 'X'.</p></dd>
-
-
 <dt>hop.size</dt>
 <dd><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.</p></dd>
 
 
 <dt>wl</dt>
-<dd><p>A numeric vector of length 1 specifying the window length of the spectrogram, default
-is <code>NULL</code>. If supplied, 'hop.size' is ignored.</p></dd>
+<dd><p>a vector with a single even integer number specifying the window length of the spectrogram, default is <code>NULL</code>. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number.</p></dd>
 
 
 <dt>path</dt>
-<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table.</p></dd>
+<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.</p></dd>
 
 
 <dt>spl</dt>
@@ -146,8 +154,8 @@ the start and end points of selection over which to measure background noise. Th
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>Object 'X' with an additional column,  'detection.distance',
-containing the id of the sound used as reference and the computed detection distances, respectively.</p>
+<p>Object 'X' with an additional column, 'detection.distance',
+containing the computed detection distances (in m).</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

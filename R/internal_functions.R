@@ -4723,9 +4723,10 @@
 .check_cores <- function(args, check_collection) {
   if (any(names(args) == "cores")) {
     checkmate::assert_integerish(
-      args$cores,
+      x = args$cores,
       add = check_collection,
       lower = 1,
+      len = 1, 
       upper = parallel::detectCores(),
       .var.name = "cores",
       any.missing = FALSE,
@@ -4801,10 +4802,11 @@
       lower = 2,
       add = check_collection,
       .var.name = "wl",
-      na.ok = FALSE, 
       len = 1, 
-      null.ok = TRUE
-)
+      null.ok = TRUE,
+      any.missing = FALSE,
+      all.missing = FALSE
+      )
     
   }
   return(check_collection)

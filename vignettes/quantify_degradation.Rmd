@@ -383,9 +383,9 @@ ggplot(spctr[spctr$freq > 0.3,], aes(y = amp, x = freq, col = distance)) +
 
 ### Excess attenuation
 
-With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading, due to atmospheric conditions or habitat (Wiley & Richards, 1978). This degradation metric can be measured using the `excess_attenuation()` function. Low values indicate little sound attenuation. The function will then compare each sound to the corresponding reference sound within the frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for calculating excess attenuation are provided (see 'method' argument).
+With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in excess attenuation, or energy loss in excess of that expected to occur with distance via spherical spreading, due to atmospheric conditions or habitat (Wiley & Richards, 1978). This degradation metric can be measured using the `excess_attenuation()` function. Low values indicate little sound attenuation. The function will then compare each sound to the corresponding reference sound within the frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X').
 
-`excess_attenuation()`  can be measured like this:
+`excess_attenuation()` can be measured like this:
 
 ```{r, eval = TRUE}
 

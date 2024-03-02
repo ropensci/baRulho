@@ -560,7 +560,7 @@ sc
 
 ### Noise profiles
 
-The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no sound) or over entire sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra. The following code measures the ambient noise profile for the recordings at distance >= 5m on the example extended selection table:
+The function `noise_profile()` allows to estimate the frequency spectrum of ambient noise. This can be done on extended selection tables (using the segments containing no sound) or over entire sound files in the working directory (or path supplied). The function uses the seewave function `meanspec()` internally to calculate frequency spectra. The following code measures the ambient noise profile for the recordings at distance >= 5m on the example extended selection table:
 
 ```{r, eval = TRUE}
 

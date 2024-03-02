@@ -1177,6 +1177,10 @@
         )$y
     }
     
+    # add little variation if all values ar the same so measurements can be taken on in (like envelope correlation)
+    if (all(nv == nv[1]))
+      nv[1] <- nv[1] + 0.0001
+      
     return(nv)
   }
 
@@ -1256,11 +1260,10 @@
       )
   }
   
-  
-  sig_env <-   if (!rms)
+  # convert into envelope using warbleR if no rms
+  sig_env <- if (!rms)
     mean(warbleR::envelope(x = clp@left)) else
       seewave::rms(warbleR::envelope(x = clp@left))
-  
   
   return(sig_env)
 }
@@ -1319,6 +1322,9 @@
       # excess attenuation = (total attenuation - spheric spreading attenuation) 
       ea <- (-20 * log10(sig_env_REF / X$sig_env[y])) - (20 * log10(1 / dist_SIG))
   }
+  
+  if (is.infinite(ea))
+    ea <- NA
   
   return(ea)
 }
@@ -1549,7 +1555,11 @@
         
         # get RMS for signal
         sig_rms <- seewave::rms(warbleR::envelope(signal[, 1]))
-        
+       
+        # convert to 0.0001 if sig_rms is 0 to avoid errors in SNR measurements
+        if (sig_rms == 0)
+          sig_rms <- 0.0001
+
         # cut ambient noise before sound
         noise1 <-
           seewave::cutw(noise_sig,
@@ -1559,6 +1569,11 @@
         
         # get RMS for background noise
         bg_rms <- seewave::rms(warbleR::envelope(noise1[, 1]))
+        
+        # convert to 0.0001 if bg_rms is 0 to avoid errors in SNR measurements
+        if (bg_rms == 0)
+          bg_rms <- 0.0001
+        
       }
     } else {
       sig_rms <- NA

@@ -69,7 +69,7 @@ spcc <-
     comp_mat <- cbind(X$.sgnl.temp, X$reference)
     
     # remove NA rows
-    comp_mat <- comp_mat[stats::complete.cases(comp_mat),]
+    comp_mat <- comp_mat[stats::complete.cases(comp_mat), , drop = FALSE]
     
     
     # save previous warbleR options

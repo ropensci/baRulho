@@ -23,7 +23,7 @@
 #' with the signal-to-noise ratio values (in dB).
 #' @export
 #' @name signal_to_noise_ratio
-#' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise immediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}.
+#' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise immediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}. SNR can be ~0 when both tail and signal have very low amplitude.
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
@@ -86,6 +86,7 @@ signal_to_noise_ratio <-
         path = path,
         header = TRUE
       )$sample.rate
+      
     
     # adjust wl based on hop.size
     wl <- .adjust_wl(wl, X, hop.size, path)
@@ -118,7 +119,7 @@ signal_to_noise_ratio <-
     }
     
     # 'mar' is needed when not using equal duration
-    if (!eq.dur & is.null(mar)) {
+    if (!eq.dur & is.null(mar) & noise.ref == "adjacent") {
       .stop("'mar' must be supplied when 'eq.dur = FALSE'")
     }
     

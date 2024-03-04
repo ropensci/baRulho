@@ -92,7 +92,7 @@ There are a few important things to keep in mind about functions for quantifying
 
 ## Required data structure
 
-The input data should contain some additional information. [baRulho](https://marce10.github.io/baRulho/) comes with an example `extended_selection_table` data set that can be used to understand the required data structure:
+The input data should contain some additional information. [baRulho](https://marce10.github.io/baRulho/) comes with an example annotation data set that can be used to understand the required data structure:
 
 ```{r,eval=FALSE}
 
@@ -127,9 +127,17 @@ data("test_sounds_est")
  
 Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. The structure of the data must indicate the transect and distance within that transect for each sound. Hence, besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also includes the following columns:
 
- - **'sound.id'**: ID of sounds used to identify same sounds at different distances and transects.
- - **'distance'**: refers to the distance from the source at which each sound was recorded.
- - **'transect'**: identify sounds (rows) from the same transect. Each distance is replicated once within a transect.  
+ 1) **sound.files**: character or factor column with the name of the sound files including the file extension (e.g. "rec_1.wav")
+ 1) **selec**: numeric, character or factor column with a unique identifier (at least within each sound file) for each annotation (e.g. 1, 2, 3 or "a", "b", "c")
+ 1) **start**: numeric column with the start position in time of an annotated sound (in seconds)
+ 1) **end**: numeric column with the end position in time of an annotated sound (in seconds)
+ 1) 'bottom.freq': numeric column with the bottom frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
+ 1) **top.freq**: numeric column with the top frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
+ 1) **channel**: numeric column with the number of the channel in which the annotation is found in a multi-channel sound file (optional, by default is 1 if not supplied)
+ 1) **sound.id**: numeric, character or factor column with the ID of sounds used to identify same sounds at different distances and transects.
+ 1) **transect**: numeric, character or factor column with the transect ID. 
+ 1) **distance**: numeric column with with the distance (in m) from the source at which the sound was recorded. The package assumes that each distance is replicated once within a transect.  
+
  
 Importantly, each sound ID can have only one sample at each distance/transect combination.
 The combined information from these columns is used to identify the reference sounds for each test sound. The function `set_reference_sounds()` does exactly that. There are two possible experimental designs when defining reference sounds (which is controlled by the argument 'method' in `set_reference_sounds()`):
@@ -163,7 +171,15 @@ tb <- as.data.frame.matrix(table(test_sounds_est$sound.id, test_sounds_est$dista
 .print_df(tb, height = NULL, row.names = TRUE)
 
 ```
+&nbsp;
 
+**baRulho** can take sound file annotations represented in the following **R** objects: 
+
+ - Data frames
+ - Selection tables
+ - Extended selection tables
+ 
+The last 2 are annotation specific R classes included in [warbleR](https://marce10.github.io/warbleR/articles/annotation_data_format.html). Take a look at this [annotation format vignette](https://marce10.github.io/warbleR/articles/annotation_data_format.html) from [warbleR](https://marce10.github.io/warbleR/) for more details on these formats.
 
 ## Measuring degradation 
 

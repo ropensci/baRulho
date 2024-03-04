@@ -191,7 +191,7 @@ version of <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="e
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>The function aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded.</p>
+    <p>The function aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded. Amplitude envelopes and power spectra are computed using the functions  <code>envelope</code> (warbleR package) and <code><a href="https://rdrr.io/pkg/seewave/man/spec.html" class="external-link">spec</a></code> (seewave package) respectively. This two visualizations show the power distribution in time and frequency between the minimum and maximum power values for each sound. Therefore scales are not necessarily comparable across panels.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -256,11 +256,11 @@ version of <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="e
 <span class="r-in"><span>  <span class="co"># more rows than needed (will adjust it automatically)</span></span></span>
 <span class="r-in"><span>  <span class="fu">plot_degradation</span><span class="op">(</span>X <span class="op">=</span> <span class="va">Y</span>, nrow <span class="op">=</span> <span class="fl">10</span>, ovlp <span class="op">=</span> <span class="fl">90</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmphxDtz8'</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmphxDtz8'</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmphxDtz8'</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmphxDtz8'</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/RtmphxDtz8'</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/tmp/Rtmpao0FpH'</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/tmp/Rtmpao0FpH'</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/tmp/Rtmpao0FpH'</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/tmp/Rtmpao0FpH'</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/tmp/Rtmpao0FpH'</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

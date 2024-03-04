@@ -124,8 +124,8 @@ rate.</li>
 <h3 id="required-data-structure">Required data structure<a class="anchor" aria-label="anchor" href="#required-data-structure"></a>
 </h3>
 <p>The input data should contain some additional information. <a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an
-example <code>extended_selection_table</code> data set that can be used
-to understand the required data structure:</p>
+example annotation data set that can be used to understand the required
+data structure:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/maRce10/baRulho" class="external-link">baRulho</a></span><span class="op">)</span></span>
@@ -903,17 +903,44 @@ transect. The structure of the data must indicate the transect and
 distance within that transect for each sound. Hence, besides the basic
 acoustic annotation information (e.g. sound file, time, frequency) the
 table also includes the following columns:</p>
-<ul>
+<ol style="list-style-type: decimal">
 <li>
-<strong>‘sound.id’</strong>: ID of sounds used to identify same
-sounds at different distances and transects.</li>
+<strong>sound.files</strong>: character or factor column with the
+name of the sound files including the file extension
+(e.g. “rec_1.wav”)</li>
 <li>
-<strong>‘distance’</strong>: refers to the distance from the source
-at which each sound was recorded.</li>
+<strong>selec</strong>: numeric, character or factor column with a
+unique identifier (at least within each sound file) for each annotation
+(e.g. 1, 2, 3 or “a”, “b”, “c”)</li>
 <li>
-<strong>‘transect’</strong>: identify sounds (rows) from the same
-transect. Each distance is replicated once within a transect.</li>
-</ul>
+<strong>start</strong>: numeric column with the start position in
+time of an annotated sound (in seconds)</li>
+<li>
+<strong>end</strong>: numeric column with the end position in time
+of an annotated sound (in seconds)</li>
+<li>‘bottom.freq’: numeric column with the bottom frequency of the
+frequency range of the annotation (in kHz, used for bandpass
+filtering)</li>
+<li>
+<strong>top.freq</strong>: numeric column with the top frequency of
+the frequency range of the annotation (in kHz, used for bandpass
+filtering)</li>
+<li>
+<strong>channel</strong>: numeric column with the number of the
+channel in which the annotation is found in a multi-channel sound file
+(optional, by default is 1 if not supplied)</li>
+<li>
+<strong>sound.id</strong>: numeric, character or factor column with
+the ID of sounds used to identify same sounds at different distances and
+transects.</li>
+<li>
+<strong>transect</strong>: numeric, character or factor column with
+the transect ID.</li>
+<li>
+<strong>distance</strong>: numeric column with with the distance (in
+m) from the source at which the sound was recorded. The package assumes
+that each distance is replicated once within a transect.</li>
+</ol>
 <p>Importantly, each sound ID can have only one sample at each
 distance/transect combination. The combined information from these
 columns is used to identify the reference sounds for each test sound.
@@ -1042,6 +1069,18 @@ freq:9
 </tbody>
 </table>
 </div>
+<p> </p>
+<p><strong>baRulho</strong> can take sound file annotations represented
+in the following <strong>R</strong> objects:</p>
+<ul>
+<li>Data frames</li>
+<li>Selection tables</li>
+<li>Extended selection tables</li>
+</ul>
+<p>The last 2 are annotation specific R classes included in <a href="https://marce10.github.io/warbleR/articles/annotation_data_format.html" class="external-link">warbleR</a>.
+Take a look at this <a href="https://marce10.github.io/warbleR/articles/annotation_data_format.html" class="external-link">annotation
+format vignette</a> from <a href="https://marce10.github.io/warbleR/" class="external-link">warbleR</a> for more details
+on these formats.</p>
 </div>
 <div class="section level3">
 <h3 id="measuring-degradation">Measuring degradation<a class="anchor" aria-label="anchor" href="#measuring-degradation"></a>
@@ -1930,9 +1969,9 @@ and power spectra (the last 2 are optional):</p>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp3iRu54/plot_degradation_p1.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp3iRu54/plot_degradation_p2.jpeg"</span></span></code></pre>
-<p><img src="../../../../../../private/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T/Rtmp3iRu54/plot_degradation_p1.jpeg" width="100%" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">## [1] "/tmp/Rtmp332sZ3/plot_degradation_p1.jpeg"</span></span>
+<span><span class="co">## [2] "/tmp/Rtmp332sZ3/plot_degradation_p2.jpeg"</span></span></code></pre>
+<p><img src="../../../../../../tmp/Rtmp332sZ3/plot_degradation_p1.jpeg" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
 <p>Each row includes all the copies of a sound id for a given transect
 (the row label includes the sound id in the first line and transect in
@@ -2900,12 +2939,12 @@ functions (PMF)).</p>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp3iRu54/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp3iRu54/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [3] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp3iRu54/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [4] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp3iRu54/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [5] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp3iRu54/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
-<span><span class="co">## [6] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp3iRu54/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/Rtmp332sZ3/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
+<span><span class="co">## [2] "/tmp/Rtmp332sZ3/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
+<span><span class="co">## [3] "/tmp/Rtmp332sZ3/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
+<span><span class="co">## [4] "/tmp/Rtmp332sZ3/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
+<span><span class="co">## [5] "/tmp/Rtmp332sZ3/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
+<span><span class="co">## [6] "/tmp/Rtmp332sZ3/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
 <p>Output image files (in the working directory) look like these
 ones:</p>
 <center>
@@ -9955,18 +9994,21 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <hr>
 <p><font size="4">Session information</font></p>
 <pre><code><span><span class="co">## R version 4.3.3 (2024-02-29)</span></span>
-<span><span class="co">## Platform: x86_64-apple-darwin20 (64-bit)</span></span>
-<span><span class="co">## Running under: macOS Monterey 12.7.3</span></span>
+<span><span class="co">## Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
+<span><span class="co">## Running under: Ubuntu 22.04.4 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib </span></span>
-<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0</span></span>
+<span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
+<span><span class="co">## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
-<span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
+<span><span class="co">##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
+<span><span class="co">##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
+<span><span class="co">## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## time zone: UTC</span></span>
-<span><span class="co">## tzcode source: internal</span></span>
+<span><span class="co">## tzcode source: system (glibc)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## attached base packages:</span></span>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>

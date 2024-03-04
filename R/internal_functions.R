@@ -2200,7 +2200,7 @@
             new = TRUE)
         
         # get power spectrum
-        spc <- spec(wave = wave, plot = FALSE)
+        spc <- seewave::spec(wave = wave, plot = FALSE)
         
         # smooth
         spc[, 2] <-

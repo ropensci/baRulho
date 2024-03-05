@@ -221,6 +221,17 @@ test_sounds_est <-
 degrad_imgs <- plot_degradation(test_sounds_est, dest.path = tempdir())
 ```
 
+```{r, echo = FALSE}
+
+# try to copy files to vignettes
+# fc <- file.copy(from = aligned_imgs[1:2], 
+#           to = file.path("../man/figures", basename(aligned_imgs[c(1, 4)])))
+
+fc <- file.copy(from = degrad_imgs[1], 
+          to = file.path("../vignettes", basename(degrad_imgs[1])), overwrite = TRUE)
+
+```
+
 These are the paths to some of the image files:
 ```{r, eval = TRUE}
 
@@ -230,7 +241,7 @@ degrad_imgs
 
 ```{r, echo=FALSE, out.width="100%", fig.align='center'}
 
-knitr::include_graphics(degrad_imgs[1])
+knitr::include_graphics(basename(degrad_imgs[1]))
 
 ```
 

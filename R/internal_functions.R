@@ -2243,6 +2243,9 @@
         # add 0s at star and end so polygon doesnt twist
         spc[c(1, nrow(spc)), 2] <- 0
         
+        # flip values so they are aligned at the right side
+        spc[,2] <- abs(spc[,2] - max(spc[,2]))
+        
         # add polygon with spectrum shape
         polygon(spc[, 2:1], col = spc_fill, border = NA)
         

@@ -90,7 +90,7 @@ These are key considerations regarding the package behavior when assessing degra
 - The package offers two methods to compare sounds to the reference: 
     1. Compare all sounds with the counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
     1. Compare all sounds with the counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the one recorded at 5m, then sound recorded at 15m compared with the one recorded at 10m and so on).
-- The function will try to use references from the same transect. However, if there is another test sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect. 
+- The package will attempt to use re-recorded sounds from the shortest distance in the same transect as reference. However, if there is another re-recorded sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect.
 - The package assumes all sound files have the same sampling rate.
 </div>
 

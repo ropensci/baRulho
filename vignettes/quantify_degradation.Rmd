@@ -123,9 +123,8 @@ data("test_sounds_est")
 .print_df(test_sounds_est, highlight = c("sound.id", "transect", "distance"))
 
 ```
-&nbsp;
  
-Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. The structure of the data must indicate the transect and distance within that transect for each sound. Hence, besides the basic acoustic annotation information (e.g. sound file, time, frequency) the table also includes the following columns:
+Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. Hence, the data must indicate, besides the basic acoustic annotation information (e.g. sound file, time, frequency), the transect and distance within that transect for each sound. These are required input data columns:
 
  1) **sound.files**: character or factor column with the name of the sound files including the file extension (e.g. "rec_1.wav")
  1) **selec**: numeric, character or factor column with a unique identifier (at least within each sound file) for each annotation (e.g. 1, 2, 3 or "a", "b", "c")
@@ -134,12 +133,13 @@ Transmission experiments tend to follow a common experimental design in which mo
  1) 'bottom.freq': numeric column with the bottom frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
  1) **top.freq**: numeric column with the top frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
  1) **channel**: numeric column with the number of the channel in which the annotation is found in a multi-channel sound file (optional, by default is 1 if not supplied)
- 1) **sound.id**: numeric, character or factor column with the ID of sounds used to identify same sounds at different distances and transects.
+ 1) **sound.id**: numeric, character or factor column with the ID of sounds used to identify same sounds at different distances and transects. Each sound ID can have only one sample at each distance/transect combination. 
  1) **transect**: numeric, character or factor column with the transect ID. 
  1) **distance**: numeric column with with the distance (in m) from the source at which the sound was recorded. The package assumes that each distance is replicated once within a transect.  
 
- 
-Importantly, each sound ID can have only one sample at each distance/transect combination.
+
+# Setting reference sounds 
+
 The combined information from these columns is used to identify the reference sounds for each test sound. The function `set_reference_sounds()` does exactly that. There are two possible experimental designs when defining reference sounds (which is controlled by the argument 'method' in `set_reference_sounds()`):
 
 - 1: compare sounds (by 'sound.id') with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. For this design users can have a single example for the shortest distance to be used as reference (for instance at 1m as is the case in most studies) The function will try to use references from the same transect. However, if there is another test sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect. 
@@ -185,7 +185,7 @@ The last 2 are annotation specific R classes included in [warbleR](https://marce
 
 ### Data format
 
-The functions `set_reference_sounds()` can be used to determined, for each row in the input data, which sounds would be used as references. The function can do this using any of the two methods described above:
+As mention above, the function `set_reference_sounds()` is used to determined, for each row in the input data, which sounds would be used as references. The function can do this using any of the two methods described above:
 
 ```{r}
 
@@ -203,7 +203,7 @@ test_sounds_est
 ```
 &nbsp;
 
-The function adds the column 'reference' which is then used by downstream functions plotting or measuring degradation. References are indicated as a the combination of the 'sound.files' and 'selec' column. For instance, '10m.wav-1' indicates that the row in which the 'selec' column is '1' and the sound file is '10m.wav' should be used as reference. The function also checks that the information 'X' (the input annotation data) is in the right format so it wont produce errors in downstream analysis (see 'X' argument description for details on format). The function will ignore rows with 'sound.id' 'ambient', 'start_marker' and 'end_marker'.
+The function adds the column 'reference' which is then used by downstream functions plotting or measuring degradation. Hence it is used before running any of the degradation functions (including plotting functions). References are indicated as a the combination of the 'sound.files' and 'selec' column. For instance, '10m.wav-1' indicates that the row in which the 'selec' column is '1' and the sound file is '10m.wav' should be used as reference. The function also checks that the information 'X' (the input annotation data) is in the right format so it won't produce errors in downstream analysis (see 'X' argument description for details on format). The function will ignore rows in which the sound id  column is 'ambient', 'start_marker' or 'end_marker'.
 
 ### Visual inspection
 

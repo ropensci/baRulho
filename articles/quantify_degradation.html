@@ -896,13 +896,12 @@ open
 </tbody>
 </table>
 </div>
-<p> </p>
 <p>Transmission experiments tend to follow a common experimental design
 in which model sounds are re-recorded at increasing distance within a
-transect. The structure of the data must indicate the transect and
-distance within that transect for each sound. Hence, besides the basic
-acoustic annotation information (e.g. sound file, time, frequency) the
-table also includes the following columns:</p>
+transect. Hence, the data must indicate, besides the basic acoustic
+annotation information (e.g. sound file, time, frequency), the transect
+and distance within that transect for each sound. These are required
+input data columns:</p>
 <ol style="list-style-type: decimal">
 <li>
 <strong>sound.files</strong>: character or factor column with the
@@ -932,7 +931,8 @@ channel in which the annotation is found in a multi-channel sound file
 <li>
 <strong>sound.id</strong>: numeric, character or factor column with
 the ID of sounds used to identify same sounds at different distances and
-transects.</li>
+transects. Each sound ID can have only one sample at each
+distance/transect combination.</li>
 <li>
 <strong>transect</strong>: numeric, character or factor column with
 the transect ID.</li>
@@ -941,12 +941,15 @@ the transect ID.</li>
 m) from the source at which the sound was recorded. The package assumes
 that each distance is replicated once within a transect.</li>
 </ol>
-<p>Importantly, each sound ID can have only one sample at each
-distance/transect combination. The combined information from these
-columns is used to identify the reference sounds for each test sound.
-The function <code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> does exactly that.
-There are two possible experimental designs when defining reference
-sounds (which is controlled by the argument ‘method’ in
+</div>
+<div class="section level2">
+<h2 id="setting-reference-sounds">Setting reference sounds<a class="anchor" aria-label="anchor" href="#setting-reference-sounds"></a>
+</h2>
+<p>The combined information from these columns is used to identify the
+reference sounds for each test sound. The function
+<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> does exactly that. There are two
+possible experimental designs when defining reference sounds (which is
+controlled by the argument ‘method’ in
 <code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code>):</p>
 <ul>
 <li>1: compare sounds (by ‘sound.id’) with their counterpart that was
@@ -1081,17 +1084,16 @@ in the following <strong>R</strong> objects:</p>
 Take a look at this <a href="https://marce10.github.io/warbleR/articles/annotation_data_format.html" class="external-link">annotation
 format vignette</a> from <a href="https://marce10.github.io/warbleR/" class="external-link">warbleR</a> for more details
 on these formats.</p>
-</div>
 <div class="section level3">
 <h3 id="measuring-degradation">Measuring degradation<a class="anchor" aria-label="anchor" href="#measuring-degradation"></a>
 </h3>
 <div class="section level4">
 <h4 id="data-format">Data format<a class="anchor" aria-label="anchor" href="#data-format"></a>
 </h4>
-<p>The functions <code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> can be used to
-determined, for each row in the input data, which sounds would be used
-as references. The function can do this using any of the two methods
-described above:</p>
+<p>As mention above, the function <code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> is
+used to determined, for each row in the input data, which sounds would
+be used as references. The function can do this using any of the two
+methods described above:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add reference column</span></span>
 <span><span class="va">test_sounds_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/set_reference_sounds.html">set_reference_sounds</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, method <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -1938,15 +1940,17 @@ open
 </div>
 <p> </p>
 <p>The function adds the column ‘reference’ which is then used by
-downstream functions plotting or measuring degradation. References are
-indicated as a the combination of the ‘sound.files’ and ‘selec’ column.
-For instance, ‘10m.wav-1’ indicates that the row in which the ‘selec’
-column is ‘1’ and the sound file is ‘10m.wav’ should be used as
-reference. The function also checks that the information ‘X’ (the input
-annotation data) is in the right format so it wont produce errors in
-downstream analysis (see ‘X’ argument description for details on
-format). The function will ignore rows with ‘sound.id’ ‘ambient’,
-‘start_marker’ and ‘end_marker’.</p>
+downstream functions plotting or measuring degradation. Hence it is used
+before running any of the degradation functions (including plotting
+functions). References are indicated as a the combination of the
+‘sound.files’ and ‘selec’ column. For instance, ‘10m.wav-1’ indicates
+that the row in which the ‘selec’ column is ‘1’ and the sound file is
+‘10m.wav’ should be used as reference. The function also checks that the
+information ‘X’ (the input annotation data) is in the right format so it
+won’t produce errors in downstream analysis (see ‘X’ argument
+description for details on format). The function will ignore rows in
+which the sound id column is ‘ambient’, ‘start_marker’ or
+‘end_marker’.</p>
 </div>
 <div class="section level4">
 <h4 id="visual-inspection">Visual inspection<a class="anchor" aria-label="anchor" href="#visual-inspection"></a>
@@ -1969,9 +1973,9 @@ and power spectra (the last 2 are optional):</p>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmpn5xAcE/plot_degradation_p1.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmpn5xAcE/plot_degradation_p2.jpeg"</span></span></code></pre>
-<p><img src="../../../../../../private/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T/Rtmpn5xAcE/plot_degradation_p1.jpeg" width="100%" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">## [1] "/tmp/Rtmp7lOz18/plot_degradation_p1.jpeg"</span></span>
+<span><span class="co">## [2] "/tmp/Rtmp7lOz18/plot_degradation_p2.jpeg"</span></span></code></pre>
+<p><img src="../../../../../../tmp/Rtmp7lOz18/plot_degradation_p1.jpeg" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
 <p>Each row includes all the copies of a sound id for a given transect
 (the row label includes the sound id in the first line and transect in
@@ -2939,12 +2943,12 @@ functions (PMF)).</p>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmpn5xAcE/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmpn5xAcE/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [3] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmpn5xAcE/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [4] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmpn5xAcE/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [5] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmpn5xAcE/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
-<span><span class="co">## [6] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmpn5xAcE/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/Rtmp7lOz18/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
+<span><span class="co">## [2] "/tmp/Rtmp7lOz18/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
+<span><span class="co">## [3] "/tmp/Rtmp7lOz18/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
+<span><span class="co">## [4] "/tmp/Rtmp7lOz18/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
+<span><span class="co">## [5] "/tmp/Rtmp7lOz18/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
+<span><span class="co">## [6] "/tmp/Rtmp7lOz18/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
 <p>Output image files (in the working directory) look like these
 ones:</p>
 <center>
@@ -9965,6 +9969,7 @@ should be cited as follows:</p>
 <hr>
 </div>
 </div>
+</div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
@@ -9994,18 +9999,21 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <hr>
 <p><font size="4">Session information</font></p>
 <pre><code><span><span class="co">## R version 4.3.3 (2024-02-29)</span></span>
-<span><span class="co">## Platform: x86_64-apple-darwin20 (64-bit)</span></span>
-<span><span class="co">## Running under: macOS Monterey 12.7.3</span></span>
+<span><span class="co">## Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
+<span><span class="co">## Running under: Ubuntu 22.04.4 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib </span></span>
-<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0</span></span>
+<span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
+<span><span class="co">## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
-<span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
+<span><span class="co">##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
+<span><span class="co">##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
+<span><span class="co">## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## time zone: UTC</span></span>
-<span><span class="co">## tzcode source: internal</span></span>
+<span><span class="co">## tzcode source: system (glibc)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## attached base packages:</span></span>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>

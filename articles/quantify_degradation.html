@@ -95,9 +95,11 @@ Araya-Salas, PhD</a></h4>
 <!-- <center>![warbleR logo](logo.png)</center> -->
 
 <p> </p>
+<!-- light brown box -->
+<div class="alert alert-warning">
 <p><img src="baRulho_sticker.png" alt="baRulho logo" align="right" width="25%" height="25%"></p>
-<p>There are a few important things to keep in mind about functions for
-quantifying degradation:</p>
+<p>These are key considerations regarding the package behavior when
+assessing degradation:</p>
 <ul>
 <li>The package currently assumes that all recordings have been made
 with the same equipment and recording volume. This will be modified in
@@ -117,15 +119,26 @@ recorded at 5m, then sound recorded at 15m compared with the one
 recorded at 10m and so on).</li>
 </ol>
 </li>
+<li>The function will try to use references from the same transect.
+However, if there is another test sound from the same ‘sound.id’ at a
+shorter distance in other transects, it will be used as reference
+instead. This behavior aims to account for the fact that in this type of
+experiments reference sounds are typically recorded at 1 m and at single
+transect.</li>
 <li>The package assumes all sound files have the same sampling
 rate.</li>
 </ul>
+</div>
 <div class="section level3">
 <h3 id="required-data-structure">Required data structure<a class="anchor" aria-label="anchor" href="#required-data-structure"></a>
 </h3>
-<p>The input data should contain some additional information. <a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an
-example annotation data set that can be used to understand the required
-data structure:</p>
+<p>Transmission experiments tend to follow a common experimental design
+in which model sounds are re-recorded at increasing distance within a
+transect. Hence, the data must indicate, besides the basic acoustic
+annotation information (e.g. sound file, time, frequency), the transect
+and distance within that transect for each sound. <a href="https://marce10.github.io/baRulho/">baRulho</a> comes with an
+example annotation data set that can shows the required data
+structure:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/maRce10/baRulho" class="external-link">baRulho</a></span><span class="op">)</span></span>
@@ -896,12 +909,7 @@ open
 </tbody>
 </table>
 </div>
-<p>Transmission experiments tend to follow a common experimental design
-in which model sounds are re-recorded at increasing distance within a
-transect. Hence, the data must indicate, besides the basic acoustic
-annotation information (e.g. sound file, time, frequency), the transect
-and distance within that transect for each sound. These are required
-input data columns:</p>
+<p>This the despcription of the required input data columns:</p>
 <ol style="list-style-type: decimal">
 <li>
 <strong>sound.files</strong>: character or factor column with the
@@ -947,9 +955,12 @@ that each distance is replicated once within a transect.</li>
 </h2>
 <p>The combined information from these columns is used to identify the
 reference sounds for each test sound. The function
-<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> does exactly that. There are two
-possible experimental designs when defining reference sounds (which is
-controlled by the argument ‘method’ in
+<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> does exactly that. Hence, unless you
+define the reference sound for each test sound manually,
+<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> must always be run before any
+degradation measuring function.</p>
+<p>There are two possible experimental designs when defining reference
+sounds (which is controlled by the argument ‘method’ in
 <code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code>):</p>
 <ul>
 <li>1: compare sounds (by ‘sound.id’) with their counterpart that was
@@ -1973,9 +1984,10 @@ and power spectra (the last 2 are optional):</p>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp5iCA3z/plot_degradation_p1.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp5iCA3z/plot_degradation_p2.jpeg"</span></span></code></pre>
-<p><img src="plot_degradation_p1.jpeg" width="100%" style="display: block; margin: auto;"></p>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpfC0WMF/plot_degradation_p1.jpeg"</span></span>
+<span><span class="co">## [2] "/tmp/RtmpfC0WMF/plot_degradation_p2.jpeg"</span></span></code></pre>
+<p>… and this is one of the images:
+<img src="plot_degradation_p1.jpeg" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
 <p>Each row includes all the copies of a sound id for a given transect
 (the row label includes the sound id in the first line and transect in
@@ -2943,12 +2955,12 @@ functions (PMF)).</p>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp5iCA3z/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp5iCA3z/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [3] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp5iCA3z/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [4] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp5iCA3z/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [5] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp5iCA3z/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
-<span><span class="co">## [6] "/var/folders/h1/8hndypj13nsbj5pn4xsnv1tm0000gn/T//Rtmp5iCA3z/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/tmp/RtmpfC0WMF/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
+<span><span class="co">## [2] "/tmp/RtmpfC0WMF/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
+<span><span class="co">## [3] "/tmp/RtmpfC0WMF/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
+<span><span class="co">## [4] "/tmp/RtmpfC0WMF/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
+<span><span class="co">## [5] "/tmp/RtmpfC0WMF/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
+<span><span class="co">## [6] "/tmp/RtmpfC0WMF/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
 <p>Output image files (in the working directory) look like these
 ones:</p>
 <center>
@@ -9999,18 +10011,21 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <hr>
 <p><font size="4">Session information</font></p>
 <pre><code><span><span class="co">## R version 4.3.3 (2024-02-29)</span></span>
-<span><span class="co">## Platform: x86_64-apple-darwin20 (64-bit)</span></span>
-<span><span class="co">## Running under: macOS Monterey 12.7.3</span></span>
+<span><span class="co">## Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
+<span><span class="co">## Running under: Ubuntu 22.04.4 LTS</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRblas.0.dylib </span></span>
-<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0</span></span>
+<span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
+<span><span class="co">## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## locale:</span></span>
-<span><span class="co">## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span><span class="co">##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
+<span><span class="co">##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
+<span><span class="co">##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
+<span><span class="co">## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## time zone: UTC</span></span>
-<span><span class="co">## tzcode source: internal</span></span>
+<span><span class="co">## tzcode source: system (glibc)</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## attached base packages:</span></span>
 <span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
@@ -10025,7 +10040,7 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <span><span class="co">##  [5] vctrs_0.6.5        tools_4.3.3        bitops_1.0-7       parallel_4.3.3    </span></span>
 <span><span class="co">##  [9] tibble_3.2.1       proxy_0.4-27       fansi_1.0.6        highr_0.10        </span></span>
 <span><span class="co">## [13] pkgconfig_2.0.3    KernSmooth_2.23-22 checkmate_2.3.1    desc_1.4.3        </span></span>
-<span><span class="co">## [17] lifecycle_1.0.4    farver_2.1.1       stringr_1.5.1      compiler_4.3.3    </span></span>
+<span><span class="co">## [17] lifecycle_1.0.4    farver_2.1.1       compiler_4.3.3     stringr_1.5.1     </span></span>
 <span><span class="co">## [21] textshaping_0.3.7  brio_1.1.4         munsell_0.5.0      htmltools_0.5.7   </span></span>
 <span><span class="co">## [25] class_7.3-22       sass_0.4.8         RCurl_1.98-1.14    yaml_2.3.8        </span></span>
 <span><span class="co">## [29] pkgdown_2.0.7      pillar_1.9.0       jquerylib_0.1.4    MASS_7.3-60.0.1   </span></span>
@@ -10033,13 +10048,13 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <span><span class="co">## [37] stringi_1.8.3      sf_1.0-15          purrr_1.0.2        labeling_0.4.3    </span></span>
 <span><span class="co">## [41] fastmap_1.1.1      grid_4.3.3         colorspace_2.1-0   cli_3.6.2         </span></span>
 <span><span class="co">## [45] magrittr_2.0.3     utf8_1.2.4         e1071_1.7-14       withr_3.0.0       </span></span>
-<span><span class="co">## [49] scales_1.3.0       backports_1.4.1    rmarkdown_2.26     Sim.DiffProc_4.8  </span></span>
+<span><span class="co">## [49] scales_1.3.0       backports_1.4.1    rmarkdown_2.25     Sim.DiffProc_4.8  </span></span>
 <span><span class="co">## [53] signal_1.8-0       igraph_2.0.2       gridExtra_2.3      png_0.1-8         </span></span>
 <span><span class="co">## [57] ragg_1.2.7         kableExtra_1.4.0   memoise_2.0.1      pbapply_1.7-2     </span></span>
 <span><span class="co">## [61] evaluate_0.23      dtw_1.23-1         fftw_1.0-8         testthat_3.2.1    </span></span>
 <span><span class="co">## [65] rlang_1.1.3        Rcpp_1.0.12        glue_1.7.0         DBI_1.2.2         </span></span>
 <span><span class="co">## [69] xml2_1.3.6         svglite_2.1.3      rstudioapi_0.15.0  jsonlite_1.8.8    </span></span>
-<span><span class="co">## [73] R6_2.5.1           systemfonts_1.0.5  fs_1.6.3           units_0.8-5</span></span></code></pre>
+<span><span class="co">## [73] R6_2.5.1           units_0.8-5        systemfonts_1.0.5  fs_1.6.3</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

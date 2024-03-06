@@ -99,7 +99,7 @@ opts_chunk$set(fig.align = "center",
 ## Required data structure
 
  
-Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. Hence, the data must indicate, besides the basic acoustic annotation information (e.g. sound file, time, frequency), the transect and distance within that transect for each sound. [baRulho](https://marce10.github.io/baRulho/) comes with an example annotation data set that can shows the required data structure:
+Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. Hence, the data must indicate, besides the basic acoustic annotation information (e.g. sound file, time, frequency), the transect and distance within that transect for each sound. [baRulho](https://marce10.github.io/baRulho/) comes with an example annotation data set that can be used to show the required data structure:
 
 ```{r,eval=FALSE}
 

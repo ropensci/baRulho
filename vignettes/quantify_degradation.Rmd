@@ -138,7 +138,7 @@ This the despcription of the required input data columns:
  1) 'bottom.freq': numeric column with the bottom frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
  1) **top.freq**: numeric column with the top frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
  1) **channel**: numeric column with the number of the channel in which the annotation is found in a multi-channel sound file (optional, by default is 1 if not supplied)
- 1) **sound.id**: numeric, character or factor column with the ID of sounds used to identify same sounds at different distances and transects. Each sound ID can have only one sample at each distance/transect combination. 
+ 1) **sound.id**: numeric, character or factor column with the ID of sounds used to identify same sounds at different distances and transects. Each sound ID can have only one sample at each distance/transect combination. The sound id label "ambient" can be used to defined annotations in which ambient noise can be measure. 
  1) **transect**: numeric, character or factor column with the transect ID. 
  1) **distance**: numeric column with with the distance (in m) from the source at which the sound was recorded. The package assumes that each distance is replicated once within a transect.  
 

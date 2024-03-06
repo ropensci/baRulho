@@ -83,7 +83,7 @@ opts_chunk$set(fig.align = "center",
 
 <img src="baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
-These are key considerations regarding the package behavior when assessing degradation:
+**These are key considerations regarding the package behavior when assessing degradation**:
 
 - The package currently assumes that all recordings have been made with the same equipment and recording volume. This will be modified in future versions to allow for amplitude calibration of recordings.
 - Wave envelope and frequency spectrum calculations are made after applying a bandpass filter within the frequency range of the reference sound ('bottom.freq' and 'top.freq' columns)

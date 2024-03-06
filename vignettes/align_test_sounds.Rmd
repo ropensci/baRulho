@@ -66,7 +66,6 @@ opts_chunk$set(fig.align = "center",
 
 ```
 
-<img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width = "25%" height="25%"/>
 
 This vignette deals with two things: how to create synthetic sounds for playback experiments and how to align re-recorded sounds to their reference once playback has been conducted. Here is some terms that will be used in this vignettes and throughout the package.
 
@@ -74,7 +73,9 @@ This vignette deals with two things: how to create synthetic sounds for playback
 
 <div class="alert alert-info">
 
-<font size="5">Glossary</font> 
+<img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width = "25%" height="25%"/>
+
+# Glossary 
 
 -**Model sound**: sound in which transmission properties will be studied, usually found in the original field recordings or synthetic sound files.
 

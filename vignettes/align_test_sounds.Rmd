@@ -73,7 +73,6 @@ This vignette deals with two things: how to create synthetic sounds for playback
 
 <div class="alert alert-info">
 
-
 # Glossary 
 
 <img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width = "25%" height="25%"/>

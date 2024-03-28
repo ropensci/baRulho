@@ -12,6 +12,8 @@ add_noise(
   cores = getOption("mc.cores", 1),
   pb = getOption("pb", TRUE),
   max.iterations = 1000,
+  kind = c("pink", "white", "brown", "red", "power"),
+  alpha = 1,
   ...
 )
 }
@@ -30,6 +32,10 @@ the start point of the annotation over which to measure ambient noise.}
 \item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
 
 \item{max.iterations}{Numeric vector of length 1. Specifies the maximum number of iterations that the internal signal-to-noise adjusting routine will run before stopping. Note that in most cases the default maximum number of iterations (1000) is not reached.}
+
+\item{kind}{Character vector of length 1 indicating the kind of noise, “white”, “pink”, “power”, "brown", or “red”. Noise is synthesized with a modified version of the function \code{\link[tuneR]{noise}}. Default is "pink" which is similar to background noise in natural environments.}
+
+\item{alpha}{Numeric vector of length 1. The power for the power law noise (defaults are 1 for pink and 1.5 for red noise). Only used when \code{kind = "power"}.}
 
 \item{...}{Additional arguments to be passed internally to \code{\link{signal_to_noise_ratio}}.}
 }
@@ -57,6 +63,7 @@ X_noise <- add_noise(X = X[1:5, ], mar = 0.2, target.snr = 3)
 \references{
 {
 Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
+Timmer. J and M. König (1995): On generating power law noise. Astron. Astrophys. 300, 707-710.
 }
 }
 \seealso{

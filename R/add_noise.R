@@ -8,6 +8,8 @@
 #' @param target.snr numeric vector of length 1. Specifies the desired signal-to-noise ratio. Must be lower that the current signal-to-noise ratio. Annotations showing a signal-to-noise ratio higher than 'target.snr' will remain unchanged. Must be supplied.
 #' @param precision  numeric vector of length 1. Specifies the precision of the adjusted signal-to-noise ratio (in dB).
 #' @param max.iterations Numeric vector of length 1. Specifies the maximum number of iterations that the internal signal-to-noise adjusting routine will run before stopping. Note that in most cases the default maximum number of iterations (1000) is not reached.
+#' @param kind Character vector of length 1 indicating the kind of noise, “white”, “pink”, “power”, "brown", or “red”. Noise is synthesized with a modified version of the function \code{\link[tuneR]{noise}}. Default is "pink" which is similar to background noise in natural environments.
+#' @param alpha Numeric vector of length 1. The power for the power law noise (defaults are 1 for pink and 1.5 for red noise). Only used when \code{kind = "power"}.
 #' @param ... Additional arguments to be passed internally to \code{\link{signal_to_noise_ratio}}.
 #' @return Object 'X' in which the wave objects have been modified to match the target signal-to-noise ratio. It also includes an additional column, 'adjusted.snr', with the new signal-to-noise ratio values.
 #' @export
@@ -28,6 +30,7 @@
 #' @seealso \code{\link{signal_to_noise_ratio}}
 #' @references {
 #' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
+#' Timmer. J and M. König (1995): On generating power law noise. Astron. Astrophys. 300, 707-710.
 #' }
 
 add_noise <-
@@ -38,7 +41,13 @@ add_noise <-
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            max.iterations = 1000,
+           kind = c("pink", "white", "brown", "red", "power"),
+           alpha = 1,
            ...) {
+    
+    # assign a value to kind
+    kind <- rlang::arg_match(kind)
+    
     # check arguments
     arguments <- as.list(base::match.call())
     
@@ -68,7 +77,9 @@ add_noise <-
         target.snr = target.snr,
         precision = precision,
         max.iterations = max.iterations,
-        Y = X
+        Y = X,
+        kind = kind,
+        alpha = alpha
       )
     
     names(wav_snr_list) <- target_rows

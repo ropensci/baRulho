@@ -1,9 +1,24 @@
 ### internal functions not to be called by users ###
 
+
 # stop function that doesn't print call
 .stop <- function(...) {
   stop(..., call. = FALSE)
 }
+
+# synthesize noise, copied without changes from tuneR:::TK95()
+.TK95 <- function(N, alpha = 1) {
+  f <- seq(from = 0, to = pi, length.out = (N/2 + 1))[-c(1, 
+                                                         (N/2 + 1))]
+  f_ <- 1/f^alpha
+  RW <- suppressWarnings(sqrt(0.5 * f_) * rnorm(N/2 - 1))
+  IW <- suppressWarnings(sqrt(0.5 * f_) * rnorm(N/2 - 1))
+  fR <- complex(real = c(stats::rnorm(1), RW, rnorm(1), RW[(N/2 - 
+                                                       1):1]), imaginary = c(0, IW, 0, -IW[(N/2 - 1):1]), length.out = N)
+  reihe <- stats::fft(fR, inverse = TRUE)
+  return(Re(reihe))
+}
+
 
 # calculate time and freq ranges based on all recs
 .time_freq_range_files <- function(X, i, path, margins) {
@@ -1334,6 +1349,20 @@
   suppressWarnings(rbind(...))
 }
 
+# Function to force vector values to be within the range [a, b]
+.force_range <- function(x, min, max) {
+  min_val <- min(x)
+  max_val <- max(x)
+  
+  if (min_val < min | max_val > max) {
+    range_x <- max_val - min_val
+    slope <- (max - min) / range_x
+    intercept <- min - min_val * slope
+    x <- x * slope + intercept
+  }
+  return(x)
+}  
+  
 ## adjust SNR
 .add_noise <-
   function(x,
@@ -1341,7 +1370,9 @@
            target.snr,
            precision,
            max.iterations,
-           Y) {
+           Y,
+           kind,
+           alpha) {
     # extract selection as single extended selection table
     Y_x <- Y[x,]
     
@@ -1383,17 +1414,37 @@
       while (all(snr > target.snr + precision |
                  snr < target.snr - precision) &
              length(prop_noise_vector) < max.iterations) {
+        
+        # set number of samples
+        N <- length(wav@left)
+        
+        # ad seed to make it replicable
         seed <- seed + 1
         set.seed(seed)
+        # noise_wav <-
+        #   runif(n = N,
+        #         min = 0,
+        #         max = 1)
+
         noise_wav <-
-          runif(length(wav@left),
-                min = -1 * prop_noise,
-                max = prop_noise)
+          switch(
+            kind,
+            white = stats::rnorm(N),
+            pink = .TK95(N, alpha = 1),
+            brown = cumsum(stats::rnorm(N)),
+            power = .TK95(N, alpha = alpha),
+            red = .TK95(N, alpha = 1.5)
+          )
+
+        noise_wav <-
+          .force_range(x = noise_wav,
+                       min = -1 * prop_noise,
+                       max = prop_noise)
+        
         
         attributes(Y_x)$wave.objects[[1]] <- wav + noise_wav
         
-        snr <-
-          signal_to_noise_ratio(X = Y_x,
+        snr <- signal_to_noise_ratio(X = Y_x,
                                 mar = mar,
                                 pb = FALSE)$signal.to.noise.ratio
         
@@ -1414,12 +1465,28 @@
       
       # adjust SNR using best SNR
       set.seed(which.min(abs(snr_vector - target.snr)))
+      
+      # recalculate noise
       prop_noise <-
         prop_noise_vector[which.min(abs(snr_vector - target.snr))]
-      attributes(Y_x)$wave.objects[[1]] <- wav +
-        runif(length(wav@left),
-              min = -1 * prop_noise,
-              max = prop_noise)
+      
+      noise_wav <-
+        switch(
+          kind,
+          white = stats::rnorm(N),
+          pink = .TK95(N, alpha = 1),
+          brown = cumsum(stats::rnorm(N)),
+          power = .TK95(N, alpha = alpha),
+          red = .TK95(N, alpha = 1.5)
+        )
+      
+      noise_wav <-
+        .force_range(x = noise_wav,
+                     min = -1 * prop_noise,
+                     max = prop_noise)
+      
+      attributes(Y_x)$wave.objects[[1]] <- wav + noise_wav
+      
       snr <-
         snr_vector[which.min(abs(snr_vector - target.snr))]
       modified <- TRUE

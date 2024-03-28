@@ -66,6 +66,8 @@
 <span>  cores <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"mc.cores"</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  pb <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"pb"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  max.iterations <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  kind <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"pink"</span>, <span class="st">"white"</span>, <span class="st">"brown"</span>, <span class="st">"red"</span>, <span class="st">"power"</span><span class="op">)</span>,</span>
+<span>  alpha <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -101,6 +103,14 @@ the start point of the annotation over which to measure ambient noise.</p></dd>
 <dd><p>Numeric vector of length 1. Specifies the maximum number of iterations that the internal signal-to-noise adjusting routine will run before stopping. Note that in most cases the default maximum number of iterations (1000) is not reached.</p></dd>
 
 
+<dt>kind</dt>
+<dd><p>Character vector of length 1 indicating the kind of noise, “white”, “pink”, “power”, "brown", or “red”. Noise is synthesized with a modified version of the function <code><a href="https://rdrr.io/pkg/tuneR/man/Waveforms.html" class="external-link">noise</a></code>. Default is "pink" which is similar to background noise in natural environments.</p></dd>
+
+
+<dt>alpha</dt>
+<dd><p>Numeric vector of length 1. The power for the power law noise (defaults are 1 for pink and 1.5 for red noise). Only used when <code>kind = "power"</code>.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Additional arguments to be passed internally to <code><a href="signal_to_noise_ratio.html">signal_to_noise_ratio</a></code>.</p></dd>
 
@@ -117,7 +127,8 @@ the start point of the annotation over which to measure ambient noise.</p></dd>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2</p>
+    <p>Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
+Timmer. J and M. König (1995): On generating power law noise. Astron. Astrophys. 300, 707-710.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

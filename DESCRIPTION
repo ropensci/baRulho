@@ -9,8 +9,8 @@ License: GPL (>= 2)
 Imports: utils, stats, seewave, tuneR, fftw, methods, viridis, Sim.DiffProc, png, checkmate, cli, rlang
 Depends: R (>= 3.2.1), warbleR (>= 1.1.30), ohun (>= 1.0.1)
 LazyData: TRUE
-URL: https://github.com/maRce10/baRulho
-BugReports: https://github.com/maRce10/baRulho/issues
+URL: https://github.com/ropensci/baRulho
+BugReports: https://github.com/ropensci/baRulho/issues
 Suggests:
     rmarkdown,
     ggplot2,

@@ -603,7 +603,7 @@ In case this doesn't work as expected there is another option. The function `sel
 
 ---
 
-Please report any bugs [here](https://github.com/maRce10/baRulho/issues). 
+Please report any bugs [here](https://github.com/ropensci/baRulho/issues). 
 
 The package [baRulho](https://marce10.github.io/baRulho/) should be cited as follows:
 

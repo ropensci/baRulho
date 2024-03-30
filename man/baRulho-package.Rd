@@ -21,8 +21,8 @@ License: GPL (>= 2)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/maRce10/baRulho}
-  \item Report bugs at \url{https://github.com/maRce10/baRulho/issues}
+  \item \url{https://github.com/ropensci/baRulho}
+  \item Report bugs at \url{https://github.com/ropensci/baRulho/issues}
 }
 
 }

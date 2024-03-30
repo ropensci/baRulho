@@ -29,8 +29,8 @@ preferred-citation:
     given-names: M.
   year: '2020'
 repository: https://CRAN.R-project.org/package=baRulho
-repository-code: https://github.com/maRce10/baRulho
-url: https://github.com/maRce10/baRulho
+repository-code: https://github.com/ropensci/baRulho
+url: https://github.com/ropensci/baRulho
 contact:
 - family-names: Araya-Salas
   given-names: Marcelo
@@ -377,7 +377,7 @@ references:
   title: Rraven
   abstract: 'Rraven: Connecting R and ''Raven'' Sound Analysis Software'
   notes: Suggests
-  url: https://github.com/maRce10/Rraven
+  url: https://github.com/ropensci/Rraven
   repository: https://CRAN.R-project.org/package=Rraven
   authors:
   - family-names: Araya-Salas

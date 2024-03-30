@@ -689,7 +689,7 @@ The function can estimate noise profiles for entire sound files, by supplying a 
 
 ---
 
-Please report any bugs [here](https://github.com/maRce10/baRulho/issues). 
+Please report any bugs [here](https://github.com/ropensci/baRulho/issues). 
 
 The package [baRulho](https://marce10.github.io/baRulho/) should be cited as follows:
 

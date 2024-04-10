@@ -77,7 +77,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2024-04-09</h4>
+            <h4 data-toc-skip class="date">2024-04-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/HEAD/vignettes/align_test_sounds.Rmd" class="external-link"><code>vignettes/align_test_sounds.Rmd</code></a></small>
       <div class="d-none name"><code>align_test_sounds.Rmd</code></div>
@@ -572,7 +572,7 @@ tones:</p>
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.15</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The file synthetic_master.wav has been saved in the directory path '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp7Jpn8G'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The file synthetic_master.wav has been saved in the directory path '/private/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T/RtmpJaVi58'</span></span></span></code></pre>
 <p> </p>
 <p>The function saves the master sound file as a wave file and returns a
 selection table in the R environment with the time and frequency
@@ -635,7 +635,7 @@ example data and recordings from the package <a href="https://cran.r-project.org
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.3</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The file example_master.wav has been saved in the directory path '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp7Jpn8G'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The file example_master.wav has been saved in the directory path '/private/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T/RtmpJaVi58'</span></span></span></code></pre>
 <p> </p>
 <p>Again, we can look at the spectrogram of the output file:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -1550,14 +1550,14 @@ files. The spectrograms are saved as individual JPEG image files (in
 <span>  duration <span class="op">=</span> <span class="fl">2.4</span>,</span>
 <span>  ovlp <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T/Rtmp7Jpn8G'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T/RtmpJaVi58'</span></span></span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aligned_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp7Jpn8G/plot_align_10m_closed.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp7Jpn8G/plot_align_10m_open.jpeg"  </span></span>
-<span><span class="co">## [3] "/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp7Jpn8G/plot_align_1m_open.jpeg"   </span></span>
-<span><span class="co">## [4] "/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp7Jpn8G/plot_align_30m_closed.jpeg"</span></span>
-<span><span class="co">## [5] "/var/folders/24/8k48jl6d249_n_qfxwsl6xvm0000gn/T//Rtmp7Jpn8G/plot_align_30m_open.jpeg"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_10m_closed.jpeg"</span></span>
+<span><span class="co">## [2] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_10m_open.jpeg"  </span></span>
+<span><span class="co">## [3] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_1m_open.jpeg"   </span></span>
+<span><span class="co">## [4] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_30m_closed.jpeg"</span></span>
+<span><span class="co">## [5] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_30m_open.jpeg"</span></span></code></pre>
 <p>These are two of the files generated by the code above:</p>
 <p><img src="plot_align_10m_closed.jpeg" width="100%" style="display: block; margin: auto;"><img src="plot_align_30m_closed.jpeg" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>

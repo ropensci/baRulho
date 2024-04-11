@@ -23,7 +23,7 @@
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">baRulho</a>
 
@@ -77,7 +77,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2024-04-10</h4>
+            <h4 data-toc-skip class="date">2024-04-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/maRce10/baRulho/blob/HEAD/vignettes/align_test_sounds.Rmd" class="external-link"><code>vignettes/align_test_sounds.Rmd</code></a></small>
       <div class="d-none name"><code>align_test_sounds.Rmd</code></div>
@@ -572,7 +572,7 @@ tones:</p>
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.15</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The file synthetic_master.wav has been saved in the directory path '/private/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T/RtmpJaVi58'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The file synthetic_master.wav has been saved in the directory path '/private/var/folders/n2/pt_35rc53tdgkld9531s2tfh0000gn/T/Rtmp6aMonf'</span></span></span></code></pre>
 <p> </p>
 <p>The function saves the master sound file as a wave file and returns a
 selection table in the R environment with the time and frequency
@@ -635,7 +635,7 @@ example data and recordings from the package <a href="https://cran.r-project.org
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.3</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The file example_master.wav has been saved in the directory path '/private/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T/RtmpJaVi58'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The file example_master.wav has been saved in the directory path '/private/var/folders/n2/pt_35rc53tdgkld9531s2tfh0000gn/T/Rtmp6aMonf'</span></span></span></code></pre>
 <p> </p>
 <p>Again, we can look at the spectrogram of the output file:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -1550,14 +1550,14 @@ files. The spectrograms are saved as individual JPEG image files (in
 <span>  duration <span class="op">=</span> <span class="fl">2.4</span>,</span>
 <span>  ovlp <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T/RtmpJaVi58'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/n2/pt_35rc53tdgkld9531s2tfh0000gn/T/Rtmp6aMonf'</span></span></span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aligned_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_10m_closed.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_10m_open.jpeg"  </span></span>
-<span><span class="co">## [3] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_1m_open.jpeg"   </span></span>
-<span><span class="co">## [4] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_30m_closed.jpeg"</span></span>
-<span><span class="co">## [5] "/var/folders/8_/r1lvzqc55v10qydntqm5c3j00000gn/T//RtmpJaVi58/plot_align_30m_open.jpeg"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/var/folders/n2/pt_35rc53tdgkld9531s2tfh0000gn/T//Rtmp6aMonf/plot_align_10m_closed.jpeg"</span></span>
+<span><span class="co">## [2] "/var/folders/n2/pt_35rc53tdgkld9531s2tfh0000gn/T//Rtmp6aMonf/plot_align_10m_open.jpeg"  </span></span>
+<span><span class="co">## [3] "/var/folders/n2/pt_35rc53tdgkld9531s2tfh0000gn/T//Rtmp6aMonf/plot_align_1m_open.jpeg"   </span></span>
+<span><span class="co">## [4] "/var/folders/n2/pt_35rc53tdgkld9531s2tfh0000gn/T//Rtmp6aMonf/plot_align_30m_closed.jpeg"</span></span>
+<span><span class="co">## [5] "/var/folders/n2/pt_35rc53tdgkld9531s2tfh0000gn/T//Rtmp6aMonf/plot_align_30m_open.jpeg"</span></span></code></pre>
 <p>These are two of the files generated by the code above:</p>
 <p><img src="plot_align_10m_closed.jpeg" width="100%" style="display: block; margin: auto;"><img src="plot_align_30m_closed.jpeg" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -1717,7 +1717,7 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <span><span class="co">## [17] desc_1.4.3         lifecycle_1.0.4    stringr_1.5.1      compiler_4.3.3    </span></span>
 <span><span class="co">## [21] textshaping_0.3.7  brio_1.1.4         munsell_0.5.1      htmltools_0.5.8.1 </span></span>
 <span><span class="co">## [25] class_7.3-22       sass_0.4.9         RCurl_1.98-1.14    yaml_2.3.8        </span></span>
-<span><span class="co">## [29] pillar_1.9.0       pkgdown_2.0.7      jquerylib_0.1.4    MASS_7.3-60.0.1   </span></span>
+<span><span class="co">## [29] pillar_1.9.0       pkgdown_2.0.8      jquerylib_0.1.4    MASS_7.3-60.0.1   </span></span>
 <span><span class="co">## [33] classInt_0.4-10    cachem_1.0.8       Deriv_4.1.3        digest_0.6.35     </span></span>
 <span><span class="co">## [37] stringi_1.8.3      sf_1.0-16          purrr_1.0.2        fastmap_1.1.1     </span></span>
 <span><span class="co">## [41] grid_4.3.3         colorspace_2.1-0   cli_3.6.2          magrittr_2.0.3    </span></span>
@@ -1743,7 +1743,7 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer>

@@ -1,15 +1,14 @@
 Package: baRulho
 Type: Package
 Title: Quantifying (Animal) Sound Degradation  
-Version: 2.1.0
-Author: Marcelo Araya-Salas [aut, cre]
+Version: 2.1.1
 Maintainer: Marcelo Araya-Salas <marcelo.araya@ucr.ac.cr>
 Description: Intended to facilitate acoustic analysis of (animal) sound transmission experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. The package offers a workflow with functions to prepare the data set for analysis as well as to calculate and visualize several degradation metrics, including blur ratio, signal-to-noise ratio, excess attenuation and envelope correlation among others (Dabelsteen et al 1993 <doi:10.1121/1.406682>).
 License: GPL (>= 2)
 Imports: utils, stats, seewave, tuneR, fftw, methods, viridis, Sim.DiffProc, png, checkmate, cli, rlang
 Depends: R (>= 3.2.1), warbleR (>= 1.1.30), ohun (>= 1.0.1)
 LazyData: TRUE
-URL: https://github.com/ropensci/baRulho
+URL: https://github.com/ropensci/baRulho, https://docs.ropensci.org/baRulho/
 BugReports: https://github.com/ropensci/baRulho/issues
 Suggests:
     rmarkdown,
@@ -19,11 +18,26 @@ Suggests:
     testthat (>= 3.0.0),
     covr,
     formatR,
-    Rraven
+    Rraven,
+    monitoR
 VignetteBuilder: knitr
 RoxygenNote: 7.3.1
 Repository: CRANs
 Language: en-US
-Authors@R: person("Marcelo", "Araya-Salas", role = c("aut", "cre"), email = "marcelo.araya@ucr.ac.cr")
+Authors@R: 
+    c(person("Marcelo", "Araya-Salas", 
+      role = c("aut", "cre"), 
+      email = "marcelo.araya@ucr.ac.cr", 
+      comment = c(ORCID = "0000-0003-3594-619X")),
+      person(given = "Michael",
+      family = "Mahoney",
+      role = "rev",
+      email = "mike.mahoney.218@gmail.com",
+      comment = c(ORCID = "0000-0003-2402-304X")),
+       person(given = "Dena",
+      family = "Clink",
+      role = "rev",
+      email = "dena.clink@cornell.edu",
+      comment = c(ORCID = "0000-0003-0363-5581")))  
 Config/testthat/edition: 3
 Encoding: UTF-8

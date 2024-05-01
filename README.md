@@ -13,8 +13,6 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 [![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
-[![packageversion](https://img.shields.io/badge/Package%20version-2.1.0-orange.svg?style=flat-square)](commits/develop)
-[![Last-changedate](https://img.shields.io/badge/last%20change-2024--03--05-yellowgreen.svg)](/commits/master)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
@@ -52,7 +50,7 @@ functions that can be used at those steps.*
 
  
 
-[baRulho](https://marce10.github.io/baRulho/) offers functions for
+[baRulho](https://docs.ropensci.org/baRulho//) offers functions for
 critical steps in this workflow (those in black, including ‘checks’)
 that required acoustic data manipulation and analysis.
 
@@ -68,7 +66,7 @@ The main features of the package are:
 - The use of parallelization to distribute tasks among several cores to
   improve computational efficiency
 
-[baRulho](https://marce10.github.io/baRulho/) builds upon functions and
+[baRulho](https://docs.ropensci.org/baRulho//) builds upon functions and
 data formats from the
 [warbleR](https://cran.r-project.org/package=warbleR) and
 [seewave](https://cran.r-project.org/package=seewave) packages, so some
@@ -78,9 +76,9 @@ Take a look at the vignettes for an overview of the main features of the
 packages:
 
 - [Align test
-  sounds](https://marce10.github.io/baRulho/articles/align_test_sounds.html)
+  sounds](https://docs.ropensci.org/baRulho//articles/align_test_sounds.html)
 - [Quantify
-  degradation](https://marce10.github.io/baRulho/articles/quantify_degradation.html)
+  degradation](https://docs.ropensci.org/baRulho//articles/quantify_degradation.html)
 
 ## Installing baRulho
 
@@ -94,11 +92,27 @@ Install/load the package from CRAN as follows:
 library(baRulho)
 ```
 
+It can also be install from
+[R-Universe](https://ropensci.org/blog/2021/06/22/setup-runiverse/) in
+this way:
+
+``` r
+install.packages("baRulho", repos = "https://ropensci.r-universe.dev")
+```
+
+    ## Installing package into '/home/m/R/x86_64-pc-linux-gnu-library/4.1'
+    ## (as 'lib' is unspecified)
+
 To install the latest developmental version from
 [github](https://github.com/) you will need the R package
 [remotes](https://cran.r-project.org/package=remotes):
 
 ``` r
+# install remotes if not installed
+if (!requireNamespace("remotes")) {
+  install.packages("remotes")
+}
+
 # From github
 remotes::install_github("ropensci/baRulho")
 
@@ -120,7 +134,7 @@ work on wave objects already imported into the R environment. The
 package [warbleR](https://cran.r-project.org/package=warbleR) provides
 functions to visualize and measure sounds already referenced in
 annotation tables, similar to
-[baRulho](https://marce10.github.io/baRulho/). The package
+[baRulho](https://docs.ropensci.org/baRulho//). The package
 [Rraven](https://cran.r-project.org/package=Rraven) facilitates the
 exchange of data between R and [Raven sound analysis
 software](https://www.ravensoundsoftware.com/) ([Cornell Lab of
@@ -133,7 +147,7 @@ routines.
 
 ## Citation
 
-Please cite [baRulho](https://marce10.github.io/baRulho/) as follows:
+Please cite [baRulho](https://docs.ropensci.org/baRulho//) as follows:
 
 Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal)
 acoustic signals in R*. R package version 1.0.0.

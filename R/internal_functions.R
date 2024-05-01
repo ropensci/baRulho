@@ -182,7 +182,7 @@
   function(libname, pkgname) {
     packageStartupMessage("\nPlease cite 'baRulho' as: \n")
     packageStartupMessage(
-      "Araya-Salas, M. (2020), baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.0"
+      "Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), baRulho: an R package to quantify degradation in animal acoustic signals .bioRxiv 2023.11.22.568305."
     )
     
     invisible(TRUE)

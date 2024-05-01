@@ -1,3 +1,9 @@
+baRulho 2.1.1
+=========================
+
+* Update requested by CRAN to fix package reference issue. No changes in the code.
+
+
 baRulho 2.1.0
 =========================
 

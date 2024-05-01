@@ -2,38 +2,26 @@
 title: Quantify degradation
 pagetitle: baRulho quantifying sound degradation
 author: 
-- <a href="https://marceloarayasalas.weebly.com">Marcelo Araya-Salas, PhD</a>
+- <a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a>
 date:  "`r Sys.Date()`"
 output:
-  rmarkdown::html_document:
+  # rmarkdown::html_document:
+  rmarkdown::html_vignette:
     self_contained: yes
     toc: true
     toc_depth: 3
-    toc_float:
-      collapsed: true
-      smooth_scroll: true
-vignette: >
-  \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Quantify degradation}
-  %\VignetteDepends{viridis}
-  %\VignetteDepends{ggplot2}
-  %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
+vignette: >
+   %\VignetteIndexEntry{2. Quantify degradation}
+   %\usepackage[utf8]{inputenc}
+   %\VignetteEncoding{UTF-8}
+   %\VignetteDepends{Rraven}
+   %\VignetteDepends{viridis}   
+   %\VignetteEngine{knitr::rmarkdown}     
+params:
+  EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")    
 ---
-
-<!-- <script> -->
-<!--    $(document).ready(function() { -->
-<!--      $head = $('#header'); -->
-<!--      $head.prepend('<img src=\"logo.png\"/>') -->
-<!--    }); -->
-<!-- </script> -->
-
-<!-- &nbsp;  -->
-
-
-<!-- <center>![warbleR logo](logo.png)</center> -->
-</center>
 
 &nbsp; 
 
@@ -66,15 +54,21 @@ library(knitr)
   
   
   kbl <-
-    kableExtra::scroll_box(kbl, width = "800px", height = height)
+    kableExtra::scroll_box(kbl, width = "100%", height = height)
   
   asis_output(kbl)
 }
 
-
-opts_chunk$set(fig.align = "center",
-               message = FALSE,
-               warning = FALSE)
+# global option chunks
+knitr::opts_chunk$set(
+  dpi = 70,
+  fig.width = 8,
+  fig.height = 4,
+  out.width = "100%",
+  fig.align = "center",
+  message = TRUE,
+  warning = TRUE
+)
 
 ```
 
@@ -99,7 +93,7 @@ opts_chunk$set(fig.align = "center",
 ## Required data structure
 
  
-Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. Hence, the data must indicate, besides the basic acoustic annotation information (e.g. sound file, time, frequency), the transect and distance within that transect for each sound. [baRulho](https://marce10.github.io/baRulho/) comes with an example annotation data set that can be used to show the required data structure:
+Transmission experiments tend to follow a common experimental design in which model sounds are re-recorded at increasing distance within a transect. Hence, the data must indicate, besides the basic acoustic annotation information (e.g. sound file, time, frequency), the transect and distance within that transect for each sound. [baRulho](https://docs.ropensci.org/baRulho//) comes with an example annotation data set that can be used to show the required data structure:
 
 ```{r,eval=FALSE}
 
@@ -114,7 +108,7 @@ data("test_sounds_est")
 test_sounds_est
 ```
 
-```{r, eval = TRUE, echo = FALSE}
+```{r, eval = TRUE, echo = FALSE, message=FALSE}
 
 # load packages
 library(baRulho)
@@ -194,7 +188,7 @@ The last 2 are annotation specific R classes included in [warbleR](https://marce
 
 As mention above, the function `set_reference_sounds()` is used to determined, for each row in the input data, which sounds would be used as references. The function can do this using any of the two methods described above:
 
-```{r}
+```{r, eval = FALSE}
 
 # add reference column
 test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
@@ -204,6 +198,9 @@ test_sounds_est
 ```
 
 ```{r, echo = FALSE}
+
+# add reference column
+test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
 
 .print_df(test_sounds_est, highlight = c("reference"))
 
@@ -691,7 +688,7 @@ The function can estimate noise profiles for entire sound files, by supplying a 
 
 Please report any bugs [here](https://github.com/ropensci/baRulho/issues). 
 
-The package [baRulho](https://marce10.github.io/baRulho/) should be cited as follows:
+The package [baRulho](https://docs.ropensci.org/baRulho//) should be cited as follows:
 
 Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0.
 

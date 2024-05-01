@@ -71,7 +71,7 @@ The function aligns sounds found in re-recorded sound files (referenced in 'Y') 
 }
 \references{
 {
-Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
+Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), baRulho: an R package to quantify degradation in animal acoustic signals .bioRxiv 2023.11.22.568305.
 }
 }
 \seealso{

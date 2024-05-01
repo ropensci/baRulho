@@ -22,6 +22,7 @@ License: GPL (>= 2)
 Useful links:
 \itemize{
   \item \url{https://github.com/ropensci/baRulho}
+  \item \url{https://docs.ropensci.org/baRulho/}
   \item Report bugs at \url{https://github.com/ropensci/baRulho/issues}
 }
 

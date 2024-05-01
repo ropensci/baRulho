@@ -1,9 +1,10 @@
 citHeader("Please cite 'baRulho' as follows:")
 
-citEntry(entry = "MISC",
-        title = "baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R",
-        author = personList(as.person("M. Araya-Salas")),
-        year = "2020",
-        textVersion = "Araya-Salas, M. (2020), baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R. R package version 1.0.0"
+bibentry(bibtype = "Article", 
+         journal = "bioRxiv",
+         title = "baRulho: quantifying habitat-induced degradation of (animal) acoustic signals in R",
+        author = c(as.person("M. Araya-Salas"), as.person("Erin E. Grabarczyk"), as.person("Marcos Quiroz-Oliva"), as.person("Adrian Garcia-Rodriguez"), as.person("Alejandro Rico-Guevara")),
+        year = "2023",
+        textVersion = "Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), baRulho: an R package to quantify degradation in animal acoustic signals .bioRxiv 2023.11.22.568305."
 )
 

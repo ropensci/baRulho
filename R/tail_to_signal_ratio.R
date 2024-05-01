@@ -41,7 +41,7 @@
 #' @family quantify degradation
 #' @seealso \code{\link{excess_attenuation}}
 #' @references {
-#' Araya-Salas, M. (2020). baRulho: baRulho: quantifying degradation of (animal) acoustic signals in R. R package version 1.0.2
+#' Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), baRulho: an R package to quantify degradation in animal acoustic signals .bioRxiv 2023.11.22.568305.
 #'
 #' Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
 #'
@@ -199,7 +199,7 @@ tail_to_signal_ratio <- function(X,
         if (sig_RMS == 0)
           sig_RMS <- 0.0001
         
-        # get reference ambient noise RMS
+        # get tail RMS
         tail_RMS <- seewave::rms(tail.env)
         
         # convert to 0.0001 if tail_RMS is 0 to avoid errors in STR measurements

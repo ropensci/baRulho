@@ -2,24 +2,25 @@
 title: Synthesize and align test sounds
 pagetitle: baRulho quantifying sound degradation
 author: 
-- <a href="https://marce10.github.io">Marcelo Araya-Salas, PhD</a>
+- <a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a>
 date:  "`r Sys.Date()`"
 output:
-  rmarkdown::html_document:
+  # rmarkdown::html_document:
+  rmarkdown::html_vignette:
     self_contained: yes
     toc: true
     toc_depth: 3
-    toc_float:
-      collapsed: true
-      smooth_scroll: true
 vignette: >
-  \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Synthesize and align test sounds}
-  %\VignetteDepends{Rraven}
-  %\VignetteDepends{viridis}
-  %\VignetteEngine{knitr::rmarkdown}
+   %\VignetteIndexEntry{1. Synthesize and align test sounds}
+   %\usepackage[utf8]{inputenc}
+   %\VignetteEncoding{UTF-8}
+   %\VignetteDepends{Rraven}
+   %\VignetteDepends{viridis}   
+   %\VignetteEngine{knitr::rmarkdown}     
 editor_options: 
   chunk_output_type: console
+params:
+  EVAL: !r identical(Sys.getenv("NOT_CRAN"), "true")
 ---
 
 &nbsp; 
@@ -31,8 +32,7 @@ library(knitr)
 # create custom printing method
 .print_df <- function(x, highlight = NULL, ...) {
   kbl <- kableExtra::kable(
-    head(as.data.frame(x))
-    ,
+    head(as.data.frame(x)),
     align = "c",
     row.names = F,
     format = "html",
@@ -47,7 +47,7 @@ library(knitr)
 
   
   kbl <-
-    kableExtra::scroll_box(kbl, width = "800px", height = "300px")
+    kableExtra::scroll_box(kbl, width = "100%", height = "300px")
   
   asis_output(kbl)
 }
@@ -56,13 +56,15 @@ library(knitr)
 registerS3method("knit_print", "data.frame", .print_df)
 
 # global option chunks
-knitr::opts_chunk$set(dpi = 70,
-                      fig.width = 8,
-                      fig.height = 6)
-
-opts_chunk$set(fig.align = "center",
-               message = TRUE,
-               warning = TRUE)
+knitr::opts_chunk$set(
+  dpi = 70,
+  fig.width = 8,
+  fig.height = 4,
+  out.width = "100%",
+  fig.align = "center",
+  message = TRUE,
+  warning = TRUE
+)
 
 ```
 
@@ -107,7 +109,7 @@ For instance, Tobias et al (2010) studied whether acoustic adaptation (a special
 We can synthesize the same pure tones using the function `synth_sounds()`. The function requires 1) the frequencies of tones to synthesize (argument `frequencies`, in kHz) and 2) the duration of the tones (`durations`, in seconds). In addition, logical arguments `fm` and `am` allow to create frequency and amplitude modulated sounds respectively. In our case we need six tones of 100 ms at 0.5, 1, 2, 3, 4, and 5 kHz separated by intervals of 150 ms (at least for the first synthetic file described in Tobias et al 2010). We can also get a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR)) with the information about the time and frequency location of every sound. This would be required in order to make the master sound file. To get the selection table we need to set the argument `selec.table = TRUE`. This can be done as follows:
 
 
-```{r, eval = TRUE, fig.height=5, dpi=120, message=FALSE, warning=FALSE}
+```{r, eval = TRUE}
 
 # load packages
 library(viridis)
@@ -136,10 +138,9 @@ seewave::spectro(
   scale = FALSE,
   palette = viridis,
   grid = FALSE,
-  flim = c(0, 5.5),
   collevels = seq(-20, 0, 1),
   osc = TRUE,
-  colwave = "#482878FF",
+  colwave = "#31688EB3",
   heights = c(2, 1),
   wl = 100
 )
@@ -150,12 +151,12 @@ seewave::spectro(
 
 The function can add complexity to additional acoustic dimensions. For instance the following code generates all possible combinations of frequencies (2, 3 and 4 kHz), durations (0.1, and 0.2 s), frequency modulation (tonal and modulated) and amplitude modulation (flat and modulated envelope):
 
-```{r, eval = TRUE, echo = TRUE, fig.height=5, dpi=120, message=FALSE, warning=FALSE}
+```{r, eval = TRUE, echo = TRUE}
 
 # synthesize
 synth_est2 <- baRulho::synth_sounds(
   mar = 0.01,
-  sig2 = 0.5,
+  sig2 = 0.05,
   frequencies = 2:4,
   durations = c(0.1, 0.2),
   fm = TRUE,
@@ -176,14 +177,13 @@ synth_wav2 <- Rraven::exp_est(
 # plot spectro
 seewave::spectro(
   synth_wav2,
-  tlim = c(0, 3),
+  tlim = c(0, 2),
   scale = FALSE,
   palette = viridis,
   grid = FALSE,
-  flim = c(0.5, 5.5),
   collevels = seq(-20, 0, 1),
   osc = TRUE,
-  colwave = "#482878FF",
+  colwave = "#31688EB3",
   heights = c(2, 1),
   wl = 140
 )
@@ -231,7 +231,7 @@ synth_master_annotations <- baRulho::master_sound_file(
 
 The function saves the master sound file as a wave file and returns a selection table in the R environment with the time and frequency 'coordinates' of the sounds in that file (be careful when playing the master sound file as it can be shocking for some audiences!). We can look at the spectrogram of the output file using the [seewave](https://cran.r-project.org/package=seewave) function `spectro()` as follows:
 
-```{r spectro master 1, eval = TRUE, fig.height=4, out.width="100%"}
+```{r spectro master 1, eval = TRUE}
 
 # read wave file
 wave <-
@@ -294,7 +294,7 @@ master_annotations <- baRulho::master_sound_file(
 
 Again, we can look at the spectrogram of the output file:
 
-```{r spectro master 2, eval = TRUE, fig.height=4, out.width="100%"}
+```{r spectro master 2, eval = TRUE}
 
 # read wave file
 wave <-
@@ -327,7 +327,9 @@ Rraven::exp_raven(master_annotations, path = tempdir(),
 
 Both sound files and annotations can be visualized in Raven ( acoustic analysis software):
 
- <img src="example_master_table.jpg" alt="Raven view">
+```{r}
+knitr::include_graphics("example_master_table.jpg")
+```
 
 &nbsp;
 
@@ -485,7 +487,7 @@ fc <- file.copy(from = aligned_imgs[c(1, 4)],
 
 These are two of the files generated by the code above:
 
-```{r, echo=FALSE, out.width="100%"}
+```{r, echo=FALSE}
 
 knitr::include_graphics(basename(aligned_imgs[1]))
 
@@ -510,7 +512,7 @@ baRulho::manual_realign(
 
 ```
 
-```{r, eval = TRUE, echo=FALSE, out.width="100%", fig.align='center'}
+```{r, eval = TRUE, echo=FALSE}
 
 knitr::include_graphics("manual_realign.gif")
 
@@ -522,7 +524,7 @@ Spectrograms include the first few seconds of the sound files (controlled by 'du
 
 ## Further aligning
 
-When alignments are done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded sounds. This is problematic for quantifying degradation in [baRulho](https://marce10.github.io/baRulho/) (and other sound analysis software) as precise alignment of sound is crucial for the accuracy of downstream measures of sound degradation. 
+When alignments are done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded sounds. This is problematic for quantifying degradation in [baRulho](https://docs.ropensci.org/baRulho//) (and other sound analysis software) as precise alignment of sound is crucial for the accuracy of downstream measures of sound degradation. 
 
 Misalignment can be fixed with the function `auto_realign()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `manual_realign()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation. 
 We can simulate a aligned data set in which test sound are slightly off their position: 
@@ -605,7 +607,7 @@ In case this doesn't work as expected there is another option. The function `sel
 
 Please report any bugs [here](https://github.com/ropensci/baRulho/issues). 
 
-The package [baRulho](https://marce10.github.io/baRulho/) should be cited as follows:
+The package [baRulho](https://docs.ropensci.org/baRulho//) should be cited as follows:
 
 Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0.
 

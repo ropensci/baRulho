@@ -5,8 +5,8 @@ author:
 - <a href="https://marce10.github.io/">Marcelo Araya-Salas, PhD</a>
 date:  "`r Sys.Date()`"
 output:
-  # rmarkdown::html_document:
-  rmarkdown::html_vignette:
+  rmarkdown::html_document:
+  # rmarkdown::html_vignette:
     self_contained: yes
     toc: true
     toc_depth: 3

@@ -76,7 +76,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2024-05-23</h4>
+            <h4 data-toc-skip class="date">2024-05-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/HEAD/vignettes/quantify_degradation.Rmd" class="external-link"><code>vignettes/quantify_degradation.Rmd</code></a></small>
       <div class="d-none name"><code>quantify_degradation.Rmd</code></div>
@@ -1972,12 +1972,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T/RtmpGv6U7z'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T/RtmpCDpdSp'</span></span></span></code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpGv6U7z/plot_degradation_p1.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpGv6U7z/plot_degradation_p2.jpeg"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpCDpdSp/plot_degradation_p1.jpeg"</span></span>
+<span><span class="co">## [2] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpCDpdSp/plot_degradation_p2.jpeg"</span></span></code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2944,16 +2944,16 @@ functions (PMF)).</p>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## Computing amplitude envelopes (step 1 out of 2):</span></span>
 <span><span class="co">## Producing images (step 2 out of 2):</span></span></code></pre>
-<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T/RtmpGv6U7z'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T/RtmpCDpdSp'</span></span></span></code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpGv6U7z/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpGv6U7z/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [3] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpGv6U7z/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [4] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpGv6U7z/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [5] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpGv6U7z/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
-<span><span class="co">## [6] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpGv6U7z/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpCDpdSp/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
+<span><span class="co">## [2] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpCDpdSp/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
+<span><span class="co">## [3] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpCDpdSp/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
+<span><span class="co">## [4] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpCDpdSp/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
+<span><span class="co">## [5] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpCDpdSp/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
+<span><span class="co">## [6] "/var/folders/2f/8t5k6yr535sdw0s4glnpxrzm0000gn/T//RtmpCDpdSp/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
 <p>Output image files (in the working directory) look like these
 ones:</p>
 <center>
@@ -10041,7 +10041,7 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <span><span class="co">## [37] stringi_1.8.4      sf_1.0-16          purrr_1.0.2        labeling_0.4.3    </span></span>
 <span><span class="co">## [41] fastmap_1.2.0      grid_4.4.0         colorspace_2.1-0   cli_3.6.2         </span></span>
 <span><span class="co">## [45] magrittr_2.0.3     utf8_1.2.4         e1071_1.7-14       withr_3.0.0       </span></span>
-<span><span class="co">## [49] scales_1.3.0       backports_1.4.1    rmarkdown_2.27     Sim.DiffProc_4.9  </span></span>
+<span><span class="co">## [49] scales_1.3.0       backports_1.5.0    rmarkdown_2.27     Sim.DiffProc_4.9  </span></span>
 <span><span class="co">## [53] signal_1.8-0       igraph_2.0.3       gridExtra_2.3      png_0.1-8         </span></span>
 <span><span class="co">## [57] ragg_1.3.2         kableExtra_1.4.0   memoise_2.0.1      pbapply_1.7-2     </span></span>
 <span><span class="co">## [61] evaluate_0.23      dtw_1.23-1         fftw_1.0-8         testthat_3.2.1.1  </span></span>

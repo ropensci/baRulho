@@ -76,7 +76,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2024-06-02</h4>
+            <h4 data-toc-skip class="date">2024-06-03</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/HEAD/vignettes/align_test_sounds.Rmd" class="external-link"><code>vignettes/align_test_sounds.Rmd</code></a></small>
       <div class="d-none name"><code>align_test_sounds.Rmd</code></div>
@@ -588,7 +588,7 @@ tones:</p>
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.15</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The file synthetic_master.wav has been saved in the directory path '/private/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T/RtmpUwBGB7'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The file synthetic_master.wav has been saved in the directory path '/private/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T/RtmpbyAt4U'</span></span></span></code></pre>
 <p> </p>
 <p>The function saves the master sound file as a wave file and returns a
 selection table in the R environment with the time and frequency
@@ -651,7 +651,7 @@ example data and recordings from the package <a href="https://cran.r-project.org
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.3</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The file example_master.wav has been saved in the directory path '/private/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T/RtmpUwBGB7'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The file example_master.wav has been saved in the directory path '/private/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T/RtmpbyAt4U'</span></span></span></code></pre>
 <p> </p>
 <p>Again, we can look at the spectrogram of the output file:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
@@ -1568,14 +1568,14 @@ files. The spectrograms are saved as individual JPEG image files (in
 <span>  duration <span class="op">=</span> <span class="fl">2.4</span>,</span>
 <span>  ovlp <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T/RtmpUwBGB7'</span></span></span></code></pre>
+<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T/RtmpbyAt4U'</span></span></span></code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aligned_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpUwBGB7/plot_align_10m_closed.jpeg"</span></span>
-<span><span class="co">## [2] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpUwBGB7/plot_align_10m_open.jpeg"  </span></span>
-<span><span class="co">## [3] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpUwBGB7/plot_align_1m_open.jpeg"   </span></span>
-<span><span class="co">## [4] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpUwBGB7/plot_align_30m_closed.jpeg"</span></span>
-<span><span class="co">## [5] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpUwBGB7/plot_align_30m_open.jpeg"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpbyAt4U/plot_align_10m_closed.jpeg"</span></span>
+<span><span class="co">## [2] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpbyAt4U/plot_align_10m_open.jpeg"  </span></span>
+<span><span class="co">## [3] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpbyAt4U/plot_align_1m_open.jpeg"   </span></span>
+<span><span class="co">## [4] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpbyAt4U/plot_align_30m_closed.jpeg"</span></span>
+<span><span class="co">## [5] "/var/folders/lr/439_fwvd3m76p9vy50d57kcc0000gn/T//RtmpbyAt4U/plot_align_30m_open.jpeg"</span></span></code></pre>
 <p>These are two of the files generated by the code above:</p>
 <p><img src="plot_align_10m_closed.jpeg" width="100%" style="display: block; margin: auto;"><img src="plot_align_30m_closed.jpeg" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -1744,7 +1744,7 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <span><span class="co">## [53] gridExtra_2.3      png_0.1-8          ragg_1.3.2         kableExtra_1.4.0  </span></span>
 <span><span class="co">## [57] memoise_2.0.1      pbapply_1.7-2      evaluate_0.23      dtw_1.23-1        </span></span>
 <span><span class="co">## [61] fftw_1.0-8         testthat_3.2.1.1   rlang_1.1.3        Rcpp_1.0.12       </span></span>
-<span><span class="co">## [65] glue_1.7.0         DBI_1.2.2          xml2_1.3.6         svglite_2.1.3     </span></span>
+<span><span class="co">## [65] glue_1.7.0         DBI_1.2.3          xml2_1.3.6         svglite_2.1.3     </span></span>
 <span><span class="co">## [69] rstudioapi_0.16.0  jsonlite_1.8.8     R6_2.5.1           systemfonts_1.1.0 </span></span>
 <span><span class="co">## [73] fs_1.6.4           units_0.8-5</span></span></code></pre>
 </div>

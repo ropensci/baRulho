@@ -128,9 +128,11 @@ synth_sounds <-
     
     # simulate songs
     sim.songs <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         seq_len(nrow(eg)),
         pbar = pb,
+        message = "synthesizing sounds",
+        total = 1,
         FUN = .sim_song,
         temp_dir = temp_dir,
         eg = eg,
@@ -171,12 +173,11 @@ synth_sounds <-
     
     # make a single extended selection table for simulation
     sim_sounds_est <-
-      selection_table(
+      warbleR::selection_table(
         mar = mar,
         X = sim.song.st,
         extended = TRUE,
         pb = FALSE,
-        confirm.extended = FALSE,
         path = temp_dir,
         verbose = FALSE
       )

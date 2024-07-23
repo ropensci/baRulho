@@ -188,11 +188,14 @@ plot_degradation <-
     }
     
     file_paths <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         X = sort(unique(soundid_X$page)),
         pbar = pb,
         cl = cl,
-        FUN = .plot_degrad,
+        message = "plotting degradation",
+        current = 1,
+        total = 1,
+        FUN = function(x) .plot_degrad(x, 
         X,
         soundid_X,
         flim,
@@ -214,9 +217,7 @@ plot_degradation <-
         ovlp,
         collevels, 
         env.smooth,
-        palette,
-        ...
-      )
+        palette))
     
     # message to let know users where the files have been saved
     .message(

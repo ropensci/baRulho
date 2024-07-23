@@ -44,7 +44,7 @@ The function aligns sounds found in re-recorded sound files (referenced in 'Y') 
 \examples{
 {
   # load example data
-  data("master_est")
+  data(list = c("master_est", "test_sounds_est"))
 
   # save example files in working director to recreate a case in which working
   # with sound files instead of extended selection tables.

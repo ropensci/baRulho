@@ -273,7 +273,6 @@ writeWave(Phae.long4, file.path(tempdir(), "Phae.long4.wav"))
 est <- warbleR::selection_table(
   X = lbh_selec_table,
   extended = TRUE,
-  confirm.extended = FALSE,
   path = tempdir(),
   pb = FALSE
 )

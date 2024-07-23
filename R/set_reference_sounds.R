@@ -12,7 +12,7 @@
 #' @return An object similar to 'X' with one additional column, 'reference', with the ID of the sounds to be used as reference by degradation-quantifying functions in downstream analyses. The ID is created as \code{paste(X$sound.files, X$selec, sep = "-")}. 
 #' @export
 #' @family quantify degradation
-#' @seealso \code{\link[warbleR]{check_wavs}}, \code{\link[warbleR]{check_sels}}
+#' @seealso \code{\link[warbleR]{check_sound_files}}, \code{\link[warbleR]{check_sels}}
 #' @export
 #' @name set_reference_sounds
 #' @export
@@ -65,15 +65,15 @@ set_reference_sounds <-
     
     if (!warbleR::is_extended_selection_table(X) & !is_selection_table(X)) {
       # print message
-      if (pb) {
-        write(file = "", x = "Checking annotations (step 1 out of 2):")
+      if (pb)  {
+        warbleR:::.update_progress(total = if (!warbleR::is_extended_selection_table(X) & !is_selection_table(X)) 2 else 1)
       }
+      
       
       X_check <-
         warbleR::check_sels(
           X = X,
           parallel = cores,
-          verbose = FALSE,
           pb = pb,
           fix.selec = FALSE,
           path = path
@@ -101,21 +101,21 @@ set_reference_sounds <-
       
       # add column with names of the reference sounds to be compared against
       if (is.null(X$reference)) {
-        if (pb & !warbleR::is_extended_selection_table(X) & !is_selection_table(X)) {
-          write(file = "", x = "Computing references (step 2 out of 2):")
-        }
         
-        X$reference <-
-          unlist(
-            warbleR:::pblapply_wrblr_int(
+        reference_list <-
+            warbleR:::.pblapply(
               X = X2$.sgnl.temp,
               pbar = pb,
               cl = cl,
+              message = "computing references",
+              current = if (!warbleR::is_extended_selection_table(X) & !is_selection_table(X)) 2 else 1, 
+              total = if (!warbleR::is_extended_selection_table(X) & !is_selection_table(X)) 2 else 1,
               .set_ref,
               meth = method,
               Z = X2
             )
-          )
+          
+        X$reference <- unlist(reference_list)
       }
       
       # remove temp column

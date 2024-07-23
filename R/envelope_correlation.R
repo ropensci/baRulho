@@ -80,16 +80,15 @@ envelope_correlation <-
       cl <- cores
     }
     
-    if (pb) {
-      write(file = "", x = "Computing amplitude envelopes (step 1 out of 2):")
-    }
-    
     # calculate all envelopes apply function
     envs <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = target_sgnl_temp,
         cl = cl,
+        message = "computing amplitude envelopes", 
+        current = 1,
+        total = 2,
         FUN = function(x,
                        ssmth = env.smooth,
                        ovl = ovlp,
@@ -110,16 +109,14 @@ envelope_correlation <-
     # add sound file selec column as names to envelopes
     names(envs) <- target_sgnl_temp
     
-    # set options for loop
-    if (pb) {
-      write(file = "", x = "Computing envelope correlations (step 2 out of 2):")
-    }
-    
     # calculate all envelops apply function
-    X$envelope.correlation <- unlist(warbleR:::pblapply_wrblr_int(
+    envelope_correlation_list <- warbleR:::.pblapply(
       X = seq_len(nrow(X)),
       pbar = pb,
       cl = cl,
+      message = "computing envelope correlations", 
+      current = 2,
+      total = 2,
       FUN =
         function(x,
                  nvs = envs,
@@ -130,7 +127,10 @@ envelope_correlation <-
                    envs = nvs,
                    cor.method = cm)
         }
-    ))
+    )
+    
+    # unlist
+    X$envelope.correlation <- unlist(envelope_correlation_list)
     
     # # remove temporal columns
     X$.sgnl.temp <- NULL

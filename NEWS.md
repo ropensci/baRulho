@@ -1,3 +1,11 @@
+baRulho 2.1.2
+=========================
+
+### MINOR IMPROVEMENTS
+
+* Improved tracking of progress messages when more than 1 progress bar is used by a process
+
+
 baRulho 2.1.1
 =========================
 

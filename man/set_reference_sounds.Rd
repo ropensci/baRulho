@@ -56,7 +56,7 @@ Y <- set_reference_sounds(X = X, method = 2)
 {Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.}
 }
 \seealso{
-\code{\link[warbleR]{check_wavs}}, \code{\link[warbleR]{check_sels}}
+\code{\link[warbleR]{check_sound_files}}, \code{\link[warbleR]{check_sels}}
 
 Other quantify degradation: 
 \code{\link{blur_ratio}()},

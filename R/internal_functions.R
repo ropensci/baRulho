@@ -63,6 +63,7 @@
            pb = getOption("pb", TRUE),
            max.peak = FALSE,
            output = "data.frame") {
+    
     # set clusters for windows OS and no soz
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
@@ -72,10 +73,12 @@
     
     # loop over scores of each dyad
     pks <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = unique(xc.output$scores$dyad),
         cl = cl,
+        message = "finding peaks", 
+        total = 1,
         FUN = function(i) {
           # extract data for a dyad
           dat <- xc.output$scores[xc.output$scores$dyad == i, ]
@@ -2200,7 +2203,7 @@
       
       # read wave
       wave <-
-        read_wave(
+        warbleR::read_sound_file(
           X = X,
           index = indx,
           from = X$start[indx] - X$mar.start[indx],
@@ -2722,7 +2725,7 @@
                           ...) {
   # check duration
   # import sound data
-  master_wave_info <- read_wave(index = 1,
+  master_wave_info <- warbleR::read_sound_file(index = 1,
                                 Y,
                                 header = TRUE,
                                 path = path)
@@ -2762,7 +2765,7 @@
   right_mar <- to - Y$start[Y$sound.id == marker]
   
   # import sound data
-  master_wave <- read_wave(
+  master_wave <- warbleR::read_sound_file(
     Y,
     index = 1,
     from = from,
@@ -3004,7 +3007,7 @@
     to_stp <- W$start[W$sound.id == marker] + omp$right_mar + step_sum
     
     # import sound data
-    wave_info <- read_wave(index = 1,
+    wave_info <- warbleR::read_sound_file(index = 1,
                            W,
                            header = TRUE,
                            path = path)
@@ -3013,7 +3016,7 @@
     wave_dur <- wave_info$samples / wave_info$sample.rate
     
     # read wave
-    wave <- read_wave(
+    wave <- warbleR::read_sound_file(
       W,
       index = 1,
       from = if (from_stp < 0)
@@ -4779,7 +4782,7 @@
                        .var.name = "marker")
   }
   
-  if (fun == "manual_realign" & any(names(args) == "marker")) {
+  if (fun != "manual_realign" & any(names(args) == "marker")) {
     .assert_deprecated(x = args$marker,
                        add = check_collection,
                        .var.name = "marker")

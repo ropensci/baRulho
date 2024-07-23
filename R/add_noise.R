@@ -68,7 +68,7 @@ add_noise <-
     target_rows <- which(!X$sound.id %in% c("ambient", "marker"))
     
     wav_snr_list <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = target_rows,
         cl = cores,

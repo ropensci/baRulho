@@ -91,23 +91,17 @@ plot_blur_ratio <-
     # get names of envelopes involved (those as test with reference or as reference)
     target_sgnl_temp <-
       unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
-    
-    # print message
-    if (pb) {
-      if (type == "envelope") {
-        write(file = "", x = "Computing amplitude envelopes (step 1 out of 2):")
-      } else {
-        write(file = "", x = "Computing power spectra (step 1 out of 2):")
-      }
-    }
-    
+
     # calculate all envelops apply function
     if (type == "envelope") {
       energy_vectors <-
-        warbleR:::pblapply_wrblr_int(
+        warbleR:::.pblapply(
           pbar = pb,
           X = target_sgnl_temp,
           cl = cl,
+          message = if (type == "envelope") "computing amplitude envelopes" else "computing power spectra", 
+          current = 1,
+          total = 2,
           FUN = function(x,
                          ssmth = env.smooth,
                          ovl = ovlp,
@@ -131,10 +125,13 @@ plot_blur_ratio <-
     if (type == "spectrum") {
       # calculate all spectra apply function
       energy_vectors <-
-        warbleR:::pblapply_wrblr_int(
+        warbleR:::.pblapply(
           pbar = pb,
           X = target_sgnl_temp,
           cl = cl,
+          message = if (type == "envelope") "computing amplitude envelopes" else "computing power spectra", 
+          current = 1,
+          total = 2,
           FUN = function(y,
                          ssmth = spec.smooth,
                          wln = wl,
@@ -158,17 +155,15 @@ plot_blur_ratio <-
     # add sound file selec column as names to envelopes
     names(energy_vectors) <- target_sgnl_temp
     
-    # set options to run loops
-    if (pb) {
-      write(file = "", x = "Producing images (step 2 out of 2):")
-    }
-    
     # plot blur ratio
     file_paths <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = which(!is.na(X$.sgnl.temp)),
         cl = cl,
+        message = "producing images", 
+        current = 2,
+        total = 2,
         FUN = function(x,
                        rs = res,
                        en.vctr = energy_vectors,

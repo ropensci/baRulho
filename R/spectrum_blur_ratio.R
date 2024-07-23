@@ -86,12 +86,6 @@ spectrum_blur_ratio <-
     # report errors
     .report_assertions(check_results)
     
-    # total number of steps depending on whether envelopes are returned
-    steps <- if (spectra)
-      3
-    else
-      2
-    
     # get sampling rate
     sampling_rate <-
       warbleR::read_sound_file(
@@ -120,17 +114,15 @@ spectrum_blur_ratio <-
       cl <- cores
     }
     
-    # print message
-    if (pb)
-      write(file = "",
-            x = paste0("Computing power spectra (step 1 out of ", steps, "):"))
-    
     # calculate all spectra apply function
     specs <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = target_sgnl_temp,
         cl = cl,
+        message = "computing power spectra", 
+        current = 1,
+        total = if (spectra) 3 else 2,
         FUN = function(y,
                        ssmth = spec.smooth,
                        wln = wl,
@@ -151,20 +143,16 @@ spectrum_blur_ratio <-
     # add sound file selec names to spectra
     names(specs) <- target_sgnl_temp
     
-    # print second message
-    if (pb)
-      write(
-        file = "",
-        x = paste0("Computing spectrum blur ratio (step 2 out of ", steps, "):")
-      )
-    
     # get blur ratio
     # calculate all spectra apply function
-    X$spectrum.blur.ratio <-
-      unlist(warbleR:::pblapply_wrblr_int(
+    X$spectrum.blur.ratio <- spectrum_blu_ratio_list <- 
+    warbleR:::.pblapply(
         X = seq_len(nrow(X)),
         pbar = pb,
         cl = cl,
+        message = "computing spectrum blur ratio", 
+        current = 2, 
+        total = if (spectra) 3 else 2,
         FUN = function(x,
                        Q = X,
                        wle = wl,
@@ -180,22 +168,23 @@ spectrum_blur_ratio <-
             sampling_rate = sr
           )
         }
-      ))
+      )
+    
+    X$spectrum.blur.ratio <- unlist(spectrum_blu_ratio_list)
     
     # remove temporal columns
     X$.sgnl.temp <- NULL
-    
-    if (pb & spectra)
-      write(file = "", x = "Saving spectra (step 3 out of 3):")
-    
-    
+
     # convert to list instead of extended selection table, add envelopes
     if (spectra) {
       spec.dfs <-
-        warbleR:::pblapply_wrblr_int(
+        warbleR:::.pblapply(
           X = seq_along(specs),
           cl = cl,
           pbar = pb,
+          message = "computing spectrum blur ratio", 
+          current = 3, 
+          total = 3,
           FUN = function(y) {
             # extract 1 envelope
             x <- specs[[y]]

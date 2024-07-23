@@ -46,7 +46,7 @@ A .wav file in 'path' as well as a data frame in the R environment with the anno
 \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
 }
 \details{
-The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync test (re-recorded) sounds to facilitate the streamlining of degradation quantification.
+The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync test (re-recorded) sounds to facilitate the streamlining of degradation quantification. There is no predefined limit to the duration of the output master sound file, although long this be constrained by computer memory. As a reference, master sound files of up to 10 min have been created in a 16GB RAM laptop computer.
 }
 \examples{
 {
@@ -64,7 +64,7 @@ The function is intended to simplify the creation of master sound files for play
 
   # make an extended selection table
   est <- selection_table(
-    X = lbh_selec_table, extended = TRUE, confirm.extended = FALSE,
+    X = lbh_selec_table, extended = TRUE,
     path = tempdir()
   )
 

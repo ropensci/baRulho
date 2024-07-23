@@ -64,7 +64,6 @@ spcc <-
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
     
-    
     # # put together in a single
     comp_mat <- cbind(X$.sgnl.temp, X$reference)
     
@@ -86,9 +85,9 @@ spcc <-
     )
     
     # steps for warbleR message
-    options("int_warbleR_steps" = c(current = 0, total = 1))
+    options("int_warbleR_steps" = list(current = 0, total = 1))
     
-    on.exit(options("int_warbleR_steps" = c(current = 0, total = 0)), add = TRUE)
+    on.exit(options("int_warbleR_steps" = list(current = 0, total = 0)), add = TRUE)
     
     warbleR_options(
       wl = wl,
@@ -101,7 +100,7 @@ spcc <-
     
     # run spcc
     xcorrs <-
-      warbleR::cross_correlation(X = X,
+      cross_correlation(X = X,
                                  cor.method = "pearson",
                                  path = path)$max.xcorr.matrix
     

@@ -94,8 +94,8 @@ tail_to_signal_ratio <- function(X,
   }
   
   # calculate STR
-  X$tail.to.signal.ratio <-
-    unlist(warbleR:::pblapply_wrblr_int(X = seq_len(nrow(X)), pbar = pb, cl = cl, function(y) {
+  X$tail.to.signal.ratio <- tail_to_signal_ratio_list <- 
+    warbleR:::.pblapply(X = seq_len(nrow(X)), pbar = pb, cl = cl, message = "computing tail-to-signal ratio", total = 1, function(y) {
       if (X$sound.id[y] != "ambient") {
         # Read sound files to get sample rate and length
         r <-
@@ -215,7 +215,10 @@ tail_to_signal_ratio <- function(X,
       }
       
       return(str)
-    }))
+    })
+  
+  # unlist results
+  X$tail.to.signal.ratio <- unlist(tail_to_signal_ratio_list)
   
   # fix call if not a data frame
   if (!is.data.frame(X)) {

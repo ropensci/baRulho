@@ -90,15 +90,6 @@ detection_distance <-
       cl <- cores
     }
     
-    # print message
-    if (pb) {
-      if (is.null(spl)) {
-        write(file = "", x = "Computing sound pressure level and peak frequency (step 1 out of 2):")
-      } else {
-        write(file = "", x = "Computing peak frequency (step 1 out of 2):")
-      }
-    }
-    
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
     
@@ -109,10 +100,13 @@ detection_distance <-
     
     # calculate all spectra apply function
     peak_freq_list <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = target_sgnl_temp,
         cl = cl,
+        message = "computing sound pressure level and peak frequency",
+        current = 1,
+        total = 2,
         FUN = function(y, wl) {
           # load clip
           clp <- warbleR::read_sound_file(X = X,
@@ -180,18 +174,17 @@ detection_distance <-
     
     # add sound file selec names to spectra
     names(peak_freq_list) <- target_sgnl_temp
-    
-    if (pb) {
-      write(file = "", x = "Computing detection distance (step 2 out of 2):")
-    }
-    
+
     # get detection distance
     # calculate all spectra apply function
-    X$detection.distance <-
-      unlist(warbleR:::pblapply_wrblr_int(
+    detection_distance_list <-
+      warbleR:::.pblapply(
         X = seq_len(nrow(X)),
         pbar = pb,
         cl = cl,
+        message = "computing detection distance", 
+        current = 2, 
+        total = 2,
         FUN = function(x,
                        wle = wl,
                        spl.cutoffe = spl.cutoff,
@@ -219,7 +212,9 @@ detection_distance <-
             ...
           )
         }
-      ))
+      )
+    
+    X$detection.distance <- unlist(detection_distance_list)
     
     # make NAs those sounds in which the reference is itself (only happens when method = 2) or is ambient noise
     X$reference[X$reference == X$.sgnl.temp |

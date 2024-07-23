@@ -146,11 +146,13 @@ noise_profile <-
     
     # calculate STR
     noise.profiles <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         seq_len(nrow(X)),
         cl = cl,
-        .noise_profile,
+        message = "computing noise profile(s)",
+        total = 1,
+        FUN = .noise_profile,
         Y = X,
         noise.ref = noise.ref,
         mar = mar,

@@ -79,12 +79,7 @@ excess_attenuation <-
     } else {
       cl <- cores
     }
-    
-    if (pb) {
-      write(file = "",
-            x = paste0("Computing amplitude envelopes (step 1 out of 2):"))
-    }
-    
+   
     # add sound file selec colums to X (weird column name so it does not overwrite user columns)
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
     
@@ -94,10 +89,13 @@ excess_attenuation <-
     
     # run loop apply function
     mean_envs <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         X = target_sgnl_temp,
         pbar = pb,
         cl = cl,
+        message = "computing amplitude envelopes", 
+        current = 1, 
+        total = 2,
         FUN = function(y,
                        wln = wl,
                        ovl = ovlp,
@@ -129,25 +127,21 @@ excess_attenuation <-
       return(w)
     }, FUN.VALUE = numeric(1))
     
-    # split by sound ID
-    # sigtype_list <- split(X, X$sound.id)
-    
-    if (pb) {
-      write(file = "",
-            x = paste0("Computing excess attenuation (step 2 out of 2):"))
-    }
-    
     # calculate excess attenuation
-    X$excess.attenuation <-
-      unlist(warbleR:::pblapply_wrblr_int(
+    excess_attenuation_list <-
+      warbleR:::.pblapply(
         X = seq_len(nrow(X)),
         pbar = pb,
         cl = cl,
+        message = "computing excess attenuation", 
+        current = 2, 
+        total = 2,
         FUN = function(x) {
           .exc_att(y = x, X)
         }
-      ))
+      )
     
+    X$excess.attenuation <- unlist(excess_attenuation_list)
     
     # remove temporal column
     X$.sgnl.temp <- X$sig_env <- NULL

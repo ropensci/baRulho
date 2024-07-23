@@ -83,17 +83,15 @@ spectrum_correlation <-
       cl <- cores
     }
     
-    # print message
-    if (pb) {
-      write(file = "", x = "Computing power spectra (step 1 out of 2):")
-    }
-    
     # calculate all spectra apply function
     specs <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = target_sgnl_temp,
         cl = cl,
+        message = "computing power spectra", 
+        current = 1,
+        total = 2,
         FUN = function(x,
                        ssmth = spec.smooth,
                        wln = wl,
@@ -116,17 +114,16 @@ spectrum_correlation <-
     
     # add sound file selec names to envelopes (weird column name so it does not overwrite user columns)
     names(specs) <- target_sgnl_temp
-    
-    if (pb) {
-      write(file = "", x = "Computing spectrum correlations (step 2 out of 2):")
-    }
-    
+
     # calculate all envelops apply function
-    X$spectrum.correlation <-
-      unlist(warbleR:::pblapply_wrblr_int(
+    spectrum_correlation_list <- 
+      warbleR:::.pblapply(
         X = seq_len(nrow(X)),
         pbar = pb,
         cl = cl,
+        message = "computing spectrum correlations", 
+        current = 2, 
+        total = 2,
         FUN =
           function(x,
                    spcs = specs,
@@ -139,8 +136,10 @@ spectrum_correlation <-
               cor.method = cm
             )
           }
-      ))
+      )
     
+    # unlist results
+    X$spectrum.correlation <- unlist(spectrum_correlation_list)
     # remove temporal columns
     X$.sgnl.temp <- NULL
     

@@ -103,10 +103,12 @@ plot_aligned_sounds <-
     
     # run loop
     file_paths <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = X_by_sound_file,
         cl = cl,
+        message = "plotting aligned sounds",
+        total = 1,
         FUN = function(Y) {
           warbleR:::img_wrlbr_int(
             filename = paste0("plot_align_", gsub(".wav", "", Y$sound.files[1]), ".jpeg"),
@@ -126,7 +128,7 @@ plot_aligned_sounds <-
           to <- from + duration
           
           # import sound data
-          wave <- read_wave(
+          wave <- warbleR::read_sound_file(
             Y,
             index = 1,
             from = from,

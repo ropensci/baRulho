@@ -117,10 +117,11 @@ find_markers <-
     }
     
     # run cross correlation
-    if (pb) {
-      write(file = "",
-            x = paste0("running cross-correlation (step 1 out of 2):"))
+    if (pb)  {
+   warbleR:::.update_progress(total = 2)
     }
+    
+    
     templ_corrs <-
       ohun::template_correlator(
         templates = X,
@@ -132,11 +133,6 @@ find_markers <-
       )
     
     # find peaks
-    if (pb) {
-      write(file = "",
-            x = paste0("running peak detection (step 2 out of 2):"))
-    }
-    
     pks <-
       as.data.frame(
         ohun::template_detector(

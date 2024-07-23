@@ -17,7 +17,7 @@
 #' @examples
 #' {
 #'   # load example data
-#'   data("master_est")
+#'   data(list = c("master_est", "test_sounds_est"))
 #'
 #'   # save example files in working director to recreate a case in which working
 #'   # with sound files instead of extended selection tables.
@@ -79,11 +79,7 @@ align_test_files <-
                      FUN = rank) <= 1,]
     }
     
-    if (pb & warbleR::is_extended_selection_table(X)) {
-      write(file = "",
-            x = paste0("Aligning test sound files (step 1 out of 2):"))
-    }
-    
+      
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
@@ -93,10 +89,13 @@ align_test_files <-
     
     # align each file
     out <-
-      warbleR:::pblapply_wrblr_int(
+      warbleR:::.pblapply(
         pbar = pb,
         X = seq_len(nrow(Y)),
         cl = cl,
+        message = "aligning test sounds", 
+        current = 1,
+        total = if (warbleR::is_extended_selection_table(X)) 3 else 1,
         FUN = function(y) {
           # compute start and end as the difference in relation to the marker position in the master sound file
           start <-
@@ -131,7 +130,7 @@ align_test_files <-
     
     # check if any selection exceeds length of recordings
     wvdr <-
-      wavdur(path = path, files = unique(sync.sls$sound.files))
+      duration_sound_files(path = path, files = unique(sync.sls$sound.files))
     
     # add duration to data frame
     sync.sls <- merge(sync.sls, wvdr)
@@ -177,12 +176,7 @@ align_test_files <-
     sync.sls$duration <- NULL
     
     if (warbleR::is_extended_selection_table(X)) {
-      if (pb) {
-        write(
-          file = "",
-          x = paste0("Creating extended selection table (step 2 out of 2):")
-        )
-      }
+
       if (by.song)
         # if by song add a numeric column to represent sound files
       {
@@ -192,11 +186,13 @@ align_test_files <-
         by.song <- NULL
       } # rewrite by song as null
       
+
+      warbleR:::.update_progress(current = 1, total = 3)
+      
       sync.sls <-
         selection_table(
           sync.sls,
           extended = TRUE,
-          confirm.extended = FALSE,
           path = path,
           by.song = by.song,
           pb = pb,

@@ -34,13 +34,13 @@ manual_realign(
 
 \item{Y}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
+\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
 
-\item{wl}{a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number.}
+\item{wl}{a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see \code{\link[base]{options}}).}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0.}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
 
 \item{collevels}{A numeric vector of length 3. Specifies levels to partition the amplitude range of the spectrogram (in dB). The more levels the higher the resolution of the spectrogram. Default is seq(-120, 0, 1).}
 

@@ -18,9 +18,9 @@ excess_attenuation(
 \arguments{
 \item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
 
 \item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.}
 
@@ -29,11 +29,11 @@ is \code{NULL}. If supplied, 'hop.size' is ignored.
 Note that lower values will increase time resolution, which is more important for amplitude calculations.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering.}
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
 }
 \value{
 Object 'X' with an additional column,  'excess.attenuation', containing the computed excess attenuation values (in dB).

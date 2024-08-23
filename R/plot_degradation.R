@@ -5,7 +5,7 @@
 #' @param nrow Numeric vector of length 1 with the number of rows per image file. Default is 4. This would be dynamically adjusted if more rows than needed are set.
 #' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope and power spectrum calculations (used internally by \code{\link[seewave]{env}}). Default is 200.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files.
+#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
 #' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.
 #' @param palette A color palette function to be used to assign colors in the
 #'   plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}.
@@ -121,7 +121,7 @@ plot_degradation <-
     
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
-      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+      cl <- parallel::makePSOCKcluster(cores)
     } else {
       cl <- cores
     }
@@ -182,7 +182,7 @@ plot_degradation <-
     
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
-      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+      cl <- parallel::makePSOCKcluster(cores)
     } else {
       cl <- cores
     }

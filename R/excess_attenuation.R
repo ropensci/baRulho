@@ -7,7 +7,7 @@
 #' is \code{NULL}. If supplied, 'hop.size' is ignored.
 #' Note that lower values will increase time resolution, which is more important for amplitude calculations.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering.
+#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
 #' @return Object 'X' with an additional column,  'excess.attenuation', containing the computed excess attenuation values (in dB).
 #' @export
 #' @name excess_attenuation
@@ -75,7 +75,7 @@ excess_attenuation <-
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
-        parallel::makePSOCKcluster(getOption("cl.cores", cores))
+        parallel::makePSOCKcluster(cores)
     } else {
       cl <- cores
     }

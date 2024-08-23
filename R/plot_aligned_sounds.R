@@ -6,7 +6,7 @@
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0.
+#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
 #' @param collevels A numeric vector of length 3. Specifies levels to partition the
 #'   amplitude range of the spectrogram (in dB). The more levels the higher the
 #'   resolution of the spectrogram. Default is seq(-40, 0, 1). seq(-115, 0, 1) will produces spectrograms
@@ -96,7 +96,7 @@ plot_aligned_sounds <-
     ### run loop over sound files
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
-      cl <- parallel::makePSOCKcluster(getOption("cl.cores", cores))
+      cl <- parallel::makePSOCKcluster(cores)
     } else {
       cl <- cores
     }

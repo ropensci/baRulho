@@ -49,7 +49,7 @@ frequency harmonic will be simulated.}
 
 \item{sampling.rate}{Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
 }
 \value{
 An extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The table contains columns for each of the varying features a 'treatment' column (useful to tell the acoustic features of each sound) and a 'replicate' column indicating the replicates for each 'treatment'.

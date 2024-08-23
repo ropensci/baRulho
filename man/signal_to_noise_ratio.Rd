@@ -25,9 +25,9 @@ signal_to_noise_ratio(
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
 the start point of the annotation over which to measure ambient noise.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
 
 \item{eq.dur}{Logical. Controls whether the ambient noise segment that is measured has the same duration
 to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.}
@@ -54,9 +54,9 @@ to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} t
 is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
 
 \item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.}
+consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.}
+\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
 }
 \value{
 Object 'X' with an additional column, 'signal.to.noise.ratio',

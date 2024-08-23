@@ -18,7 +18,7 @@
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering.
+#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
 #' @return Object 'X' with an additional column, 'signal.to.noise.ratio',
 #' with the signal-to-noise ratio values (in dB).
 #' @export
@@ -126,7 +126,7 @@ signal_to_noise_ratio <-
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
-        parallel::makePSOCKcluster(getOption("cl.cores", cores))
+        parallel::makePSOCKcluster(cores)
     } else {
       cl <- cores
     }

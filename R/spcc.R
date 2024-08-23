@@ -4,7 +4,7 @@
 #' @inheritParams template_params
 #' @param ovlp Numeric vector of length 1 specifying \% of overlap between two
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
-#' slow down the function but produce more accurate results.
+#' slow down the function but produce more accurate results. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
 #' @return Object 'X' with an additional column, 'cross.correlation', containing the computed spectrogram cross-correlation coefficients.
 #' @export
 #' @name spcc

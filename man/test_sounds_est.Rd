@@ -5,7 +5,7 @@
 \alias{test_sounds_est}
 \title{Extended selection table with re-recorded playbacks}
 \format{
-Extended selection table object in the \code{\link{warbleR}} format, which contains annotations and acoustic data.
+Extended selection table object in the \href{https://cran.r-project.org/package=warbleR}{warbleR} format, which contains annotations and acoustic data.
 }
 \source{
 Marcelo Araya-Salas

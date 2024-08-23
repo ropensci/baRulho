@@ -26,9 +26,9 @@ align_test_files(
 
 \item{marker}{Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is \code{NULL}. DEPRECATED.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.}
+\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
 
 \item{...}{Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.}
 }

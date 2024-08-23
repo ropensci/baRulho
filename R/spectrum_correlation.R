@@ -4,7 +4,7 @@
 #' @inheritParams template_params
 #' @param spec.smooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70.
+#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
 #' @param n.bins Numeric vector of length 1 specifying the number of frequency bins to use for representing power spectra. Default is 100. If null the raw power spectrum is used (note that this can result in high RAM memory usage for large data sets). Power spectrum values are interpolated using \code{\link[stats]{approx}}.
 #' @return Object 'X' with an additional column,  'spectrum.correlation', containing the computed frequency spectrum correlation coefficients.
 #' @export
@@ -78,7 +78,7 @@ spectrum_correlation <-
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
-        parallel::makePSOCKcluster(getOption("cl.cores", cores))
+        parallel::makePSOCKcluster(cores)
     } else {
       cl <- cores
     }

@@ -66,11 +66,11 @@
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
-<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).</p></dd>
+<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
-<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.</p></dd>
+<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.  Can be set globally for the current R session via the "pb" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-cor-method">cor.method<a class="anchor" aria-label="anchor" href="#arg-cor-method"></a></dt>
@@ -78,17 +78,17 @@
 
 
 <dt id="arg-hop-size">hop.size<a class="anchor" aria-label="anchor" href="#arg-hop-size"></a></dt>
-<dd><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.</p></dd>
+<dd><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-wl">wl<a class="anchor" aria-label="anchor" href="#arg-wl"></a></dt>
-<dd><p>a vector with a single even integer number specifying the window length of the spectrogram, default is <code>NULL</code>. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number.</p></dd>
+<dd><p>a vector with a single even integer number specifying the window length of the spectrogram, default is <code>NULL</code>. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-ovlp">ovlp<a class="anchor" aria-label="anchor" href="#arg-ovlp"></a></dt>
 <dd><p>Numeric vector of length 1 specifying % of overlap between two
 consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="external-link">spectro</a></code>. Default is 90. High values of ovlp
-slow down the function but produce more accurate results.</p></dd>
+slow down the function but produce more accurate results. Can be set globally for the current R session via the "ovlp" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-wn">wn<a class="anchor" aria-label="anchor" href="#arg-wn"></a></dt>
@@ -96,7 +96,7 @@ slow down the function but produce more accurate results.</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
-<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.</p></dd>
+<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">

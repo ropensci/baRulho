@@ -83,19 +83,19 @@
 
 
 <dt id="arg-hop-size">hop.size<a class="anchor" aria-label="anchor" href="#arg-hop-size"></a></dt>
-<dd><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.</p></dd>
+<dd><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-wl">wl<a class="anchor" aria-label="anchor" href="#arg-wl"></a></dt>
-<dd><p>a vector with a single even integer number specifying the window length of the spectrogram, default is <code>NULL</code>. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number.</p></dd>
+<dd><p>a vector with a single even integer number specifying the window length of the spectrogram, default is <code>NULL</code>. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-ovlp">ovlp<a class="anchor" aria-label="anchor" href="#arg-ovlp"></a></dt>
-<dd><p>Numeric vector of length 1 specifying the percentage of overlap between two consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="external-link">spectro</a></code>. Default is 0.</p></dd>
+<dd><p>Numeric vector of length 1 specifying the percentage of overlap between two consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="external-link">spectro</a></code>. Default is 0. Can be set globally for the current R session via the "ovlp" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
-<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.</p></dd>
+<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-collevels">collevels<a class="anchor" aria-label="anchor" href="#arg-collevels"></a></dt>

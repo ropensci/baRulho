@@ -78,11 +78,11 @@
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
-<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).</p></dd>
+<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
-<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.</p></dd>
+<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.  Can be set globally for the current R session via the "pb" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-env-smooth">env.smooth<a class="anchor" aria-label="anchor" href="#arg-env-smooth"></a></dt>
@@ -90,7 +90,7 @@
 
 
 <dt id="arg-spec-smooth">spec.smooth<a class="anchor" aria-label="anchor" href="#arg-spec-smooth"></a></dt>
-<dd><p>Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.</p></dd>
+<dd><p>Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5. Can be set globally for the current R session via the "spec.smooth" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-res">res<a class="anchor" aria-label="anchor" href="#arg-res"></a></dt>
@@ -102,16 +102,16 @@
 
 
 <dt id="arg-hop-size">hop.size<a class="anchor" aria-label="anchor" href="#arg-hop-size"></a></dt>
-<dd><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.</p></dd>
+<dd><p>A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-wl">wl<a class="anchor" aria-label="anchor" href="#arg-wl"></a></dt>
-<dd><p>a vector with a single even integer number specifying the window length of the spectrogram, default is <code>NULL</code>. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number.</p></dd>
+<dd><p>a vector with a single even integer number specifying the window length of the spectrogram, default is <code>NULL</code>. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-ovlp">ovlp<a class="anchor" aria-label="anchor" href="#arg-ovlp"></a></dt>
 <dd><p>Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="external-link">spectro</a></code>. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files.</p></dd>
+consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="external-link">spectro</a></code>. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files. Can be set globally for the current R session via the "ovlp" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-palette">palette<a class="anchor" aria-label="anchor" href="#arg-palette"></a></dt>
@@ -124,11 +124,11 @@ plot, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="
 
 
 <dt id="arg-dest-path">dest.path<a class="anchor" aria-label="anchor" href="#arg-dest-path"></a></dt>
-<dd><p>Character string containing the directory path where the image files will be saved. If not supplied the current working directory will be used instead.</p></dd>
+<dd><p>Character string containing the directory path where the image files will be saved. If not supplied the current working directory will be used instead. Can be set globally for the current R session via the "dest.path" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
-<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.</p></dd>
+<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-colors">colors<a class="anchor" aria-label="anchor" href="#arg-colors"></a></dt>
@@ -183,7 +183,7 @@ plot, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="
 <span class="r-in"><span>  <span class="co"># create plots</span></span></span>
 <span class="r-in"><span>  <span class="fu">plot_blur_ratio</span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/4d/0gnh84wj53j7wyk695q0tc_80000gn/T/RtmpiqYaK5'</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/4d/0gnh84wj53j7wyk695q0tc_80000gn/T/RtmpUGW2Xt'</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

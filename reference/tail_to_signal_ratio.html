@@ -72,11 +72,11 @@ end of the sound over which to measure tail power.</p></dd>
 
 
 <dt id="arg-cores">cores<a class="anchor" aria-label="anchor" href="#arg-cores"></a></dt>
-<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing).</p></dd>
+<dd><p>Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
-<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.</p></dd>
+<dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.  Can be set globally for the current R session via the "pb" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-tsr-formula">tsr.formula<a class="anchor" aria-label="anchor" href="#arg-tsr-formula"></a></dt>
@@ -102,11 +102,11 @@ Note that lower values will increase time resolution, which is more important fo
 
 <dt id="arg-ovlp">ovlp<a class="anchor" aria-label="anchor" href="#arg-ovlp"></a></dt>
 <dd><p>Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="external-link">spectro</a></code>. Default is 0. Only used for bandpass filtering.</p></dd>
+consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="external-link">spectro</a></code>. Default is 0. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
-<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used.</p></dd>
+<dd><p>Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
 
 </dl></div>
     <div class="section level2">

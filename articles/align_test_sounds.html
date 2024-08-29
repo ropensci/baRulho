@@ -141,25 +141,25 @@ selection table we need to set the argument
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># load packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://sjmgarnier.github.io/viridis/" class="external-link">viridis</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: viridisLite</span></span></code></pre>
+<pre><code>Loading required package: viridisLite</code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://docs.ropensci.org/baRulho" class="external-link">baRulho</a></span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Loading required package: warbleR</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: tuneR</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: seewave</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: NatureSounds</span></span></code></pre>
-<pre><code><span><span class="co">## Loading required package: ohun</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Please cite 'ohun' as:</span></span></code></pre>
-<pre><code><span><span class="co">##  Araya-Salas, M., Smith-Vidaurre, G., Chaverri, G., Brenes, J. C., Chirino, F., Elizondo-Calvo, J., &amp; Rico-Guevara, A. 2023. ohun: an R package for diagnosing and optimizing automatic sound event detection. Methods in Ecology and Evolution. https://doi.org/10.1111/2041-210X.14170</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Please cite 'baRulho' as:</span></span></code></pre>
-<pre><code><span><span class="co">## Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), baRulho: an R package to quantify degradation in animal acoustic signals .bioRxiv 2023.11.22.568305.</span></span></code></pre>
-<pre><code><span><span class="co">## </span></span>
-<span><span class="co">## Attaching package: 'baRulho'</span></span></code></pre>
-<pre><code><span><span class="co">## The following object is masked from 'package:seewave':</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">##     attenuation</span></span></code></pre>
+<pre><code>Loading required package: warbleR</code></pre>
+<pre><code>Loading required package: tuneR</code></pre>
+<pre><code>Loading required package: seewave</code></pre>
+<pre><code>Loading required package: NatureSounds</code></pre>
+<pre><code>Loading required package: ohun</code></pre>
+<pre><code>
+Please cite 'ohun' as: </code></pre>
+<pre><code> Araya-Salas, M., Smith-Vidaurre, G., Chaverri, G., Brenes, J. C., Chirino, F., Elizondo-Calvo, J., &amp; Rico-Guevara, A. 2023. ohun: an R package for diagnosing and optimizing automatic sound event detection. Methods in Ecology and Evolution. https://doi.org/10.1111/2041-210X.14170</code></pre>
+<pre><code>
+Please cite 'baRulho' as: </code></pre>
+<pre><code>Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), baRulho: an R package to quantify degradation in animal acoustic signals .bioRxiv 2023.11.22.568305.</code></pre>
+<pre><code>
+Attaching package: 'baRulho'</code></pre>
+<pre><code>The following object is masked from 'package:seewave':
+
+    attenuation</code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/maRce10/Rraven" class="external-link">Rraven</a></span><span class="op">)</span></span>
 <span></span>
@@ -172,7 +172,7 @@ selection table we need to set the argument
 <span>  am <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sampling.rate <span class="op">=</span> <span class="fl">12</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">synthesizing sounds (step 0 of 0):</span></span></span></code></pre>
+<pre><code> [30msynthesizing sounds (step 0 of 0): [39m</code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># convert into a single wave object</span></span>
 <span><span class="va">synth_wav</span> <span class="op">&lt;-</span> <span class="fu">Rraven</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Rraven/man/exp_est.html" class="external-link">exp_est</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">synth_est</span>,</span>
@@ -192,7 +192,7 @@ selection table we need to set the argument
 <span>  heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  wl <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="align_test_sounds_files/figure-html/unnamed-chunk-1-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="align_test_sounds_files/figure-html/unnamed-chunk-1-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
 <p>The function can add complexity to additional acoustic dimensions.
 For instance the following code generates all possible combinations of
@@ -234,7 +234,7 @@ modulated envelope):</p>
 <span>  heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  wl <span class="op">=</span> <span class="fl">140</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="align_test_sounds_files/figure-html/unnamed-chunk-2-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="align_test_sounds_files/figure-html/unnamed-chunk-2-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Note that the output is an extended selection table that contains the
 time-frequency annotations for all synthetic sounds:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
@@ -540,14 +540,12 @@ directory:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># check name of wave objects</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">synth_est2</span><span class="op">)</span><span class="op">$</span><span class="va">wave.objects</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] "synthetic_sound_1"  "synthetic_sound_2"  "synthetic_sound_3" </span></span>
-<span><span class="co">##  [4] "synthetic_sound_4"  "synthetic_sound_5"  "synthetic_sound_6" </span></span>
-<span><span class="co">##  [7] "synthetic_sound_7"  "synthetic_sound_8"  "synthetic_sound_9" </span></span>
-<span><span class="co">## [10] "synthetic_sound_10" "synthetic_sound_11" "synthetic_sound_12"</span></span>
-<span><span class="co">## [13] "synthetic_sound_13" "synthetic_sound_14" "synthetic_sound_15"</span></span>
-<span><span class="co">## [16] "synthetic_sound_16" "synthetic_sound_17" "synthetic_sound_18"</span></span>
-<span><span class="co">## [19] "synthetic_sound_19" "synthetic_sound_20" "synthetic_sound_21"</span></span>
-<span><span class="co">## [22] "synthetic_sound_22" "synthetic_sound_23" "synthetic_sound_24"</span></span></code></pre>
+<pre><code> [1] "synthetic_sound_1"  "synthetic_sound_2"  "synthetic_sound_3"  "synthetic_sound_4" 
+ [5] "synthetic_sound_5"  "synthetic_sound_6"  "synthetic_sound_7"  "synthetic_sound_8" 
+ [9] "synthetic_sound_9"  "synthetic_sound_10" "synthetic_sound_11" "synthetic_sound_12"
+[13] "synthetic_sound_13" "synthetic_sound_14" "synthetic_sound_15" "synthetic_sound_16"
+[17] "synthetic_sound_17" "synthetic_sound_18" "synthetic_sound_19" "synthetic_sound_20"
+[21] "synthetic_sound_21" "synthetic_sound_22" "synthetic_sound_23" "synthetic_sound_24"</code></pre>
 <p> </p>
 </div>
 <div class="section level2">
@@ -574,7 +572,7 @@ tones:</p>
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.15</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The file synthetic_master.wav has been saved in the directory path '/tmp/Rtmp8ziP5X'</span></span></span></code></pre>
+<pre><code> [30mThe file synthetic_master.wav has been saved in the directory path '/tmp/RtmpNCUHrV' [39m</code></pre>
 <p> </p>
 <p>The function saves the master sound file as a wave file and returns a
 selection table in the R environment with the time and frequency
@@ -596,7 +594,7 @@ look at the spectrogram of the output file using the <a href="https://cran.r-pro
 <span>  grid <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  flim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">4.7</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="align_test_sounds_files/figure-html/spectro%20master%201-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="align_test_sounds_files/figure-html/spectro%20master%201-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>The function can also create a master sound file from sounds found in
 sound files and from several sounds files, as is likely the case with
 recordings collected in the field. The following example shows how to
@@ -625,8 +623,8 @@ example data and recordings from the package <a href="https://cran.r-project.org
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  pb <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">all selections are OK </span></span></span>
-<span><span class="co"><span style="color: #000000;">## </span></span></span></code></pre>
+<pre><code> [30mall selections are OK 
+ [39m</code></pre>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add sound_id column</span></span>
 <span><span class="va">est</span><span class="op">$</span><span class="va">sound.id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/abbreviate.html" class="external-link">abbreviate</a></span><span class="op">(</span><span class="va">est</span><span class="op">$</span><span class="va">sound.files</span><span class="op">)</span>, <span class="va">est</span><span class="op">$</span><span class="va">selec</span><span class="op">)</span></span>
@@ -638,7 +636,7 @@ example data and recordings from the package <a href="https://cran.r-project.org
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.3</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The file example_master.wav has been saved in the directory path '/tmp/Rtmp8ziP5X'</span></span></span></code></pre>
+<pre><code> [30mThe file example_master.wav has been saved in the directory path '/tmp/RtmpNCUHrV' [39m</code></pre>
 <p> </p>
 <p>Again, we can look at the spectrogram of the output file:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -656,7 +654,7 @@ example data and recordings from the package <a href="https://cran.r-project.org
 <span>  grid <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  flim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="align_test_sounds_files/figure-html/spectro%20master%202-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="align_test_sounds_files/figure-html/spectro%20master%202-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Note that the output could also be exported to <a href="https://www.ravensoundsoftware.com/software/raven-pro/" class="external-link">Raven
 sound analysis software</a> (<a href="https://www.birds.cornell.edu/home" class="external-link">Cornell Lab of
 Ornithology</a>) for visualization or further manipulation using the
@@ -671,7 +669,7 @@ function <code><a href="https://rdrr.io/pkg/Rraven/man/exp_raven.html" class="ex
 acoustic analysis software):</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/include_graphics.html" class="external-link">include_graphics</a></span><span class="op">(</span><span class="st">"example_master_table.jpg"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="example_master_table.jpg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="example_master_table.jpg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
 <p>Take a look at the <a href="https://CRAN.R-project.org/package=Rraven/vignettes/Rraven.html" class="external-link">Rraven
 vignette</a> for more details on how to export and import data from R to
@@ -711,11 +709,10 @@ repository</a>. There are two example objects that will be used:</p>
 <p>These are the files contained in the data set:</p>
 <div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">master_est</span><span class="op">$</span><span class="va">sound.files</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "master.wav"</span></span></code></pre>
+<pre><code>[1] "master.wav"</code></pre>
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">sound.files</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "10m_closed.wav" "10m_open.wav"   "1m_open.wav"    "30m_closed.wav"</span></span>
-<span><span class="co">## [5] "30m_open.wav"</span></span></code></pre>
+<pre><code>[1] "10m_closed.wav" "10m_open.wav"   "1m_open.wav"    "30m_closed.wav" "30m_open.wav"  </code></pre>
 <p> </p>
 <p>Their names are self-explanatory: a master sound file (“master.wav”)
 and its annotations, a reference sound file (“reference_1m.wav”) and two
@@ -1347,7 +1344,7 @@ re-recorded files can be generated using the function
 ‘X’. In this case ‘X’ is an <code>data.frame</code>:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">is.data.frame</a></span><span class="op">(</span><span class="va">aligned_tests</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
+<pre><code>[1] TRUE</code></pre>
 <div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aligned_tests</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -1551,16 +1548,14 @@ files. The spectrograms are saved as individual JPEG image files (in
 <span>  duration <span class="op">=</span> <span class="fl">2.4</span>,</span>
 <span>  ovlp <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/tmp/Rtmp8ziP5X'</span></span></span></code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpNCUHrV' [39m</code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aligned_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/Rtmp8ziP5X/plot_align_10m_closed.jpeg"</span></span>
-<span><span class="co">## [2] "/tmp/Rtmp8ziP5X/plot_align_10m_open.jpeg"  </span></span>
-<span><span class="co">## [3] "/tmp/Rtmp8ziP5X/plot_align_1m_open.jpeg"   </span></span>
-<span><span class="co">## [4] "/tmp/Rtmp8ziP5X/plot_align_30m_closed.jpeg"</span></span>
-<span><span class="co">## [5] "/tmp/Rtmp8ziP5X/plot_align_30m_open.jpeg"</span></span></code></pre>
+<pre><code>[1] "/tmp/RtmpNCUHrV/plot_align_10m_closed.jpeg" "/tmp/RtmpNCUHrV/plot_align_10m_open.jpeg"  
+[3] "/tmp/RtmpNCUHrV/plot_align_1m_open.jpeg"    "/tmp/RtmpNCUHrV/plot_align_30m_closed.jpeg"
+[5] "/tmp/RtmpNCUHrV/plot_align_30m_open.jpeg"  </code></pre>
 <p>These are two of the files generated by the code above:</p>
-<p><img src="plot_align_10m_closed.jpeg" width="100%" style="display: block; margin: auto;"><img src="plot_align_30m_closed.jpeg" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="plot_align_10m_closed.jpeg" width="80%" style="display: block; margin: auto;"><img src="plot_align_30m_closed.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
 <div class="section level3">
 <h3 id="manually-fixing-alignment">Manually fixing alignment<a class="anchor" aria-label="anchor" href="#manually-fixing-alignment"></a>
@@ -1581,7 +1576,7 @@ alignment:</p>
 <span>  duration <span class="op">=</span> <span class="fl">2.4</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="manual_realign.gif" width="100%" style="display: block; margin: auto;"><!-- <img src="/home/runner/work/baRulho/baRulho/vignettes/manual_realign.gif" alt="manual realign"> --></p>
+<p><img src="manual_realign.gif" width="80%" style="display: block; margin: auto;"><!-- <img src="/home/runner/work/baRulho/baRulho/vignettes/manual_realign.gif" alt="manual realign"> --></p>
 <p>Spectrograms include the first few seconds of the sound files
 (controlled by ‘duration’) which is usually enough to tell the precision
 of the alignment. The lower spectrogram shows a series of ‘buttons’ that
@@ -1686,50 +1681,45 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 </ol>
 <hr>
 <p><font size="4">Session information</font></p>
-<pre><code><span><span class="co">## R version 4.4.1 (2024-06-14)</span></span>
-<span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">## Running under: Ubuntu 22.04.4 LTS</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
-<span><span class="co">## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## locale:</span></span>
-<span><span class="co">##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
-<span><span class="co">##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
-<span><span class="co">##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
-<span><span class="co">## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## time zone: UTC</span></span>
-<span><span class="co">## tzcode source: system (glibc)</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## attached base packages:</span></span>
-<span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] Rraven_1.0.14      baRulho_2.1.2      ohun_1.0.2         warbleR_1.1.32    </span></span>
-<span><span class="co">##  [5] NatureSounds_1.0.4 seewave_2.2.3      tuneR_1.4.7        viridis_0.6.5     </span></span>
-<span><span class="co">##  [9] viridisLite_0.4.2  knitr_1.48        </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] gtable_0.3.5       rjson_0.2.22       xfun_0.47          bslib_0.8.0       </span></span>
-<span><span class="co">##  [5] ggplot2_3.5.1      vctrs_0.6.5        tools_4.4.1        bitops_1.0-8      </span></span>
-<span><span class="co">##  [9] parallel_4.4.1     tibble_3.2.1       proxy_0.4-27       fansi_1.0.6       </span></span>
-<span><span class="co">## [13] highr_0.11         pkgconfig_2.0.3    KernSmooth_2.23-24 checkmate_2.3.2   </span></span>
-<span><span class="co">## [17] desc_1.4.3         lifecycle_1.0.4    stringr_1.5.1      compiler_4.4.1    </span></span>
-<span><span class="co">## [21] textshaping_0.4.0  brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1 </span></span>
-<span><span class="co">## [25] class_7.3-22       sass_0.4.9         RCurl_1.98-1.16    yaml_2.3.10       </span></span>
-<span><span class="co">## [29] pillar_1.9.0       pkgdown_2.1.0      jquerylib_0.1.4    MASS_7.3-60.2     </span></span>
-<span><span class="co">## [33] classInt_0.4-10    cachem_1.1.0       Deriv_4.1.3        digest_0.6.37     </span></span>
-<span><span class="co">## [37] stringi_1.8.4      sf_1.0-16          fastmap_1.2.0      grid_4.4.1        </span></span>
-<span><span class="co">## [41] colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3     utf8_1.2.4        </span></span>
-<span><span class="co">## [45] e1071_1.7-14       scales_1.3.0       backports_1.5.0    rmarkdown_2.28    </span></span>
-<span><span class="co">## [49] Sim.DiffProc_4.9   signal_1.8-1       igraph_2.0.3       gridExtra_2.3     </span></span>
-<span><span class="co">## [53] png_0.1-8          ragg_1.3.2         kableExtra_1.4.0   pbapply_1.7-2     </span></span>
-<span><span class="co">## [57] evaluate_0.24.0    dtw_1.23-1         fftw_1.0-8         testthat_3.2.1.1  </span></span>
-<span><span class="co">## [61] rlang_1.1.4        Rcpp_1.0.13        glue_1.7.0         DBI_1.2.3         </span></span>
-<span><span class="co">## [65] xml2_1.3.6         svglite_2.1.3      rstudioapi_0.16.0  jsonlite_1.8.8    </span></span>
-<span><span class="co">## [69] R6_2.5.1           systemfonts_1.1.0  fs_1.6.4           units_0.8-5</span></span></code></pre>
+<pre><code>R version 4.4.1 (2024-06-14)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 22.04.4 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8        LC_COLLATE=C.UTF-8    
+ [5] LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8    LC_PAPER=C.UTF-8       LC_NAME=C             
+ [9] LC_ADDRESS=C           LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: UTC
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] Rraven_1.0.14      baRulho_2.1.2      ohun_1.0.2         warbleR_1.1.32     NatureSounds_1.0.4
+ [6] seewave_2.2.3      tuneR_1.4.7        viridis_0.6.5      viridisLite_0.4.2  knitr_1.48        
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.5       rjson_0.2.22       xfun_0.47          bslib_0.8.0        ggplot2_3.5.1     
+ [6] vctrs_0.6.5        tools_4.4.1        bitops_1.0-8       parallel_4.4.1     tibble_3.2.1      
+[11] proxy_0.4-27       fansi_1.0.6        highr_0.11         pkgconfig_2.0.3    KernSmooth_2.23-24
+[16] checkmate_2.3.2    desc_1.4.3         lifecycle_1.0.4    stringr_1.5.1      compiler_4.4.1    
+[21] textshaping_0.4.0  brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1  class_7.3-22      
+[26] sass_0.4.9         RCurl_1.98-1.16    yaml_2.3.10        pillar_1.9.0       pkgdown_2.1.0     
+[31] jquerylib_0.1.4    MASS_7.3-60.2      classInt_0.4-10    cachem_1.1.0       Deriv_4.1.3       
+[36] digest_0.6.37      stringi_1.8.4      sf_1.0-16          fastmap_1.2.0      grid_4.4.1        
+[41] colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3     utf8_1.2.4         e1071_1.7-14      
+[46] scales_1.3.0       backports_1.5.0    rmarkdown_2.28     Sim.DiffProc_4.9   signal_1.8-1      
+[51] igraph_2.0.3       gridExtra_2.3      png_0.1-8          ragg_1.3.2         kableExtra_1.4.0  
+[56] pbapply_1.7-2      evaluate_0.24.0    dtw_1.23-1         fftw_1.0-8         testthat_3.2.1.1  
+[61] rlang_1.1.4        Rcpp_1.0.13        glue_1.7.0         DBI_1.2.3          xml2_1.3.6        
+[66] svglite_2.1.3      rstudioapi_0.16.0  jsonlite_1.8.8     R6_2.5.1           systemfonts_1.1.0 
+[71] fs_1.6.4           units_0.8-5       </code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

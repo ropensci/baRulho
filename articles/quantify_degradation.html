@@ -964,8 +964,8 @@ differences due to non-target sounds.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># count selection per recordings</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">sound.files</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "10m_closed.wav" "10m_open.wav"   "1m_open.wav"    "30m_closed.wav"</span></span>
-<span><span class="co">## [5] "30m_open.wav"</span></span></code></pre>
+<pre><code>[1] "10m_closed.wav" "10m_open.wav"   "1m_open.wav"    "30m_closed.wav"
+[5] "30m_open.wav"  </code></pre>
 <p>The data contains selections for 5 sounds as well as 1 ambient noise
 selections at each distance/recording:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -1087,7 +1087,7 @@ methods described above:</p>
 <span></span>
 <span><span class="co"># print</span></span>
 <span><span class="va">test_sounds_est</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">computing references (step 0 of 0):</span></span></span></code></pre>
+<pre><code> [30mcomputing references (step 0 of 0): [39m</code></pre>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -1958,12 +1958,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/tmp/RtmpOsuxvv'</span></span></span></code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpvUFhNe' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpOsuxvv/plot_degradation_p1.jpeg"</span></span>
-<span><span class="co">## [2] "/tmp/RtmpOsuxvv/plot_degradation_p2.jpeg"</span></span></code></pre>
+<pre><code>[1] "/tmp/RtmpvUFhNe/plot_degradation_p1.jpeg"
+[2] "/tmp/RtmpvUFhNe/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="100%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2926,16 +2926,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">The image files have been saved in the directory path '/tmp/RtmpOsuxvv'</span></span></span></code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpvUFhNe' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] "/tmp/RtmpOsuxvv/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [2] "/tmp/RtmpOsuxvv/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"</span></span>
-<span><span class="co">## [3] "/tmp/RtmpOsuxvv/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [4] "/tmp/RtmpOsuxvv/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  </span></span>
-<span><span class="co">## [5] "/tmp/RtmpOsuxvv/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"</span></span>
-<span><span class="co">## [6] "/tmp/RtmpOsuxvv/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</span></span></code></pre>
+<pre><code>[1] "/tmp/RtmpvUFhNe/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/tmp/RtmpvUFhNe/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/tmp/RtmpvUFhNe/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/tmp/RtmpvUFhNe/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/tmp/RtmpvUFhNe/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/tmp/RtmpvUFhNe/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like these
 ones:</p>
 <center>
@@ -2965,7 +2965,7 @@ included):</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time (s)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-19-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-19-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>The <code>env.smooth</code> argument could change envelope shapes and
 related measurements, as higher values tend to smooth the envelopes. The
 following code sets <code>env.smooth = 800</code> which produces
@@ -2983,7 +2983,7 @@ smoother envelopes:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Time (s)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-20-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-20-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
 </div>
 <div class="section level4">
@@ -3940,7 +3940,7 @@ can also return the amplitude spectrum contours with the argument
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (PMF)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-26-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-26-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
 </div>
 <div class="section level4">
@@ -9621,7 +9621,7 @@ extended selection table:</p>
 <code class="sourceCode R"><span><span class="co"># run noise profile</span></span>
 <span><span class="va">np</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/noise_profile.html">noise_profile</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span><span class="op">[</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">distance</span> <span class="op">&gt;</span> <span class="fl">5</span>,<span class="op">]</span>, mar <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #000000;">computing noise profile(s) (step 0 of 0):</span></span></span></code></pre>
+<pre><code> [30mcomputing noise profile(s) (step 0 of 0): [39m</code></pre>
 <p>The output is a data frame with amplitude values for the frequency
 bins for each wave object in the extended selection table:</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
@@ -9872,7 +9872,7 @@ amp
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (dBA)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-48-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-48-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>The output data is actually an average of several frequency spectra
 for each sound file. We can obtain the original spectra by setting the
 argument <code>averaged = FALSE</code>:</p>
@@ -9895,7 +9895,7 @@ argument <code>averaged = FALSE</code>:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (dBA)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-49-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-49-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>Note that we can limit the frequency range by using a bandpass filter
 (‘bp’ argument). In addition, the argument ‘hop.size’, which control the
 size of the time windows, affects the precision in the frequency domain.
@@ -9923,9 +9923,9 @@ We can get a better precision by increasing ‘hop.size’ (or ‘wl’):</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Frequency (kHz)"</span>, y <span class="op">=</span> <span class="st">"Amplitude (dBA)"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_classic</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: Removed 20 rows containing missing values or values outside the scale range</span></span>
-<span><span class="co">## (`geom_line()`).</span></span></code></pre>
-<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-50-1.png" width="100%" style="display: block; margin: auto;"></p>
+<pre><code>Warning:  [1m [22mRemoved 20 rows containing missing values or values outside the scale range
+(`geom_line()`).</code></pre>
+<p><img src="quantify_degradation_files/figure-html/unnamed-chunk-50-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p>The function can estimate noise profiles for entire sound files, by
 supplying a list of the files (argument ‘files’, and not supplying ‘X’)
 or by simply running it without supplying ‘X’ or ‘files’. In this case
@@ -9969,51 +9969,51 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 </ol>
 <hr>
 <p><font size="4">Session information</font></p>
-<pre><code><span><span class="co">## R version 4.4.1 (2024-06-14)</span></span>
-<span><span class="co">## Platform: x86_64-pc-linux-gnu</span></span>
-<span><span class="co">## Running under: Ubuntu 22.04.4 LTS</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## Matrix products: default</span></span>
-<span><span class="co">## BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 </span></span>
-<span><span class="co">## LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## locale:</span></span>
-<span><span class="co">##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       </span></span>
-<span><span class="co">##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   </span></span>
-<span><span class="co">##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          </span></span>
-<span><span class="co">## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## time zone: UTC</span></span>
-<span><span class="co">## tzcode source: system (glibc)</span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## attached base packages:</span></span>
-<span><span class="co">## [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## other attached packages:</span></span>
-<span><span class="co">##  [1] ggplot2_3.5.1      viridis_0.6.5      viridisLite_0.4.2  baRulho_2.1.2     </span></span>
-<span><span class="co">##  [5] ohun_1.0.2         warbleR_1.1.32     NatureSounds_1.0.4 seewave_2.2.3     </span></span>
-<span><span class="co">##  [9] tuneR_1.4.7        knitr_1.48        </span></span>
-<span><span class="co">## </span></span>
-<span><span class="co">## loaded via a namespace (and not attached):</span></span>
-<span><span class="co">##  [1] gtable_0.3.5       rjson_0.2.22       xfun_0.47          bslib_0.8.0       </span></span>
-<span><span class="co">##  [5] vctrs_0.6.5        tools_4.4.1        bitops_1.0-8       parallel_4.4.1    </span></span>
-<span><span class="co">##  [9] tibble_3.2.1       proxy_0.4-27       fansi_1.0.6        highr_0.11        </span></span>
-<span><span class="co">## [13] pkgconfig_2.0.3    KernSmooth_2.23-24 checkmate_2.3.2    desc_1.4.3        </span></span>
-<span><span class="co">## [17] lifecycle_1.0.4    farver_2.1.2       stringr_1.5.1      compiler_4.4.1    </span></span>
-<span><span class="co">## [21] textshaping_0.4.0  brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1 </span></span>
-<span><span class="co">## [25] class_7.3-22       sass_0.4.9         RCurl_1.98-1.16    yaml_2.3.10       </span></span>
-<span><span class="co">## [29] pillar_1.9.0       pkgdown_2.1.0      jquerylib_0.1.4    MASS_7.3-60.2     </span></span>
-<span><span class="co">## [33] classInt_0.4-10    cachem_1.1.0       Deriv_4.1.3        digest_0.6.37     </span></span>
-<span><span class="co">## [37] stringi_1.8.4      sf_1.0-16          labeling_0.4.3     fastmap_1.2.0     </span></span>
-<span><span class="co">## [41] grid_4.4.1         colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3    </span></span>
-<span><span class="co">## [45] utf8_1.2.4         e1071_1.7-14       withr_3.0.1        scales_1.3.0      </span></span>
-<span><span class="co">## [49] backports_1.5.0    rmarkdown_2.28     Sim.DiffProc_4.9   signal_1.8-1      </span></span>
-<span><span class="co">## [53] igraph_2.0.3       gridExtra_2.3      ragg_1.3.2         png_0.1-8         </span></span>
-<span><span class="co">## [57] kableExtra_1.4.0   pbapply_1.7-2      evaluate_0.24.0    dtw_1.23-1        </span></span>
-<span><span class="co">## [61] fftw_1.0-8         testthat_3.2.1.1   rlang_1.1.4        Rcpp_1.0.13       </span></span>
-<span><span class="co">## [65] glue_1.7.0         DBI_1.2.3          xml2_1.3.6         svglite_2.1.3     </span></span>
-<span><span class="co">## [69] rstudioapi_0.16.0  jsonlite_1.8.8     R6_2.5.1           systemfonts_1.1.0 </span></span>
-<span><span class="co">## [73] fs_1.6.4           units_0.8-5</span></span></code></pre>
+<pre><code>R version 4.4.1 (2024-06-14)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 22.04.4 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: UTC
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] ggplot2_3.5.1      viridis_0.6.5      viridisLite_0.4.2  baRulho_2.1.2     
+ [5] ohun_1.0.2         warbleR_1.1.32     NatureSounds_1.0.4 seewave_2.2.3     
+ [9] tuneR_1.4.7        knitr_1.48        
+
+loaded via a namespace (and not attached):
+ [1] gtable_0.3.5       rjson_0.2.22       xfun_0.47          bslib_0.8.0       
+ [5] vctrs_0.6.5        tools_4.4.1        bitops_1.0-8       parallel_4.4.1    
+ [9] tibble_3.2.1       proxy_0.4-27       fansi_1.0.6        highr_0.11        
+[13] pkgconfig_2.0.3    KernSmooth_2.23-24 checkmate_2.3.2    desc_1.4.3        
+[17] lifecycle_1.0.4    farver_2.1.2       stringr_1.5.1      compiler_4.4.1    
+[21] textshaping_0.4.0  brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1 
+[25] class_7.3-22       sass_0.4.9         RCurl_1.98-1.16    yaml_2.3.10       
+[29] pillar_1.9.0       pkgdown_2.1.0      jquerylib_0.1.4    MASS_7.3-60.2     
+[33] classInt_0.4-10    cachem_1.1.0       Deriv_4.1.3        digest_0.6.37     
+[37] stringi_1.8.4      sf_1.0-16          labeling_0.4.3     fastmap_1.2.0     
+[41] grid_4.4.1         colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3    
+[45] utf8_1.2.4         e1071_1.7-14       withr_3.0.1        scales_1.3.0      
+[49] backports_1.5.0    rmarkdown_2.28     Sim.DiffProc_4.9   signal_1.8-1      
+[53] igraph_2.0.3       gridExtra_2.3      ragg_1.3.2         png_0.1-8         
+[57] kableExtra_1.4.0   pbapply_1.7-2      evaluate_0.24.0    dtw_1.23-1        
+[61] fftw_1.0-8         testthat_3.2.1.1   rlang_1.1.4        Rcpp_1.0.13       
+[65] glue_1.7.0         DBI_1.2.3          xml2_1.3.6         svglite_2.1.3     
+[69] rstudioapi_0.16.0  jsonlite_1.8.8     R6_2.5.1           systemfonts_1.1.0 
+[73] fs_1.6.4           units_0.8-5       </code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

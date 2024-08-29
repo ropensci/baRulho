@@ -1338,7 +1338,7 @@
     dist_SIG <- X$distance[y]
     
       # excess attenuation = (total attenuation - spheric spreading attenuation) 
-      ea <- (-20 * log10(sig_env_REF / X$sig_env[y])) - (20 * log10(1 / dist_SIG))
+    ea <- (-20 * log10(sig_env_REF / X$sig_env[y])) - (20 * log10(1 / dist_SIG))
   }
   
   if (is.infinite(ea))

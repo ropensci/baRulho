@@ -246,7 +246,7 @@ degrad_imgs
 ```
 
 ... and this is one of the images:
-```{r, echo=FALSE, out.width="100%", fig.align='center'}
+```{r, echo=FALSE}
 
 knitr::include_graphics(basename(degrad_imgs[1]))
 
@@ -304,9 +304,24 @@ head(blur_imgs)
 
 ```
 
-Output image files (in the working directory) look like these ones:
+Output image files (in the working directory) look like this one:
 
-<center><img src="blur_ratio_example.gif" alt="Blur ratio visualization"  width="500" height="400"></center>
+```{r, echo = FALSE}
+
+# try to copy files to vignettes
+# fc <- file.copy(from = aligned_imgs[1:2], 
+#           to = file.path("../man/figures", basename(aligned_imgs[c(1, 4)])))
+
+fc <- file.copy(from = blur_imgs[1], 
+          to = file.path("../vignettes", basename(blur_imgs[1])), overwrite = TRUE)
+
+```
+
+```{r, echo=FALSE}
+
+knitr::include_graphics(basename(blur_imgs[1]))
+
+```
 
 &nbsp;
 

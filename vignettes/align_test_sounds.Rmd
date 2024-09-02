@@ -61,7 +61,7 @@ registerS3method("knit_print", "data.frame", .print_df)
 knitr::opts_chunk$set(
   fig.width = 5, 
   fig.height = 3.5,
-  dpi = 40,
+  dpi = 70,
   comment = "",
   out.width = "80%",
   fig.align = "center",

@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2024-09-16</h4>
+            <h4 data-toc-skip class="date">2024-09-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/master/vignettes/quantify_degradation.Rmd" class="external-link"><code>vignettes/quantify_degradation.Rmd</code></a></small>
       <div class="d-none name"><code>quantify_degradation.Rmd</code></div>
@@ -1958,12 +1958,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T/RtmpLwpgrw' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T/RtmpFi1GlP' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T//RtmpLwpgrw/plot_degradation_p1.jpeg"
-[2] "/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T//RtmpLwpgrw/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T//RtmpFi1GlP/plot_degradation_p1.jpeg"
+[2] "/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T//RtmpFi1GlP/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2926,16 +2926,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T/RtmpLwpgrw' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T/RtmpFi1GlP' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T//RtmpLwpgrw/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T//RtmpLwpgrw/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T//RtmpLwpgrw/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T//RtmpLwpgrw/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T//RtmpLwpgrw/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/var/folders/n3/x0zngmn15fzg2jfkglj4ys4w0000gn/T//RtmpLwpgrw/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T//RtmpFi1GlP/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T//RtmpFi1GlP/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T//RtmpFi1GlP/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T//RtmpFi1GlP/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T//RtmpFi1GlP/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/var/folders/0g/hj_q_pzx65bbjnslxz9n0src0000gn/T//RtmpFi1GlP/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -9989,7 +9989,7 @@ other attached packages:
  [9] tuneR_1.4.7        knitr_1.48        
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.5       rjson_0.2.22       xfun_0.47          bslib_0.8.0       
+ [1] gtable_0.3.5       rjson_0.2.23       xfun_0.47          bslib_0.8.0       
  [5] vctrs_0.6.5        tools_4.4.1        bitops_1.0-8       parallel_4.4.1    
  [9] tibble_3.2.1       proxy_0.4-27       fansi_1.0.6        highr_0.11        
 [13] pkgconfig_2.0.3    KernSmooth_2.23-24 checkmate_2.3.2    desc_1.4.3        
@@ -10000,7 +10000,7 @@ loaded via a namespace (and not attached):
 [33] classInt_0.4-10    cachem_1.1.0       Deriv_4.1.6        digest_0.6.37     
 [37] stringi_1.8.4      sf_1.0-17          labeling_0.4.3     fastmap_1.2.0     
 [41] grid_4.4.1         colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3    
-[45] utf8_1.2.4         e1071_1.7-14       withr_3.0.1        scales_1.3.0      
+[45] utf8_1.2.4         e1071_1.7-16       withr_3.0.1        scales_1.3.0      
 [49] backports_1.5.0    rmarkdown_2.28     Sim.DiffProc_4.9   signal_1.8-1      
 [53] igraph_2.0.3       gridExtra_2.3      ragg_1.3.3         png_0.1-8         
 [57] kableExtra_1.4.0   pbapply_1.7-2      evaluate_0.24.0    dtw_1.23-1        

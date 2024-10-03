@@ -5,7 +5,7 @@
 #' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the test sounds . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass.
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   end of the sound over which to measure tail power.
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
+#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}). Note that this might be internally adjusted if the number of samples in the tail is lower than the hop.size.
 #' @param tsr.formula Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 #' \itemize{
 #' \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
@@ -94,7 +94,7 @@ tail_to_signal_ratio <- function(X,
   }
   
   # calculate STR
-  X$tail.to.signal.ratio <- tail_to_signal_ratio_list <- 
+  tail_to_signal_ratio_list <- 
     warbleR:::.pblapply(X = seq_len(nrow(X)), pbar = pb, cl = cl, message = "computing tail-to-signal ratio", total = 1, function(y) {
       if (X$sound.id[y] != "ambient") {
         # Read sound files to get sample rate and length
@@ -107,7 +107,6 @@ tail_to_signal_ratio <- function(X,
             header = TRUE,
             path = path
           )
-        
         
         # reset time coordinates of sounds if higher than duration
         enn <- X$end[y] + mar
@@ -160,7 +159,11 @@ tail_to_signal_ratio <- function(X,
               ovlp = ovlp,
               to = bp[2] * 1000,
               bandpass = TRUE,
-              wl = wl,
+              wl = if (wl > length(tail.wv)) {
+                length(tail.wv)
+              } else {
+                wl
+              },
               output = "Wave"
             )
           
@@ -172,7 +175,11 @@ tail_to_signal_ratio <- function(X,
               ovlp = ovlp,
               to = bp[2] * 1000,
               bandpass = TRUE,
-              wl = wl,
+              wl = if (wl > length(tail.wv)) {
+                length(tail.wv)
+              } else {
+                wl
+              },
               output = "Wave"
             )
         }

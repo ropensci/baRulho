@@ -2,7 +2,7 @@
 #'
 #' \code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied.
+#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is \code{NULL}. If supplied, 'hop.size' is ignored.
 #' Note that lower values will increase time resolution, which is more important for amplitude calculations.

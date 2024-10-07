@@ -1333,13 +1333,14 @@
     ea <- NA
   } else {
     # extract mean envelope of sounds
+    sig_env <- X$sig_env[y]
     sig_env_REF <- X$sig_env[X$.sgnl.temp == rfrnc]
     dist_REF <- X$distance[X$.sgnl.temp == rfrnc]
     dist_SIG <- X$distance[y]
-    
-      # excess attenuation = (total attenuation - spheric spreading attenuation) 
-    ea <- (-20 * log10(sig_env_REF / X$sig_env[y])) - (20 * log10(1 / dist_SIG))
-  }
+      
+    # excess attenuation = (total attenuation - spheric spreading attenuation) 
+    ea <- (20 * log10(sig_env_REF / sig_env)) - (-20 * log10(dist_REF / dist_SIG))
+    }
   
   if (is.infinite(ea))
     ea <- NA

@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2024-11-01</h4>
+            <h4 data-toc-skip class="date">2024-11-02</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/master/vignettes/quantify_degradation.Rmd" class="external-link"><code>vignettes/quantify_degradation.Rmd</code></a></small>
       <div class="d-none name"><code>quantify_degradation.Rmd</code></div>
@@ -1958,12 +1958,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T/Rtmpxlu36N' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T/Rtmpa5XHpU' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpxlu36N/plot_degradation_p1.jpeg"
-[2] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpxlu36N/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpa5XHpU/plot_degradation_p1.jpeg"
+[2] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpa5XHpU/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2926,16 +2926,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T/Rtmpxlu36N' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T/Rtmpa5XHpU' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpxlu36N/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpxlu36N/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpxlu36N/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpxlu36N/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpxlu36N/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpxlu36N/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpa5XHpU/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpa5XHpU/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpa5XHpU/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpa5XHpU/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpa5XHpU/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/var/folders/g6/rgtlsw6n123b0gt5483s5_cm0000gn/T//Rtmpa5XHpU/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="blur_ratio_freq%3A1-1m_open.wav-4-10m_closed.wav-4.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -9966,7 +9966,7 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 </ol>
 <hr>
 <p><font size="4">Session information</font></p>
-<pre><code>R version 4.4.1 (2024-06-14)
+<pre><code>R version 4.4.2 (2024-10-31)
 Platform: aarch64-apple-darwin20
 Running under: macOS Sonoma 14.7
 
@@ -9990,16 +9990,16 @@ other attached packages:
 
 loaded via a namespace (and not attached):
  [1] gtable_0.3.6       rjson_0.2.23       xfun_0.49          bslib_0.8.0       
- [5] vctrs_0.6.5        tools_4.4.1        bitops_1.0-9       parallel_4.4.1    
+ [5] vctrs_0.6.5        tools_4.4.2        bitops_1.0-9       parallel_4.4.2    
  [9] tibble_3.2.1       proxy_0.4-27       fansi_1.0.6        highr_0.11        
 [13] pkgconfig_2.0.3    KernSmooth_2.23-24 checkmate_2.3.2    desc_1.4.3        
-[17] lifecycle_1.0.4    farver_2.1.2       stringr_1.5.1      compiler_4.4.1    
+[17] lifecycle_1.0.4    farver_2.1.2       stringr_1.5.1      compiler_4.4.2    
 [21] textshaping_0.4.0  brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1 
 [25] class_7.3-22       sass_0.4.9         RCurl_1.98-1.16    yaml_2.3.10       
 [29] pillar_1.9.0       pkgdown_2.1.1      jquerylib_0.1.4    MASS_7.3-61       
 [33] classInt_0.4-10    cachem_1.1.0       Deriv_4.1.6        digest_0.6.37     
 [37] stringi_1.8.4      sf_1.0-18          labeling_0.4.3     fastmap_1.2.0     
-[41] grid_4.4.1         colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3    
+[41] grid_4.4.2         colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3    
 [45] utf8_1.2.4         e1071_1.7-16       withr_3.0.2        scales_1.3.0      
 [49] backports_1.5.0    rmarkdown_2.28     Sim.DiffProc_4.9   signal_1.8-1      
 [53] igraph_2.1.1       gridExtra_2.3      ragg_1.3.3         png_0.1-8         

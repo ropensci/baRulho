@@ -1903,7 +1903,7 @@
     
     # method 1 compare to closest distance to source
     if (meth == 1) {
-      # if column transect is found select the lowest distance in that trasnect
+      # if column transect is found select the lowest distance in that transect
       if (!is.null(Z$transect)) {
         W <-
           Z[Z$transect == Z$transect[Z$.sgnl.temp == x] &

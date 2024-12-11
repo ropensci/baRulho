@@ -102,7 +102,7 @@ The packages [seewave](https://cran.r-project.org/package=seewave) and  [tuneR](
 
 Please cite [baRulho](https://docs.ropensci.org/baRulho//) as follows:
 
-Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0.
+Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), *baRulho: an R package to quantify degradation in animal acoustic signals*. bioRxiv 2023.11.22.568305.
 
 ## References
 

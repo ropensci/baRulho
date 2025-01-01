@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2024-12-31</h4>
+            <h4 data-toc-skip class="date">2025-01-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/master/vignettes/quantify_degradation.Rmd" class="external-link"><code>vignettes/quantify_degradation.Rmd</code></a></small>
       <div class="d-none name"><code>quantify_degradation.Rmd</code></div>
@@ -1960,12 +1960,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T/RtmpPy0MdY' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T/RtmpABsSMa' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpPy0MdY/plot_degradation_p1.jpeg"
-[2] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpPy0MdY/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpABsSMa/plot_degradation_p1.jpeg"
+[2] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpABsSMa/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2928,16 +2928,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T/RtmpPy0MdY' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T/RtmpABsSMa' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpPy0MdY/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpPy0MdY/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpPy0MdY/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpPy0MdY/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpPy0MdY/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpPy0MdY/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpABsSMa/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpABsSMa/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpABsSMa/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpABsSMa/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpABsSMa/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/var/folders/95/0ydz4d79163427j3k5crp3fh0000gn/T//RtmpABsSMa/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="blur_ratio_freq%3A1-1m_open.wav-4-10m_closed.wav-4.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>

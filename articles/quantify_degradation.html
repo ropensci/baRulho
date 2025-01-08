@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2025-01-07</h4>
+            <h4 data-toc-skip class="date">2025-01-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/master/vignettes/quantify_degradation.Rmd" class="external-link"><code>vignettes/quantify_degradation.Rmd</code></a></small>
       <div class="d-none name"><code>quantify_degradation.Rmd</code></div>
@@ -124,8 +124,6 @@ structure:</p>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"test_sounds_est"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">test_sounds_est</span></span></code></pre></div>
-<pre><code>Error in get(paste0(generic, ".", class), envir = get_method_env()) : 
-  object 'type_sum.accel' not found</code></pre>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
 <thead><tr>
@@ -963,14 +961,14 @@ Ambient noise can be used by some functions to correct for amplitude
 differences due to non-target sounds.</p>
 <p>In this example data there are 4 recordings at increasing distances:
 1m, 5m, 10m and 15m:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># count selection per recordings</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">sound.files</span><span class="op">)</span></span></code></pre></div>
 <pre><code>[1] "10m_closed.wav" "10m_open.wav"   "1m_open.wav"    "30m_closed.wav"
 [5] "30m_open.wav"  </code></pre>
 <p>The data contains selections for 5 sounds as well as 1 ambient noise
 selections at each distance/recording:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">sound.id</span>, <span class="va">test_sounds_est</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
 <table class="table table table-striped" style="font-size: 14px; margin-left: auto; margin-right: auto;">
@@ -1083,7 +1081,7 @@ on these formats.</p>
 used to determined, for each row in the input data, which sounds would
 be used as references. The function can do this using any of the two
 methods described above:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># add reference column</span></span>
 <span><span class="va">test_sounds_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/set_reference_sounds.html">set_reference_sounds</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, method <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -1951,7 +1949,7 @@ visual inspection of sound degradation by producing multipanel figures
 test sound and its reference. Sounds are sorted by distance (columns)
 and transect. Visualizations include spectrograms, amplitude envelopes
 and power spectra (the last 2 are optional):</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># sort to order panels</span></span>
 <span><span class="va">test_sounds_est</span> <span class="op">&lt;-</span></span>
 <span>  <span class="va">test_sounds_est</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/order.html" class="external-link">order</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">sound.id</span>,</span>
@@ -1960,12 +1958,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T/Rtmp0nULSz' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T/Rtmpf0OV37' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmp0nULSz/plot_degradation_p1.jpeg"
-[2] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmp0nULSz/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmpf0OV37/plot_degradation_p1.jpeg"
+[2] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmpf0OV37/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -1994,10 +1992,10 @@ to only compare sounds belonging to the same category (e.g. song-types).
 All sound files (or wave objects in the extended selection table) must
 have the same sampling rate so the length of envelopes is comparable.
 Blur ratio can be calculated as follows:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run blur ratio</span></span>
 <span><span class="va">br</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/blur_ratio.html">blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># see output</span></span>
 <span><span class="va">br</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -2925,19 +2923,19 @@ noise selections.</p>
 image files (in ‘jpeg’ format) for each comparison showing spectrograms
 of both sounds and the overlaid amplitude envelopes (as probability mass
 functions (PMF)).</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T/Rtmp0nULSz' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T/Rtmpf0OV37' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmp0nULSz/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmp0nULSz/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmp0nULSz/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmp0nULSz/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmp0nULSz/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmp0nULSz/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmpf0OV37/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmpf0OV37/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmpf0OV37/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmpf0OV37/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmpf0OV37/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/var/folders/ml/x_tvfgn50_s7p67dm1ypcqqm0000gn/T//Rtmpf0OV37/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="blur_ratio_freq%3A1-1m_open.wav-4-10m_closed.wav-4.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2950,7 +2948,7 @@ argument <code>envelopes = TRUE</code>. The contours can be directly
 input into ggplot to visualize amplitude envelopes, and how they vary
 with distance and across sound types (and ambient noise if
 included):</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get envelopes</span></span>
 <span><span class="va">br</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/blur_ratio.html">blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, envelopes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">br</span><span class="op">)</span><span class="op">$</span><span class="va">envelopes</span></span>
@@ -2969,7 +2967,7 @@ included):</p>
 related measurements, as higher values tend to smooth the envelopes. The
 following code sets <code>env.smooth = 800</code> which produces
 smoother envelopes:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># get envelopes</span></span>
 <span><span class="va">br</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/blur_ratio.html">blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, envelopes <span class="op">=</span> <span class="cn">TRUE</span>, env.smooth <span class="op">=</span> <span class="fl">800</span><span class="op">)</span></span>
 <span><span class="va">envs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">br</span><span class="op">)</span><span class="op">$</span><span class="va">envelopes</span></span>
@@ -2999,10 +2997,10 @@ sound and the re-recorded sound. It works in the same way than
 <code><a href="../reference/blur_ratio.html">blur_ratio()</a></code>, comparing each sound to the corresponding
 reference sound, and the output and images are alike as well.</p>
 <p>Spectrum blur ratio can be calculated as follows:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run Spectrum blur ratio</span></span>
 <span><span class="va">sbr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spectrum_blur_ratio.html">spectrum_blur_ratio</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># see output</span></span>
 <span><span class="va">sbr</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -3925,7 +3923,7 @@ open
 <p>As in <code><a href="../reference/blur_ratio.html">blur_ratio()</a></code>, <code><a href="../reference/spectrum_blur_ratio.html">spectrum_blur_ratio()</a></code>
 can also return the amplitude spectrum contours with the argument
 <code>spectra = TRUE</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sbr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spectrum_blur_ratio.html">spectrum_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, spectra <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">spctr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes</a></span><span class="op">(</span><span class="va">sbr</span><span class="op">)</span><span class="op">$</span><span class="va">spectra</span></span>
@@ -3957,14 +3955,14 @@ corresponding reference sound within the frequency range (e.g. bandpass)
 of the reference sound (‘bottom.freq’ and ‘top.freq’ columns in
 ‘X’).</p>
 <p><code><a href="../reference/excess_attenuation.html">excess_attenuation()</a></code> can be measured like this:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run  envelope correlation</span></span>
 <span><span class="va">ea</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/excess_attenuation.html">excess_attenuation</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">)</span></span></code></pre></div>
 <p>The output, similar to those of other functions, is an extended
 selection table with the input data, but also including two new columns
 (‘reference’ and ‘excess.attenuation’) with the reference sound and the
 excess attenuation:</p>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span><span class="va">ea</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -4901,14 +4899,14 @@ in the functions detailed above, ‘sound.id’ column must be used to
 instruct the function to only compare sounds that belong to the same
 category.</p>
 <p><code><a href="../reference/envelope_correlation.html">envelope_correlation()</a></code> can be run as follows:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run  envelope correlation</span></span>
 <span><span class="va">ec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/envelope_correlation.html">envelope_correlation</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">)</span></span></code></pre></div>
 <p>The output is also similar to those of other functions; an extended
 selection table similar to input data, but also includes two new columns
 (‘reference’ and ‘envelope.correlation’) with the reference sound and
 the amplitude envelope correlation coefficients:</p>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span><span class="va">ec</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -5841,12 +5839,12 @@ frequency domain. This is similar to
 sounds are compared within the frequency range of the reference sound
 (so both spectra have the same length). Again, values near 1 indicate
 identical frequency spectrum (i.e. no degradation).</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run spectrum correlation</span></span>
 <span><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spectrum_correlation.html">spectrum_correlation</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">)</span></span></code></pre></div>
 <p>The output is also similar to that of
 <code><a href="../reference/envelope_correlation.html">envelope_correlation()</a></code>:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span><span class="va">sc</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -6792,7 +6790,7 @@ another acoustic signal nearby, SNR will be inaccurate, so margin length
 should be carefully considered. Any SNR less than or equal to one
 suggests background noise is equal to or overpowering the acoustic
 signal. SNR can be measured as follows:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run signal to noise ratio</span></span>
 <span><span class="va">snr</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/signal_to_noise_ratio.html">signal_to_noise_ratio</a></span><span class="op">(</span><span class="va">test_sounds_est</span>,</span>
@@ -6800,7 +6798,7 @@ signal. SNR can be measured as follows:</p>
 <span>                        noise.ref <span class="op">=</span> <span class="st">"custom"</span>,</span>
 <span>                        mar <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
 <p>The output is also similar to the other functions:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span><span class="va">snr</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -7740,11 +7738,11 @@ original description of TSR in Dabelsteen et al. (1993) while
 given that it compares the amplitude of tails to those of ambient noise.
 For both types higher values represent more reverberations. TSR can be
 measured as follows:</p>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run tail to signal ratio</span></span>
 <span><span class="va">tsr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/tail_to_signal_ratio.html">tail_to_signal_ratio</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, tsr.formula <span class="op">=</span> <span class="fl">1</span>, mar <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 <p>Again, the output is similar to other functions:</p>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span></span>
 <span><span class="va">tsr</span></span></code></pre></div>
@@ -8676,11 +8674,11 @@ cross-correlation as a metric of sound distortion of sounds. Values
 close to 1 means very similar spectrograms (i.e. little sound
 distortion). The function is a wrapper on <a href="https://cran.r-project.org/package=warbleR" class="external-link">warbleR</a>’s
 <code><a href="https://marce10.github.io/warbleR/reference/cross_correlation.html" class="external-link">cross_correlation()</a></code>. It can be run as follows:</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run spcc</span></span>
 <span><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/spcc.html">spcc</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, wl <span class="op">=</span> <span class="fl">512</span><span class="op">)</span></span></code></pre></div>
 <p>And again, the output is similar to other functions:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span><span class="va">sc</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -9616,14 +9614,14 @@ uses the seewave function <code>meanspec()</code> internally to
 calculate frequency spectra. The following code measures the ambient
 noise profile for the recordings at distance &gt;= 5m on the example
 extended selection table:</p>
-<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># run noise profile</span></span>
 <span><span class="va">np</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/noise_profile.html">noise_profile</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span><span class="op">[</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">distance</span> <span class="op">&gt;</span> <span class="fl">5</span>,<span class="op">]</span>, mar <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
 <pre><code> [30mcomputing noise profile(s) (step 0 of 0): [39m</code></pre>
 <p>The output is a data frame with amplitude values for the frequency
 bins for each wave object in the extended selection table:</p>
-<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">np</span>, <span class="fl">20</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 0px; overflow-y: scroll; height:300px; overflow-x: scroll; width:100%; ">
@@ -9864,7 +9862,7 @@ amp
 </table>
 </div>
 <p>This can be graphically represented as follows:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">np</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">amp</span>, x <span class="op">=</span> <span class="va">freq</span>, col <span class="op">=</span> <span class="va">sound.files</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1.4</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_color_viridis_d</a></span><span class="op">(</span>begin <span class="op">=</span> <span class="fl">0.2</span>, end <span class="op">=</span> <span class="fl">0.8</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
@@ -9875,7 +9873,7 @@ amp
 <p>The output data is actually an average of several frequency spectra
 for each sound file. We can obtain the original spectra by setting the
 argument <code>averaged = FALSE</code>:</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">np</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/noise_profile.html">noise_profile</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span><span class="op">[</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">distance</span> <span class="op">&gt;</span> <span class="fl">5</span>, <span class="op">]</span>,</span>
 <span>                mar <span class="op">=</span> <span class="fl">0.1</span>, averaged <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -9899,7 +9897,7 @@ argument <code>averaged = FALSE</code>:</p>
 (‘bp’ argument). In addition, the argument ‘hop.size’, which control the
 size of the time windows, affects the precision in the frequency domain.
 We can get a better precision by increasing ‘hop.size’ (or ‘wl’):</p>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">np</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/noise_profile.html">noise_profile</a></span><span class="op">(</span></span>
 <span>  X <span class="op">=</span> <span class="va">test_sounds_est</span><span class="op">[</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">distance</span> <span class="op">&gt;</span> <span class="fl">5</span>,<span class="op">]</span>,</span>
 <span>  mar <span class="op">=</span> <span class="fl">0.05</span>,</span>
@@ -9991,19 +9989,19 @@ other attached packages:
  [9] tuneR_1.4.7        knitr_1.49        
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6       rjson_0.2.23       xfun_0.49          bslib_0.8.0       
+ [1] gtable_0.3.6       rjson_0.2.23       xfun_0.50          bslib_0.8.0       
  [5] vctrs_0.6.5        tools_4.4.2        bitops_1.0-9       curl_6.1.0        
  [9] parallel_4.4.2     tibble_3.2.1       proxy_0.4-27       pkgconfig_2.0.3   
 [13] KernSmooth_2.23-26 checkmate_2.3.2    desc_1.4.3         lifecycle_1.0.4   
 [17] farver_2.1.2       stringr_1.5.1      compiler_4.4.2     textshaping_0.4.1 
 [21] brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1  class_7.3-23      
 [25] sass_0.4.9         RCurl_1.98-1.16    yaml_2.3.10        pkgdown_2.1.1     
-[29] pillar_1.10.0      jquerylib_0.1.4    MASS_7.3-64        classInt_0.4-10   
+[29] pillar_1.10.1      jquerylib_0.1.4    MASS_7.3-64        classInt_0.4-10   
 [33] cachem_1.1.0       Deriv_4.1.6        digest_0.6.37      stringi_1.8.4     
 [37] sf_1.0-19          labeling_0.4.3     fastmap_1.2.0      grid_4.4.2        
 [41] colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3     e1071_1.7-16      
 [45] withr_3.0.2        scales_1.3.0       backports_1.5.0    rmarkdown_2.29    
-[49] httr_1.4.7         Sim.DiffProc_4.9   signal_1.8-1       igraph_2.1.2      
+[49] httr_1.4.7         Sim.DiffProc_4.9   signal_1.8-1       igraph_2.1.3      
 [53] gridExtra_2.3      png_0.1-8          ragg_1.3.3         kableExtra_1.4.0  
 [57] pbapply_1.7-2      evaluate_1.0.1     dtw_1.23-1         fftw_1.0-9        
 [61] testthat_3.2.2     rlang_1.1.4        Rcpp_1.0.13-1      glue_1.8.0        

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">baRulho</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1958,12 +1958,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T/Rtmpdz5YuQ' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpfbpwtF' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T//Rtmpdz5YuQ/plot_degradation_p1.jpeg"
-[2] "/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T//Rtmpdz5YuQ/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/tmp/RtmpfbpwtF/plot_degradation_p1.jpeg"
+[2] "/tmp/RtmpfbpwtF/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2926,16 +2926,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T/Rtmpdz5YuQ' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpfbpwtF' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T//Rtmpdz5YuQ/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T//Rtmpdz5YuQ/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T//Rtmpdz5YuQ/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T//Rtmpdz5YuQ/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T//Rtmpdz5YuQ/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T//Rtmpdz5YuQ/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/tmp/RtmpfbpwtF/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/tmp/RtmpfbpwtF/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/tmp/RtmpfbpwtF/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/tmp/RtmpfbpwtF/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/tmp/RtmpfbpwtF/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/tmp/RtmpfbpwtF/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="blur_ratio_freq%3A1-1m_open.wav-4-10m_closed.wav-4.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -3248,7 +3248,7 @@ closed
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.0682672
+0.0290863
 </td>
 </tr>
 <tr>
@@ -3283,7 +3283,7 @@ closed
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.1292459
+0.0524915
 </td>
 </tr>
 <tr>
@@ -3318,7 +3318,7 @@ open
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.2077196
+0.0406274
 </td>
 </tr>
 <tr>
@@ -3388,7 +3388,7 @@ open
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.1617808
+0.0771104
 </td>
 </tr>
 <tr>
@@ -3423,7 +3423,7 @@ closed
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.1027621
+0.0373389
 </td>
 </tr>
 <tr>
@@ -3458,7 +3458,7 @@ closed
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.1567549
+0.0375922
 </td>
 </tr>
 <tr>
@@ -3493,7 +3493,7 @@ open
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.2204311
+0.0511878
 </td>
 </tr>
 <tr>
@@ -3563,7 +3563,7 @@ open
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.1366660
+0.0513809
 </td>
 </tr>
 <tr>
@@ -3598,7 +3598,7 @@ closed
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.0760921
+0.0315084
 </td>
 </tr>
 <tr>
@@ -3633,7 +3633,7 @@ closed
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.2013668
+0.0958100
 </td>
 </tr>
 <tr>
@@ -3668,7 +3668,7 @@ open
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.0858642
+0.0117749
 </td>
 </tr>
 <tr>
@@ -3738,7 +3738,7 @@ open
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.0839942
+0.0373253
 </td>
 </tr>
 <tr>
@@ -3773,7 +3773,7 @@ closed
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.1049022
+0.0266188
 </td>
 </tr>
 <tr>
@@ -3808,7 +3808,7 @@ closed
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.1929705
+0.0421037
 </td>
 </tr>
 <tr>
@@ -3843,7 +3843,7 @@ open
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.1809072
+0.0716653
 </td>
 </tr>
 <tr>
@@ -3913,7 +3913,7 @@ open
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.0710742
+0.0302866
 </td>
 </tr>
 </tbody>
@@ -6092,7 +6092,7 @@ closed
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9985589
+0.9983597
 </td>
 </tr>
 <tr>
@@ -6127,7 +6127,7 @@ closed
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.3231770
+-0.0609972
 </td>
 </tr>
 <tr>
@@ -6162,7 +6162,7 @@ open
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9307024
+0.9466352
 </td>
 </tr>
 <tr>
@@ -6232,7 +6232,7 @@ open
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9453447
+0.9776356
 </td>
 </tr>
 <tr>
@@ -6267,7 +6267,7 @@ closed
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.8898157
+0.9558702
 </td>
 </tr>
 <tr>
@@ -6302,7 +6302,7 @@ closed
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.6175148
+0.7311193
 </td>
 </tr>
 <tr>
@@ -6337,7 +6337,7 @@ open
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.8969106
+0.8872755
 </td>
 </tr>
 <tr>
@@ -6407,7 +6407,7 @@ open
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.5402966
+0.7881992
 </td>
 </tr>
 <tr>
@@ -6442,7 +6442,7 @@ closed
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9997402
+0.9997165
 </td>
 </tr>
 <tr>
@@ -6477,7 +6477,7 @@ closed
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9879835
+0.9749093
 </td>
 </tr>
 <tr>
@@ -6512,7 +6512,7 @@ open
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9926306
+0.9906310
 </td>
 </tr>
 <tr>
@@ -6582,7 +6582,7 @@ open
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9923753
+0.9866226
 </td>
 </tr>
 <tr>
@@ -6617,7 +6617,7 @@ closed
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9838624
+0.9818309
 </td>
 </tr>
 <tr>
@@ -6652,7 +6652,7 @@ closed
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9996172
+0.9947720
 </td>
 </tr>
 <tr>
@@ -6687,7 +6687,7 @@ open
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9915640
+0.9980480
 </td>
 </tr>
 <tr>
@@ -6757,7 +6757,7 @@ open
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 255) !important;">
-0.9975736
+0.9965715
 </td>
 </tr>
 </tbody>
@@ -9967,24 +9967,27 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <hr>
 <p><font size="4">Session information</font></p>
 <pre><code>R version 4.4.2 (2024-10-31)
-Platform: aarch64-apple-darwin20
-Running under: macOS Sonoma 14.7.2
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 24.04.1 LTS
 
 Matrix products: default
-BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
 
 locale:
-[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
 
 time zone: UTC
-tzcode source: internal
+tzcode source: system (glibc)
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ggplot2_3.5.1      viridis_0.6.5      viridisLite_0.4.2  baRulho_2.1.2     
+ [1] ggplot2_3.5.1      viridis_0.6.5      viridisLite_0.4.2  baRulho_2.1.3     
  [5] ohun_1.0.2         warbleR_1.1.34     NatureSounds_1.0.5 seewave_2.2.3     
  [9] tuneR_1.4.7        knitr_1.49        
 
@@ -9992,11 +9995,11 @@ loaded via a namespace (and not attached):
  [1] gtable_0.3.6       rjson_0.2.23       xfun_0.50          bslib_0.8.0       
  [5] vctrs_0.6.5        tools_4.4.2        bitops_1.0-9       curl_6.1.0        
  [9] parallel_4.4.2     tibble_3.2.1       proxy_0.4-27       pkgconfig_2.0.3   
-[13] KernSmooth_2.23-26 checkmate_2.3.2    desc_1.4.3         lifecycle_1.0.4   
+[13] KernSmooth_2.23-24 checkmate_2.3.2    desc_1.4.3         lifecycle_1.0.4   
 [17] farver_2.1.2       stringr_1.5.1      compiler_4.4.2     textshaping_1.0.0 
-[21] brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1  class_7.3-23      
+[21] brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1  class_7.3-22      
 [25] sass_0.4.9         RCurl_1.98-1.16    yaml_2.3.10        pkgdown_2.1.1     
-[29] pillar_1.10.1      jquerylib_0.1.4    MASS_7.3-64        classInt_0.4-11   
+[29] pillar_1.10.1      jquerylib_0.1.4    MASS_7.3-61        classInt_0.4-11   
 [33] cachem_1.1.0       Deriv_4.1.6        digest_0.6.37      stringi_1.8.4     
 [37] sf_1.0-19          labeling_0.4.3     fastmap_1.2.0      grid_4.4.2        
 [41] colorspace_2.1-1   cli_3.6.3          magrittr_2.0.3     e1071_1.7-16      

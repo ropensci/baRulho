@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">baRulho</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"dest.path"</span>, <span class="st">"."</span><span class="op">)</span>,</span>
 <span>  path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"sound.files.path"</span>, <span class="st">"."</span><span class="op">)</span>,</span>
 <span>  colors <span class="op">=</span> <span class="fu">viridis</span><span class="fu">::</span><span class="fu"><a href="https://sjmgarnier.github.io/viridisLite/reference/viridis.html" class="external-link">viridis</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span>,</span>
-<span>  n.samples <span class="op">=</span> <span class="fl">100</span></span>
+<span>  n.samples <span class="op">=</span> <span class="kw">if</span> <span class="op">(</span><span class="va">type</span> <span class="op">==</span> <span class="st">"envelope"</span><span class="op">)</span> <span class="fl">100</span> <span class="kw">else</span> <span class="fl">500</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -136,7 +136,7 @@ plot, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="
 
 
 <dt id="arg-n-samples">n.samples<a class="anchor" aria-label="anchor" href="#arg-n-samples"></a></dt>
-<dd><p>Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if <code>spectrum = TRUE</code>) to use for representing power distributions. Default is 100. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).</p></dd>
+<dd><p>Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if <code>spectrum = TRUE</code>) to use for representing power distributions. Default is 100 for <code>type = "envelope"</code> and 500 for <code>type = "spectrum"</code>. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -183,7 +183,7 @@ plot, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectro.html" class="
 <span class="r-in"><span>  <span class="co"># create plots</span></span></span>
 <span class="r-in"><span>  <span class="fu">plot_blur_ratio</span><span class="op">(</span>X <span class="op">=</span> <span class="va">X</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/private/var/folders/2s/h6hvv9ps03xgz_krkkstvq_r0000gn/T/RtmppUnJBD'</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #000000;">The image files have been saved in the directory path '/tmp/RtmpmGBj1K'</span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

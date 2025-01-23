@@ -21,7 +21,7 @@ plot_blur_ratio(
   dest.path = getOption("dest.path", "."),
   path = getOption("sound.files.path", "."),
   colors = viridis::viridis(3),
-  n.samples = 100
+  n.samples = if (type == "envelope") 100 else 500
 )
 }
 \arguments{
@@ -59,7 +59,7 @@ plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viri
 
 \item{colors}{Character vector of length 4 containing the colors to be used for the color to identify the reference sound  (element 1),  the color to identify the test sound (element 2) and the color of blurred region (element 3).}
 
-\item{n.samples}{Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power distributions. Default is 100. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).}
+\item{n.samples}{Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power distributions. Default is 100 for \code{type = "envelope"} and 500 for \code{type = "spectrum"}. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).}
 }
 \value{
 It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showing spectrograms of both sounds and the overlaid amplitude envelopes (or power spectra if \code{spectrum = TRUE}) as probability mass functions (PMF). Spectrograms are shown within the frequency range of the reference sound. It also returns the file path of the images invisibly.

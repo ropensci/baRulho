@@ -33,7 +33,7 @@ If \code{NULL} (default) then the current working directory will be used instead
 
 \item{amp.marker}{Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of sounds, so it is picked up at further distances. Default is 2.}
 
-\item{flim}{Numeric vector of length 2 to control the frequency range in which the markers would be found. If \code{NULL} markers would be display across the whole frequency range. Default is c(0, 4).}
+\item{flim}{Numeric vector of length 2 to control the (approximate) frequency range in which the markers would be found. If \code{NULL} markers would span across the entire frequency range. Default is c(0, 4).}
 
 \item{cex}{Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.}
 

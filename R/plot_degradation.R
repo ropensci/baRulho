@@ -119,13 +119,6 @@ plot_degradation <-
     # adjust wl based on hop.size
     wl <- .adjust_wl(wl, X, hop.size, path)
     
-    # set clusters for windows OS
-    if (Sys.info()[1] == "Windows" & cores > 1) {
-      cl <- parallel::makePSOCKcluster(cores)
-    } else {
-      cl <- cores
-    }
-    
     # remove ambient sounds
     X <- X[X$sound.id != "ambient",]
     

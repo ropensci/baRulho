@@ -13,7 +13,7 @@
 #'   plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}.
 #' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.
 #' @param colors Character vector of length 4 containing the colors to be used for the color to identify the reference sound  (element 1),  the color to identify the test sound (element 2) and the color of blurred region (element 3).
-#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power distributions. Default is 100. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).
+#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power distributions. Default is 100 for \code{type = "envelope"} and 500 for \code{type = "spectrum"}. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).
 #' @return It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showing spectrograms of both sounds and the overlaid amplitude envelopes (or power spectra if \code{spectrum = TRUE}) as probability mass functions (PMF). Spectrograms are shown within the frequency range of the reference sound. It also returns the file path of the images invisibly.
 #' @export
 #' @name plot_blur_ratio
@@ -55,7 +55,7 @@ plot_blur_ratio <-
            dest.path = getOption("dest.path", "."),
            path = getOption("sound.files.path", "."),
            colors = viridis::viridis(3),
-           n.samples = 100) {
+           n.samples = if (type == "envelope") 100 else 500) {
     
     # assign a value to type
     type <- rlang::arg_match(type)
@@ -76,8 +76,8 @@ plot_blur_ratio <-
     .report_assertions(check_results)
     
     # adjust wl based on hop.size
-    wl <- .adjust_wl(wl, X, hop.size)
-    
+    wl <- .adjust_wl(wl, X, hop.size, path)
+
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <- parallel::makePSOCKcluster(cores)
@@ -91,7 +91,7 @@ plot_blur_ratio <-
     # get names of envelopes involved (those as test with reference or as reference)
     target_sgnl_temp <-
       unique(c(X$.sgnl.temp[!is.na(X$reference)], X$reference[!is.na(X$reference)]))
-
+   
     # calculate all envelops apply function
     if (type == "envelope") {
       energy_vectors <-
@@ -121,7 +121,7 @@ plot_blur_ratio <-
           }
         )
     }
-    
+
     if (type == "spectrum") {
       # calculate all spectra apply function
       energy_vectors <-
@@ -184,7 +184,7 @@ plot_blur_ratio <-
             X = Q,
             energy_vectors = en.vctr,
             spectr = spct,
-            path,
+            path = path,
             dest.path = dest.pth,
             x,
             res = rs,

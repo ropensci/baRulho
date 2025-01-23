@@ -10,7 +10,7 @@
 #' @param delay Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning (and at the end) of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.
 #' @param gap.duration Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between sounds. Default is 1 s.
 #' @param amp.marker Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of sounds, so it is picked up at further distances. Default is 2.
-#' @param flim Numeric vector of length 2 to control the frequency range in which the markers would be found. If \code{NULL} markers would be display across the whole frequency range. Default is c(0, 4).
+#' @param flim Numeric vector of length 2 to control the (approximate) frequency range in which the markers would be found. If \code{NULL} markers would span across the entire frequency range. Default is c(0, 4). 
 #' @param cex Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.
 #' @return A .wav file in 'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.
 #' @export
@@ -91,7 +91,6 @@ master_sound_file <-
         header = TRUE
       )$sample.rate
     
-    
     mrkrs <- .make_markers(X, flim, sampling_rate, cex)  
     
     # output wave object
@@ -109,7 +108,12 @@ master_sound_file <-
     
     # fix bottom freq if NA
     if (is.na(strt_mrkr_freq$bottom.freq))
-      strt_mrkr_freq$bottom.freq <- 0
+      strt_mrkr_freq$bottom.freq <- flim[1]
+    
+    # fix top freq if NA
+    if (is.na(strt_mrkr_freq$top.freq))
+      strt_mrkr_freq$top.freq <- flim[2]
+    
     
     end_mrkr_freq <-
       warbleR::freq_range_detec(
@@ -121,7 +125,11 @@ master_sound_file <-
     
     # fix bottom freq if NA
     if (is.na(end_mrkr_freq$bottom.freq))
-      end_mrkr_freq$bottom.freq <- 0
+      end_mrkr_freq$bottom.freq <- flim[1]
+    
+    # fix top freq if NA
+    if (is.na(end_mrkr_freq$top.freq))
+      end_mrkr_freq$top.freq <- flim[2]
     
     # amplify markers
     strt_mrkr@left <- strt_mrkr@left * amp.marker

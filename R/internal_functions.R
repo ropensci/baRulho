@@ -4804,17 +4804,12 @@
 }
 
 .check_marker <- function(args, check_collection, fun) {
-  if (fun != "manual_realign" & any(names(args) == "marker")) {
+  if (!(fun %in% c("manual_realign", "align_test_files")) & any(names(args) == "marker")) {
     .assert_deprecated(x = args$marker,
                        add = check_collection,
                        .var.name = "marker")
   }
   
-  if (fun != "manual_realign" & any(names(args) == "marker")) {
-    .assert_deprecated(x = args$marker,
-                       add = check_collection,
-                       .var.name = "marker")
-  }
   return(check_collection)
 }
 

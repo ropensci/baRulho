@@ -115,9 +115,9 @@ manual_realign <-
     if (!all(sapply(unique(X$sound.files), function(x)
       sum(X$sound.files == x &
           X$sound.id == marker))))
-      .stop("at least 1 sound file does not have 'marker' in 'sound.id' column in 'X'")
+      .stop("at least 1 sound file does not have the supplied 'marker' in 'sound.id' column in 'X'")
     if (!marker %in% Y$sound.id)
-      .stop("'marker' not found in 'sound.id' column in 'Y'")
+      .stop("supplied 'marker' not found in 'sound.id' column in 'Y'")
     
     # set external window function
     if (any(Sys.info()[1] == c("Linux", "Windows")))

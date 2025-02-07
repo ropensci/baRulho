@@ -1,3 +1,19 @@
+baRulho 2.1.4
+=========================
+
+### MINOR IMPROVEMENTS
+
+* Fix bug in `find_markers()` and `manual_realign()` when missing one marker that is not used
+
+
+baRulho 2.1.3
+=========================
+
+### MINOR IMPROVEMENTS
+
+* Improved performance issue of `plot_degradation()` 
+
+
 baRulho 2.1.2
 =========================
 

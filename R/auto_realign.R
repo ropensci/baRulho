@@ -2,14 +2,14 @@
 #'
 #' \code{auto_realign} fixes small misalignments in the time position of test sounds in an extended selection table using spectrographic cross-correlation
 #' @inheritParams template_params
-#' @param X object of class 'extended_selection_table' created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.
+#' @param X object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the annotations to be aligned. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.
 #' @param Y object of class 'extended_selection_table' (a class created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.
 #' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
 #' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values slow down the function but produce more accurate results. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
 #' @return Object 'X' in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
 #' @export
 #' @name auto_realign
-#' @details Precise alignment is crucial for downstream measures of sound degradation. This function uses spectrographic cross-correlation to align the position in time of test sounds. The master sound file is used as reference. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment. Note that this function only works to further improve alignments if the estimated position of the test sound is already close to the actual position. Note that both 'X' and 'Y' must be extended selection tables sensu \code{\link[warbleR]{selection_table}}.
+#' @details Precise alignment is crucial for downstream measures of sound degradation. This function uses spectrogram cross-correlation to align the position in time of test sounds. The master sound file is used as reference. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment. Note that 1) this function only works to further improve alignments if the estimated position of the test sound is already close to the actual position and 2) both 'X' and 'Y' must be extended selection tables sensu \code{\link[warbleR]{selection_table}}.
 #' 
 #' @examples {
 #'   # load example data
@@ -39,7 +39,7 @@
 #' @family test sound alignment
 #' @seealso \code{\link{blur_ratio}}, \code{\link[warbleR]{cross_correlation}}
 #' @references {
-#' Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), baRulho: an R package to quantify degradation in animal acoustic signals .bioRxiv 2023.11.22.568305.
+#' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #'
 #' Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
 #' }
@@ -72,30 +72,32 @@ auto_realign <-
     # report errors
     .report_assertions(check_results)
     
+    # add column to discriminate between reference and unaligned
+    X$..type.. <- "unaligned"
+    Y$..type.. <- "reference"
     
     # combine the two extended selection tables
     common_cols <- intersect(names(X), names(Y))  
     W <- rbind(X[, common_cols], Y[, common_cols])
     
-    
     # adjust wl based on hop.size
     wl <- .adjust_wl(wl, W, hop.size)
-
+    
     # remove ambient if any from sound types
     sig.types <- setdiff(unique(W$sound.id), c("ambient", "start_marker", "end_marker"))
     
     # create matrix containing pairwise comparisons of selections (2 columns)
     comp_mats <- lapply(sig.types, function(x) {
       # extract for single sound and order by distance
-      Y <- as.data.frame(W[W$sound.id == x,])
+      Q <- as.data.frame(W[W$sound.id == x,])
       
       # create selec ID column (unique ID for each selection (row))
-      Y$sf.selec <- paste(Y$sound.files, Y$selec, sep = "-")
+      Q$sf.selec <- paste(Q$sound.files, Q$selec, sep = "-")
       
       # create matrix with 2 columns of the selections to be compare
       # comparing to closest distance to source
       cmp.mt <-
-        cbind(Y$sf.selec[-which.min(Y$distance)], Y$sf.selec[which.min(Y$distance)])
+        cbind(Q$sf.selec[Q$..type.. == "unaligned"], Q$sf.selec[Q$..type.. == "reference"])
       
       return(cmp.mt)
     })
@@ -192,6 +194,9 @@ auto_realign <-
     
     # fix call attribute
     attributes(X)$call <- base::match.call()
+    
+    # remove temporary column
+    X$..type.. <- NULL
     
     return(X)
   }

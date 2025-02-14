@@ -14,7 +14,7 @@ Marcelo Araya-Salas
 data(master_est)
 }
 \description{
-Extended selection table (est) with the acoustic data and annotations of the master sound file of synthetic sounds. The synthetic sounds are 2 s long, frequency modulated and amplitude modulated. The data was created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The re-recorded data generated with these sounds is found in the example object \code{\link{test_sounds_est}}.
+Extended selection table (est) with the acoustic data and annotations of the master sound file of synthetic sounds. The synthetic sounds files are 2 s long, frequency modulated and amplitude modulated. The data was created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The re-recorded data generated with these sounds is found in the example object \code{\link{test_sounds_est}}.
 }
 \seealso{
 Other data sets: 

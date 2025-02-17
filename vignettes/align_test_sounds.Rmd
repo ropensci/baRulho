@@ -84,7 +84,7 @@ This vignette deals with two things: how to create synthetic sounds for playback
 
 <img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width = "25%" height="25%"/>
 
--**Model sound**: sound in which transmission properties will be studied, usually found in the original field recordings or synthetic sound files.
+-**Model sound**: sound in which propagation properties will be studied, usually found in the original field recordings or synthetic sound files.
 
 -**Reference sound**: sound to use as a pattern to compare against. Usually created by re-recording a model sound broadcast at 1 m from the source (speaker).
 
@@ -92,7 +92,7 @@ This vignette deals with two things: how to create synthetic sounds for playback
 
 -**Ambient noise**: energy from background sounds in the recording, excluding sounds of interest.  
 
--**Test sound**: sounds re-recorded far from the source to test for transmission/degradation (also refer to as 're-recorded' sounds).
+-**Test sound**: sounds re-recorded far from the source to test for propagation/degradation (also refer to as 're-recorded' sounds).
 
 -**Degradation**: loose term used to describe any changes in the structure of a sound when transmitted in a habitat.
 
@@ -106,7 +106,7 @@ Note the use of the syntax `package_name::function()` in the code throughout the
 
 # Synthesize sounds
 
-We often want to figure out how transmission properties vary across a range of frequencies.
+We often want to figure out how propagation properties vary across a range of frequencies.
 For instance, Tobias et al (2010) studied whether acoustic adaptation (a special case of sensory drive; Morton 1975), could explain song evolution in Amazonian avian communities.  To test this the authors created synthetic pure tone sounds that were used as playback and re-recorded in different habitats. This is the actual procedure of creating synthetic sounds as they described it: 
 
 > "Tones were synthesized at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz) to encompass the range of maximum avian auditory sensitivity (Dooling 1982). At each frequency, we generated two sequences of two 100-msec tones. One sequence had  a  relatively  short  interval  of  150  msec,  close  to  the  mean internote interval in our sample (152± 4 msec). The other sequence had a longer interval of 250 msec, close to the mean maximum internote interval in our sample (283± 74 msec). The first sequence reflects a fast-paced song and the second a slower paced song  (sensu  Slabbekoorn  et  al.  2007).  The  master  file  (44100 Hz/16 bit WAV) thereby consisted of a series of 12 pairs of artificial 100-ms constant-frequency tones at six different frequencies (0.5, 1.0, 2.0, 3.0, 4.0, and 5.0 kHz)." 
@@ -350,7 +350,7 @@ Once we went to the field (or lab) and re-recorded the master sound files at dif
 
 &nbsp;
 
-We will use acoustic data included in the package as example data. This is a data subset from a sound transmission experiment. The complete data set of the experiment is hosted in [this repository](https://figshare.com/articles/media/baRulho_an_R_package_to_quantify_animal_acoustic_signal_transmission_and_degradation/21559074). There are two example objects that will be used: 
+We will use acoustic data included in the package as example data. This is a data subset from a sound propagation experiment. The complete data set of the experiment is hosted in [this repository](https://figshare.com/articles/media/baRulho_an_R_package_to_quantify_animal_acoustic_signal_transmission_and_degradation/21559074). There are two example objects that will be used: 
 
 ```{r, eval = TRUE}
 

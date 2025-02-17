@@ -24,27 +24,27 @@ coverage](https://codecov.io/gh/ropensci/baRulho/branch/master/graph/badge.svg)]
 <img src="man/figures/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>
 
 [baRulho](https://cran.r-project.org/package=baRulho) is intended to
-facilitate the implementation of (animal) sound transmission
-experiments, which typically aim to quantify changes in signal structure
-when transmitted in a given habitat by broadcasting and re-recording
-animal sounds at increasing distances.
+facilitate the implementation of (animal) sound propagation experiments,
+which typically aim to quantify changes in signal structure when
+transmitted in a given habitat by broadcasting and re-recording animal
+sounds at increasing distances.
 
 These experiments aim to answer research questions such as:
 
-- How habitat structure has shaped the transmission properties of animal
+- How habitat structure has shaped the propagation properties of animal
   acoustic signals?
 - Which acoustic features are shaped by selection for improving
-  transmission?
+  propagation?
 - Which features are more degraded in different habitats?
 - How far a acoustic signals can be detected?
 
 A common sequence of steps to experimentally test hypotheses related to
-sound transmission is depicted in the following diagram:
+sound propagation is depicted in the following diagram:
 
 <img src="man/figures/analysis_workflow.png" width="100%" style="display: block; margin: auto;" />
 
 *Diagram depicting a typical workflow for a experiment working on signal
-transmission and degradation. Nodes with black font indicate steps that
+propagation and degradation. Nodes with black font indicate steps that
 can be conducted using baRulho functions. Blue nodes denote the
 functions that can be used at those steps.*
 
@@ -100,7 +100,7 @@ this way:
 install.packages("baRulho", repos = "https://ropensci.r-universe.dev")
 ```
 
-    ## Installing package into '/home/m/R/x86_64-pc-linux-gnu-library/4.1'
+    ## Installing package into '/home/marce/R/x86_64-pc-linux-gnu-library/4.3'
     ## (as 'lib' is unspecified)
 
 To install the latest developmental version from
@@ -149,8 +149,9 @@ routines.
 
 Please cite [baRulho](https://docs.ropensci.org/baRulho//) as follows:
 
-Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal)
-acoustic signals in R*. R package version 1.0.0.
+Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A.
+Rico-Guevara. (2023), *baRulho: an R package to quantify degradation in
+animal acoustic signals*. bioRxiv 2023.11.22.568305.
 
 ## References
 

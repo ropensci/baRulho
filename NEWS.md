@@ -1,3 +1,10 @@
+baRulho 2.1.5
+=========================
+
+## NEW FEATURES
+
+* new function `spot_ambient_noise()` to find segments of ambient noise to be used as reference by other functions
+
 baRulho 2.1.4
 =========================
 

@@ -13,13 +13,13 @@ doi: 10.1111/2041-210X.14481
 identifiers:
 - type: doi
   value: 10.32614/CRAN.package.baRulho
-abstract: Intended to facilitate acoustic analysis of (animal) sound propagation
-  experiments, which typically aim to quantify changes in signal structure when transmitted
-  in a given habitat by broadcasting and re-recording animal sounds at increasing
-  distances. The package offers a workflow with functions to prepare the data set
-  for analysis as well as to calculate and visualize several degradation metrics,
-  including blur ratio, signal-to-noise ratio, excess attenuation and envelope correlation
-  among others (Dabelsteen et al 1993 <https://doi.org/10.1121/1.406682>).
+abstract: Intended to facilitate acoustic analysis of (animal) sound propagation experiments,
+  which typically aim to quantify changes in signal structure when transmitted in
+  a given habitat by broadcasting and re-recording animal sounds at increasing distances.
+  The package offers a workflow with functions to prepare the data set for analysis
+  as well as to calculate and visualize several degradation metrics, including blur
+  ratio, signal-to-noise ratio, excess attenuation and envelope correlation among
+  others (Dabelsteen et al 1993 <https://doi.org/10.1121/1.406682>).
 authors:
 - family-names: Araya-Salas
   given-names: Marcelo
@@ -199,7 +199,7 @@ references:
   authors:
   - family-names: Csárdi
     given-names: Gábor
-    email: csardi.gabor@gmail.com
+    email: gabor@posit.co
   year: '2025'
   doi: 10.32614/CRAN.package.cli
 - type: software

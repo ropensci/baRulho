@@ -50,7 +50,7 @@
 #'   path = tempdir())
 #'
 #'   # align all test sounds
-#'   alg.tests <- align_test_files(X = master_est, Y = markers)
+#'   alg.tests <- align_test_files(X = master_est, Y = markers, path = tempdir())
 #'
 #'   # add error to alignment
 #'   lag <- (as.numeric(as.factor(alg.tests$sound.files)) - 2) / 30

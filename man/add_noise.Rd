@@ -14,6 +14,7 @@ add_noise(
   max.iterations = 1000,
   kind = c("pink", "white", "brown", "red", "power"),
   alpha = 1,
+  seed = 123,
   ...
 )
 }
@@ -36,6 +37,8 @@ the start point of the annotation over which to measure ambient noise.}
 \item{kind}{Character vector of length 1 indicating the kind of noise, “white”, “pink”, “power”, "brown", or “red”. Noise is synthesized with a modified version of the function \code{\link[tuneR]{noise}}. Default is "pink" which is similar to background noise in natural environments.}
 
 \item{alpha}{Numeric vector of length 1. The power for the power law noise (defaults are 1 for pink and 1.5 for red noise). Only used when \code{kind = "power"}.}
+
+\item{seed}{Numeric vector of length 1. Seed for random number generation. Default is 123. If NULL, the seed is not set.}
 
 \item{...}{Additional arguments to be passed internally to \code{\link{signal_to_noise_ratio}}.}
 }

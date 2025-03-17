@@ -1377,7 +1377,8 @@
            max.iterations,
            Y,
            kind,
-           alpha) {
+           alpha,
+           seed) {
     # extract selection as single extended selection table
     Y_x <- Y[x,]
     
@@ -1415,7 +1416,6 @@
       prop_noise_vector <- vector()
       snr_vector <- vector()
       
-      seed <- 0
       while (all(snr > target.snr + precision |
                  snr < target.snr - precision) &
              length(prop_noise_vector) < max.iterations) {
@@ -1424,8 +1424,11 @@
         N <- length(wav@left)
         
         # ad seed to make it replicable
+        if (!is.null(seed)){
         seed <- seed + 1
         set.seed(seed)
+        }
+        
         # noise_wav <-
         #   runif(n = N,
         #         min = 0,

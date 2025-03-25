@@ -3667,6 +3667,14 @@
     
     msgs <-
       gsub(
+        pattern = "Variable 'names(Y)': Names",
+        replacement = "Columns in 'Y':",
+        x = msgs,
+        fixed = TRUE
+      )
+    
+    msgs <-
+      gsub(
         pattern = "Variable 'transect column': Names must include the elements {'transect'}, but is missing elements {'transect'}.",
         replacement = "Column 'transect' in 'X' is required when 'method = 2'",
         x = msgs,
@@ -4125,12 +4133,13 @@
       }
       
       # default columns
-      cols <- c("sound.files", "selec", "start", "end", "sound.id")
+      columns <- c("sound.files", "selec", "start", "end", "sound.id")
       
       # overwrite for other functions
       if (fun == "master_sound_file") {
-        cols <- c("sound.files", "selec", "start", "end")
+        columns <- c("sound.files", "selec", "start", "end")
       }
+      
       # functions that compare by distance
       if (fun %in% c(
         "blur_ratio",
@@ -4143,7 +4152,7 @@
         "spectrum_correlation",
         "plot_degradation"
       )) {
-        cols <-
+        columns <-
           c("sound.files",
             "selec",
             "start",
@@ -4172,7 +4181,7 @@
       
       
       if (fun == "set_reference_sounds") {
-        cols <- c("sound.files",
+        columns <- c("sound.files",
                   "selec",
                   "start",
                   "end",
@@ -4192,7 +4201,7 @@
       checkmate::assert_names(
         x = names(args$X),
         type = "unique",
-        must.include = cols,
+        must.include = columns,
         add = check_collection,
         disjunct.from = if (fun == "set_reference_sounds") {
           "reference"
@@ -4202,7 +4211,7 @@
         .var.name = "names(X)"
       )
       try(checkmate::assert_data_frame(
-        x = args$X[, cols],
+        x = args$X[, columns],
         any.missing = TRUE,
         add = check_collection,
         .var.name = "X"
@@ -5238,7 +5247,39 @@
                         add = check_collection,
                         .var.name = "Y")
     
-   }
+  }
+    
+    # default columns
+    columns <- c("sound.files", "selec", "start", "end", "marker", "scores")
+    
+    # overwrite for other functions
+    if (fun %in% c("auto_realign", "manual_realign")) {
+      columns <- c("sound.files", "selec", "start", "end", "sound.id")
+    }
+    
+    checkmate::assert_names(
+      x = names(args$Y),
+      type = "unique",
+      must.include = columns,
+      add = check_collection,
+      .var.name = "names(Y)"
+    )
+    try(checkmate::assert_data_frame(
+      x = args$Y[, columns],
+      any.missing = TRUE,
+      add = check_collection,
+      .var.name = "Y"
+    ),
+    silent = TRUE)
+    
+    .assert_unique_sels(
+      x = args$Y,
+      fun = fun,
+      add = check_collection,
+      .var.name = "Y"
+    )
+
+    
     }
   return(check_collection)
 }

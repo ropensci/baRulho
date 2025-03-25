@@ -9,6 +9,7 @@ baRulho 2.1.5
 ### MINOR IMPROVEMENTS
 
 * Fix bug in `add_noise()` in which '...' were not sent internally to `signal_to_noise_ratio()`
+* Improved error message when missing columns in supplied `Y` data frames 
 
 baRulho 2.1.4
 =========================

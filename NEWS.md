@@ -6,6 +6,10 @@ baRulho 2.1.5
 * new function `spot_ambient_noise()` to find segments of ambient noise to be used as reference by other functions
 * new argument `seed` in `add_noise()` to let users set a seed for reproducibility (or not)
 
+### MINOR IMPROVEMENTS
+
+* Fix bug in `add_noise()` in which '...' were not sent internally to `signal_to_noise_ratio()`
+
 baRulho 2.1.4
 =========================
 

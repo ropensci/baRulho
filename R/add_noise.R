@@ -82,7 +82,8 @@ add_noise <-
         Y = X,
         kind = kind,
         alpha = alpha, 
-        seed = seed
+        seed = seed, 
+        ...
       )
     
     names(wav_snr_list) <- target_rows

@@ -1378,7 +1378,8 @@
            Y,
            kind,
            alpha,
-           seed) {
+           seed,
+           ...) {
     # extract selection as single extended selection table
     Y_x <- Y[x,]
     
@@ -1388,7 +1389,7 @@
     
     # estimate current snr
     snr <-
-      signal_to_noise_ratio(Y_x, mar = mar, pb = FALSE)$signal.to.noise.ratio
+      signal_to_noise_ratio(Y_x, mar = mar, pb = FALSE, ...)$signal.to.noise.ratio
     
     if (snr > target.snr) {
       # reset time coordinates of sounds if lower than 0 o higher than duration
@@ -1454,7 +1455,7 @@
         
         snr <- signal_to_noise_ratio(X = Y_x,
                                      mar = mar,
-                                     pb = FALSE)$signal.to.noise.ratio
+                                     pb = FALSE, ...)$signal.to.noise.ratio
         
         prop_noise_vector[length(prop_noise_vector) + 1] <-
           prop_noise

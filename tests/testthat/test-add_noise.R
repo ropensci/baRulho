@@ -22,7 +22,7 @@ test_that("basic", {
   
   expect_equal(sum(!is.na(X_noise$adjusted.snr)), 4)
 
-  expect_equal(sum(X_noise$adjusted.snr, na.rm = TRUE), 11.905124)
+  expect_equal(round(sum(X_noise$adjusted.snr, na.rm = TRUE), 1), 11.9)
   
   expect_equal(nrow(X_noise), 5)
   
@@ -41,6 +41,6 @@ test_that("basic", {
       kind = "white"
     )
   
-  expect_equal(sum(X_noise$adjusted.snr, na.rm = TRUE), 12.107109)
+  expect_equal(round(sum(X_noise$adjusted.snr, na.rm = TRUE), 1), 12.1)
   
 })

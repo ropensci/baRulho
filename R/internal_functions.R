@@ -3808,19 +3808,25 @@
 
 # check unique sound.id
 .check_unique_sound.id <- function(x, fun) {
+  
+  out <- TRUE
   if (!is.null(x$sound.id) & is.null(x$distance)) {
     if (anyDuplicated(paste0(x$sound.files, x$sound.id)) > 0) {
-      "Duplicated 'sound.id' labels are not allowed within a sound file"
+      out <- "Duplicated 'sound.id' labels are not allowed within a sound file"
     }
   }
-  if (!is.null(x$sound.id) & !is.null(x$distance)) {
+  if (!is.null(x$sound.id) & !is.null(x$distance) & fun == "plot_degradation") {
+    if (anyDuplicated(paste0(x$transect, x$sound.id, x$distance)) > 0) {
+      out <- "Duplicated 'sound.id' labels are not allowed within a transect/distance combination"
+    }
+  }
+  if (!is.null(x$sound.id) & !is.null(x$distance) & fun != "plot_degradation") {
     if (anyDuplicated(paste0(x$sound.files, x$sound.id, x$distance)) > 0) {
       "Duplicated 'sound.id' labels are not allowed within a sound file or sound file/distance combination"
     }
   }
-  if (is.null(x$sound.id) & is.null(x$distance)) {
-    TRUE
-  }
+
+  return(out)
 }
 
 .assert_unique_sound.id <-
@@ -4088,7 +4094,6 @@
       )
     }
     
-    
     if (fun != "noise_profile") {
       checkmate::assert_data_frame(
         x = args$X,
@@ -4178,7 +4183,6 @@
           .var.name = "X$distance"
         )
       }
-      
       
       if (fun == "set_reference_sounds") {
         columns <- c("sound.files",
@@ -4293,9 +4297,9 @@
         add = check_collection,
         .var.name = "X"
       )
-      
-      
     }
+    
+    
   }
   return(check_collection)
 }

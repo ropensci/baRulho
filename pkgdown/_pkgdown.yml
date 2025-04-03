@@ -53,3 +53,4 @@ reference:
   - attenuation
   - add_noise
   - noise_profile
+  - spot_ambient_noise

@@ -19,7 +19,7 @@ add_noise(
 )
 }
 \arguments{
-\item{X}{Object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package), generated 'by element', with the reference to the test sounds (which in baRulho is typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds (needed to calculate signal to noise ratio internally using \code{\link{signal_to_noise_ratio}}).}
+\item{X}{Object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package), generated 'by element', with the test sound files' annotations (which in baRulho is typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds (needed to calculate signal to noise ratio internally using \code{\link{signal_to_noise_ratio}}).}
 
 \item{mar}{numeric vector of length 1. Specifies the margins adjacent to
 the start point of the annotation over which to measure ambient noise.}

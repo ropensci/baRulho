@@ -67,8 +67,7 @@ find_markers <-
     .report_assertions(check_results)
     
     if (!all(markers %in% X$sound.id))
-      .stop("at least one value in 'markers' not found in 'sound.id' column in 'X'")
-    else
+      .stop("at least one value in 'markers' not found in 'sound.id' column in 'X'") else
       X <- X[X$sound.id %in% markers,]
     
     # get sound files in path
@@ -107,7 +106,7 @@ find_markers <-
         parallel = 1,
         pb = FALSE,
         skip.error = TRUE,
-        files = c(test.files, unique(X$sound.files))
+        files = c(test.files, as.character(unique(X$sound.files)))
       )
     
     if (length(unique(wi$sample.rate)) > 1) {

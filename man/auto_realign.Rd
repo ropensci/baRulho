@@ -12,11 +12,12 @@ auto_realign(
   hop.size = getOption("hop.size", 11.6),
   wl = getOption("wl", NULL),
   ovlp = getOption("ovlp", 90),
-  wn = c("hanning", "hamming", "bartlett", "blackman", "flattop", "rectangle")
+  wn = c("hanning", "hamming", "bartlett", "blackman", "flattop", "rectangle"),
+  bp = NULL
 )
 }
 \arguments{
-\item{X}{object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the annotations to be aligned. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.}
+\item{X}{object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations to be aligned. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a given distance.. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.}
 
 \item{Y}{object of class 'extended_selection_table' (a class created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.}
 
@@ -32,6 +33,8 @@ auto_realign(
 consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values slow down the function but produce more accurate results. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
 
 \item{wn}{A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.}
+
+\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
 }
 \value{
 Object 'X' in which time parameters (columns 'start' and 'end') have been tailored to more closely match the start and end of the reference sound.
@@ -40,7 +43,7 @@ Object 'X' in which time parameters (columns 'start' and 'end') have been tailor
 \code{auto_realign} fixes small misalignments in the time position of test sounds in an extended selection table using spectrographic cross-correlation
 }
 \details{
-Precise alignment is crucial for downstream measures of sound degradation. This function uses spectrogram cross-correlation to align the position in time of test sounds. The master sound file is used as reference. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment. Note that 1) this function only works to further improve alignments if the estimated position of the test sound is already close to the actual position and 2) both 'X' and 'Y' must be extended selection tables sensu \code{\link[warbleR]{selection_table}}.
+Precise alignment is crucial for downstream measures of sound degradation. This function uses spectrogram cross-correlation to improve the time position alignment of test sounds. The master sound file is used as reference. The function calls warbleR's \code{\link[warbleR]{cross_correlation}} internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment.  \strong{Note that 1) this function only works to further improve alignments if the estimated position of the test sound is already close to the actual position and 2) both 'X' and 'Y' must be extended selection tables sensu \code{\link[warbleR]{selection_table}}}. The function might not work properly with annotations with a small frequency range (e.g. pure tones).
 }
 \examples{
 {

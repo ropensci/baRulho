@@ -3768,6 +3768,19 @@
 .assert_unique_sels <-
   checkmate::makeAssertionFunction(.check_unique_sels)
 
+# check a single sound file is found in master annotations
+.check_unique_sound_file <- function(x, fun) {
+  if (length(unique(x$sound.files)) > 1) {
+    "More than one sound file found in column 'sound.files'. Only one sound file is allowed in master annotations"
+  } else {
+    TRUE
+  }
+}
+
+.assert_unique_sound_file <-
+  checkmate::makeAssertionFunction(.check_unique_sound_file)
+
+
 # check if X has any ambient reference in sound id column
 .check_ambient_ref <- function(x, noise.ref) {
   if (noise.ref == "custom" & !any(x$sound.id == "ambient")) {
@@ -3822,7 +3835,7 @@
   }
   if (!is.null(x$sound.id) & !is.null(x$distance) & fun != "plot_degradation") {
     if (anyDuplicated(paste0(x$sound.files, x$sound.id, x$distance)) > 0) {
-      "Duplicated 'sound.id' labels are not allowed within a sound file or sound file/distance combination"
+      out <- "Duplicated 'sound.id' labels are not allowed within a sound file or sound file/distance combination"
     }
   }
 
@@ -3831,6 +3844,21 @@
 
 .assert_unique_sound.id <-
   checkmate::makeAssertionFunction(.check_unique_sound.id)
+
+
+# check unique sound.id in master annotations
+.check_unique_sound.id_master <- function(x, fun) {
+    
+    out <- TRUE
+        if (anyDuplicated(x$sound.id) > 0) {
+          out <- "Duplicated 'sound.id' labels are not allowed in master annotations"
+        }  
+
+      return(out)
+    }  
+  
+.assert_unique_sound.id_master <-
+  checkmate::makeAssertionFunction(.check_unique_sound.id_master)
 
 # check than more than 1 distance is found
 .check_several_distances <- function(x, fun) {
@@ -3862,7 +3890,7 @@
 .check_extended_selection_table <- function(x) {
   if (!is.null(x)) {
     if (!warbleR::is_extended_selection_table(x)) {
-      "'X' must be of class 'extended_selection_table'"
+      "must be of class 'extended_selection_table'"
     }
   } else {
     TRUE
@@ -4074,6 +4102,30 @@
   ### check arguments
   if (any(names(args) == "X")) {
     
+    if (fun == "align_test_files" & !warbleR::is_extended_selection_table(args$X)){
+      .assert_unique_sound_file(
+        x = args$X,
+        fun = fun,
+        add = check_collection,
+        .var.name = "X"
+      )
+    }
+    
+    if   (fun == "auto_realign"){
+      .assert_extended_selection_table(x = args$X,
+                                       add = check_collection,
+                                       .var.name = "X")
+    } 
+    
+    if (fun == "align_test_files") {
+      .assert_unique_sound.id_master(
+        x = args$X,
+        fun = fun,
+        add = check_collection,
+        .var.name = "X"
+      )
+    }
+    
     if (!warbleR::is_extended_selection_table(args$X)) {
       if (!is.null(args$path)) {
         files <- file.path(args$path, unique(args$X$sound.files))
@@ -4229,12 +4281,14 @@
         .var.name = "X"
       )
       
+      if (fun != "align_test_files"){
       .assert_unique_sound.id(
         x = args$X,
         fun = fun,
         add = check_collection,
         .var.name = "X"
       )
+      }
       
       if (!fun %in% c(
         "plot_aligned_sounds",
@@ -4263,7 +4317,8 @@
                           "align_test_files",
                           "set_reference_sounds",
                           "add_noise",
-                          "spot_ambient_noise")) {
+                          "spot_ambient_noise",
+                          "auto_realign")) {
             .warning("assuming all sound files have the same sampling rate")
           }
           
@@ -4298,8 +4353,6 @@
         .var.name = "X"
       )
     }
-    
-    
   }
   return(check_collection)
 }
@@ -5257,10 +5310,19 @@
     columns <- c("sound.files", "selec", "start", "end", "marker", "scores")
     
     # overwrite for other functions
-    if (fun %in% c("auto_realign", "manual_realign")) {
+    if (fun == "manual_realign"  & !warbleR::is_extended_selection_table(args$Y)) {
+      
+      .assert_unique_sound_file(
+        x = args$Y,
+        fun = fun,
+        add = check_collection,
+        .var.name = "Y"
+      )
+      
       columns <- c("sound.files", "selec", "start", "end", "sound.id")
     }
     
+    if (fun == "manual_realign"){
     checkmate::assert_names(
       x = names(args$Y),
       type = "unique",
@@ -5268,6 +5330,7 @@
       add = check_collection,
       .var.name = "names(Y)"
     )
+  }
     try(checkmate::assert_data_frame(
       x = args$Y[, columns],
       any.missing = TRUE,
@@ -5283,6 +5346,21 @@
       .var.name = "Y"
     )
 
+    if   (fun == "auto_realign"){
+      .assert_extended_selection_table(x = args$Y,
+                                       add = check_collection,
+                                       .var.name = "Y")
+    }
+    
+    if (fun %in% c("auto_realign", "manual_realign")) {
+      .assert_unique_sound.id_master(
+        x = args$Y,
+        fun = fun,
+        add = check_collection,
+        .var.name = "Y"
+      )
+    }
+    
     
     }
   return(check_collection)

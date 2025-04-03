@@ -52,7 +52,8 @@
 <span>  hop.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"hop.size"</span>, <span class="fl">11.6</span><span class="op">)</span>,</span>
 <span>  wl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"wl"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
 <span>  ovlp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"ovlp"</span>, <span class="fl">90</span><span class="op">)</span>,</span>
-<span>  wn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hanning"</span>, <span class="st">"hamming"</span>, <span class="st">"bartlett"</span>, <span class="st">"blackman"</span>, <span class="st">"flattop"</span>, <span class="st">"rectangle"</span><span class="op">)</span></span>
+<span>  wn <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"hanning"</span>, <span class="st">"hamming"</span>, <span class="st">"bartlett"</span>, <span class="st">"blackman"</span>, <span class="st">"flattop"</span>, <span class="st">"rectangle"</span><span class="op">)</span>,</span>
+<span>  bp <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -61,7 +62,7 @@
 
 
 <dl><dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>object of class 'extended_selection_table' created by the function <code><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></code> from the warbleR package. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.</p></dd>
+<dd><p>object of class 'extended_selection_table' (created by the function <code><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></code> from the warbleR package) with the test sound files' annotations to be aligned. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a given distance.. The object must include the following additional columns: 'sound.id', 'bottom.freq' and 'top.freq'.</p></dd>
 
 
 <dt id="arg-y">Y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
@@ -92,6 +93,10 @@ consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectr
 <dt id="arg-wn">wn<a class="anchor" aria-label="anchor" href="#arg-wn"></a></dt>
 <dd><p>A character vector of length 1 specifying the window name as in <code><a href="https://rdrr.io/pkg/seewave/man/ftwindow.html" class="external-link">ftwindow</a></code>.</p></dd>
 
+
+<dt id="arg-bp">bp<a class="anchor" aria-label="anchor" href="#arg-bp"></a></dt>
+<dd><p>Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is <code>NULL</code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -99,11 +104,11 @@ consecutive windows, as in <code><a href="https://rdrr.io/pkg/seewave/man/spectr
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Precise alignment is crucial for downstream measures of sound degradation. This function uses spectrographic cross-correlation to align the position in time of test sounds. The master sound file is used as reference. The function calls warbleR's <code><a href="https://marce10.github.io/warbleR/reference/cross_correlation.html" class="external-link">cross_correlation</a></code> internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment. Note that this function only works to further improve alignments if the estimated position of the test sound is already close to the actual position. Note that both 'X' and 'Y' must be extended selection tables sensu <code><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></code>.</p>
+    <p>Precise alignment is crucial for downstream measures of sound degradation. This function uses spectrogram cross-correlation to improve the time position alignment of test sounds. The master sound file is used as reference. The function calls warbleR's <code><a href="https://marce10.github.io/warbleR/reference/cross_correlation.html" class="external-link">cross_correlation</a></code> internally to align sounds using cross-correlation. The output extended selection table contains the new start and end values after alignment.  <strong>Note that 1) this function only works to further improve alignments if the estimated position of the test sound is already close to the actual position and 2) both 'X' and 'Y' must be extended selection tables sensu <code><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></code></strong>. The function might not work properly with annotations with a small frequency range (e.g. pure tones).</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), baRulho: an R package to quantify degradation in animal acoustic signals .bioRxiv 2023.11.22.568305.Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
+    <p>Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., &amp; Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481Clark, C.W., Marler, P. &amp; Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>

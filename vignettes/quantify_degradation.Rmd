@@ -312,15 +312,22 @@ Output image files (in the working directory) look like this one:
 #           to = file.path("../man/figures", basename(aligned_imgs[c(1, 4)])))
 
 fc <- file.copy(from = blur_imgs[1], 
-          to = file.path("../vignettes", basename(blur_imgs[1])), overwrite = TRUE)
+          to = "../vignettes/temp.img.jpeg", overwrite = TRUE)
 
 ```
 
 ```{r, echo=FALSE}
 
-knitr::include_graphics(basename(blur_imgs[1]))
+knitr::include_graphics("../vignettes/temp.img.jpeg")
 
 ```
+
+```{r, echo=FALSE}
+
+unlink("../vignettes/temp.img.jpeg")
+
+```
+
 
 &nbsp;
 

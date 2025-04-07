@@ -1958,12 +1958,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/tmp/Rtmp7VqFzy' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T/RtmpaEauko' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/tmp/Rtmp7VqFzy/plot_degradation_p1.jpeg"
-[2] "/tmp/Rtmp7VqFzy/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T//RtmpaEauko/plot_degradation_p1.jpeg"
+[2] "/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T//RtmpaEauko/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2926,16 +2926,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/tmp/Rtmp7VqFzy' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T/RtmpaEauko' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/tmp/Rtmp7VqFzy/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/tmp/Rtmp7VqFzy/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/tmp/Rtmp7VqFzy/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/tmp/Rtmp7VqFzy/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/tmp/Rtmp7VqFzy/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/tmp/Rtmp7VqFzy/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T//RtmpaEauko/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T//RtmpaEauko/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T//RtmpaEauko/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T//RtmpaEauko/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T//RtmpaEauko/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/var/folders/qn/7t0vq3ts721cmgt0tgrtgzl80000gn/T//RtmpaEauko/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="../articles/temp.img.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -9967,21 +9967,18 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 <hr>
 <p><font size="4">Session information</font></p>
 <pre><code>R version 4.4.3 (2025-02-28)
-Platform: x86_64-pc-linux-gnu
-Running under: Ubuntu 24.04.2 LTS
+Platform: aarch64-apple-darwin20
+Running under: macOS Sonoma 14.7.4
 
 Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
 
 locale:
- [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
- [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
- [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
-[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 
 time zone: UTC
-tzcode source: system (glibc)
+tzcode source: internal
 
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
@@ -9999,7 +9996,7 @@ loaded via a namespace (and not attached):
 [17] farver_2.1.2       stringr_1.5.1      compiler_4.4.3     textshaping_1.0.0 
 [21] brio_1.1.5         munsell_0.5.1      htmltools_0.5.8.1  class_7.3-23      
 [25] sass_0.4.9         RCurl_1.98-1.17    yaml_2.3.10        pkgdown_2.1.1     
-[29] pillar_1.10.2      jquerylib_0.1.4    MASS_7.3-64        classInt_0.4-11   
+[29] pillar_1.10.2      jquerylib_0.1.4    MASS_7.3-65        classInt_0.4-11   
 [33] cachem_1.1.0       Deriv_4.1.6        digest_0.6.37      stringi_1.8.7     
 [37] sf_1.0-20          labeling_0.4.3     fastmap_1.2.0      grid_4.4.3        
 [41] colorspace_2.1-1   cli_3.6.4          magrittr_2.0.3     e1071_1.7-16      

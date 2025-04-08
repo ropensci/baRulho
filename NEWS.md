@@ -9,6 +9,7 @@ baRulho 2.1.5
 ### MINOR IMPROVEMENTS
 
 * Improve error messages for functions working with master annotations
+* Remove requirement of "sound.id" column in `add_noise()` and `signal_to_noise_ratio()`
 * Fix bug in `add_noise()` in which '...' were not sent internally to `signal_to_noise_ratio()`
 * Improved error message when missing columns in supplied `Y` data frames 
 

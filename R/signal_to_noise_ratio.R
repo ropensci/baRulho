@@ -2,7 +2,7 @@
 #'
 #' \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.
 #' @inheritParams template_params
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument).
+#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument). If the "sound.id" column is supplied then SNR is only computed for those rows with a sound.id different from "ambient", "start_marker" or "end_marker". 
 #' @param mar numeric vector of length 1. Specifies the margins adjacent to
 #'   the start point of the annotation over which to measure ambient noise.
 #' @param eq.dur Logical. Controls whether the ambient noise segment that is measured has the same duration
@@ -86,7 +86,6 @@ signal_to_noise_ratio <-
         path = path,
         header = TRUE
       )$sample.rate
-      
     
     # adjust wl based on hop.size
     wl <- .adjust_wl(wl, X, hop.size, path)
@@ -106,6 +105,14 @@ signal_to_noise_ratio <-
       .stop(
         "'ambient' selections must be contained in 'X' and labeled in a 'sound.id' column as 'ambient' when 'noise.ref = 'custom'"
       )
+    }
+    
+    if (noise.ref == "custom" & warbleR::is_extended_selection_table(X)){
+      if (!attributes(X)$by.song[[1]]) {
+        .stop(
+          "if 'X' is an extended selection table, it should be created 'by.song' when 'noise.ref = 'custom'' (see 'https://marce10.github.io/warbleR/articles/b_annotation_data_format.html#by-element-vs-by-song-extended-selection-tables')"
+        )
+      }
     }
     
     if (noise.ref == "custom" &
@@ -131,10 +138,25 @@ signal_to_noise_ratio <-
       cl <- cores
     }
     
+    # get index number
+    # exclude "ambient" sounds if "sound.id" column was supplied
+    target_rows <- if (!is.null(X$sound.id)){
+      which(!X$sound.id %in% c("ambient", "start_marker", "end_marker")) } else {
+        seq_len(nrow(X))
+      }
+    
+    # target rows for rms differ when reference is "ambient"
+    target_rows_rms <- if (noise.ref == "custom") {
+      which(!X$sound.id %in% c("start_marker", "end_marker"))
+    } else {
+      target_rows
+      }
+
+    
     # calculate all RMS of envelopes with a apply function
     rms_list <-
       warbleR:::.pblapply(
-        X = seq_len(nrow(X)),
+        X = target_rows_rms,
         pbar = pb,
         cl = cl,
         message = "computing signal-to-noise ratio",
@@ -152,13 +174,13 @@ signal_to_noise_ratio <-
       )
     
     # add sound file selec column and names to envelopes (weird column name so it does not overwrite user columns)
-    X$.y <-
-      names(rms_list) <- paste(X$sound.files, X$selec, sep = "-")
+    X$.y <- paste(X$sound.files, X$selec, sep = "-")
+    names(rms_list) <- paste(X$sound.files[target_rows_rms], X$selec[target_rows_rms], sep = "-")
     
     # calculate SNR
-    X$signal.to.noise.ratio <-
+    X$signal.to.noise.ratio[target_rows] <-
       vapply(
-        X = seq_len(nrow(X)),
+        X = target_rows,
         FUN = .snr,
         W = X,
         noise.ref = noise.ref,

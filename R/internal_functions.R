@@ -4193,7 +4193,7 @@
       columns <- c("sound.files", "selec", "start", "end", "sound.id")
       
       # overwrite for other functions
-      if (fun == "master_sound_file") {
+      if (fun %in% c("master_sound_file", "signal_to_noise_ratio", "add_noise")) {
         columns <- c("sound.files", "selec", "start", "end")
       }
       

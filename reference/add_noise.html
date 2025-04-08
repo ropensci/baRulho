@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">baRulho</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,7 +64,7 @@
 
 
 <dl><dt id="arg-x">X<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Object of class 'extended_selection_table' (created by the function <code><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></code> from the warbleR package), generated 'by element', with the test sound files' annotations (which in baRulho is typically the output of <code><a href="align_test_files.html">align_test_files</a></code>). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds (needed to calculate signal to noise ratio internally using <code><a href="signal_to_noise_ratio.html">signal_to_noise_ratio</a></code>).</p></dd>
+<dd><p>Object of class 'extended_selection_table' (created by the function <code><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></code> from the warbleR package), generated 'by element' (see 'https://marce10.github.io/warbleR/articles/b_annotation_data_format.html#by-element-vs-by-song-extended-selection-tables'), with the test sound files' annotations (which in baRulho is typically the output of <code><a href="align_test_files.html">align_test_files</a></code>). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass. If the "sound.id" column is supplied noise is only added to those sounds with a 'sound.id' different from "ambient", "start_marker" or "end_marker".</p></dd>
 
 
 <dt id="arg-mar">mar<a class="anchor" aria-label="anchor" href="#arg-mar"></a></dt>
@@ -105,7 +105,7 @@ the start point of the annotation over which to measure ambient noise.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Additional arguments to be passed internally to <code><a href="signal_to_noise_ratio.html">signal_to_noise_ratio</a></code>.</p></dd>
+<dd><p>Additional arguments to be passed internally to <code><a href="signal_to_noise_ratio.html">signal_to_noise_ratio</a></code>. Note that "custom" noise reference (argument 'noise.ref' in <code><a href="signal_to_noise_ratio.html">signal_to_noise_ratio</a></code>) is currently not supported.</p></dd>
 
 </dl></div>
     <div class="section level2">

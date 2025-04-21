@@ -29,10 +29,9 @@
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @family miscellaneous
 #' @seealso \code{\link{signal_to_noise_ratio}}
-#' @references {
+#' @references 
 #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #' Timmer. J and M. König (1995): On generating power law noise. Astron. Astrophys. 300, 707-710.
-#' }
 
 add_noise <-
   function(X,

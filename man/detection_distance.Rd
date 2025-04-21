@@ -83,11 +83,9 @@ detection_distance(X = X[X$distance \%in\% c(1, 10), ], spl.cutoff = 5, mar = 0.
 
 }
 \references{
-{
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 
 Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
-}
 }
 \seealso{
 \code{\link{attenuation}}

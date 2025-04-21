@@ -65,9 +65,7 @@ The function takes a master sound file's reference data ('X') and finds the posi
 }
 }
 \references{
-{
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
-}
 }
 \seealso{
 \code{\link{manual_realign}}; \code{\link{auto_realign}}; \code{\link{align_test_files}}; \code{\link{master_sound_file}}

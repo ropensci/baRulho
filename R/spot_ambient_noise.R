@@ -38,10 +38,10 @@
 #' # min peak
 #' spot_ambient_noise(X = test_sounds_df, path = td, length = 0.12, ovlp = 20, fun = which.min)
 #' }
-#' @references {
+#' @references
 #' #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #' Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.
-#' }
+#'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 
 spot_ambient_noise <-

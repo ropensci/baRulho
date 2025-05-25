@@ -1,10 +1,10 @@
 pandoc: 3.1.11
-pkgdown: 2.1.2
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   align_test_sounds: align_test_sounds.html
   quantify_degradation: quantify_degradation.html
-last_built: 2025-05-24T04:20Z
+last_built: 2025-05-25T04:24Z
 urls:
   reference: https://marce10.github.io/baRulho/reference
   article: https://marce10.github.io/baRulho/articles

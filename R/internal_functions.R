@@ -1727,12 +1727,14 @@
            sig2,
            seed,
            hrm.freqs,
-           sampling.rate) {
+           sampling.rate,
+           fr) {
     sm.sng <- warbleR::simulate_songs(
       n = length(frequencies),
       durs = eg$dur[x],
       freqs = frequencies,
       samp.rate = sampling.rate,
+      freq.range = fr,
       gaps = mar * 3 / 2,
       am.amps = if (eg$am[x] == "no.am") {
         1

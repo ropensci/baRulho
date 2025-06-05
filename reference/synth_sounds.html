@@ -58,7 +58,8 @@
 <span>  shuffle <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  hrm.freqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">/</span><span class="fl">4</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">8</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">9</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">10</span><span class="op">)</span>,</span>
 <span>  sampling.rate <span class="op">=</span> <span class="fl">44.1</span>,</span>
-<span>  pb <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>  pb <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  freq.range <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -121,6 +122,10 @@ frequency harmonic will be simulated.</p></dd>
 
 <dt id="arg-pb">pb<a class="anchor" aria-label="anchor" href="#arg-pb"></a></dt>
 <dd><p>Logical argument to control if progress bar is shown. Default is <code>TRUE</code>.  Can be set globally for the current R session via the "pb" option (see <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></code>).</p></dd>
+
+
+<dt id="arg-freq-range">freq.range<a class="anchor" aria-label="anchor" href="#arg-freq-range"></a></dt>
+<dd><p>Numeric vector of length 1 with the frequency range around the simulated frequency in which signals will modulate. Default is 2 which means that sounds will range +/- 1 kHz around the target frequency.</p></dd>
 
 </dl></div>
     <div class="section level2">

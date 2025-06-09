@@ -29,9 +29,9 @@ end of the sound over which to measure tail power.}
 
 \item{tsr.formula}{Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 \itemize{
-\item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
- (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
-\item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the sound. So tsr.formula 2 actually measures tail-to-noise ratio.
+\item \code{1}: log10 of the ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
+ (\code{log10(rms(env(T))/rms(env(S)))}) as described by Dabelsteen et al. (1993).
+\item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{log10(rms(env(T))/rms(env(N)))}). N is measure in the margin right before the sound. So tsr.formula 2 actually measures tail-to-noise ratio.
 }}
 
 \item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}

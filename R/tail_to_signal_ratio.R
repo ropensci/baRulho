@@ -8,9 +8,9 @@
 #' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}). Note that this might be internally adjusted if the number of samples in the tail is lower than the hop.size.
 #' @param tsr.formula Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):
 #' \itemize{
-#' \item \code{1}: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
-#'  (\code{rms(env(T))/rms(env(S))}) as described by Dabelsteen et al. (1993).
-#' \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{rms(env(T))/rms(env(N))}). N is measure in the margin right before the sound. So tsr.formula 2 actually measures tail-to-noise ratio.
+#' \item \code{1}: log10 of the ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
+#'  (\code{log10(rms(env(T))/rms(env(S)))}) as described by Dabelsteen et al. (1993).
+#' \item \code{2}: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (\code{log10(rms(env(T))/rms(env(N)))}). N is measure in the margin right before the sound. So tsr.formula 2 actually measures tail-to-noise ratio.
 #' }
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.

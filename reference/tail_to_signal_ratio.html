@@ -80,9 +80,9 @@ end of the sound over which to measure tail power.</p></dd>
 
 
 <dt id="arg-tsr-formula">tsr.formula<a class="anchor" aria-label="anchor" href="#arg-tsr-formula"></a></dt>
-<dd><p>Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):</p><ul><li><p><code>1</code>: ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
- (<code>rms(env(T))/rms(env(S))</code>) as described by Dabelsteen et al. (1993).</p></li>
-<li><p><code>2</code>: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (<code>rms(env(T))/rms(env(N))</code>). N is measure in the margin right before the sound. So tsr.formula 2 actually measures tail-to-noise ratio.</p></li>
+<dd><p>Integer vector of length 1. Determine the formula to be used to calculate the tail-to-signal ratio (S = signal, T = tail, N = background noise):</p><ul><li><p><code>1</code>: log10 of the ratio of T amplitude envelope quadratic mean to S amplitude envelope quadratic mean
+ (<code>log10(rms(env(T))/rms(env(S)))</code>) as described by Dabelsteen et al. (1993).</p></li>
+<li><p><code>2</code>: ratio of T amplitude envelope quadratic mean to N amplitude envelope quadratic mean (<code>log10(rms(env(T))/rms(env(N)))</code>). N is measure in the margin right before the sound. So tsr.formula 2 actually measures tail-to-noise ratio.</p></li>
 </ul></dd>
 
 

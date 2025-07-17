@@ -3,6 +3,7 @@ baRulho 2.1.5
 
 ## NEW FEATURES
 
+* new argument `freq_range` in `synth_sounds()` to limit the frequency range of modulated sounds
 * new function `spot_ambient_noise()` to find segments of ambient noise to be used as reference by other functions
 * new argument `seed` in `add_noise()` to let users set a seed for reproducibility (or not)
 

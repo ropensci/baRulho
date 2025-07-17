@@ -86,7 +86,7 @@ knitr::opts_chunk$set(
 - The package offers two methods to compare sounds to the reference: 
     1. Compare all sounds with the counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method.
     1. Compare all sounds with the counterpart recorded at the distance immediately before (e.g. a sound recorded at 10m compared with the one recorded at 5m, then sound recorded at 15m compared with the one recorded at 10m and so on).
-- The package will attempt to use re-recorded sounds from the shortest distance in the same transect as reference. However, if there is another re-recorded sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect.
+- When method 1 is used, the package will attempt to use re-recorded sounds from the shortest distance in the same transect as reference. However, if there is another re-recorded sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect.
 - The package assumes all sound files have the same sampling rate.
 </div>
 
@@ -124,30 +124,30 @@ data("test_sounds_est")
 
 ```
  
-This the despcription of the required input data columns:
+This is the description of the required input data columns:
 
  1) **sound.files**: character or factor column with the name of the sound files including the file extension (e.g. "rec_1.wav")
  1) **selec**: numeric, character or factor column with a unique identifier (at least within each sound file) for each annotation (e.g. 1, 2, 3 or "a", "b", "c")
  1) **start**: numeric column with the start position in time of an annotated sound (in seconds)
  1) **end**: numeric column with the end position in time of an annotated sound (in seconds)
- 1) 'bottom.freq': numeric column with the bottom frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
+ 1) **bottom.freq**: numeric column with the bottom frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
  1) **top.freq**: numeric column with the top frequency of the frequency range of the annotation (in kHz, used for bandpass filtering)
  1) **channel**: numeric column with the number of the channel in which the annotation is found in a multi-channel sound file (optional, by default is 1 if not supplied)
- 1) **sound.id**: numeric, character or factor column with the ID of sounds used to identify same sounds at different distances and transects. Each sound ID can have only one sample at each distance/transect combination. The sound id label "ambient" can be used to defined annotations in which ambient noise can be measure. 
+ 1) **sound.id**: numeric, character or factor column with the ID of sounds used to identify same sounds at different distances and transects. Each sound ID can have only one sample at each distance/transect combination. The sound id label "ambient" can be used to defined annotations in which ambient noise can be measured. 
  1) **transect**: numeric, character or factor column with the transect ID. 
  1) **distance**: numeric column with with the distance (in m) from the source at which the sound was recorded. The package assumes that each distance is replicated once within a transect.  
 
 
 # Setting reference sounds 
 
-The combined information from these columns is used to identify the reference sounds for each test sound. The function `set_reference_sounds()` does exactly that. Hence, unless you define the reference sound for each test sound manually, `set_reference_sounds()` must always be run before any degradation measuring function. 
+The combined information from these columns is used to identify the reference sounds for each test (re-recorded) sound. The function `set_reference_sounds()` does exactly that. Hence, **unless you define the reference sound for each test sound manually, `set_reference_sounds()` must always be run before any degradation measuring function**. 
 
 There are two possible experimental designs when defining reference sounds (which is controlled by the argument 'method' in `set_reference_sounds()`):
 
 - 1: compare sounds (by 'sound.id') with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. For this design users can have a single example for the shortest distance to be used as reference (for instance at 1m as is the case in most studies) The function will try to use references from the same transect. However, if there is another test sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect. 
 - 2: compare all sounds with their counterpart recorded at the distance immediately before within a transect (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
 
-Also note that some selections are labeled as "ambient" in the 'sound.id'. These selections refer to ambient (background) noise. Ambient noise can be used by some functions to correct for amplitude differences due to non-target sounds.
+Also note that some selections are labeled as "ambient" in the 'sound.id'. These selections refer to ambient (background) noise. Ambient noise can be used by some functions (e.g. `signal_to_noise_ratio`) to used the same noise sample for all test sounds in a sound file.
  
 In this example data there are 4 recordings at increasing distances: 1m, 5m, 10m and 15m:
 
@@ -208,7 +208,7 @@ test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
 ```
 &nbsp;
 
-The function adds the column 'reference' which is then used by downstream functions plotting or measuring degradation. Hence it is used before running any of the degradation functions (including plotting functions). References are indicated as a the combination of the 'sound.files' and 'selec' column. For instance, '10m.wav-1' indicates that the row in which the 'selec' column is '1' and the sound file is '10m.wav' should be used as reference. The function also checks that the information 'X' (the input annotation data) is in the right format so it won't produce errors in downstream analysis (see 'X' argument description for details on format). The function will ignore rows in which the sound id  column is 'ambient', 'start_marker' or 'end_marker'.
+The function adds the column 'reference' which is then used by downstream functions plotting or measuring degradation. Hence it is used before running any of the degradation functions (including plotting functions). References are indicated as a the combination of the 'sound.files' and 'selec' column. For instance, '10m.wav-1' indicates that the row in which the 'selec' column is '1' and the sound file is '10m.wav' should be used as reference. Note that `NAs` are returned for sounds used as reference and 'ambient' noise selections. The function also checks that the information 'X' (the input annotation data) is in the right format so it won't produce errors in downstream analysis (see 'X' argument description for details on format). The function will ignore rows in which the sound id  column is 'ambient', 'start_marker' or 'end_marker'.
 
 ### Visual inspection
 
@@ -257,7 +257,7 @@ Each row includes all the copies of a sound id for a given transect (the row lab
 
 ### Blur ratio
  
-Blur ratio quantifies the degradation of sound as a function of the distortion of the amplitude envelope (time domain) while excluding changes due to energy attenuation. This measure was first described by Dabelsteen et al. (1993). Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference sound and the re-recorded sound. Low values indicate low degradation of sounds. The function `blur_ratio()` measures the blur ratio of sounds in which a reference playback has been re-recorded at different distances. The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). All sound files (or wave objects in the extended selection table) must have the same sampling rate so the length of envelopes is comparable.
+Blur ratio quantifies the degradation of sound as a function of the distortion of the amplitude envelope (time domain) while excluding changes due to energy attenuation. This measure was first described by Dabelsteen et al. (1993). Blur ratio is computed as the mismatch between amplitude envelopes (expressed as probability density functions) of the reference sound and the re-recorded sound. Low values indicate low degradation of sounds. The function `blur_ratio()` measures the blur ratio of sounds in which a reference playback has been re-recorded at different distances. The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). All sound files (or wave objects in the extended selection table) must have the same sampling rate so the length of envelopes is comparable.
 Blur ratio can be calculated as follows:
 
 ```{r, eval = FALSE}
@@ -287,7 +287,7 @@ br
 ```
 &nbsp;
 
-The output data frame is simply the input data with an additional column ('blur.ratio') with the  blur ratio values. Note that `NAs` are returned for sounds used as reference and 'ambient' noise selections.
+The output data frame is simply the input data with an additional column ('blur.ratio') with the  blur ratio values. Note again that `NAs` are returned for sounds used as reference and 'ambient' noise selections.
 
 The function `plot_blur_ratio()` can be used to generate image files (in 'jpeg' format) for each comparison showing spectrograms of both sounds and the overlaid amplitude envelopes (as probability mass functions (PMF)). 
 
@@ -311,20 +311,21 @@ Output image files (in the working directory) look like this one:
 # fc <- file.copy(from = aligned_imgs[1:2], 
 #           to = file.path("../man/figures", basename(aligned_imgs[c(1, 4)])))
 
-fc <- file.copy(from = blur_imgs[1], 
-          to = "../vignettes/temp.img.jpeg", overwrite = TRUE)
+fc <- file.copy(from = blur_imgs[1],
+          to = file.path("../vignettes", basename(blur_imgs[1])), overwrite = TRUE)
 
 ```
 
 ```{r, echo=FALSE}
 
-knitr::include_graphics("../vignettes/temp.img.jpeg")
+# knitr::include_graphics("../vignettes/temp.img.jpeg")
+knitr::include_graphics(basename(blur_imgs[1]))
 
 ```
 
 ```{r, echo=FALSE}
 
-unlink("../vignettes/temp.img.jpeg")
+# unlink("../vignettes/temp.img.jpeg")
 
 ```
 

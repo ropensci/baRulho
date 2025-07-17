@@ -74,15 +74,14 @@ options(width = 100, max.print = 100)
 ```
 
 
+<img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width = "15%" height="15%"/>
+
 This vignette deals with two things: how to create synthetic sounds for playback experiments and how to align re-recorded sounds to their reference once playback has been conducted. Here is some terms that will be used in this vignettes and throughout the package.
 
-&nbsp;
 
 <div class="alert alert-info">
 
 # Glossary 
-
-<img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width = "25%" height="25%"/>
 
 -**Model sound**: sound in which propagation properties will be studied, usually found in the original field recordings or synthetic sound files.
 
@@ -154,7 +153,7 @@ seewave::spectro(
 
 &nbsp;
 
-The function can add complexity to additional acoustic dimensions. For instance the following code generates all possible combinations of frequencies (2, 3 and 4 kHz), durations (0.1, and 0.2 s), frequency modulation (tonal and modulated) and amplitude modulation (flat and modulated envelope):
+The function can add variation to additional acoustic dimensions. For instance the following code generates all possible combinations of frequencies (2, 3 and 4 kHz), durations (0.1, and 0.2 s), frequency modulation (tonal and modulated) and amplitude modulation (flat and modulated envelope):
 
 ```{r, eval = TRUE, echo = TRUE}
 
@@ -168,7 +167,8 @@ synth_est2 <- baRulho::synth_sounds(
   am = TRUE,
   shuffle = TRUE,
   seed = 123,
-  sampling.rate = 12
+  sampling.rate = 12, 
+  freq.range = 1
 )
 
 # convert into a single wave object
@@ -195,7 +195,7 @@ seewave::spectro(
 
 ```
 
-Note that the output is an extended selection table that contains the time-frequency annotations for all synthetic sounds:
+Note that the output is an extended selection table (take a look at this [annotation format vignette](https://marce10.github.io/warbleR/articles/annotation_data_format.html) from [warbleR](https://marce10.github.io/warbleR/) for more details on this object format). It contains the time-frequency annotations for all synthetic sounds:
 
 ```{r, eval = TRUE}
 # check first 6 rows
@@ -269,10 +269,10 @@ data(list = c(
 ))
 
 # save sound files to temporary folder
-writeWave(Phae.long1, file.path(tempdir(), "Phae.long1.wav"))
-writeWave(Phae.long2, file.path(tempdir(), "Phae.long2.wav"))
-writeWave(Phae.long3, file.path(tempdir(), "Phae.long3.wav"))
-writeWave(Phae.long4, file.path(tempdir(), "Phae.long4.wav"))
+tuneR::writeWave(Phae.long1, file.path(tempdir(), "Phae.long1.wav"))
+tuneR::writeWave(Phae.long2, file.path(tempdir(), "Phae.long2.wav"))
+tuneR::writeWave(Phae.long3, file.path(tempdir(), "Phae.long3.wav"))
+tuneR::writeWave(Phae.long4, file.path(tempdir(), "Phae.long4.wav"))
 
 # make an extended selection table
 est <- warbleR::selection_table(
@@ -387,12 +387,12 @@ unlink(list.files(
 ))
 
 # save master sound file
-writeWave(object = attr(master_est, "wave.objects")[[1]],
+tuneR::writeWave(object = attr(master_est, "wave.objects")[[1]],
           file.path(tempdir(), "master.wav"))
 
 # save test sound files
 for (i in unique(test_sounds_est$sound.files)) {
-  writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(tempdir(), i))
+  tuneR::writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(tempdir(), i))
 }
 
 # make annotations a data frame
@@ -559,7 +559,7 @@ Now we can re-aligned test sounds:
 ```{r, eval = TRUE}
 
 #re align
-rts <- auto_realign(X = unaligned_test_sounds_est, Y = master_est)
+rts <- baRulho::auto_realign(X = unaligned_test_sounds_est, Y = master_est)
 
 ```
 

@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2025-07-16</h4>
+            <h4 data-toc-skip class="date">2025-07-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/master/vignettes/quantify_degradation.Rmd" class="external-link"><code>vignettes/quantify_degradation.Rmd</code></a></small>
       <div class="d-none name"><code>quantify_degradation.Rmd</code></div>
@@ -94,12 +94,13 @@ recorded at 5m, then sound recorded at 15m compared with the one
 recorded at 10m and so on).</li>
 </ol>
 </li>
-<li>The package will attempt to use re-recorded sounds from the shortest
-distance in the same transect as reference. However, if there is another
-re-recorded sound from the same ‘sound.id’ at a shorter distance in
-other transects, it will be used as reference instead. This behavior
-aims to account for the fact that in this type of experiments reference
-sounds are typically recorded at 1 m and at single transect.</li>
+<li>When method 1 is used, the package will attempt to use re-recorded
+sounds from the shortest distance in the same transect as reference.
+However, if there is another re-recorded sound from the same ‘sound.id’
+at a shorter distance in other transects, it will be used as reference
+instead. This behavior aims to account for the fact that in this type of
+experiments reference sounds are typically recorded at 1 m and at single
+transect.</li>
 <li>The package assumes all sound files have the same sampling
 rate.</li>
 </ul>
@@ -884,7 +885,7 @@ open
 </tbody>
 </table>
 </div>
-<p>This the despcription of the required input data columns:</p>
+<p>This is the description of the required input data columns:</p>
 <ol style="list-style-type: decimal">
 <li>
 <strong>sound.files</strong>: character or factor column with the
@@ -900,9 +901,10 @@ time of an annotated sound (in seconds)</li>
 <li>
 <strong>end</strong>: numeric column with the end position in time
 of an annotated sound (in seconds)</li>
-<li>‘bottom.freq’: numeric column with the bottom frequency of the
-frequency range of the annotation (in kHz, used for bandpass
-filtering)</li>
+<li>
+<strong>bottom.freq</strong>: numeric column with the bottom
+frequency of the frequency range of the annotation (in kHz, used for
+bandpass filtering)</li>
 <li>
 <strong>top.freq</strong>: numeric column with the top frequency of
 the frequency range of the annotation (in kHz, used for bandpass
@@ -916,7 +918,7 @@ channel in which the annotation is found in a multi-channel sound file
 the ID of sounds used to identify same sounds at different distances and
 transects. Each sound ID can have only one sample at each
 distance/transect combination. The sound id label “ambient” can be used
-to defined annotations in which ambient noise can be measure.</li>
+to defined annotations in which ambient noise can be measured.</li>
 <li>
 <strong>transect</strong>: numeric, character or factor column with
 the transect ID.</li>
@@ -930,11 +932,11 @@ that each distance is replicated once within a transect.</li>
 <h2 id="setting-reference-sounds">Setting reference sounds<a class="anchor" aria-label="anchor" href="#setting-reference-sounds"></a>
 </h2>
 <p>The combined information from these columns is used to identify the
-reference sounds for each test sound. The function
-<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> does exactly that. Hence, unless you
-define the reference sound for each test sound manually,
-<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> must always be run before any
-degradation measuring function.</p>
+reference sounds for each test (re-recorded) sound. The function
+<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> does exactly that. Hence,
+<strong>unless you define the reference sound for each test sound
+manually, <code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> must always be run before
+any degradation measuring function</strong>.</p>
 <p>There are two possible experimental designs when defining reference
 sounds (which is controlled by the argument ‘method’ in
 <code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code>):</p>
@@ -957,8 +959,9 @@ distance immediately before within a transect (e.g. a sound recorded at
 </ul>
 <p>Also note that some selections are labeled as “ambient” in the
 ‘sound.id’. These selections refer to ambient (background) noise.
-Ambient noise can be used by some functions to correct for amplitude
-differences due to non-target sounds.</p>
+Ambient noise can be used by some functions
+(e.g. <code>signal_to_noise_ratio</code>) to used the same noise sample
+for all test sounds in a sound file.</p>
 <p>In this example data there are 4 recordings at increasing distances:
 1m, 5m, 10m and 15m:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -1933,12 +1936,13 @@ before running any of the degradation functions (including plotting
 functions). References are indicated as a the combination of the
 ‘sound.files’ and ‘selec’ column. For instance, ‘10m.wav-1’ indicates
 that the row in which the ‘selec’ column is ‘1’ and the sound file is
-‘10m.wav’ should be used as reference. The function also checks that the
-information ‘X’ (the input annotation data) is in the right format so it
-won’t produce errors in downstream analysis (see ‘X’ argument
-description for details on format). The function will ignore rows in
-which the sound id column is ‘ambient’, ‘start_marker’ or
-‘end_marker’.</p>
+‘10m.wav’ should be used as reference. Note that <code>NAs</code> are
+returned for sounds used as reference and ‘ambient’ noise selections.
+The function also checks that the information ‘X’ (the input annotation
+data) is in the right format so it won’t produce errors in downstream
+analysis (see ‘X’ argument description for details on format). The
+function will ignore rows in which the sound id column is ‘ambient’,
+‘start_marker’ or ‘end_marker’.</p>
 </div>
 <div class="section level4">
 <h4 id="visual-inspection">Visual inspection<a class="anchor" aria-label="anchor" href="#visual-inspection"></a>
@@ -1958,12 +1962,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/RtmpR30rGn' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/Rtmp0xWECk' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpR30rGn/plot_degradation_p1.jpeg"
-[2] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpR30rGn/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp0xWECk/plot_degradation_p1.jpeg"
+[2] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp0xWECk/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -1979,7 +1983,7 @@ excluded.</p>
 <p>Blur ratio quantifies the degradation of sound as a function of the
 distortion of the amplitude envelope (time domain) while excluding
 changes due to energy attenuation. This measure was first described by
-Dabelsteen et al. (1993). Blur ratio is measured as the mismatch between
+Dabelsteen et al. (1993). Blur ratio is computed as the mismatch between
 amplitude envelopes (expressed as probability density functions) of the
 reference sound and the re-recorded sound. Low values indicate low
 degradation of sounds. The function <code><a href="../reference/blur_ratio.html">blur_ratio()</a></code> measures
@@ -2916,7 +2920,7 @@ open
 </div>
 <p> </p>
 <p>The output data frame is simply the input data with an additional
-column (‘blur.ratio’) with the blur ratio values. Note that
+column (‘blur.ratio’) with the blur ratio values. Note again that
 <code>NAs</code> are returned for sounds used as reference and ‘ambient’
 noise selections.</p>
 <p>The function <code><a href="../reference/plot_blur_ratio.html">plot_blur_ratio()</a></code> can be used to generate
@@ -2926,18 +2930,18 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/RtmpR30rGn' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/Rtmp0xWECk' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpR30rGn/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpR30rGn/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpR30rGn/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpR30rGn/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpR30rGn/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpR30rGn/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp0xWECk/blur_ratio_freq:1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp0xWECk/blur_ratio_freq:1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp0xWECk/blur_ratio_freq:1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp0xWECk/blur_ratio_freq:1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp0xWECk/blur_ratio_freq:4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp0xWECk/blur_ratio_freq:4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
-<p><img src="../articles/temp.img.jpeg" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="blur_ratio_freq%3A1-1m_open.wav-4-10m_closed.wav-4.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
 <p>The image shows the spectrogram for the reference and re-recorded
 sound, as well as the envelopes of both sounds overlaid in a single

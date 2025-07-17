@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2025-07-16</h4>
+            <h4 data-toc-skip class="date">2025-07-17</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/master/vignettes/align_test_sounds.Rmd" class="external-link"><code>vignettes/align_test_sounds.Rmd</code></a></small>
       <div class="d-none name"><code>align_test_sounds.Rmd</code></div>
@@ -70,15 +70,14 @@ Araya-Salas, PhD</a></h4>
     
     
 <p> </p>
+<p><img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width="15%" height="15%"></p>
 <p>This vignette deals with two things: how to create synthetic sounds
 for playback experiments and how to align re-recorded sounds to their
 reference once playback has been conducted. Here is some terms that will
 be used in this vignettes and throughout the package.</p>
-<p> </p>
 <div class="section level2">
 <h2 id="glossary">Glossary<a class="anchor" aria-label="anchor" href="#glossary"></a>
 </h2>
-<p><img src="baRulho_sticker.png" alt="baRulho sticker" align="right" width="25%" height="25%"></p>
 <p>-<strong>Model sound</strong>: sound in which propagation properties
 will be studied, usually found in the original field recordings or
 synthetic sound files.</p>
@@ -194,8 +193,8 @@ Attaching package: 'baRulho'</code></pre>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="align_test_sounds_files/figure-html/unnamed-chunk-1-1.png" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
-<p>The function can add complexity to additional acoustic dimensions.
-For instance the following code generates all possible combinations of
+<p>The function can add variation to additional acoustic dimensions. For
+instance the following code generates all possible combinations of
 frequencies (2, 3 and 4 kHz), durations (0.1, and 0.2 s), frequency
 modulation (tonal and modulated) and amplitude modulation (flat and
 modulated envelope):</p>
@@ -210,7 +209,8 @@ modulated envelope):</p>
 <span>  am <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  shuffle <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
-<span>  sampling.rate <span class="op">=</span> <span class="fl">12</span></span>
+<span>  sampling.rate <span class="op">=</span> <span class="fl">12</span>, </span>
+<span>  freq.range <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># convert into a single wave object</span></span>
@@ -235,8 +235,11 @@ modulated envelope):</p>
 <span>  wl <span class="op">=</span> <span class="fl">140</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="align_test_sounds_files/figure-html/unnamed-chunk-2-1.png" width="80%" style="display: block; margin: auto;"></p>
-<p>Note that the output is an extended selection table that contains the
-time-frequency annotations for all synthetic sounds:</p>
+<p>Note that the output is an extended selection table (take a look at
+this <a href="https://marce10.github.io/warbleR/articles/annotation_data_format.html" class="external-link">annotation
+format vignette</a> from <a href="https://marce10.github.io/warbleR/" class="external-link">warbleR</a> for more details
+on this object format). It contains the time-frequency annotations for
+all synthetic sounds:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># check first 6 rows</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">synth_est2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -380,10 +383,10 @@ synthetic_sound_3
 0.21
 </td>
 <td style="text-align:center;">
-2.0
+2.5
 </td>
 <td style="text-align:center;">
-4.0
+3.5
 </td>
 <td style="text-align:center;">
 3
@@ -421,10 +424,10 @@ synthetic_sound_4
 0.11
 </td>
 <td style="text-align:center;">
-1.0
+1.5
 </td>
 <td style="text-align:center;">
-3.0
+2.5
 </td>
 <td style="text-align:center;">
 2
@@ -462,10 +465,10 @@ synthetic_sound_5
 0.11
 </td>
 <td style="text-align:center;">
-3.0
+3.5
 </td>
 <td style="text-align:center;">
-5.0
+4.5
 </td>
 <td style="text-align:center;">
 4
@@ -572,7 +575,7 @@ tones:</p>
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.15</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe file synthetic_master.wav has been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/RtmpYdJF8I' [39m</code></pre>
+<pre><code> [30mThe file synthetic_master.wav has been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/Rtmp9IO7Qd' [39m</code></pre>
 <p> </p>
 <p>The function saves the master sound file as a wave file and returns a
 selection table in the R environment with the time and frequency
@@ -611,10 +614,10 @@ example data and recordings from the package <a href="https://cran.r-project.org
 <span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># save sound files to temporary folder</span></span>
-<span><span class="fu">writeWave</span><span class="op">(</span><span class="va">Phae.long1</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Phae.long1.wav"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">writeWave</span><span class="op">(</span><span class="va">Phae.long2</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Phae.long2.wav"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">writeWave</span><span class="op">(</span><span class="va">Phae.long3</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Phae.long3.wav"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu">writeWave</span><span class="op">(</span><span class="va">Phae.long4</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Phae.long4.wav"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">tuneR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span><span class="va">Phae.long1</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Phae.long1.wav"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">tuneR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span><span class="va">Phae.long2</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Phae.long2.wav"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">tuneR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span><span class="va">Phae.long3</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Phae.long3.wav"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">tuneR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span><span class="va">Phae.long4</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"Phae.long4.wav"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># make an extended selection table</span></span>
 <span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu">warbleR</span><span class="fu">::</span><span class="fu"><a href="https://marce10.github.io/warbleR/reference/selection_table.html" class="external-link">selection_table</a></span><span class="op">(</span></span>
@@ -636,7 +639,7 @@ example data and recordings from the package <a href="https://cran.r-project.org
 <span>  dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  gap.duration <span class="op">=</span> <span class="fl">0.3</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe file example_master.wav has been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/RtmpYdJF8I' [39m</code></pre>
+<pre><code> [30mThe file example_master.wav has been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/Rtmp9IO7Qd' [39m</code></pre>
 <p> </p>
 <p>Again, we can look at the spectrogram of the output file:</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
@@ -730,12 +733,12 @@ the usual case in which the acoustic data is found in sound files.</p>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># save master sound file</span></span>
-<span><span class="fu">writeWave</span><span class="op">(</span>object <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">master_est</span>, <span class="st">"wave.objects"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
+<span><span class="fu">tuneR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span>object <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">master_est</span>, <span class="st">"wave.objects"</span><span class="op">)</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>          <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"master.wav"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># save test sound files</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">sound.files</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="fu">writeWave</span><span class="op">(</span>object <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, <span class="st">"wave.objects"</span><span class="op">)</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu">tuneR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span>object <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, <span class="st">"wave.objects"</span><span class="op">)</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="va">i</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># make annotations a data frame</span></span>
@@ -1506,14 +1509,14 @@ files. The spectrograms are saved as individual JPEG image files (in
 <span>  duration <span class="op">=</span> <span class="fl">2.4</span>,</span>
 <span>  ovlp <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/RtmpYdJF8I' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/private/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T/Rtmp9IO7Qd' [39m</code></pre>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">aligned_imgs</span></span></code></pre></div>
-<pre><code>[1] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpYdJF8I/plot_align_10m_closed.jpeg"
-[2] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpYdJF8I/plot_align_10m_open.jpeg"  
-[3] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpYdJF8I/plot_align_1m_open.jpeg"   
-[4] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpYdJF8I/plot_align_30m_closed.jpeg"
-[5] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//RtmpYdJF8I/plot_align_30m_open.jpeg"  </code></pre>
+<pre><code>[1] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp9IO7Qd/plot_align_10m_closed.jpeg"
+[2] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp9IO7Qd/plot_align_10m_open.jpeg"  
+[3] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp9IO7Qd/plot_align_1m_open.jpeg"   
+[4] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp9IO7Qd/plot_align_30m_closed.jpeg"
+[5] "/var/folders/y6/nj790rtn62lfktb1sh__79hc0000gn/T//Rtmp9IO7Qd/plot_align_30m_open.jpeg"  </code></pre>
 <p>These are two of the files generated by the code above:</p>
 <p><img src="plot_align_10m_closed.jpeg" width="80%" style="display: block; margin: auto;"><img src="plot_align_30m_closed.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -1590,7 +1593,7 @@ in which test sound are slightly off their position:</p>
 <p>Now we can re-aligned test sounds:</p>
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#re align</span></span>
-<span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/auto_realign.html">auto_realign</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">unaligned_test_sounds_est</span>, Y <span class="op">=</span> <span class="va">master_est</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">rts</span> <span class="op">&lt;-</span> <span class="fu">baRulho</span><span class="fu">::</span><span class="fu"><a href="../reference/auto_realign.html">auto_realign</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">unaligned_test_sounds_est</span>, Y <span class="op">=</span> <span class="va">master_est</span><span class="op">)</span></span></code></pre></div>
 <p>This is how the sounds look before and after being aligned:</p>
 <center>
 <img src="auto_realign_results.gif" alt="time sync with manual_realign">

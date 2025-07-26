@@ -25,7 +25,7 @@ reference:
 
 - title: Quantify degradation
   desc: >
-    Functions for quantifying degradation metrics
+    Functions for quantifying and visually exploring degradation
   contents:
   - blur_ratio
   - detection_distance

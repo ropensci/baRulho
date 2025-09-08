@@ -331,7 +331,7 @@ Rraven::exp_raven(master_annotations, path = tempdir(),
 
 Both sound files and annotations can be visualized in Raven ( acoustic analysis software):
 
-```{r}
+```{r, echo = FALSE}
 knitr::include_graphics("example_master_table.jpg")
 ```
 

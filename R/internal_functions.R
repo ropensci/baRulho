@@ -5321,10 +5321,12 @@
         .var.name = "Y"
       )
       
-      columns <- c("sound.files", "selec", "start", "end", "sound.id")
     }
     
     if (fun == "manual_realign"){
+      columns <- c("sound.files", "selec", "start", "end", "sound.id")
+      
+      
     checkmate::assert_names(
       x = names(args$Y),
       type = "unique",

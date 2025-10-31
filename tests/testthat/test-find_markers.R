@@ -17,7 +17,7 @@ test_that("using extended table and both marker", {
   pks <-
     find_markers(X = master_est,
                  test.files = unique(test_sounds_est$sound.files)[2], 
-                 pb = FALSE)
+                 pb = FALSE, bp = c(0, 10))
   
   expect_equal(nrow(pks), 2)
   

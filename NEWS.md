@@ -1,3 +1,10 @@
+baRulho 2.1.6
+=========================
+
+### MINOR IMPROVEMENTS
+
+* Improve documentation of several functions
+
 baRulho 2.1.5
 =========================
 

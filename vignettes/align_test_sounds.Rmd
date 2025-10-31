@@ -637,8 +637,12 @@ Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic s
 
 <font size="4">Session information</font>
 
-```{r session info, echo=F}
+<details>
+  <summary>Click to see</summary>
+```{r session info}
+#| echo: false
 
 sessionInfo()
 
 ```
+</details>

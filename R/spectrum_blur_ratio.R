@@ -30,11 +30,13 @@
 #'
 #'   # get power spectra
 #'   sbr <- spectrum_blur_ratio(X = X, spectra = TRUE)
+#'   
+#'   \donttest{
+#'   # plot spectra
 #'   spctr <- attributes(sbr)$spectra
 #'
 #'   # make distance a factor for plotting
 #'   spctr$distance <- as.factor(spctr$distance)
-#'
 #'   
 #'   # plot
 #'   rlang::check_installed("ggplot2")
@@ -48,6 +50,7 @@
 #'   labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
 #'   coord_flip() +
 #'   theme_classic()
+#'   }
 #' }
 #'
 #' @seealso \code{\link{blur_ratio}}

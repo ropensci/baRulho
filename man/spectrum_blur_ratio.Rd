@@ -69,11 +69,13 @@ X <- set_reference_sounds(X = test_sounds_est)
 
   # get power spectra
   sbr <- spectrum_blur_ratio(X = X, spectra = TRUE)
+  
+  \donttest{
+  # plot spectra
   spctr <- attributes(sbr)$spectra
 
   # make distance a factor for plotting
   spctr$distance <- as.factor(spctr$distance)
-
   
   # plot
   rlang::check_installed("ggplot2")
@@ -87,6 +89,7 @@ X <- set_reference_sounds(X = test_sounds_est)
   labs(x = "Frequency (kHz)", y = "Amplitude (PMF)") +
   coord_flip() +
   theme_classic()
+  }
 }
 
 }

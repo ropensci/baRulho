@@ -10,7 +10,6 @@ Review](https://badges.ropensci.org/609_status.svg)](https://github.com/ropensci
 [![Project Status: Active The project has reached a stable, usable state
 and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Licence](https://img.shields.io/badge/https://img.shields.io/badge/licence-GPL--2-blue.svg)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
@@ -121,20 +120,19 @@ library(baRulho)
 ```
 
 Further system requirements due to the dependency
-[seewave](https://rug.mnhn.fr/seewave/) may be needed. Take a look a
-[this link](https://rug.mnhn.fr/seewave/inst.html) for instruction on
-how to install/troubleshoot these external dependencies.
+[seewave](https://cran.r-project.org/package=seewave) may be needed.
+Take a look a [this link](https://rug.mnhn.fr/seewave/inst.html) for
+instruction on how to install/troubleshoot these external dependencies.
 
 ## Other packages
 
 The packages [seewave](https://cran.r-project.org/package=seewave) and
-[tuneR](https://cran.r-project.org/package=seewave) provide a huge
-variety of functions for acoustic analysis and manipulation. They mostly
-work on wave objects already imported into the R environment. The
-package [warbleR](https://cran.r-project.org/package=warbleR) provides
-functions to visualize and measure sounds already referenced in
-annotation tables, similar to
-[baRulho](https://docs.ropensci.org/baRulho//). The package
+[tuneR](https://cran.r-project.org/package=tuneR) provide a huge variety
+of functions for acoustic analysis and manipulation. They mostly work on
+wave objects already imported into the R environment. The package
+[warbleR](https://cran.r-project.org/package=warbleR) provides functions
+to visualize and measure sounds already referenced in annotation tables,
+similar to [baRulho](https://docs.ropensci.org/baRulho//). The package
 [Rraven](https://cran.r-project.org/package=Rraven) facilitates the
 exchange of data between R and [Raven sound analysis
 software](https://www.ravensoundsoftware.com/) ([Cornell Lab of

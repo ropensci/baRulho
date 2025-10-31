@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">baRulho</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -1962,12 +1962,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpbUAYzL' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpkoYXLM' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/tmp/RtmpbUAYzL/plot_degradation_p1.jpeg"
-[2] "/tmp/RtmpbUAYzL/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/tmp/RtmpkoYXLM/plot_degradation_p1.jpeg"
+[2] "/tmp/RtmpkoYXLM/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2930,16 +2930,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpbUAYzL' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpkoYXLM' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/tmp/RtmpbUAYzL/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/tmp/RtmpbUAYzL/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/tmp/RtmpbUAYzL/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/tmp/RtmpbUAYzL/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/tmp/RtmpbUAYzL/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/tmp/RtmpbUAYzL/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/tmp/RtmpkoYXLM/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/tmp/RtmpkoYXLM/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/tmp/RtmpkoYXLM/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/tmp/RtmpkoYXLM/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/tmp/RtmpkoYXLM/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/tmp/RtmpkoYXLM/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -9993,7 +9993,7 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ggplot2_4.0.0      viridis_0.6.5      viridisLite_0.4.2  baRulho_2.1.6     
+ [1] ggplot2_4.0.0      viridis_0.6.5      viridisLite_0.4.2  baRulho_2.1.7     
  [5] ohun_1.0.4         warbleR_1.1.37     NatureSounds_1.0.5 seewave_2.2.4     
  [9] tuneR_1.4.7        knitr_1.50        
 

@@ -8,7 +8,7 @@ message: 'To cite package "baRulho" in publications use:'
 type: software
 license: GPL-2.0-or-later
 title: 'baRulho: Quantifying (Animal) Sound Degradation'
-version: 2.1.6
+version: 2.1.7
 doi: 10.1111/2041-210X.14481
 identifiers:
 - type: doi

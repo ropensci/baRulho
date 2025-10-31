@@ -8,7 +8,7 @@ message: 'To cite package "baRulho" in publications use:'
 type: software
 license: GPL-2.0-or-later
 title: 'baRulho: Quantifying (Animal) Sound Degradation'
-version: 2.1.5
+version: 2.1.6
 doi: 10.1111/2041-210X.14481
 identifiers:
 - type: doi
@@ -97,6 +97,7 @@ references:
   title: tuneR
   abstract: 'tuneR: Analysis of Music and Speech'
   notes: Imports
+  url: https://tuner.R-forge.R-project.org
   repository: https://CRAN.R-project.org/package=tuneR
   authors:
   - family-names: Ligges
@@ -424,22 +425,24 @@ references:
   title: monitoR
   abstract: 'monitoR: Acoustic Template Detection in R'
   notes: Suggests
-  url: http://www.uvm.edu/rsenr/vtcfwru/R/?Page=monitoR/monitoR.htm
+  url: https://github.com/jonkatz2/monitor
   repository: https://CRAN.R-project.org/package=monitoR
   authors:
   - family-names: Hafner
     given-names: Sasha D.
-    email: sdh11@cornell.edu
+    email: sasha.hafner@bce.au.dk
+    orcid: https://orcid.org/0000-0003-0955-0327
   - family-names: Katz
     given-names: Jon
     email: jonkatz4@gmail.com
-  - family-names: package
-    given-names: with code for the Fourier transform from the seewave
-  - family-names: direction
-    given-names: code for the readMP3 function from the tuneR package. Therese Donovan
-      provided creative
-  - family-names: support.
-    given-names: database design
+  - family-names: Sueur
+    given-names: Jerome
+  - family-names: Aubin
+    given-names: Thierry
+  - family-names: Simonis
+    given-names: Caroline
+  - family-names: Ligges
+    given-names: Uwe
   year: '2025'
   doi: 10.32614/CRAN.package.monitoR
 

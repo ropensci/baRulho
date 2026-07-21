@@ -72,9 +72,9 @@ Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamlin
 \seealso{
 \code{\link{signal_to_noise_ratio}}, \code{\link{noise_profile}}
 
-Other prepare acoustic data: 
-\code{\link{master_sound_file}()},
-\code{\link{synth_sounds}()}
+Other prepare acoustic data:
+\code{\link[=master_sound_file]{master_sound_file()}},
+\code{\link[=synth_sounds]{synth_sounds()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

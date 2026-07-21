@@ -108,11 +108,11 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 \seealso{
 \code{\link{manual_realign}};  \code{\link{auto_realign}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
 
-Other test sound alignment: 
-\code{\link{align_test_files}()},
-\code{\link{auto_realign}()},
-\code{\link{find_markers}()},
-\code{\link{manual_realign}()}
+Other test sound alignment:
+\code{\link[=align_test_files]{align_test_files()}},
+\code{\link[=auto_realign]{auto_realign()}},
+\code{\link[=find_markers]{find_markers()}},
+\code{\link[=manual_realign]{manual_realign()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

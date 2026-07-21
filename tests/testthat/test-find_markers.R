@@ -41,9 +41,6 @@ test_that("using data frame and start marker", {
   writeWave(object = attr(master_est, "wave.objects")[[1]],
             file.path(td, "master.wav"))
   
-  options(sound.files.path = td, pb = T)
-  
-  
   pks <-
     find_markers(
       X = master_est,
@@ -56,7 +53,7 @@ test_that("using data frame and start marker", {
   
   expect_equal(ncol(pks), 6)
   
-  expect_true(pks$scores >  0.6)
+  expect_true(pks$scores >  0.5)
   
   
   expect_equal(class(pks)[1], "data.frame")

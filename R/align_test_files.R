@@ -55,17 +55,18 @@ align_test_files <-
            pb = getOption("pb", TRUE),
            ...) {
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      # use try to avoid errors with argumets from dots (...)
-      try(arguments[[i]] <- get(i), silent = TRUE)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "align_test_files",
+      args = list(
+        X = X,
+        Y = Y,
+        path = path,
+        by.song = by.song,
+        marker = marker,
+        cores = cores,
+        pb = pb
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

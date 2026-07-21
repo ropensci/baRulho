@@ -4,7 +4,7 @@ test_that("envelope blur ratio", {
   
   # add reference to X
   X <-
-    set_reference_sounds(X = test_sounds_est[test_sounds_est$sound.id == test_sounds_est$sound.id[2],])
+    set_reference_sounds(X = test_sounds_est[test_sounds_est$sound.id == test_sounds_est$sound.id[6],])
   
   unlink(list.files(
     path = tempdir(),
@@ -13,7 +13,7 @@ test_that("envelope blur ratio", {
   ))
   
   # create plots
-  plot_blur_ratio(X = X[2:3,],
+  plot_blur_ratio(X = X,
                   dest.path = tempdir(),
                   pb = FALSE)
   
@@ -22,7 +22,7 @@ test_that("envelope blur ratio", {
                pattern = "^blur_ratio",
                full.names = TRUE)
   
-  expect_length(fls, 1)
+  expect_length(fls, 4)
   
   unlink(fls)
 })
@@ -34,7 +34,7 @@ test_that("spectrum blur ratio", {
   
   # add reference to X
   X <-
-    set_reference_sounds(X = test_sounds_est[test_sounds_est$sound.id == test_sounds_est$sound.id[2],])
+    set_reference_sounds(X = test_sounds_est[test_sounds_est$sound.id == test_sounds_est$sound.id[6],])
   
   unlink(list.files(
     path = tempdir(),
@@ -44,7 +44,7 @@ test_that("spectrum blur ratio", {
   
   # create plots
   plot_blur_ratio(
-    X = X[2:3,],
+    X = X,
     dest.path = tempdir(),
     pb = FALSE,
     type = "spectrum"
@@ -55,7 +55,7 @@ test_that("spectrum blur ratio", {
                pattern = "^spectrum_blur_ratio",
                full.names = TRUE)
   
-  expect_length(fls, 1)
+  expect_length(fls, 4)
   
   unlink(fls)
 })

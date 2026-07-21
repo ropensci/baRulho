@@ -47,16 +47,20 @@ envelope_correlation <-
     cor.method <- rlang::arg_match(cor.method)
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "envelope_correlation",
+      args = list(
+        X = X,
+        cores = cores,
+        pb = pb,
+        cor.method = cor.method,
+        env.smooth = env.smooth,
+        hop.size = hop.size,
+        wl = wl,
+        ovlp = ovlp,
+        path = path
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

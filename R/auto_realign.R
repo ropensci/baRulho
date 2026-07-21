@@ -59,16 +59,20 @@ auto_realign <-
     wn <- rlang::arg_match(wn)
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "auto_realign",
+      args = list(
+        X = X,
+        Y = Y,
+        cores = cores,
+        pb = pb,
+        hop.size = hop.size,
+        wl = wl,
+        ovlp = ovlp,
+        wn = wn,
+        bp = bp
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

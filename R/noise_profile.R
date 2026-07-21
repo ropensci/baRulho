@@ -12,7 +12,7 @@
 #' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column).
 #' }
 #' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}). 
+#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).
 #' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
 #' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
 #' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.
@@ -57,7 +57,7 @@ noise_profile <-
            norm = TRUE,
            dB = c("A", "B", "C", "D", "ITU", "max0"),
            averaged = TRUE) {
-
+    
     # assign a value to dB
     dB <- rlang::arg_match(dB)
     
@@ -65,23 +65,31 @@ noise_profile <-
     noise.ref <- rlang::arg_match(noise.ref)
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "noise_profile",
+      args = list(
+        X = X,
+        files = files,
+        mar = mar,
+        noise.ref = noise.ref,
+        cores = cores,
+        pb = pb,
+        path = path,
+        bp = bp,
+        hop.size = hop.size,
+        wl = wl,
+        PSD = PSD,
+        norm = norm,
+        dB = dB,
+        averaged = averaged
+      )
+    )
     
     # report errors
     .report_assertions(check_results)
     
     # if X is not supplied modify noise reference
     if (!is.null(X)) {
-      
       # keep only 'ambient' selections
       if (noise.ref == "custom") {
         X <- X[X$sound.id == "ambient", ]
@@ -114,7 +122,6 @@ noise_profile <-
     
     # check files
     if (!is.null(files)) {
-      
       # created selection table from sound files
       X <-
         warbleR::selection_table(whole.recs = TRUE,
@@ -122,7 +129,7 @@ noise_profile <-
                                  path = path)
       
       # filter sound files in files
-      X <- X[X$sound.files %in% files,]
+      X <- X[X$sound.files %in% files, ]
       
       # add sound column
       X$sound.id <- "ambient"
@@ -133,7 +140,7 @@ noise_profile <-
     
     # adjust wl based on hop.size
     wl <- .adjust_wl(wl, X, hop.size, path)
-      
+    
     # set clusters for windows OS
     if (Sys.info()[1] == "Windows" & cores > 1) {
       cl <-
@@ -167,7 +174,7 @@ noise_profile <-
     
     # make all the same length if noise.ref is adjacent
     if (length(unique(rws)) > 1 & noise.ref == "adjacent") {
-      noise.profiles <- .same_length_noise(noise.profiles, rws)  
+      noise.profiles <- .same_length_noise(noise.profiles, rws)
     }
     
     # put together in 1 data frame
@@ -181,7 +188,7 @@ noise_profile <-
     
     # sort by sound file and freq
     noise.profile <-
-      noise.profile[order(noise.profile$sound.files, noise.profile$freq),]
+      noise.profile[order(noise.profile$sound.files, noise.profile$freq), ]
     
     rownames(noise.profile) <- seq_len(nrow(noise.profile))
     

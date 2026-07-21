@@ -50,17 +50,21 @@ add_noise <-
     kind <- rlang::arg_match(kind)
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      # use try to avoid errors with argumets from dots (...)
-      try(arguments[[i]] <- get(i), silent = TRUE)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "add_noise",
+      args = list(
+        X = X,
+        mar = mar,
+        target.snr = target.snr,
+        precision = precision,
+        cores = cores,
+        pb = pb,
+        max.iterations = max.iterations,
+        kind = kind,
+        alpha = alpha,
+        seed = seed
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

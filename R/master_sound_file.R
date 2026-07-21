@@ -10,7 +10,7 @@
 #' @param delay Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning (and at the end) of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.
 #' @param gap.duration Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between sounds. Default is 1 s.
 #' @param amp.marker Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of sounds, so it is picked up at further distances. Default is 2.
-#' @param flim Numeric vector of length 2 to control the (approximate) frequency range in which the markers would be found. If \code{NULL} markers would span across the entire frequency range. Default is c(0, 4). 
+#' @param flim Numeric vector of length 2 to control the (approximate) frequency range in which the markers would be found. If \code{NULL} markers would span across the entire frequency range. Default is c(0, 4).
 #' @param cex Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.
 #' @return A .wav file in 'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.
 #' @export
@@ -55,7 +55,6 @@
 #' @references {
 #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #' }
-
 master_sound_file <-
   function(X,
            file.name,
@@ -67,248 +66,249 @@ master_sound_file <-
            flim = c(0, 4),
            cex = 14,
            path = getOption("sound.files.path", ".")) {
-    # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
-    
-    # report errors
-    .report_assertions(check_results)
-    
-    # get sampling rate
-    sampling_rate <-
-      warbleR::read_sound_file(
-        X = X,
-        index = 1,
-        path = path,
-        header = TRUE
-      )$sample.rate
-    
-    mrkrs <- .make_markers(X, flim, sampling_rate, cex)  
-    
-    # output wave object
-    strt_mrkr <- tuneR::normalize(mrkrs$strt_mrkr)
-    end_mrkr <- tuneR::normalize(mrkrs$end_mrkr)
-    
-    # frequency range of markers
-    strt_mrkr_freq <-
-      warbleR::freq_range_detec(
-        strt_mrkr,
-        fsmooth = 0.2,
-        plot = FALSE,
-        dB.threshold = 20
-      )
-    
-    # fix bottom freq if NA
-    if (is.na(strt_mrkr_freq$bottom.freq))
-      strt_mrkr_freq$bottom.freq <- flim[1]
-    
-    # fix top freq if NA
-    if (is.na(strt_mrkr_freq$top.freq))
-      strt_mrkr_freq$top.freq <- flim[2]
-    
-    
-    end_mrkr_freq <-
-      warbleR::freq_range_detec(
-        end_mrkr,
-        fsmooth = 0.2,
-        plot = FALSE,
-        dB.threshold = 20
-      )
-    
-    # fix bottom freq if NA
-    if (is.na(end_mrkr_freq$bottom.freq))
-      end_mrkr_freq$bottom.freq <- flim[1]
-    
-    # fix top freq if NA
-    if (is.na(end_mrkr_freq$top.freq))
-      end_mrkr_freq$top.freq <- flim[2]
-    
-    # amplify markers
-    strt_mrkr@left <- strt_mrkr@left * amp.marker
-    end_mrkr@left <- end_mrkr@left * amp.marker
-    
-    # save duration of markers for creating selection table
-    dur_strt_mrkr <- seewave::duration(strt_mrkr)
-    dur_end_mrkr <- seewave::duration(end_mrkr)
-    
-    # add delay at the beggining
-    if (delay > 0) {
-      strt_mrkr <-
-        seewave::addsilw(
-          strt_mrkr,
-          d = delay,
-          output = "Wave",
-          at = "start",
-          f = sampling_rate
-        )
-    }
-    
-    # add gap to start marker
-    strt_mrkr <-
-      seewave::addsilw(
-        strt_mrkr,
-        d = gap.duration,
-        output = "Wave",
-        at = "end",
-        f = sampling_rate
-      )
-    
-    # add columns to attach durations
-    X$pb.start <- NA
-    
-    # add start marker duration
-    X$pb.start[1] <- seewave::duration(strt_mrkr)
-    
-    # read first selection
-    plbck <- warbleR::read_sound_file(X, index = 1, path = path)
-    
-    # duration first selection
-    dr1 <- seewave::duration(plbck)
-    
-    # add gap
-    plbck <-
-      seewave::addsilw(plbck,
-                       d = gap.duration,
-                       output = "Wave",
-                       at = "end")
-    
-    # normalize
-    plbck <- tuneR::normalize(plbck)
-    
-    # add start marker
-    plbck <- seewave::pastew(plbck, strt_mrkr, output = "Wave")
-    
-    # add end column
-    X$pb.end <- NA
-    
-    # add duration of first selection
-    X$pb.end[1] <- X$pb.start[1] + dr1
-    
-    # concatenate all selection with a loop
-    for (i in 2:nrow(X))
-    {
-      # read waves
-      wv <- warbleR::read_sound_file(X, index = i, path = path)
-      
-      # save duration in sel tab
-      X$pb.start[i] <- seewave::duration(plbck)
-      X$pb.end[i] <-
-        seewave::duration(plbck) + seewave::duration(wv)
-      
-      # add gaps
-      wv <-
-        seewave::addsilw(
-          wv,
-          d = gap.duration,
-          output = "Wave",
-          at = "end",
-          f = sampling_rate
-        )
-      
-      # normalize
-      wv <- tuneR::normalize(wv)
-      
-      # add to master playback
-      plbck <- seewave::pastew(wv, plbck, output = "Wave")
-    }
-    
-    # add end marker
-    plbck <- seewave::pastew(end_mrkr, plbck, output = "Wave")
-    
-    # margin range for selections on markers
-    mar.f <- (flim[2] - flim[1]) / 3
-    
-    # add .wav at the end of file.name if not included
-    if (!grepl("\\.wav$", file.name, ignore.case = TRUE)) {
-      file.name <- paste0(file.name, ".wav")
-    }
-    
-    # create selection table
-    sel.tab <- data.frame(
-      sound.files = file.name,
-      selec = seq_along(nrow(X) + 2),
-      start = c(delay, X$pb.start, X$pb.end[nrow(X)] + gap.duration),
-      end = c(
-        delay + dur_strt_mrkr,
-        X$pb.end,
-        length(plbck@left) / sampling_rate
-      )
+# check arguments
+check_results <- .check_arguments(
+  fun = "master_sound_file",
+  args = list(
+    X = X,
+    file.name = file.name,
+    dest.path = dest.path,
+    overwrite = overwrite,
+    delay = delay,
+    gap.duration = gap.duration,
+    amp.marker = amp.marker,
+    flim = flim,
+    cex = cex,
+    path = path
+  )
+)
+
+# report errors
+.report_assertions(check_results)
+
+# get sampling rate
+sampling_rate <-
+  warbleR::read_sound_file(
+    X = X,
+    index = 1,
+    path = path,
+    header = TRUE
+  )$sample.rate
+
+mrkrs <- .make_markers(X, flim, sampling_rate, cex)
+
+# output wave object
+strt_mrkr <- tuneR::normalize(mrkrs$strt_mrkr)
+end_mrkr <- tuneR::normalize(mrkrs$end_mrkr)
+
+# frequency range of markers
+strt_mrkr_freq <-
+  warbleR::freq_range_detec(strt_mrkr,
+                            fsmooth = 0.2,
+                            plot = FALSE,
+                            dB.threshold = 20)
+
+# fix bottom freq if NA
+if (is.na(strt_mrkr_freq$bottom.freq))
+  strt_mrkr_freq$bottom.freq <- flim[1]
+
+# fix top freq if NA
+if (is.na(strt_mrkr_freq$top.freq))
+  strt_mrkr_freq$top.freq <- flim[2]
+
+
+end_mrkr_freq <-
+  warbleR::freq_range_detec(end_mrkr,
+                            fsmooth = 0.2,
+                            plot = FALSE,
+                            dB.threshold = 20)
+
+# fix bottom freq if NA
+if (is.na(end_mrkr_freq$bottom.freq))
+  end_mrkr_freq$bottom.freq <- flim[1]
+
+# fix top freq if NA
+if (is.na(end_mrkr_freq$top.freq))
+  end_mrkr_freq$top.freq <- flim[2]
+
+# amplify markers
+strt_mrkr@left <- strt_mrkr@left * amp.marker
+end_mrkr@left <- end_mrkr@left * amp.marker
+
+# save duration of markers for creating selection table
+dur_strt_mrkr <- seewave::duration(strt_mrkr)
+dur_end_mrkr <- seewave::duration(end_mrkr)
+
+# add delay at the beggining
+if (delay > 0) {
+  strt_mrkr <-
+    seewave::addsilw(
+      strt_mrkr,
+      d = delay,
+      output = "Wave",
+      at = "start",
+      f = sampling_rate
     )
-    
-    # add bottom freq info
-    if (!is.null(X$bottom.freq)) {
-      sel.tab$bottom.freq <-
-        c(strt_mrkr_freq$bottom.freq,
-          X$bottom.freq,
-          end_mrkr_freq$bottom.freq)
-    } else {
-      sel.tab$bottom.freq <-
-        c(strt_mrkr_freq$bottom.freq,
-          rep(NA, nrow(X)),
-          end_mrkr_freq$bottom.freq)
-    }
-    
-    
-    # add top freq info
-    if (!is.null(X$top.freq)) {
-      sel.tab$top.freq <-
-        c(strt_mrkr_freq$top.freq,
-          X$top.freq,
-          end_mrkr_freq$top.freq)
-    } else {
-      sel.tab$top.freq <-
-        c(strt_mrkr_freq$top.freq,
-          rep(NA, nrow(X)),
-          end_mrkr_freq$top.freq)
-    }
-    
-    # add start & end markers
-    sel.tab$sound.id <- if (!is.null(X$sound.id)) {
-      c("start_marker", X$sound.id, "end_marker")
-    } else if (warbleR::is_extended_selection_table(X)) {
-      c("start_marker", X$sound.files, "end_marker")
-    } else {
-      c("start_marker",
-        paste(X$sound.files, X$selec, sep = "-"),
-        "end_marker")
-    }
-    
-    # add delay at the end
-    if (delay > 0) {
-      plbck <-
-        seewave::addsilw(plbck,
-                         d = delay,
-                         output = "Wave",
-                         at = "end")
-    }
-    
-    # normalize whole master playback
-    plbck <- tuneR::normalize(plbck, unit = "16")
-    
-    # save master playback
-    tuneR::writeWave(plbck, file.path(dest.path, file.name), extensible = FALSE)
-    
-    # message to let know users the file has been saved
-    .message(
-      paste0(
-        "The file ",
-        file.name,
-        " has been saved in the directory path '",
-        normalizePath(dest.path),
-        "'"
-      )
+}
+
+# add gap to start marker
+strt_mrkr <-
+  seewave::addsilw(
+    strt_mrkr,
+    d = gap.duration,
+    output = "Wave",
+    at = "end",
+    f = sampling_rate
+  )
+
+# add columns to attach durations
+X$pb.start <- NA
+
+# add start marker duration
+X$pb.start[1] <- seewave::duration(strt_mrkr)
+
+# read first selection
+plbck <- warbleR::read_sound_file(X, index = 1, path = path)
+
+# duration first selection
+dr1 <- seewave::duration(plbck)
+
+# add gap
+plbck <-
+  seewave::addsilw(plbck,
+                   d = gap.duration,
+                   output = "Wave",
+                   at = "end")
+
+# normalize
+plbck <- tuneR::normalize(plbck)
+
+# add start marker
+plbck <- seewave::pastew(plbck, strt_mrkr, output = "Wave")
+
+# add end column
+X$pb.end <- NA
+
+# add duration of first selection
+X$pb.end[1] <- X$pb.start[1] + dr1
+
+# concatenate all selection with a loop
+for (i in 2:nrow(X))
+{
+  # read waves
+  wv <- warbleR::read_sound_file(X, index = i, path = path)
+  
+  # save duration in sel tab
+  X$pb.start[i] <- seewave::duration(plbck)
+  X$pb.end[i] <-
+    seewave::duration(plbck) + seewave::duration(wv)
+  
+  # add gaps
+  wv <-
+    seewave::addsilw(
+      wv,
+      d = gap.duration,
+      output = "Wave",
+      at = "end",
+      f = sampling_rate
     )
-    
-    # add a unique selec id to each annotation
-    sel.tab$selec <- seq_len(nrow(sel.tab))
-    
-    return(sel.tab)
-  }
+  
+  # normalize
+  wv <- tuneR::normalize(wv)
+  
+  # add to master playback
+  plbck <- seewave::pastew(wv, plbck, output = "Wave")
+}
+
+# add end marker
+plbck <- seewave::pastew(end_mrkr, plbck, output = "Wave")
+
+# margin range for selections on markers
+mar.f <- (flim[2] - flim[1]) / 3
+
+# add .wav at the end of file.name if not included
+if (!grepl("\\.wav$", file.name, ignore.case = TRUE)) {
+  file.name <- paste0(file.name, ".wav")
+}
+
+# create selection table
+sel.tab <- data.frame(
+  sound.files = file.name,
+  selec = seq_along(nrow(X) + 2),
+  start = c(delay, X$pb.start, X$pb.end[nrow(X)] + gap.duration),
+  end = c(
+    delay + dur_strt_mrkr,
+    X$pb.end,
+    length(plbck@left) / sampling_rate
+  )
+)
+
+# add bottom freq info
+if (!is.null(X$bottom.freq)) {
+  sel.tab$bottom.freq <-
+    c(strt_mrkr_freq$bottom.freq,
+      X$bottom.freq,
+      end_mrkr_freq$bottom.freq)
+} else {
+  sel.tab$bottom.freq <-
+    c(strt_mrkr_freq$bottom.freq,
+      rep(NA, nrow(X)),
+      end_mrkr_freq$bottom.freq)
+}
+
+
+# add top freq info
+if (!is.null(X$top.freq)) {
+  sel.tab$top.freq <-
+    c(strt_mrkr_freq$top.freq,
+      X$top.freq,
+      end_mrkr_freq$top.freq)
+} else {
+  sel.tab$top.freq <-
+    c(strt_mrkr_freq$top.freq,
+      rep(NA, nrow(X)),
+      end_mrkr_freq$top.freq)
+}
+
+# add start & end markers
+sel.tab$sound.id <- if (!is.null(X$sound.id)) {
+  c("start_marker", X$sound.id, "end_marker")
+} else if (warbleR::is_extended_selection_table(X)) {
+  c("start_marker", X$sound.files, "end_marker")
+} else {
+  c("start_marker",
+    paste(X$sound.files, X$selec, sep = "-"),
+    "end_marker")
+}
+
+# add delay at the end
+if (delay > 0) {
+  plbck <-
+    seewave::addsilw(plbck,
+                     d = delay,
+                     output = "Wave",
+                     at = "end")
+}
+
+# normalize whole master playback
+plbck <- tuneR::normalize(plbck, unit = "16")
+
+# save master playback
+tuneR::writeWave(plbck, file.path(dest.path, file.name), extensible = FALSE)
+
+# message to let know users the file has been saved
+.message(
+  paste0(
+    "The file ",
+    file.name,
+    " has been saved in the directory path '",
+    normalizePath(dest.path),
+    "'"
+  )
+)
+
+# add a unique selec id to each annotation
+sel.tab$selec <- seq_len(nrow(sel.tab))
+
+return(sel.tab)
+}

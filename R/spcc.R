@@ -42,16 +42,20 @@ spcc <-
     cor.method <- rlang::arg_match(cor.method)
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "spcc",
+      args = list(
+        X = X,
+        cores = cores,
+        pb = pb,
+        cor.method = cor.method,
+        hop.size = hop.size,
+        wl = wl,
+        ovlp = ovlp,
+        wn = wn,
+        path = path
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

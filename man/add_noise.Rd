@@ -70,9 +70,9 @@ Timmer. J and M. König (1995): On generating power law noise. Astron. Astrophys
 \seealso{
 \code{\link{signal_to_noise_ratio}}
 
-Other miscellaneous: 
-\code{\link{attenuation}()},
-\code{\link{noise_profile}()}
+Other miscellaneous:
+\code{\link[=attenuation]{attenuation()}},
+\code{\link[=noise_profile]{noise_profile()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

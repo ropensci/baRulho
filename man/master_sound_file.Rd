@@ -91,9 +91,9 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 \seealso{
 \code{\link[Rraven]{exp_raven}}
 
-Other prepare acoustic data: 
-\code{\link{spot_ambient_noise}()},
-\code{\link{synth_sounds}()}
+Other prepare acoustic data:
+\code{\link[=spot_ambient_noise]{spot_ambient_noise()}},
+\code{\link[=synth_sounds]{synth_sounds()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

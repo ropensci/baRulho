@@ -75,11 +75,11 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 \seealso{
 \code{\link{manual_realign}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
 
-Other test sound alignment: 
-\code{\link{auto_realign}()},
-\code{\link{find_markers}()},
-\code{\link{manual_realign}()},
-\code{\link{plot_aligned_sounds}()}
+Other test sound alignment:
+\code{\link[=auto_realign]{auto_realign()}},
+\code{\link[=find_markers]{find_markers()}},
+\code{\link[=manual_realign]{manual_realign()}},
+\code{\link[=plot_aligned_sounds]{plot_aligned_sounds()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

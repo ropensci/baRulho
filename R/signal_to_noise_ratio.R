@@ -61,20 +61,26 @@ signal_to_noise_ratio <-
     noise.ref <- rlang::arg_match(noise.ref)
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "signal_to_noise_ratio",
+      args = list(
+        X = X,
+        mar = mar,
+        cores = cores,
+        pb = pb,
+        eq.dur = eq.dur,
+        noise.ref = noise.ref,
+        snr.formula = snr.formula,
+        bp = bp,
+        hop.size = hop.size,
+        wl = wl,
+        ovlp = ovlp,
+        path = path
+      )
+    )
     
     # report errors
-    .report_assertions(check_results)
-    
+    .report_assertions(check_results)    
     # get sampling rate
     sampling_rate <-
       warbleR::read_sound_file(

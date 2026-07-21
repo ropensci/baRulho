@@ -66,17 +66,17 @@ Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal voca
 \seealso{
 \code{\link{blur_ratio}}, \code{\link{manual_realign}}, \code{\link[warbleR]{cross_correlation}}
 
-Other quantify degradation: 
-\code{\link{blur_ratio}()},
-\code{\link{detection_distance}()},
-\code{\link{envelope_correlation}()},
-\code{\link{plot_blur_ratio}()},
-\code{\link{plot_degradation}()},
-\code{\link{set_reference_sounds}()},
-\code{\link{signal_to_noise_ratio}()},
-\code{\link{spectrum_blur_ratio}()},
-\code{\link{spectrum_correlation}()},
-\code{\link{tail_to_signal_ratio}()}
+Other quantify degradation:
+\code{\link[=blur_ratio]{blur_ratio()}},
+\code{\link[=detection_distance]{detection_distance()}},
+\code{\link[=envelope_correlation]{envelope_correlation()}},
+\code{\link[=plot_blur_ratio]{plot_blur_ratio()}},
+\code{\link[=plot_degradation]{plot_degradation()}},
+\code{\link[=set_reference_sounds]{set_reference_sounds()}},
+\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}},
+\code{\link[=spectrum_blur_ratio]{spectrum_blur_ratio()}},
+\code{\link[=spectrum_correlation]{spectrum_correlation()}},
+\code{\link[=tail_to_signal_ratio]{tail_to_signal_ratio()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

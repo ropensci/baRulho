@@ -4,7 +4,7 @@ test_that("basic", {
   
   
   test_sounds_est <-
-    test_sounds_est[test_sounds_est$sound.id == "freq:9",]
+    test_sounds_est[test_sounds_est$sound.id == "freq9",]
   
   # order so spectrograms from same sound id as close in the graph
   test_sounds_est <-
@@ -45,7 +45,7 @@ test_that("many ros", {
   
   
   test_sounds_est <-
-    test_sounds_est[test_sounds_est$sound.id == "freq:9",]
+    test_sounds_est[test_sounds_est$sound.id == "freq9",]
   
   # order so spectrograms from same sound id as close in the graph
   test_sounds_est <-

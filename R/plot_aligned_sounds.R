@@ -69,18 +69,35 @@ plot_aligned_sounds <-
            srt = 0,
            cex = 1,
            ...) {
+    
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      try(arguments[[i]] <- get(i), silent = TRUE)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
-    
+    check_results <- .check_arguments(
+      fun = "plot_aligned_sounds",
+      args = list(
+        X = X,
+        hop.size = hop.size,
+        wl = wl,
+        ovlp = ovlp,
+        path = path,
+        cores = cores,
+        pb = pb,
+        collevels = collevels,
+        palette = palette,
+        duration = duration,
+        mar = mar,
+        dest.path = dest.path,
+        flim = flim,
+        col = col,
+        width = width,
+        height = height,
+        res = res,
+        label = label,
+        fast.spec = fast.spec,
+        srt = srt,
+        cex = cex
+      )
+    )
+
     # report errors
     .report_assertions(check_results)
     

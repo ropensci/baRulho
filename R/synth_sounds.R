@@ -71,16 +71,26 @@ synth_sounds <-
            pb = TRUE,
            freq.range = 2) {
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "synth_sounds",
+      args = list(
+        replicates = replicates,
+        frequencies = frequencies,
+        durations = durations,
+        nharmonics = nharmonics,
+        fm = fm,
+        am = am,
+        am.amps = am.amps,
+        mar = mar,
+        seed = seed,
+        sig2 = sig2,
+        shuffle = shuffle,
+        hrm.freqs = hrm.freqs,
+        sampling.rate = sampling.rate,
+        pb = pb,
+        freq.range = freq.range
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

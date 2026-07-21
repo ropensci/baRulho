@@ -33,7 +33,6 @@ Suggests:
     Rraven,
     monitoR
 VignetteBuilder: knitr
-RoxygenNote: 7.3.2
 Repository: CRANs
 Language: en-US
 Authors@R: 
@@ -53,3 +52,4 @@ Authors@R:
       comment = c(ORCID = "0000-0003-0363-5581")))  
 Config/testthat/edition: 3
 Encoding: UTF-8
+Config/roxygen2/version: 8.0.0

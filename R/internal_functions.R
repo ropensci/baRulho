@@ -21,7 +21,7 @@
 
 
 # calculate time and freq ranges based on all recs
-.time_freq_range_files <- function(X, i, path, margins) {
+.time_freq_range_files <- function(X, path, margins) {
   rang_list <- lapply(seq_len(nrow(X)), function(i) {
     r <- read_sound_file(
       X = X,
@@ -2721,8 +2721,8 @@
 }
 
 # for each sound fix start and end based on margin
-.fix_margins <- function(X, i, path, margins){
-  rangs <- .time_freq_range_files(X, i, path, margins)
+.fix_margins <- function(X, path, margins){
+  rangs <- .time_freq_range_files(X, path, margins)
   
   X$mar.end <- X$mar.start <- NA
   for (u in seq_len(nrow(X))) {
@@ -3785,7 +3785,7 @@
 
 # check if X has any ambient reference in sound id column
 .check_ambient_ref <- function(x, noise.ref) {
-  if (noise.ref == "custom" & !any(x$sound.id == "ambient")) {
+  if (noise.ref == "custom" & !any(x$sound.id %in% "ambient")) {
     "'noise.ref = custom' but no 'ambient' label found in 'sound.id' column"
   } else {
     TRUE
@@ -3798,11 +3798,15 @@
 
 # check sound files exist
 .check_sound_files_found <- function(files, fun) {
+  if (length(files) == 0 | is.null(files)){
+    return(TRUE)
+  }
+
   if (all(!file.exists(files))) {
     if (!fun != "noise_profile") {
-      "Not a single sound files in 'X$sound.files' can be found. Use 'path' to set the directory where the sound files are found"
+      "Not a single sound file in 'X$sound.files' can be found. Use 'path' to set the directory where the sound files are found"
     } else {
-      "Not a single sound files in 'files' can be found. Use 'path' to set the directory where the sound files are found"
+      "Not a single sound file in 'files' can be found. Use 'path' to set the directory where the sound files are found"
     }
   } else {
     if (!all(file.exists(files))) {
@@ -4526,7 +4530,7 @@
       x = args$am.amps,
       any.missing = FALSE,
       all.missing = FALSE,
-      unique = TRUE,
+      unique = FALSE,
       null.ok = TRUE,
       lower = 0.0001,
       add = check_collection,
@@ -4700,7 +4704,7 @@
       x = args$flim,
       any.missing = FALSE,
       all.missing = FALSE,
-      null.ok = FALSE,
+      null.ok = TRUE,
       len = 2,
       add = check_collection,
       .var.name = "flim"
@@ -5137,22 +5141,23 @@
         any.missing = FALSE,
         all.missing = FALSE,
         len = 2,
-        unique = TRUE,
+        unique = TRUE, 
         lower = 0,
         add = check_collection,
-        .var.name = "bp"
+        .var.name = "bp",
+        null.ok = TRUE
       )
     } else {
       checkmate::assert_character(
         x = args$bp,
-        null.ok = FALSE,
         add = check_collection,
         .var.name = "bp",
         len = 1,
         pattern = "^freq.range$",
         any.missing = FALSE,
         all.missing = FALSE,
-        ignore.case = FALSE
+        ignore.case = FALSE, 
+        null.ok = TRUE
       )
     }
   }

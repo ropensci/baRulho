@@ -56,16 +56,21 @@ tail_to_signal_ratio <- function(X,
                                  ovlp = getOption("ovlp", 0),
                                  path = getOption("sound.files.path", ".")) {
   # check arguments
-  arguments <- as.list(base::match.call())
-  
-  # add objects to argument names
-  for (i in names(arguments)[-1]) {
-    arguments[[i]] <- get(i)
-  }
-  
-  # check each arguments
-  check_results <-
-    .check_arguments(fun = arguments[[1]], args = arguments)
+  check_results <- .check_arguments(
+    fun = "tail_to_signal_ratio",
+    args = list(
+      X = X,
+      mar = mar,
+      cores = cores,
+      pb = pb,
+      tsr.formula = tsr.formula,
+      bp = bp,
+      hop.size = hop.size,
+      wl = wl,
+      ovlp = ovlp,
+      path = path
+    )
+  )
   
   # report errors
   .report_assertions(check_results)

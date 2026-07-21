@@ -96,16 +96,32 @@ manual_realign <-
     }
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      try(arguments[[i]] <- get(i), silent = TRUE)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "manual_realign",
+      args = list(
+        X = X,
+        Y = Y,
+        hop.size = hop.size,
+        wl = wl,
+        ovlp = ovlp,
+        path = path,
+        collevels = collevels,
+        palette = palette,
+        duration = duration,
+        mar = mar,
+        step.lengths = step.lengths,
+        flim = flim,
+        label.col = label.col,
+        ext.window = ext.window,
+        width = width,
+        height = height,
+        srt = srt,
+        cex = cex,
+        fast.spec = fast.spec,
+        marker = marker,
+        grid = grid
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

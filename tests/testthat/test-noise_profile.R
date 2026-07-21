@@ -86,15 +86,17 @@ test_that("using entire files", {
   # set temporary directory
   td <- tempdir()
   
-  for (i in unique(test_sounds_est$sound.files)[2:3])
+  unlink(file.path(td, unique(test_sounds_est$sound.files)), recursive = TRUE)
+  
+  for (i in unique(test_sounds_est$sound.files))
     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
   
   options(sound.files.path = td, pb = FALSE)
   
   np <-
-    noise_profile(mar = 0.01, pb = FALSE)
+    noise_profile(mar = 0.01, pb = FALSE, files = unique(test_sounds_est$sound.files))
   
-  expect_equal(nrow(np), 60)
+  expect_equal(nrow(np), 50)
   
   expect_equal(ncol(np), 3)
   

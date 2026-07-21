@@ -50,17 +50,17 @@ find_markers <-
            cores = getOption("mc.cores", 1),
            ...) {
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      # use try to avoid errors with argumets from dots (...)
-      try(arguments[[i]] <- get(i), silent = TRUE)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "find_markers",
+      args = list(
+        X = X,
+        markers = markers,
+        test.files = test.files,
+        path = path,
+        pb = pb,
+        cores = cores
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

@@ -86,9 +86,9 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 \seealso{
 \code{\link{excess_attenuation}}
 
-Other miscellaneous: 
-\code{\link{add_noise}()},
-\code{\link{attenuation}()}
+Other miscellaneous:
+\code{\link[=add_noise]{add_noise()}},
+\code{\link[=attenuation]{attenuation()}}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

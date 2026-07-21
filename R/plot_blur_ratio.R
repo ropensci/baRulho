@@ -60,20 +60,31 @@ plot_blur_ratio <-
     type <- rlang::arg_match(type)
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "plot_blur_ratio",
+      args = list(
+        X = X,
+        type = type,
+        cores = cores,
+        pb = pb,
+        env.smooth = env.smooth,
+        spec.smooth = spec.smooth,
+        res = res,
+        flim = flim,
+        hop.size = hop.size,
+        wl = wl,
+        ovlp = ovlp,
+        palette = palette,
+        collevels = collevels,
+        dest.path = dest.path,
+        path = path,
+        colors = colors,
+        n.samples = n.samples
+      )
+    )
     
     # report errors
-    .report_assertions(check_results)
-    
+    .report_assertions(check_results)    
     # adjust wl based on hop.size
     wl <- .adjust_wl(wl, X, hop.size, path)
 

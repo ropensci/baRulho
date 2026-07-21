@@ -44,18 +44,21 @@ test_that("using data frame", {
   
   # set temporary directory
   td <- tempdir()
-  
+
   for (i in unique(test_sounds_est$sound.files)[-1])
     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
   
-  options(sound.files.path = td, pb = FALSE)
+  
+  files <- file.path(td, unique(test_sounds_est$sound.files)[-1])
+  stopifnot(file.exists(files))
+  # options(sound.files.path = td, pb = FALSE)
   
   X <-
     as.data.frame(test_sounds_est[test_sounds_est$sound.files != "master.wav",])
   
-  X <- set_reference_sounds(X, method = 2)
+  X <- set_reference_sounds(X, method = 2, path = td)
   
-  expect_warning(br <- blur_ratio(X = X))
+  expect_warning(br <- blur_ratio(X = X, path = td))
   
   expect_equal(sum(is.na(br$blur.ratio)), 13)
   

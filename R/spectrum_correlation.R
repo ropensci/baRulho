@@ -49,20 +49,24 @@ spectrum_correlation <-
     cor.method <- rlang::arg_match(cor.method)
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "spectrum_correlation",
+      args = list(
+        X = X,
+        cores = cores,
+        pb = pb,
+        cor.method = cor.method,
+        spec.smooth = spec.smooth,
+        hop.size = hop.size,
+        wl = wl,
+        ovlp = ovlp,
+        path = path,
+        n.bins = n.bins
+      )
+    )
     
     # report errors
-    .report_assertions(check_results)
-    
+    .report_assertions(check_results)    
     # adjust wl based on hop.size
     wl <- .adjust_wl(wl, X, hop.size, path)
     

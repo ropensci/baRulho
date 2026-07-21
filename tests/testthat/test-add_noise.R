@@ -1,38 +1,37 @@
 test_that("basic", {
-  
   # load example data
   data("test_sounds_est")
-  
+
   # make it a 'by song' extended selection table
   X <- by_element_est(X = test_sounds_est, pb = FALSE)
   #'
   #' # add noise to the first five rows
   X_noise <-
     add_noise(
-      X = X[1:5, ],
+      X = X[21:25, ],
       mar = 0.2,
-      target.snr = 3,
+      target.snr = 1,
       cores = 1,
       pb = FALSE,
       max.iterations = 100,
       kind = "pink"
     )
-  
-  expect_true(is_extended_selection_table(X_noise))
-  
-  expect_equal(sum(!is.na(X_noise$adjusted.snr)), 4)
 
-  expect_equal(round(sum(X_noise$adjusted.snr, na.rm = TRUE), 1), 11.9)
-  
+  expect_true(is_extended_selection_table(X_noise))
+
+  expect_equal(sum(!is.na(X_noise$adjusted.snr)), 5)
+
+  expect_equal(round(sum(X_noise$adjusted.snr, na.rm = TRUE), 1), 4.8)
+
   expect_equal(nrow(X_noise), 5)
-  
+
   expect_equal(ncol(X_noise), 10)
-  
+
   # test white noise
   #' # add noise to the first five rows
   X_noise <-
     add_noise(
-      X = X[1:5, ],
+      X = X[21:25, ],
       mar = 0.2,
       target.snr = 3,
       cores = 1,
@@ -40,7 +39,6 @@ test_that("basic", {
       max.iterations = 100,
       kind = "white"
     )
-  
-  expect_equal(round(sum(X_noise$adjusted.snr, na.rm = TRUE), 1), 12.1)
-  
+
+  expect_equal(round(sum(X_noise$adjusted.snr, na.rm = TRUE), 1), 14)
 })

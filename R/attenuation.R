@@ -31,16 +31,18 @@ attenuation <-
            pa = 101325,
            hab.att.coef = 0.02) {
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "attenuation",
+      args = list(
+        frequency = frequency,
+        dist0 = dist0,
+        dist = dist,
+        temp = temp,
+        rh = rh,
+        pa = pa,
+        hab.att.coef = hab.att.coef
+      )
+    )
     
     # report errors
     .report_assertions(check_results)

@@ -54,20 +54,21 @@ spot_ambient_noise <-
            fun = function(x) which.min(abs(x - mean(x)))) {
     
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "spot_ambient_noise",
+      args = list(
+        X = X,
+        cores = cores,
+        pb = pb,
+        path = path,
+        length = length,
+        ovlp = ovlp,
+        fun = fun
+      )
+    )
     
     # report errors
-    .report_assertions(check_results)
-    
+    .report_assertions(check_results)    
       
       # set clusters for windows OS
       if (Sys.info()[1] == "Windows" & cores > 1) {

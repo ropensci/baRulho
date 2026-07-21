@@ -40,19 +40,19 @@ set_reference_sounds <-
            cores = getOption("mc.cores", 1),
            pb = getOption("pb", TRUE),
            path = getOption("sound.files.path", ".")) {
-    # if (!is.null(X$reference))
-    #   .stop("Column 'reference' already found in 'X'. Must be removed first.")
+
     # check arguments
-    arguments <- as.list(base::match.call())
+    check_results <- .check_arguments(
+      fun = "set_reference_sounds",
+      args = list(
+        X = X,
+        method = method,
+        cores = cores,
+        pb = pb,
+        path = path
+      )
+    )
     
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      arguments[[i]] <- get(i)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
     
     # report errors
     .report_assertions(check_results)

@@ -96,16 +96,25 @@ plot_degradation <-
            res = 120,
            ...) {
     # check arguments
-    arguments <- as.list(base::match.call())
-    
-    # add objects to argument names
-    for (i in names(arguments)[-1]) {
-      try(arguments[[i]] <- get(i), silent = TRUE)
-    }
-    
-    # check each arguments
-    check_results <-
-      .check_arguments(fun = arguments[[1]], args = arguments)
+    check_results <- .check_arguments(
+      fun = "<function_name>",
+      args = list(
+        X = X,
+        pb = pb,
+        collevels = collevels,
+        palette = palette,
+        flim = flim,
+        envelope = envelope,
+        spectrum = spectrum,
+        heights = heights,
+        widths = widths,
+        margins = margins,
+        row.height = row.height,
+        col.width = col.width,
+        cols = cols,
+        res = res
+      )
+    )
     
     # report errors
     .report_assertions(check_results)
@@ -147,7 +156,7 @@ plot_degradation <-
     X$.sgnl.temp <- paste(X$sound.files, X$selec, sep = "-")
     
     # for each sound fix start and end based on margin
-    X <- .fix_margins(X, i, path, margins)
+    X <- .fix_margins(X, path, margins)
     
     # get unique distances and maximum number of columns (distances) for any sound id
     distances <- sort(unique(X$distance))

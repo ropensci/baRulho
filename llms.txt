@@ -1,0 +1,237 @@
+# baRulho: quantifying degradation of (animal) sounds
+
+![baRulho logo](reference/figures/baRulho_sticker.png)
+
+[baRulho](https://cran.r-project.org/package=baRulho) is intended to
+facilitate the implementation of (animal) sound propagation experiments,
+which typically aim to quantify changes in signal structure when
+transmitted in a given habitat by broadcasting and re-recording animal
+sounds at increasing distances.
+
+These experiments aim to answer research questions such as:
+
+- How habitat structure has shaped the propagation properties of animal
+  acoustic signals?
+- Which acoustic features are shaped by selection for improving
+  propagation?
+- Which features are more degraded in different habitats?
+- How far a acoustic signals can be detected?
+
+A common sequence of steps to experimentally test hypotheses related to
+sound propagation is depicted in the following diagram:
+
+![](reference/figures/analysis_workflow.png)
+
+*Diagram depicting a typical workflow for a experiment working on signal
+propagation and degradation. Nodes with black font indicate steps that
+can be conducted using baRulho functions. Blue nodes denote the
+functions that can be used at those steps.*
+
+ 
+
+[baRulho](https://docs.ropensci.org/baRulho//) offers functions for
+critical steps in this workflow (those in black, including ‘checks’)
+that required acoustic data manipulation and analysis.
+
+The main features of the package are:
+
+- The use of loops to apply tasks through sounds referenced in a
+  selection table (sensu
+  [warbleR](https://cran.r-project.org/package=warbleR))
+- The production of image files with graphic representations of sound in
+  time and/or frequency that let users verify acoustic analyses
+- The use of annotation tables as the object format to input acoustic
+  data and annotations and to output results
+- The use of parallelization to distribute tasks among several cores to
+  improve computational efficiency
+
+[baRulho](https://docs.ropensci.org/baRulho//) builds upon functions and
+data formats from the
+[warbleR](https://cran.r-project.org/package=warbleR) and
+[seewave](https://cran.r-project.org/package=seewave) packages, so some
+experience with these packages is advised.
+
+Take a look at the vignettes for an overview of the main features of the
+packages:
+
+- [Align test
+  sounds](https://docs.ropensci.org/baRulho//articles/align_test_sounds.html)
+- [Quantify
+  degradation](https://docs.ropensci.org/baRulho//articles/quantify_degradation.html)
+
+## Installing baRulho
+
+Install/load the package from CRAN as follows:
+
+``` r
+
+# From CRAN would be
+# install.packages("baRulho")
+
+# load package
+library(baRulho)
+```
+
+It can also be install from
+[R-Universe](https://ropensci.org/blog/2021/06/22/setup-runiverse/) in
+this way:
+
+``` r
+
+install.packages("baRulho", repos = "https://ropensci.r-universe.dev")
+```
+
+``` R
+## Installing package into '/home/marce/R/x86_64-pc-linux-gnu-library/4.3'
+## (as 'lib' is unspecified)
+```
+
+To install the latest developmental version from
+[github](https://github.com/) you will need the R package
+[remotes](https://cran.r-project.org/package=remotes):
+
+``` r
+
+# install remotes if not installed
+if (!requireNamespace("remotes")) {
+  install.packages("remotes")
+}
+
+# From github
+remotes::install_github("ropensci/baRulho")
+
+# load package
+library(baRulho)
+```
+
+Further system requirements due to the dependency
+[seewave](https://cran.r-project.org/package=seewave) may be needed.
+Take a look a [this link](https://rug.mnhn.fr/seewave/inst.html) for
+instruction on how to install/troubleshoot these external dependencies.
+
+## Other packages
+
+The packages [seewave](https://cran.r-project.org/package=seewave) and
+[tuneR](https://cran.r-project.org/package=tuneR) provide a huge variety
+of functions for acoustic analysis and manipulation. They mostly work on
+wave objects already imported into the R environment. The package
+[warbleR](https://cran.r-project.org/package=warbleR) provides functions
+to visualize and measure sounds already referenced in annotation tables,
+similar to [baRulho](https://docs.ropensci.org/baRulho//). The package
+[Rraven](https://cran.r-project.org/package=Rraven) facilitates the
+exchange of data between R and [Raven sound analysis
+software](https://www.ravensoundsoftware.com/) ([Cornell Lab of
+Ornithology](https://www.birds.cornell.edu/home)) and can be very
+helpful for incorporating Raven as the annotating tool into acoustic
+analysis workflow in R. The package
+[ohun](https://github.com/ropensci/ohun) works on automated detection of
+sound events, providing functions to diagnose and optimize detection
+routines.
+
+## Citation
+
+Please cite [baRulho](https://docs.ropensci.org/baRulho//) as follows:
+
+Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A.
+Rico-Guevara. (2023), *baRulho: an R package to quantify degradation in
+animal acoustic signals*. bioRxiv 2023.11.22.568305.
+
+## References
+
+1.  Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993).
+    *Habitat-induced degradation of sound signals: Quantifying the
+    effects of communication sounds and bird location on blur ratio,
+    excess attenuation, and signal-to-noise ratio in blackbird song*.
+    The Journal of the Acoustical Society of America, 93(4), 2206.
+
+2.  Marten, K., & Marler, P. (1977). *Sound transmission and its
+    significance for animal vocalization*. Behavioral Ecology and
+    Sociobiology, 2(3), 271-290.
+
+3.  Morton, E. S. (1975). *Ecological sources of selection on avian
+    sounds*. The American Naturalist, 109(965), 17-34.
+
+# Package index
+
+## Prepare acoustic data
+
+Functions that format acoustic data for playback experiments
+
+- [`master_sound_file()`](https://marce10.github.io/baRulho/reference/master_sound_file.md)
+  : Create a master sound file
+- [`synth_sounds()`](https://marce10.github.io/baRulho/reference/synth_sounds.md)
+  : Create synthetic sounds
+
+## Aligning test sound files
+
+Aligning test sounds to determine their time position
+
+- [`align_test_files()`](https://marce10.github.io/baRulho/reference/align_test_files.md)
+  : Align test sound files
+- [`auto_realign()`](https://marce10.github.io/baRulho/reference/auto_realign.md)
+  : Fix small misalignments in the time position test sounds
+- [`find_markers()`](https://marce10.github.io/baRulho/reference/find_markers.md)
+  : Find acoustic markers on test sound files
+- [`manual_realign()`](https://marce10.github.io/baRulho/reference/manual_realign.md)
+  : Plot spectrograms to check test sound files alignment
+- [`plot_aligned_sounds()`](https://marce10.github.io/baRulho/reference/plot_aligned_sounds.md)
+  : Plot spectrograms to check test sound files alignment
+
+## Quantify degradation
+
+Functions for quantifying and visually exploring degradation
+
+- [`blur_ratio()`](https://marce10.github.io/baRulho/reference/blur_ratio.md)
+  : Measure blur ratio in the time domain
+- [`detection_distance()`](https://marce10.github.io/baRulho/reference/detection_distance.md)
+  : Measure detection distance of sound
+- [`envelope_correlation()`](https://marce10.github.io/baRulho/reference/envelope_correlation.md)
+  : Measure amplitude envelope correlation
+- [`excess_attenuation()`](https://marce10.github.io/baRulho/reference/excess_attenuation.md)
+  : Measure excess attenuation
+- [`plot_blur_ratio()`](https://marce10.github.io/baRulho/reference/plot_blur_ratio.md)
+  : Plot blur ratio
+- [`plot_degradation()`](https://marce10.github.io/baRulho/reference/plot_degradation.md)
+  : Save multipanel plots with reference and test sounds
+- [`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
+  : Set reference for test sounds
+- [`signal_to_noise_ratio()`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md)
+  : Measure attenuation as signal-to-noise ratio
+- [`spcc()`](https://marce10.github.io/baRulho/reference/spcc.md) :
+  Measure spectrographic cross-correlation as a measure of sound
+  distortion
+- [`spectrum_blur_ratio()`](https://marce10.github.io/baRulho/reference/spectrum_blur_ratio.md)
+  : Measure blur ratio in the frequency domain
+- [`spectrum_correlation()`](https://marce10.github.io/baRulho/reference/spectrum_correlation.md)
+  : Measure frequency spectrum correlation
+- [`tail_to_signal_ratio()`](https://marce10.github.io/baRulho/reference/tail_to_signal_ratio.md)
+  : Measure reverberations as tail-to-signal ratio
+
+## Built in datasets
+
+Datasets included in baRulho
+
+- [`master_est`](https://marce10.github.io/baRulho/reference/master_est.md)
+  : Extended selection table of master acoustic data
+- [`test_sounds_est`](https://marce10.github.io/baRulho/reference/test_sounds_est.md)
+  : Extended selection table with re-recorded playbacks
+
+## Additional functions
+
+- [`attenuation()`](https://marce10.github.io/baRulho/reference/attenuation.md)
+  : Estimate attenuation of sound pressure level
+- [`add_noise()`](https://marce10.github.io/baRulho/reference/add_noise.md)
+  : Add synthetic noise
+- [`noise_profile()`](https://marce10.github.io/baRulho/reference/noise_profile.md)
+  : Measure full spectrum sound noise profiles
+- [`spot_ambient_noise()`](https://marce10.github.io/baRulho/reference/spot_ambient_noise.md)
+  : Find a segment of ambient noise to be used as reference
+
+# Articles
+
+### All vignettes
+
+- [Synthesize and align test
+  sounds](https://marce10.github.io/baRulho/articles/align_test_sounds.md):
+- [Quantify
+  degradation](https://marce10.github.io/baRulho/articles/quantify_degradation.md):

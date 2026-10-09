@@ -1,3 +1,19 @@
+baRulho 2.2.0
+=========================
+
+### MINOR IMPROVEMENTS
+
+* Fix bug in `spcc()` in which the `cor.method` argument was ignored (always computed Pearson correlation)
+* Fix bug in `tail_to_signal_ratio()` that used the wrong dB scale (natural log instead of `20 * log10()`, inconsistent with `signal_to_noise_ratio()` and `excess_attenuation()`)
+* Fix bug in `envelope_correlation()`'s internal sliding-window search that never actually slid across candidate alignments
+* Fix bug in `plot_degradation()` and `auto_realign()` in which an internal dispatch issue caused some of their own argument validation checks to be silently skipped
+* Fix bug in `synth_sounds()` that crashed when called with a single frequency and a single duration
+* Fix bug in `detection_distance()` in which the `wl` argument was not reaching the internal peak-frequency calculation
+* Fix misspelled output column `atmopheric.attenuation` in `attenuation()` (now `atmospheric.attenuation`)
+* Fix several smaller documentation inconsistencies (incorrect argument defaults, mislocated columns, stale formulas)
+* Reformat all exported function documentation using markdown roxygen for a more consistent and readable reference site
+* Vignettes now pull their citation directly from `inst/CITATION` instead of hardcoded text, and no longer describe a stale version of the example data set
+
 baRulho 2.1.7
 =========================
 

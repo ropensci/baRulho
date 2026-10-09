@@ -9,6 +9,7 @@ baRulho 2.2.0
 * Fix bug in `plot_degradation()` and `auto_realign()` in which an internal dispatch issue caused some of their own argument validation checks to be silently skipped
 * Fix bug in `synth_sounds()` that crashed when called with a single frequency and a single duration
 * Fix bug in `detection_distance()` in which the `wl` argument was not reaching the internal peak-frequency calculation
+* Fix bug in `master_sound_file()`'s marker creation that corrupted the graphics device stack, causing spurious "cannot shut down device 1 (the null device)" errors in `R CMD check` on some platforms
 * Fix misspelled output column `atmopheric.attenuation` in `attenuation()` (now `atmospheric.attenuation`)
 * Fix several smaller documentation inconsistencies (incorrect argument defaults, mislocated columns, stale formulas)
 * Reformat all exported function documentation using markdown roxygen for a more consistent and readable reference site

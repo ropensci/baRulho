@@ -19,38 +19,100 @@ spectrum_blur_ratio(
 )
 }
 \arguments{
-\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
+\item{X}{The output of \code{\link[=set_reference_sounds]{set_reference_sounds()}}, an object of class
+\code{data.frame}, \code{selection_table}, or \code{extended_selection_table} (the
+last 2 classes are created by \code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the
+\strong{warbleR} package) with the test sound files' annotations. Must
+contain the following columns: 1) \code{sound.files}: name of the \code{.wav}
+files, 2) \code{selec}: unique selection identifier (within a sound
+file), 3) \code{start}: start time and 4) \code{end}: end time of selections,
+5) \code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances, and 8) \code{reference}:
+identity of sounds to be used as reference for each test sound
+(row). See \code{\link[=set_reference_sounds]{set_reference_sounds()}} for more details on the
+structure of \code{X}.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{spec.smooth}{Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.}
+\item{spec.smooth}{Numeric vector of length 1 determining the
+length of the sliding window used for a sum smooth for power
+spectrum calculation (in kHz). Default \code{5}.}
 
-\item{spectra}{Logical to control if power spectra are returned (as attributes). Default is \code{FALSE}.}
+\item{spectra}{Logical to control if power spectra are returned (as
+attributes). Default \code{FALSE}.}
 
-\item{res}{Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.}
+\item{res}{Numeric argument of length 1. Controls image resolution.
+Default \code{150} (faster), although 300-400 is recommended for
+publication/presentation quality.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time window
+duration (in ms). Default \code{11.6} ms, which is equivalent to 512
+\code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is supplied. Can
+be set globally for the current R session via the \code{"hop.size"}
+option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
-is NULL. If supplied, 'hop.size' is ignored. Applied to both spectra and spectrograms on image files.}
+\item{wl}{Numeric vector of length 1 specifying the window length
+of the spectrogram. Default \code{NULL}. If supplied, \code{hop.size} is
+ignored. Applied to both spectra and spectrograms on image files.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Applied to both spectra and spectrograms on image files. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of
+overlap between two consecutive windows, as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Default \code{70}. Applied to both spectra and
+spectrograms on image files. Can be set globally for the current
+R session via the \code{"ovlp"} option (see \code{\link[=options]{options()}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 
-\item{n.bins}{Numeric vector of length 1 specifying the number of frequency bins to use for representing power spectra. Default is 100. If null the raw power spectrum is used (note that this can result in high RAM memory usage for large data sets). Power spectrum values are interpolated using \code{\link[stats]{approx}}.}
+\item{n.bins}{Numeric vector of length 1 specifying the number of
+frequency bins to use for representing power spectra. Default
+\code{100}. If \code{NULL}, the raw power spectrum is used (note that this
+can result in high RAM memory usage for large data sets). Power
+spectrum values are interpolated using \code{\link[stats:approxfun]{stats::approx()}}.}
 }
 \value{
-Object 'X' with an additional column, 'spectrum.blur.ratio', containing the computed spectrum blur ratio values. If \code{spectra = TRUE} the output would include power spectra for all sounds as attributes ('attributes(X)$spectra').
+Object \code{X} with an additional column, \code{spectrum.blur.ratio},
+containing the computed spectrum blur ratio values. If
+\code{spectra = TRUE}, the output would also include power spectra for
+all sounds as attributes (\code{attributes(X)$spectra}).
 }
 \description{
-\code{spectrum_blur_ratio} measures blur ratio of frequency spectra from sounds referenced in an extended selection table.
+\code{spectrum_blur_ratio()} measures blur ratio of frequency spectra
+from sounds referenced in an extended selection table. It is
+analogous to \code{\link[=blur_ratio]{blur_ratio()}}, but operates in the frequency domain
+rather than the time domain.
 }
 \details{
-Spectral blur ratio measures the degradation of sound as a function of the change in sound power in the frequency domain, analogous to the blur ratio proposed by Dabelsteen et al (1993) for the time domain (and implemented in \code{\link{blur_ratio}}). Low values indicate low degradation of sounds. The function measures the blur ratio of spectra from sounds in which a reference playback has been re-recorded at different distances. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference sound and the re-recorded sound. The function compares each sound type to the corresponding reference sound. The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of spectra is comparable. The function uses \code{\link[seewave]{spec}} internally to compute power spectra. NA is returned if at least one the power spectra cannot be computed.
+Spectral blur ratio measures the degradation of sound as a function
+of the change in sound power in the frequency domain, analogous to
+the blur ratio proposed by Dabelsteen et al. (1993) for the time
+domain (and implemented in \code{\link[=blur_ratio]{blur_ratio()}}). Low values indicate low
+degradation of sounds. The function measures the blur ratio of
+spectra from sounds in which a reference playback has been
+re-recorded at different distances. Spectral blur ratio is measured
+as the mismatch between power spectra (expressed as probability
+density functions) of the reference sound and the re-recorded
+sound. The function compares each sound type to the corresponding
+reference sound. The \code{sound.id} column must be used to tell the
+function to only compare sounds belonging to the same category (e.g.
+song-types). Two methods for setting the experimental design are
+provided. All wave objects in the extended selection table must have
+the same sampling rate, so the length of spectra is comparable. The
+function uses \code{\link[seewave:spec]{seewave::spec()}} internally to compute power spectra.
+\code{NA} is returned if at least one of the power spectra cannot be
+computed.
 }
 \examples{
 {
@@ -98,19 +160,19 @@ Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degrada
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 }
 \seealso{
-\code{\link{blur_ratio}}
+\code{\link[=blur_ratio]{blur_ratio()}}, the analogous metric in the time domain.
 
-Other quantify degradation:
-\code{\link[=blur_ratio]{blur_ratio()}},
-\code{\link[=detection_distance]{detection_distance()}},
-\code{\link[=envelope_correlation]{envelope_correlation()}},
-\code{\link[=plot_blur_ratio]{plot_blur_ratio()}},
-\code{\link[=plot_degradation]{plot_degradation()}},
-\code{\link[=set_reference_sounds]{set_reference_sounds()}},
-\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}},
-\code{\link[=spcc]{spcc()}},
-\code{\link[=spectrum_correlation]{spectrum_correlation()}},
-\code{\link[=tail_to_signal_ratio]{tail_to_signal_ratio()}}
+Other quantify degradation: 
+\code{\link{blur_ratio}()},
+\code{\link{detection_distance}()},
+\code{\link{envelope_correlation}()},
+\code{\link{plot_blur_ratio}()},
+\code{\link{plot_degradation}()},
+\code{\link{set_reference_sounds}()},
+\code{\link{signal_to_noise_ratio}()},
+\code{\link{spcc}()},
+\code{\link{spectrum_correlation}()},
+\code{\link{tail_to_signal_ratio}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

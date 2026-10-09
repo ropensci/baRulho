@@ -21,7 +21,7 @@ test_that("basic", {
 })
 
 test_that("shuffle false", {
-  
+
   ss <- synth_sounds(
     mar = 0.01,
     frequencies = c(1, 2, 3, 5),
@@ -30,14 +30,30 @@ test_that("shuffle false", {
     am = TRUE,
     nharmonics = 4,
     shuffle = FALSE,
-    replicates = 3, 
+    replicates = 3,
     pb = FALSE
   )
-  
+
   expect_equal(nrow(ss), 96)
-  
+
   expect_equal(ncol(ss), 14)
-  
+
   expect_equal(class(ss)[1], "extended_selection_table")
-  
+
+})
+
+test_that("single frequency and duration (single row)", {
+
+  ss <- synth_sounds(
+    mar = 0.01,
+    frequencies = 5,
+    durations = 0.1,
+    replicates = 1,
+    pb = FALSE
+  )
+
+  expect_equal(nrow(ss), 1)
+
+  expect_equal(class(ss)[1], "extended_selection_table")
+
 })

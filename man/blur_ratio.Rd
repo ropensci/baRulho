@@ -18,35 +18,97 @@ blur_ratio(
 )
 }
 \arguments{
-\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
+\item{X}{The output of \code{\link[=set_reference_sounds]{set_reference_sounds()}}, an object of class
+\code{data.frame}, \code{selection_table}, or \code{extended_selection_table} (the
+last 2 classes are created by \code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the
+\strong{warbleR} package) with the test sound files' annotations. Must
+contain the following columns: 1) \code{sound.files}: name of the \code{.wav}
+files, 2) \code{selec}: unique selection identifier (within a sound
+file), 3) \code{start}: start time and 4) \code{end}: end time of selections,
+5) \code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances, and 8) \code{reference}:
+identity of sounds to be used as reference for each test sound
+(row). See \code{\link[=set_reference_sounds]{set_reference_sounds()}} for more details on the
+structure of \code{X}.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{env.smooth}{Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200. Can be set globally for the current R session via the "env.smooth" option (see \code{\link[base]{options}}).}
+\item{env.smooth}{Numeric vector of length 1 determining the length
+of the sliding window (in amplitude samples) used for a sum smooth
+for amplitude envelope calculation (used internally by
+\code{\link[seewave:env]{seewave::env()}}). Default \code{200}. Can be set globally for the
+current R session via the \code{"env.smooth"} option (see \code{\link[=options]{options()}}).}
 
-\item{envelopes}{Logical to control if envelopes are returned (as attributes, 'attributes(X)$envelopes'). Default is \code{FALSE}.}
+\item{envelopes}{Logical to control if envelopes are returned (as
+attributes, \code{attributes(X)$envelopes}). Default \code{FALSE}.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time window
+duration (in ms). Default \code{11.6} ms, which is equivalent to 512
+\code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is supplied. Can
+be set globally for the current R session via the \code{"hop.size"}
+option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see \code{\link[base]{options}}).}
+\item{wl}{A vector with a single even integer number specifying the
+window length of the spectrogram. Default \code{NULL}. If supplied,
+\code{hop.size} is ignored. Odd integers will be rounded up to the
+nearest even number. Can be set globally for the current R session
+via the \code{"wl"} option (see \code{\link[=options]{options()}}).}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Used for applying bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of
+overlap between two consecutive windows, as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Default \code{70}. Used for applying bandpass
+filtering. Can be set globally for the current R session via the
+\code{"ovlp"} option (see \code{\link[=options]{options()}}).}
 
-\item{n.samples}{Numeric vector of length 1 specifying the number of amplitude samples to use for representing amplitude envelopes. Default is 100. If null the raw amplitude envelope is used (note that this can result in high RAM memory usage for large data sets). Amplitude envelope values are interpolated using \code{\link[stats]{approx}}.}
+\item{n.samples}{Numeric vector of length 1 specifying the number of
+amplitude samples to use for representing amplitude envelopes.
+Default \code{100}. If \code{NULL} the raw amplitude envelope is used (note
+that this can result in high RAM memory usage for large data
+sets). Amplitude envelope values are interpolated using
+\code{\link[stats:approxfun]{stats::approx()}}.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 }
 \value{
-Object 'X' with an additional column,  'blur.ratio', containing the computed blur ratio values. If \code{envelopes = TRUE} the output would include amplitude envelopes for all sounds as attributes ('attributes(X)$envelopes').
+Object \code{X} with an additional column, \code{blur.ratio}, containing the
+computed blur ratio values. If \code{envelopes = TRUE} the output would
+also include amplitude envelopes for all sounds as attributes
+(\code{attributes(X)$envelopes}).
 }
 \description{
-\code{blur_ratio} measures blur ratio in sounds referenced in an extended selection table.
+\code{blur_ratio()} measures blur ratio of sounds referenced in an extended
+selection table, as described by Dabelsteen et al. (1993). Low values
+indicate low degradation of sounds.
 }
 \details{
-Blur ratio measures the degradation of sound as a change in sound power in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of sounds. The function measures the blur ratio on sounds in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability mass functions) of the reference sound and the re-recorded sound. By converting envelopes to probability mass functions the effect of energy attenuation is removed, focusing the analysis on the modification of the envelope shape. The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
+The function measures the blur ratio on sounds in which a reference
+playback has been re-recorded at different distances. Blur ratio is
+measured as the mismatch between amplitude envelopes (expressed as
+probability mass functions) of the reference sound and the
+re-recorded sound. By converting envelopes to probability mass
+functions, the effect of energy attenuation is removed, focusing the
+analysis on the modification of the envelope shape. The function
+compares each sound to the corresponding reference sound within the
+supplied frequency range (e.g. bandpass) of the reference sound
+(\code{bottom.freq} and \code{top.freq} columns in \code{X}). The \code{sound.id} column
+must be used to tell the function to only compare sounds belonging to
+the same category (e.g. song-types). Two methods for setting the
+experimental design are provided. All wave objects in the extended
+selection table must have the same sampling rate so the length of
+envelopes is comparable.
 }
 \examples{
 {
@@ -88,19 +150,20 @@ Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degrada
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 }
 \seealso{
-\code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
+\code{\link[=envelope_correlation]{envelope_correlation()}} and \code{\link[=spectrum_blur_ratio]{spectrum_blur_ratio()}}, which
+measure degradation in the frequency domain.
 
-Other quantify degradation:
-\code{\link[=detection_distance]{detection_distance()}},
-\code{\link[=envelope_correlation]{envelope_correlation()}},
-\code{\link[=plot_blur_ratio]{plot_blur_ratio()}},
-\code{\link[=plot_degradation]{plot_degradation()}},
-\code{\link[=set_reference_sounds]{set_reference_sounds()}},
-\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}},
-\code{\link[=spcc]{spcc()}},
-\code{\link[=spectrum_blur_ratio]{spectrum_blur_ratio()}},
-\code{\link[=spectrum_correlation]{spectrum_correlation()}},
-\code{\link[=tail_to_signal_ratio]{tail_to_signal_ratio()}}
+Other quantify degradation: 
+\code{\link{detection_distance}()},
+\code{\link{envelope_correlation}()},
+\code{\link{plot_blur_ratio}()},
+\code{\link{plot_degradation}()},
+\code{\link{set_reference_sounds}()},
+\code{\link{signal_to_noise_ratio}()},
+\code{\link{spcc}()},
+\code{\link{spectrum_blur_ratio}()},
+\code{\link{spectrum_correlation}()},
+\code{\link{tail_to_signal_ratio}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

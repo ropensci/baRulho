@@ -1,38 +1,95 @@
 #' Create synthetic sounds
 #'
-#' \code{synth_sounds} create synthetic sounds
+#' @description
+#' `synth_sounds()` creates synthetic sounds that can be used for
+#' playback experiments to understand the link between signal structure
+#' and its transmission properties.
+#'
 #' @inheritParams template_params
-#' @param replicates Numeric vector of length 1 indicating the number of replicates for each treatment combination. Default is 1. Useful for measuring variation in transmission parameters.
-#' @param frequencies Numeric vector with the different frequencies (in seconds) to synthesize. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation (see \code{\link[warbleR]{simulate_songs}}).
-#' @param durations Numeric vector with the different durations (in seconds) to synthesize.
-#' @param nharmonics Numeric vector of length 1 specifying the number of harmonics to simulate. 1 indicates that only the fundamental
-#' frequency harmonic will be simulated.
-#' @param fm Logical to control if both frequency modulated sounds and pure tones (i.e. non-modulated sounds) are synthesize. If \code{FALSE} (default) only pure tones are synthesized.
-#' @param am Logical to control if both amplitude modulated sounds and non-modulated sounds are synthesize. If \code{FALSE} (default) only non-modulated sounds are synthesized.
-#' @param am.amps Numeric vector with the relative amplitude for each time step to simulate amplitude modulation (only applied to the fundamental frequency). The default value (\code{rep(c(1:4, 3:2), length.out = 11)}) has 2 amplitude peaks (although only applied if 'am = TRUE')
-#' @param mar Numeric vector with the duration of margins of silence around sounds in seconds. Default is \code{0.05}.
-#' @param seed Numeric vector of length 1. This allows users to get the same results in different runs (using \code{\link[base:Random]{se.seed}} internally). Default is \code{NULL}.
-#' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
-#' @param sig2 Numeric vector of length 1 defining the sigma value of the brownian motion model (used for simulating frequency modulation). Default is 0.3.
-#' @param shuffle Logical to control if the position of sounds is randomized. Having all sounds from the same treatment in a sequence can be problematic if an environmental noise masks them. Hence 'shuffle' is useful to avoid having sounds from the same treatment next to each other. Default is \code{FALSE}.
-#' @param hrm.freqs Numeric vector with the frequencies of the harmonics relative to the fundamental frequency. The default values are c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9, 1/10).
-#' @param sampling.rate Numeric vector of length 1. Sets the sampling frequency of the wave object (in kHz). Default is 44.1.
-#' @param freq.range Numeric vector of length 1 with the frequency range around the simulated frequency in which signals will modulate. Default is 2 which means that sounds will range +/- 1 kHz around the target frequency.
-#' @return An extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The table contains columns for each of the varying features a 'treatment' column (useful to tell the acoustic features of each sound) and a 'replicate' column indicating the replicates for each 'treatment'.
-#' @family prepare acoustic data
-#' @seealso \code{\link[warbleR]{simulate_songs}} from the package warbleR.
+#' @param replicates Numeric vector of length 1 indicating the number
+#'   of replicates for each treatment combination. Default `1`. Useful
+#'   for measuring variation in transmission parameters.
+#' @param frequencies Numeric vector with the different frequencies
+#'   (in kHz) to synthesize. A Brownian bridge motion stochastic
+#'   process (`diff.fun == "BB"`) is used to simulate frequency
+#'   modulation (see [warbleR::simulate_songs()]).
+#' @param durations Numeric vector with the different durations (in
+#'   seconds) to synthesize.
+#' @param nharmonics Numeric vector of length 1 specifying the number
+#'   of harmonics to simulate. `1` indicates that only the fundamental
+#'   frequency harmonic will be simulated.
+#' @param fm Logical to control if both frequency modulated sounds and
+#'   pure tones (i.e. non-modulated sounds) are synthesized. If
+#'   `FALSE` (default), only pure tones are synthesized.
+#' @param am Logical to control if both amplitude modulated sounds and
+#'   non-modulated sounds are synthesized. If `FALSE` (default), only
+#'   non-modulated sounds are synthesized.
+#' @param am.amps Numeric vector with the relative amplitude for each
+#'   time step to simulate amplitude modulation (only applied to the
+#'   fundamental frequency). The default value
+#'   (`rep(c(1:4, 3:2), length.out = 11)`) has 2 amplitude peaks
+#'   (although only applied if `am = TRUE`).
+#' @param mar Numeric vector with the duration of margins of silence
+#'   around sounds, in seconds. Default `0.05`.
+#' @param seed Numeric vector of length 1. This allows users to get
+#'   the same results in different runs (using [set.seed()]
+#'   internally). Default `NULL`.
+#' @param sampling.rate Numeric vector of length 1. Sets the sampling
+#'   frequency of the wave object (in kHz). Default `44.1`.
+#' @param sig2 Numeric vector of length 1 defining the sigma value of
+#'   the Brownian motion model (used for simulating frequency
+#'   modulation). Default `0.3`.
+#' @param shuffle Logical to control if the position of sounds is
+#'   randomized. Having all sounds from the same treatment in a
+#'   sequence can be problematic if an environmental noise masks them.
+#'   Hence `shuffle` is useful to avoid having sounds from the same
+#'   treatment next to each other. Default `FALSE`.
+#' @param hrm.freqs Numeric vector with the frequencies of the
+#'   harmonics relative to the fundamental frequency. The default
+#'   values are `c(1/2, 1/3, 2/3, 1/4, 3/4, 1/5, 1/6, 1/7, 1/8, 1/9,
+#'   1/10)`.
+#' @param freq.range Numeric vector of length 1 with the frequency
+#'   range around the simulated frequency in which signals will
+#'   modulate. Default `2`, which means that sounds will range +/- 1
+#'   kHz around the target frequency.
+#'
+#' @details
+#' The function can add variation in signal structure in 5 features:
+#' - **frequency**: continuous, argument `frequencies`.
+#' - **duration**: continuous, argument `durations`.
+#' - **harmonic structure**: binary (harmonics vs no-harmonics),
+#'   arguments `nharmonics` and `hrm.freqs`.
+#' - **frequency modulation**: variation in fundamental frequency
+#'   across time. Binary (modulated vs non-modulated), arguments `fm`
+#'   and `sig2`.
+#' - **amplitude modulation**: variation in amplitude across time.
+#'   Binary (modulated vs non-modulated), arguments `am` and
+#'   `am.amps`.
+#'
+#' Sounds for all possible combinations of the selected structure
+#' dimensions will be synthesized. The output is an extended selection
+#' table, which can be input into [master_sound_file()] to create the
+#' `.wav` file. The function uses [warbleR::simulate_songs()]
+#' internally for synthesizing individual sounds. A Brownian bridge
+#' motion stochastic process (`diff.fun == "BB"`) is used to simulate
+#' frequency modulation. The output table contains columns for each of
+#' the varying features and a `treatment` column (useful to tell
+#' sounds from the same combination of features apart when using
+#' replicates).
+#'
+#' @return
+#' An extended selection table, which can be input into
+#' [master_sound_file()] to create the `.wav` file. The table contains
+#' columns for each of the varying features, a `treatment` column
+#' (useful to tell the acoustic features of each sound), and a
+#' `replicate` column indicating the replicates for each `treatment`.
+#'
+#' @seealso [warbleR::simulate_songs()], used internally to synthesize
+#'   individual sounds.
+#'
 #' @export
 #' @name synth_sounds
-#' @details This function creates synthetic sounds that can be used for playback experiments to understand the link between signal structure and its transmission properties. The function can add variation in signal structure in 5 features:
-#' \itemize{
-#'    \item \code{frequency}: continuous, argument 'frequencies'.
-#'    \item \code{duration}: continuous, argument 'durations'.
-#'    \item \code{harmonic structure}: binary (harmonics vs no-harmonics), arguments 'nharmonics' and 'hrm.freqs'.
-#'    \item \code{frequency modulation}: variation in fundamental frequency across time. Binary (modulated vs non-modulated), arguments 'fm' and 'sig2'.
-#'    \item \code{amplitude modulation}: variation in amplitude across time. Binary (modulated vs non-modulated), arguments 'am' and 'am.amps'.
-#' }
-#' Sound for all possible combinations of the selected structure dimensions will be synthesized. The output is an extended selection table, which can be input into \code{\link{master_sound_file}} to create the .wav file. The functions uses \code{\link[warbleR]{simulate_songs}} internally for synthesizing individual sounds. A Brownian bridge motion stochastic process (\code{diff.fun == "BB"}) is used to simulate frequency modulation. The output table contains columns for each of the varying features and a 'treatment' column (useful to tell sound from the same combination of features when using replicates).
-
+#' @family prepare acoustic data
 #' @examples
 #' \dontrun{
 #'
@@ -68,7 +125,7 @@ synth_sounds <-
            hrm.freqs = c(1 / 2, 1 / 3, 2 / 3, 1 / 4, 3 / 4, 1 / 5, 1 / 6, 1 / 7, 1 /
                            8, 1 / 9, 1 / 10),
            sampling.rate = 44.1,
-           pb = TRUE,
+           pb = getOption("pb", TRUE),
            freq.range = 2) {
     # check arguments
     check_results <- .check_arguments(

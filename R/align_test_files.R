@@ -1,19 +1,56 @@
 #' Align test sound files
 #'
-#' \code{align_test_files} aligns test (re-recorded) sound files.
+#' @description
+#' `align_test_files()` aligns test (re-recorded) sound files. It uses the
+#' position of acoustic markers found by [find_markers()] to infer the
+#' position of all other sounds referenced in a master sound file,
+#' producing an aligned selection table for the re-recorded files.
+#'
 #' @inheritParams template_params
-#' @param X object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.
-#' @param Y object of class 'data.frame' with the output of \code{\link{find_markers}}. This object contains the position of markers in the re-recorded sound files. If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used.
-#' @param path Character string containing the directory path where test (re-recorded) sound files are found.
-#' @param by.song Logical argument to indicate if the extended selection table should be created by song (see 'by.song' \code{\link[warbleR]{selection_table}} argument). Default is \code{TRUE}.
-#' @param marker Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is \code{NULL}. DEPRECATED.
-#' @param ...	Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.
-#' @return An object of the same class than 'X' with the aligned sounds from test (re-recorded) sound files.
+#' @param X Object of class `data.frame`, `selection_table`, or
+#'   `extended_selection_table` (the last 2 classes are created by
+#'   [warbleR::selection_table()] from the **warbleR** package) with the
+#'   master sound file annotations. This should be the same data used
+#'   for finding the position of markers in [find_markers()]. It should
+#'   also contain a `sound.id` column that will be used to label
+#'   re-recorded sounds according to their counterpart in the master
+#'   sound file.
+#' @param Y Object of class `data.frame` with the output of
+#'   [find_markers()]. This object contains the position of markers in
+#'   the re-recorded sound files. If more than one marker is supplied
+#'   for a sound file, only the one with the highest correlation score
+#'   (`scores` column in `Y`) is used.
+#' @param path Character string containing the directory path where
+#'   test (re-recorded) sound files are found.
+#' @param by.song Logical argument to indicate if the extended selection
+#'   table should be created by song (see the `by.song` argument of
+#'   [warbleR::selection_table()]). Default `TRUE`.
+#' @param marker Character string to define whether a `"start"` or
+#'   `"end"` marker would be used for aligning re-recorded sound files.
+#'   Default `NULL`. Deprecated.
+#' @param ... Additional arguments to be passed to
+#'   [warbleR::selection_table()] for customizing the extended selection
+#'   table.
+#'
+#' @details
+#' The function aligns sounds found in re-recorded sound files
+#' (referenced in `Y`) according to a master sound file (referenced in
+#' `X`). If more than one marker is supplied for a sound file only the
+#' one with the highest correlation score (`scores` column in `Y`) is
+#' used. The function outputs an `extended selection table` by default.
+#'
+#' @return
+#' An object of the same class as `X` with the aligned sounds from the
+#' test (re-recorded) sound files.
+#'
+#' @seealso [manual_realign()] and [auto_realign()], for fixing small
+#'   remaining misalignments; [find_markers()], for locating markers in
+#'   the first place; and [plot_aligned_sounds()], for visually checking
+#'   the result.
+#'
 #' @export
 #' @name align_test_files
-#' @details The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used. The function outputs an 'extended selection table' by default. 
 #' @family test sound alignment
-#' @seealso \code{\link{manual_realign}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
 #' @examples
 #' {
 #'   # load example data

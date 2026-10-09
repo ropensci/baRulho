@@ -140,16 +140,13 @@ This is the description of the required input data columns:
 
 # Setting reference sounds 
 
-The combined information from these columns is used to identify the reference sounds for each test (re-recorded) sound. The function `set_reference_sounds()` does exactly that. Hence, **unless you define the reference sound for each test sound manually, `set_reference_sounds()` must always be run before any degradation measuring function**. 
+The combined information from these columns is used to identify the reference sounds for each test (re-recorded) sound. The function `set_reference_sounds()` does exactly that. Hence, **unless you define the reference sound for each test sound manually, `set_reference_sounds()` must always be run before any degradation measuring function**.
 
-There are two possible experimental designs when defining reference sounds (which is controlled by the argument 'method' in `set_reference_sounds()`):
-
-- 1: compare sounds (by 'sound.id') with their counterpart that was recorded at the closest distance to source (e.g. compare a sound recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. For this design users can have a single example for the shortest distance to be used as reference (for instance at 1m as is the case in most studies) The function will try to use references from the same transect. However, if there is another test sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect. 
-- 2: compare all sounds with their counterpart recorded at the distance immediately before within a transect (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on).
+The two possible experimental designs for defining reference sounds (methods 1 and 2) are described above in the key considerations box; the design used is controlled by the 'method' argument in `set_reference_sounds()`.
 
 Also note that some selections are labeled as "ambient" in the 'sound.id'. These selections refer to ambient (background) noise. Ambient noise can be used by some functions (e.g. `signal_to_noise_ratio`) to used the same noise sample for all test sounds in a sound file.
  
-In this example data there are 4 recordings at increasing distances: 1m, 5m, 10m and 15m:
+In this example data there are 5 recordings across 2 transects ('open' and 'closed') at increasing distances of 1, 10 and 30 m:
 
 ```{r,eval=TRUE}
 
@@ -158,7 +155,7 @@ unique(test_sounds_est$sound.files)
 
 ```
 
-The data contains selections for 5 sounds as well as 1 ambient noise selections at each distance/recording:
+The data contains selections for 4 sounds as well as 1 ambient noise selection at each distance/recording:
 
 ```{r, eval = FALSE}
 
@@ -208,7 +205,7 @@ test_sounds_est <- set_reference_sounds(test_sounds_est, method = 1)
 ```
 &nbsp;
 
-The function adds the column 'reference' which is then used by downstream functions plotting or measuring degradation. Hence it is used before running any of the degradation functions (including plotting functions). References are indicated as a the combination of the 'sound.files' and 'selec' column. For instance, '10m.wav-1' indicates that the row in which the 'selec' column is '1' and the sound file is '10m.wav' should be used as reference. Note that `NAs` are returned for sounds used as reference and 'ambient' noise selections. The function also checks that the information 'X' (the input annotation data) is in the right format so it won't produce errors in downstream analysis (see 'X' argument description for details on format). The function will ignore rows in which the sound id  column is 'ambient', 'start_marker' or 'end_marker'.
+The function adds the column 'reference' which is then used by downstream functions plotting or measuring degradation. Hence it is used before running any of the degradation functions (including plotting functions). References are indicated as the combination of the 'sound.files' and 'selec' column. For instance, '10m.wav-1' indicates that the row in which the 'selec' column is '1' and the sound file is '10m.wav' should be used as reference. Note that `NAs` are returned for sounds used as reference and 'ambient' noise selections. The function also checks that the information 'X' (the input annotation data) is in the right format so it won't produce errors in downstream analysis (see 'X' argument description for details on format). The function will ignore rows in which the sound id  column is 'ambient', 'start_marker' or 'end_marker'.
 
 ### Visual inspection
 
@@ -451,7 +448,7 @@ ea <- excess_attenuation(test_sounds_est)
 ```
 
 
-The output, similar to those of other functions, is an extended selection table with the input data, but also including two new columns ('reference' and  'excess.attenuation') with the reference sound and the excess attenuation:
+The output, similar to those of other functions, is an extended selection table with the input data, but also including a new column ('excess.attenuation') with the excess attenuation values (the 'reference' column was already added earlier by `set_reference_sounds()`):
 
 ```{r, eval = FALSE}
 # print output
@@ -479,8 +476,8 @@ ec <- envelope_correlation(test_sounds_est)
 
 ```
 
-The output is also similar to those of other functions; an extended selection table similar to input data, but also includes two new columns ('reference' and  'envelope.correlation')
-with the reference sound and the amplitude envelope correlation coefficients:
+The output is also similar to those of other functions; an extended selection table similar to input data, but also includes a new column ('envelope.correlation')
+with the amplitude envelope correlation coefficients (the 'reference' column was already added earlier by `set_reference_sounds()`):
 
 ```{r, eval = FALSE}
 # print output
@@ -714,7 +711,7 @@ Please report any bugs [here](https://github.com/ropensci/baRulho/issues).
 
 The package [baRulho](https://docs.ropensci.org/baRulho//) should be cited as follows:
 
-Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0.
+`r citation("baRulho")$textVersion`
 
 ---
 
@@ -722,8 +719,8 @@ Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic s
 
 1. Araya-Salas, M. (2017). *Rraven: connecting R and Raven bioacoustic software*. R package version 1.0.0.
 
-1.  Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0
-  
+1.  `r citation("baRulho")$textVersion`
+
 1. Araya-Salas M, Smith-Vidaurre G. (2017) *warbleR: An R package to streamline analysis of animal acoustic signals*. Methods Ecol Evol 8:184–191.
 
 1. Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). *Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song*. The Journal of the Acoustical Society of America, 93(4), 2206.

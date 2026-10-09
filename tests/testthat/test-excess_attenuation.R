@@ -24,7 +24,7 @@ test_that("using data frame and method 2", {
   # set temporary directory
   td <- tempdir()
   
-  for (i in unique(test_sounds_est$sound.files)[-1])
+  for (i in unique(test_sounds_est$sound.files))
     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
   
   options(sound.files.path = td, pb = FALSE)

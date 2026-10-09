@@ -16,41 +16,99 @@ excess_attenuation(
 )
 }
 \arguments{
-\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
+\item{X}{The output of \code{\link[=set_reference_sounds]{set_reference_sounds()}}, an object of class
+\code{data.frame}, \code{selection_table}, or \code{extended_selection_table} (the
+last 2 classes are created by \code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the
+\strong{warbleR} package) with the test sound files' annotations. Must
+contain the following columns: 1) \code{sound.files}: name of the \code{.wav}
+files, 2) \code{selec}: unique selection identifier (within a sound
+file), 3) \code{start}: start time and 4) \code{end}: end time of selections,
+5) \code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances, and 8) \code{reference}:
+identity of sounds to be used as reference for each test sound
+(row). See \code{\link[=set_reference_sounds]{set_reference_sounds()}} for more details on the
+structure of \code{X}.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time
+window duration (in ms). Default \code{1} ms, which is equivalent to
+~45 \code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is
+supplied. Can be set globally for the current R session via the
+\code{"hop.size"} option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
-is \code{NULL}. If supplied, 'hop.size' is ignored.
-Note that lower values will increase time resolution, which is more important for amplitude calculations.}
+\item{wl}{Numeric vector of length 1 specifying the window length of
+the spectrogram. Default \code{NULL}. If supplied, \code{hop.size} is
+ignored. Note that lower values will increase time resolution,
+which is more important for amplitude calculations.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of
+overlap between two consecutive windows, as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Default \code{50}. Only used for bandpass
+filtering. Can be set globally for the current R session via the
+\code{"ovlp"} option (see \code{\link[=options]{options()}}).}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper
+limits of a frequency bandpass filter (in kHz). Alternatively, when
+set to \code{"freq.range"} (default), the function will use the
+\code{bottom.freq} and \code{top.freq} for each sound as the bandpass range.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 }
 \value{
-Object 'X' with an additional column,  'excess.attenuation', containing the computed excess attenuation values (in dB).
+Object \code{X} with an additional column, \code{excess.attenuation},
+containing the computed excess attenuation values (in dB).
 }
 \description{
-\code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.
+\code{excess_attenuation()} measures excess attenuation in sounds
+referenced in an extended selection table. Excess attenuation is the
+amplitude loss of a sound in excess of that due to spherical spreading
+(observed attenuation - expected attenuation).
 }
 \details{
-Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents power loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). 
-It accounts for attenuation from additional factors such as:
+With every doubling of distance, sounds attenuate with a 6 dB loss
+of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional
+loss of amplitude results in energy loss in excess of that expected
+to occur with distance via spherical spreading, representing power
+loss due to additional factors such as:
 \itemize{
-\item \code{Ground absorption}: sound energy can be absorbed by the ground, especially in environments like forests with soft or uneven terrain.
-\item \code{Vegetation and obstacles}: trees, shrubs, and other obstacles can absorb or scatter sound energy, reducing the sound level more than geometric spreading alone would predict.
-\item \code{Air absorption}: as sound travels through air, it loses energy due to air molecules absorbing the sound waves, and this effect becomes more pronounced over longer distances.
-\item \code{Wind and temperature gradients}: These environmental factors can cause sound waves to bend or refract.
+\item \strong{Ground absorption}: sound energy can be absorbed by the
+ground, especially in environments like forests with soft or
+uneven terrain.
+\item \strong{Vegetation and obstacles}: trees, shrubs, and other obstacles
+can absorb or scatter sound energy, reducing the sound level more
+than geometric spreading alone would predict.
+\item \strong{Air absorption}: as sound travels through air, it loses energy
+due to air molecules absorbing the sound waves, and this effect
+becomes more pronounced over longer distances.
+\item \strong{Wind and temperature gradients}: these environmental factors
+can cause sound waves to bend or refract.
 }
-Excess attenuation is computed as \code{-20 * log10(rms("test signal") / rms("reference signal"))) - (20 * log10(1 / "distance")} in which 'rms(..)' represents the root mean square of an amplitude envelope. Low values indicate little additional attenuation. The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two approaches for computing excess attenuation are provided (see 'type' argument). NAs will be returned if one of the envelopes is completely flat (e.g. no variation in amplitude).
+
+Excess attenuation is computed as
+\code{(20 * log10(rms("reference signal") / rms("test signal"))) - (-20 * log10("reference distance" / "test distance"))},
+in which \code{rms(...)} represents the root mean square of an amplitude
+envelope. Low values indicate little additional attenuation. The
+goal of the function is to measure the excess attenuation on sounds
+in which a reference playback has been re-recorded at increasing
+distances. The \code{sound.id} column must be used to indicate which
+sounds belong to the same category (e.g. song-types). The function
+will then compare each sound type to the corresponding reference
+sound. \code{NA}s will be returned if one of the envelopes is completely
+flat (e.g. no variation in amplitude).
 }
 \examples{
 {
@@ -75,7 +133,7 @@ Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). Habitat-induced degrada
 
 Dabelsteen, T., & Mathevon, N. (2002). Why do songbirds sing intensively at dawn?. Acta ethologica, 4(2), 65-72.
 
-Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
+Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox \emph{Vulpes velox}. The Journal of the Acoustical Society of America, 124(2), 758-766.
 
 Marten K, & Marler P. (1977). Sound transmission and its significance for animal vocalization. Behavioral Ecology and Sociobiology, 2(3), 271-290.
 
@@ -84,7 +142,8 @@ Morton ES. (1975). Ecological sources of selection on avian sounds. The American
 Wiley, R., & Richards, D. G. (1978). Physical constraints on acoustic communication in the atmosphere: implications for the evolution of animal vocalizations. Behavioral Ecology and Sociobiology, 3(1), 69-94.
 }
 \seealso{
-\code{\link{spcc}}; \code{\link{envelope_correlation}}
+\code{\link[=spcc]{spcc()}} and \code{\link[=envelope_correlation]{envelope_correlation()}}, for other
+degradation metrics in the time/frequency domain.
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -17,26 +17,40 @@ attenuation(
 \arguments{
 \item{frequency}{Numeric vector of length 1 with frequency (in Hertz).}
 
-\item{dist0}{Numeric vector of length 1 with distance (m) for the reference SPL.}
+\item{dist0}{Numeric vector of length 1 with distance (m) for the
+reference SPL.}
 
-\item{dist}{Numeric vector of length 1 with distance (m) over which a sound propagates.}
+\item{dist}{Numeric vector of length 1 with distance (m) over which a
+sound propagates.}
 
-\item{temp}{Numeric vector of length 1 with frequency (in Celsius). Default is 20.}
+\item{temp}{Numeric vector of length 1 with temperature (in Celsius).
+Default \code{20}.}
 
-\item{rh}{Numeric vector of length 1 with relative humidity (in percentage). Default is 60.}
+\item{rh}{Numeric vector of length 1 with relative humidity (in
+percentage). Default \code{60}.}
 
-\item{pa}{Numeric vector of length 1 with atmospheric (barometric) pressure in Pa (standard: 101325, default). Used for atmospheric attenuation.}
+\item{pa}{Numeric vector of length 1 with atmospheric (barometric)
+pressure in Pa (standard: \code{101325}, default). Used for atmospheric
+attenuation.}
 
-\item{hab.att.coef}{Attenuation coefficient of the habitat (in dB/kHz/m).}
+\item{hab.att.coef}{Attenuation coefficient of the habitat (in
+dB/kHz/m).}
 }
 \value{
-Returns the geometric, atmospheric and habitat attenuation (in dB) as well as the combined attenuation.
+A \code{data.frame} with the geometric, atmospheric, and habitat
+attenuation (in dB), as well as the combined attenuation.
 }
 \description{
-\code{attenuation} estimates atmospheric attenuation and atmospheric absorption.
+\code{attenuation()} estimates atmospheric attenuation and atmospheric
+absorption, calculating the geometric, atmospheric, and habitat
+attenuation, as well as the overall expected attenuation (the sum of
+the other three), based on temperature, relative humidity, atmospheric
+pressure, and sound frequency.
 }
 \details{
-Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. The function is modified from http://www.sengpielaudio.com
+Attenuation values are given in dB. The function is modified from
+\url{http://www.sengpielaudio.com} and
+\url{https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB}.
 }
 \examples{
 {
@@ -48,9 +62,9 @@ Calculate the geometric, atmospheric and habitat attenuation and the overall exp
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 }
 \seealso{
-Other miscellaneous:
-\code{\link[=add_noise]{add_noise()}},
-\code{\link[=noise_profile]{noise_profile()}}
+Other miscellaneous: 
+\code{\link{add_noise}()},
+\code{\link{noise_profile}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

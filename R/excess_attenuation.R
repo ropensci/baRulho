@@ -1,25 +1,66 @@
 #' Measure excess attenuation
 #'
-#' \code{excess_attenuation} measures excess attenuation in sounds referenced in an extended selection table.
+#' @description
+#' `excess_attenuation()` measures excess attenuation in sounds
+#' referenced in an extended selection table. Excess attenuation is the
+#' amplitude loss of a sound in excess of that due to spherical spreading
+#' (observed attenuation - expected attenuation).
+#'
 #' @inheritParams template_params
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
-#' is \code{NULL}. If supplied, 'hop.size' is ignored.
-#' Note that lower values will increase time resolution, which is more important for amplitude calculations.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 50. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @return Object 'X' with an additional column,  'excess.attenuation', containing the computed excess attenuation values (in dB).
+#' @param hop.size Numeric vector of length 1 specifying the time
+#'   window duration (in ms). Default `1` ms, which is equivalent to
+#'   ~45 `wl` for a 44.1 kHz sampling rate. Ignored if `wl` is
+#'   supplied. Can be set globally for the current R session via the
+#'   `"hop.size"` option (see [options()]).
+#' @param wl Numeric vector of length 1 specifying the window length of
+#'   the spectrogram. Default `NULL`. If supplied, `hop.size` is
+#'   ignored. Note that lower values will increase time resolution,
+#'   which is more important for amplitude calculations.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Default `50`. Only used for bandpass
+#'   filtering. Can be set globally for the current R session via the
+#'   `"ovlp"` option (see [options()]).
+#'
+#' @details
+#' With every doubling of distance, sounds attenuate with a 6 dB loss
+#' of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional
+#' loss of amplitude results in energy loss in excess of that expected
+#' to occur with distance via spherical spreading, representing power
+#' loss due to additional factors such as:
+#' - **Ground absorption**: sound energy can be absorbed by the
+#'   ground, especially in environments like forests with soft or
+#'   uneven terrain.
+#' - **Vegetation and obstacles**: trees, shrubs, and other obstacles
+#'   can absorb or scatter sound energy, reducing the sound level more
+#'   than geometric spreading alone would predict.
+#' - **Air absorption**: as sound travels through air, it loses energy
+#'   due to air molecules absorbing the sound waves, and this effect
+#'   becomes more pronounced over longer distances.
+#' - **Wind and temperature gradients**: these environmental factors
+#'   can cause sound waves to bend or refract.
+#'
+#' Excess attenuation is computed as
+#' `(20 * log10(rms("reference signal") / rms("test signal"))) - (-20 * log10("reference distance" / "test distance"))`,
+#' in which `rms(...)` represents the root mean square of an amplitude
+#' envelope. Low values indicate little additional attenuation. The
+#' goal of the function is to measure the excess attenuation on sounds
+#' in which a reference playback has been re-recorded at increasing
+#' distances. The `sound.id` column must be used to indicate which
+#' sounds belong to the same category (e.g. song-types). The function
+#' will then compare each sound type to the corresponding reference
+#' sound. `NA`s will be returned if one of the envelopes is completely
+#' flat (e.g. no variation in amplitude).
+#'
+#' @return
+#' Object `X` with an additional column, `excess.attenuation`,
+#' containing the computed excess attenuation values (in dB).
+#'
+#' @seealso [spcc()] and [envelope_correlation()], for other
+#'   degradation metrics in the time/frequency domain.
+#'
 #' @export
 #' @name excess_attenuation
-#' @details Excess attenuation is the amplitude loss of a sound in excess due to spherical spreading (observed attenuation - expected attenuation). With every doubling of distance, sounds attenuate with a 6 dB loss of amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of amplitude results in energy loss in excess of that expected to occur with distance via spherical spreading. So it represents power loss due to additional factors like vegetation or atmospheric conditions (Wiley & Richards, 1978). 
-#' It accounts for attenuation from additional factors such as:
-#' \itemize{
-#' \item \code{Ground absorption}: sound energy can be absorbed by the ground, especially in environments like forests with soft or uneven terrain.
-#' \item \code{Vegetation and obstacles}: trees, shrubs, and other obstacles can absorb or scatter sound energy, reducing the sound level more than geometric spreading alone would predict.
-#' \item \code{Air absorption}: as sound travels through air, it loses energy due to air molecules absorbing the sound waves, and this effect becomes more pronounced over longer distances.
-#' \item \code{Wind and temperature gradients}: These environmental factors can cause sound waves to bend or refract.
-#' }
-#' Excess attenuation is computed as \code{-20 * log10(rms("test signal") / rms("reference signal"))) - (20 * log10(1 / "distance")} in which 'rms(..)' represents the root mean square of an amplitude envelope. Low values indicate little additional attenuation. The goal of the function is to measure the excess attenuation on sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate which sounds belonging to the same category (e.g. song-types). The function will then compare each sound type to the corresponding reference sound. Two approaches for computing excess attenuation are provided (see 'type' argument). NAs will be returned if one of the envelopes is completely flat (e.g. no variation in amplitude).
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
@@ -35,7 +76,6 @@
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @seealso \code{\link{spcc}}; \code{\link{envelope_correlation}}
 #' @references
 #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #'

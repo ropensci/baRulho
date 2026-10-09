@@ -2,7 +2,7 @@
 % Please edit documentation in R/add_noise.R
 \name{add_noise}
 \alias{add_noise}
-\title{Add synthetic noise}
+\title{Add synthetic noise to annotations}
 \usage{
 add_noise(
   X,
@@ -19,37 +19,85 @@ add_noise(
 )
 }
 \arguments{
-\item{X}{Object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package), generated 'by element' (see 'https://marce10.github.io/warbleR/articles/b_annotation_data_format.html#by-element-vs-by-song-extended-selection-tables'), with the test sound files' annotations (which in baRulho is typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass. If the "sound.id" column is supplied noise is only added to those sounds with a 'sound.id' different from "ambient", "start_marker" or "end_marker".}
+\item{X}{Object of class \code{extended_selection_table} (created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package), generated
+\href{https://marce10.github.io/warbleR/articles/b_annotation_data_format.html#by-element-vs-by-song-extended-selection-tables}{"by element"},
+with the test sound files' annotations (which in \strong{baRulho} is
+typically the output of \code{\link[=align_test_files]{align_test_files()}}). Must contain the
+following columns: 1) \code{sound.files}: name of the \code{.wav} files, 2)
+\code{selec}: unique selection identifier (within a sound file), 3)
+\code{start}: start time and 4) \code{end}: end time of selections, 5)
+\code{bottom.freq}: low frequency for bandpass, and 6) \code{top.freq}: high
+frequency for bandpass. If the \code{sound.id} column is supplied, noise
+is only added to those sounds with a \code{sound.id} different from
+\code{"ambient"}, \code{"start_marker"}, or \code{"end_marker"}.}
 
-\item{mar}{numeric vector of length 1. Specifies the margins adjacent to
-the start point of the annotation over which to measure ambient noise.}
+\item{mar}{Numeric vector of length 1. Specifies the margins adjacent
+to the start point of the annotation over which to measure ambient
+noise.}
 
-\item{target.snr}{numeric vector of length 1. Specifies the desired signal-to-noise ratio. Must be lower that the current signal-to-noise ratio. Annotations showing a signal-to-noise ratio higher than 'target.snr' will remain unchanged. Must be supplied.}
+\item{target.snr}{Numeric vector of length 1. Specifies the desired
+signal-to-noise ratio. Must be lower than the current
+signal-to-noise ratio. Annotations showing a signal-to-noise ratio
+higher than \code{target.snr} will remain unchanged. Must be supplied.}
 
-\item{precision}{numeric vector of length 1. Specifies the precision of the adjusted signal-to-noise ratio (in dB).}
+\item{precision}{Numeric vector of length 1. Specifies the precision
+of the adjusted signal-to-noise ratio (in dB).}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{max.iterations}{Numeric vector of length 1. Specifies the maximum number of iterations that the internal signal-to-noise adjusting routine will run before stopping. Note that in most cases the default maximum number of iterations (1000) is not reached.}
+\item{max.iterations}{Numeric vector of length 1. Specifies the
+maximum number of iterations that the internal signal-to-noise
+adjusting routine will run before stopping. Note that in most
+cases the default maximum number of iterations (1000) is not
+reached.}
 
-\item{kind}{Character vector of length 1 indicating the kind of noise, “white”, “pink”, “power”, "brown", or “red”. Noise is synthesized with a modified version of the function \code{\link[tuneR]{noise}}. Default is "pink" which is similar to background noise in natural environments.}
+\item{kind}{Character vector of length 1 indicating the kind of
+noise: \code{"white"}, \code{"pink"}, \code{"power"}, \code{"brown"}, or \code{"red"}. Noise
+is synthesized with a modified version of \code{\link[tuneR:Waveforms]{tuneR::noise()}}.
+Default \code{"pink"}, which is similar to background noise in natural
+environments.}
 
-\item{alpha}{Numeric vector of length 1. The power for the power law noise (defaults are 1 for pink and 1.5 for red noise). Only used when \code{kind = "power"}.}
+\item{alpha}{Numeric vector of length 1. The power for the power law
+noise (defaults are 1 for pink and 1.5 for red noise). Only used
+when \code{kind = "power"}.}
 
-\item{seed}{Numeric vector of length 1. Seed for random number generation. Default is 123. If NULL, the seed is not set.}
+\item{seed}{Numeric vector of length 1. Seed for random number
+generation. Default \code{123}. If \code{NULL}, the seed is not set.}
 
-\item{...}{Additional arguments to be passed internally to \code{\link{signal_to_noise_ratio}}. Note that "custom" noise reference (argument 'noise.ref' in \code{\link{signal_to_noise_ratio}}) is currently not supported.}
+\item{...}{Additional arguments to be passed internally to
+\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}}. Note that the \code{"custom"} noise reference
+(argument \code{noise.ref} in \code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}}) is currently
+not supported.}
 }
 \value{
-Object 'X' in which the wave objects have been modified to match the target signal-to-noise ratio. It also includes an additional column, 'adjusted.snr', with the new signal-to-noise ratio values.
+Object \code{X} in which the wave objects have been modified to match the
+target signal-to-noise ratio. It also includes an additional column,
+\code{adjusted.snr}, with the new signal-to-noise ratio values.
 }
 \description{
-\code{add_noise} adds synthetic noise to annotations in extended selection tables
+\code{add_noise()} adds synthetic noise to sounds referenced in an extended
+selection table to decrease the signal-to-noise ratio. This can be
+useful, for instance, for evaluating the effect of background noise on
+signal structure. Note that the implementation is slow.
 }
 \details{
-The function adds synthetic noise to sounds referenced in an extended selection table (class created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) to decrease the signal-to-noise ratio. This can be useful, for instance, for evaluating the effect of background noise on signal structure. Note that the implementation is slow.
+The function adds synthetic noise to sounds referenced in an extended
+selection table (class created by \code{\link[warbleR:selection_table]{warbleR::selection_table()}} from
+the \strong{warbleR} package) by iteratively amplifying the synthesized
+noise and mixing it into each sound's waveform until the measured
+signal-to-noise ratio reaches \code{target.snr} (within \code{precision} dB) or
+\code{max.iterations} is exceeded. Annotations whose signal-to-noise ratio
+is already at or below \code{target.snr} are left unmodified, and a
+warning lists how many of these were skipped.
 }
 \examples{
 \dontrun{
@@ -68,11 +116,12 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 Timmer. J and M. König (1995): On generating power law noise. Astron. Astrophys. 300, 707-710.
 }
 \seealso{
-\code{\link{signal_to_noise_ratio}}
+\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}}, which this function calls
+internally to measure the current signal-to-noise ratio.
 
-Other miscellaneous:
-\code{\link[=attenuation]{attenuation()}},
-\code{\link[=noise_profile]{noise_profile()}}
+Other miscellaneous: 
+\code{\link{attenuation}()},
+\code{\link{noise_profile}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

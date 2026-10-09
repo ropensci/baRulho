@@ -1,29 +1,78 @@
 #' Measure full spectrum sound noise profiles
 #'
-#' \code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.
+#' @description
+#' `noise_profile()` measures full spectrum sound pressure levels (i.e.
+#' noise profiles) in sound files or extended selection tables.
+#'
 #' @inheritParams template_params
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.
-#' @param files Character vector with names of wave files to be analyzed. Files must be found in 'path' supplied (or in the working directory if 'path' is not supplied). Default is \code{NULL}.
-#' @param mar numeric vector of length 1. Specifies the margins adjacent to
-#'   the start and end points of selection over which to measure ambient noise. Required if 'X' is supplied and ignored if not supplied. Default is \code{NULL}.
-#' @param noise.ref Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Ignored if 'X' is not supplied. Two options are available:
-#' \itemize{
-#' \item \code{adjacent}: measure ambient noise right before the sound (using argument 'mar' to define duration of ambient noise segments).
-#' \item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column).
-#' }
-#' @param bp Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
-#' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-#' Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.
-#' @param PSD Logical to control whether the Probability Mass Function (the probability distribution of frequencies). See \code{\link[seewave]{meanspec}}. Default is \code{FALSE}.
-#' @param norm Logical to control whether amplitude values are normalized (divided by the maximum) so the highest value is 1. See \code{\link[seewave]{meanspec}}. Default is \code{TRUE}.
-#' @param dB A character string of length 1 specifying the type dB to return: "max0" for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights. See \code{\link[seewave]{meanspec}}. Default is \code{"A"}.
-#' @param averaged Logical to control if frequency spectra are averaged within a sound file. Default is \code{TRUE}.
-#' @return A data frame containing the frequency spectra for each sound file or wave object (if 'X' is supplied and is of class 'extended.selection.table').
+#' @param X Object of class `data.frame`, `selection_table`, or
+#'   `extended_selection_table` (the last 2 classes are created by
+#'   [warbleR::selection_table()] from the **warbleR** package) with
+#'   the test sound files' annotations. Must contain the following
+#'   columns: 1) `sound.files`: name of the `.wav` files, 2) `selec`:
+#'   unique selection identifier (within a sound file), 3) `start`:
+#'   start time and 4) `end`: end time of selections, 5)
+#'   `bottom.freq`: low frequency for bandpass, 6) `top.freq`: high
+#'   frequency for bandpass, and 7) `sound.id`: ID of sounds used to
+#'   identify counterparts across distances (needed for `"custom"`
+#'   noise reference, see the `noise.ref` argument). Default `NULL`.
+#' @param files Character vector with names of wave files to be
+#'   analyzed. Files must be found in the supplied `path` (or in the
+#'   working directory if `path` is not supplied). Default `NULL`.
+#' @param mar Numeric vector of length 1. Specifies the margins
+#'   adjacent to the start and end points of a selection over which to
+#'   measure ambient noise. Required if `X` is supplied, and ignored
+#'   if `X` is not supplied. Default `NULL`.
+#' @param noise.ref Character vector of length 1 determining which
+#'   noise segment must be used for measuring ambient noise. Ignored
+#'   if `X` is not supplied. Two options are available:
+#'   - **`adjacent`**: measure ambient noise right before the sound
+#'     (using the `mar` argument to define duration of ambient noise
+#'     segments).
+#'   - **`custom`**: measure ambient noise segments referenced in the
+#'     selection table (labeled as `"ambient"` in the `sound.id`
+#'     column).
+#' @param bp Numeric vector of length 2 giving the lower and upper
+#'   limits of a frequency bandpass filter (in kHz). Default `NULL`.
+#' @param hop.size Numeric vector of length 1 specifying the time
+#'   window duration (in ms). Default `1` ms, which is equivalent to
+#'   ~45 `wl` for a 44.1 kHz sampling rate. Ignored if `wl` is
+#'   supplied. Can be set globally for the current R session via the
+#'   `"hop.size"` option (see [options()]).
+#' @param wl Numeric vector of length 1 specifying the window length
+#'   of the spectrogram. Default `NULL`. Ignored if `bp = NULL`. If
+#'   supplied, `hop.size` is ignored. Note that lower values will
+#'   increase time resolution, which is more important for amplitude
+#'   ratio calculations.
+#' @param PSD Logical to control whether the Probability Mass Function
+#'   (the probability distribution of frequencies) is returned. See
+#'   [seewave::meanspec()]. Default `FALSE`.
+#' @param norm Logical to control whether amplitude values are
+#'   normalized (divided by the maximum) so the highest value is 1.
+#'   See [seewave::meanspec()]. Default `TRUE`.
+#' @param dB Character string of length 1 specifying the type of dB to
+#'   return: `"max0"` for a maximum dB value at 0, `"A"`, `"B"`, `"C"`,
+#'   `"D"`, and `"ITU"` for common dB weights. See
+#'   [seewave::meanspec()]. Default `"A"`.
+#' @param averaged Logical to control if frequency spectra are
+#'   averaged within a sound file. Default `TRUE`.
+#'
+#' @details
+#' The function estimates full spectrum sound pressure levels (i.e.
+#' noise profiles) of ambient noise. This can be done on data
+#' frames/(extended) selection tables (using the segments containing no
+#' target sound or the `"ambient"` sound ID) or over complete sound
+#' files in the working directory (or supplied `path`). The function
+#' uses [seewave::meanspec()] internally to calculate frequency
+#' spectra.
+#'
+#' @return
+#' A `data.frame` containing the frequency spectra for each sound file
+#' or wave object (if `X` is supplied and is of class
+#' `extended_selection_table`).
+#'
 #' @export
 #' @name noise_profile
-#' @details The function estimates full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on data frames/(extended) selection tables (using the segments containing no target sound or the 'ambient' sound id) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")

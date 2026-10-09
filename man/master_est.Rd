@@ -5,7 +5,9 @@
 \alias{master_est}
 \title{Extended selection table of master acoustic data}
 \format{
-Extended selection table object in the \href{https://cran.r-project.org/package=warbleR}{warbleR} format, which contains annotations and acoustic data.
+Extended selection table object in the
+\href{https://cran.r-project.org/package=warbleR}{warbleR} format,
+which contains annotations and acoustic data.
 }
 \source{
 Marcelo Araya-Salas
@@ -14,10 +16,16 @@ Marcelo Araya-Salas
 data(master_est)
 }
 \description{
-Extended selection table (est) with the acoustic data and annotations of the master sound file of synthetic sounds. The synthetic sounds files are 2 s long, frequency modulated and amplitude modulated. The data was created by the function \code{\link[warbleR]{selection_table}} from the warbleR package. The re-recorded data generated with these sounds is found in the example object \code{\link{test_sounds_est}}.
+Extended selection table (est) with the acoustic data and
+annotations of the master sound file of synthetic sounds. The
+synthetic sound files are 2 s long, frequency modulated, and
+amplitude modulated. The data was created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package. The
+re-recorded data generated with these sounds is found in the example
+object \link{test_sounds_est}.
 }
 \seealso{
-Other data sets:
+Other data sets: 
 \code{\link{test_sounds_est}}
 }
 \concept{data sets}

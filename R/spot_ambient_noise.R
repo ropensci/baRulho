@@ -1,18 +1,59 @@
 #' Find a segment of ambient noise to be used as reference
 #'
-#' \code{spot_ambient_noise} finds a segment of ambient noise to be used as reference by other functions.
+#' @description
+#' `spot_ambient_noise()` finds a segment of ambient noise to be used
+#' as reference by other functions.
+#'
 #' @inheritParams template_params
-#' @param X Object of class 'data.frame', or 'selection_table' (a class are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations ('extended_selection_table' are not supported). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances/transects. 'selec' column values in 'X' cannot be duplicated within a sound file ('sound.files' column) as this combination is used to refer to specific rows.
-#' @param length Numeric. Length (in s) of the segments to be used as ambient noise. Must be supplied. Default is \code{NULL}.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive segments. Default is 0. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @param fun Function to be applied to select the segment to be used as ambient noise. It must be a function that takes a numeric vector (peak sound pressure level values for each candidate segment) and a single value with the index of the value to keep. Default is \code{function(x) which.min(abs(x - mean(x)))}.
-#' @details This function finds a segment of ambient noise to be used as reference by other functions. The function first finds candidate segments that do not overlap with annotated sounds in 'X'. Then, it calculates the peak sound pressure level (SPL) of each candidate segment and applies the function supplied by the argument 'fun' to select a single segment. By default 'fun' searches for the segment with the closest value to the mean peak SPL across all candidate segments. Ambient noise annotations are added as a new row in 'X'. Ambient noise annotations are used by the functions \code{\link{signal_to_noise_ratio}} and \code{\link{noise_profile}} to determine background noise levels. Note that this function does not work with annotations in 'extended_selection_table' format.
-#' @return An object similar to 'X' with one additional row for each sound file, containing the selected 'ambient' reference. 
-#' @family prepare acoustic data
-#' @seealso \code{\link{signal_to_noise_ratio}}, \code{\link{noise_profile}} 
+#' @param X Object of class `data.frame` or `selection_table` (a class
+#'   created by [warbleR::selection_table()] from the **warbleR**
+#'   package) with the test sound files' annotations
+#'   (`extended_selection_table` is not supported). Must contain the
+#'   following columns: 1) `sound.files`: name of the `.wav` files, 2)
+#'   `selec`: unique selection identifier (within a sound file), 3)
+#'   `start`: start time and 4) `end`: end time of selections, 5)
+#'   `bottom.freq`: low frequency for bandpass, 6) `top.freq`: high
+#'   frequency for bandpass, and 7) `sound.id`: ID of sounds used to
+#'   identify counterparts across distances/transects. `selec` column
+#'   values in `X` cannot be duplicated within a sound file
+#'   (`sound.files` column), as this combination is used to refer to
+#'   specific rows.
+#' @param length Numeric. Length (in s) of the segments to be used as
+#'   ambient noise. Must be supplied. Default `NULL`.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive segments. Default `0`. Can be set
+#'   globally for the current R session via the `"ovlp"` option (see
+#'   [options()]).
+#' @param fun Function to be applied to select the segment to be used
+#'   as ambient noise. It must be a function that takes a numeric
+#'   vector (peak sound pressure level values for each candidate
+#'   segment) and returns a single value with the index of the value
+#'   to keep. Default `function(x) which.min(abs(x - mean(x)))`.
+#'
+#' @details
+#' This function finds a segment of ambient noise to be used as
+#' reference by other functions. The function first finds candidate
+#' segments that do not overlap with annotated sounds in `X`. Then, it
+#' calculates the peak sound pressure level (SPL) of each candidate
+#' segment and applies the function supplied by the `fun` argument to
+#' select a single segment. By default, `fun` searches for the segment
+#' with the closest value to the mean peak SPL across all candidate
+#' segments. Ambient noise annotations are added as a new row in `X`.
+#' Ambient noise annotations are used by [signal_to_noise_ratio()] and
+#' [noise_profile()] to determine background noise levels. Note that
+#' this function does not work with annotations in
+#' `extended_selection_table` format.
+#'
+#' @return
+#' An object similar to `X` with one additional row for each sound
+#' file, containing the selected `"ambient"` reference.
+#'
+#' @seealso [signal_to_noise_ratio()] and [noise_profile()], which use
+#'   the ambient noise annotations added by this function.
+#'
 #' @export
 #' @name spot_ambient_noise
+#' @family prepare acoustic data
 #' @examples {
 #' # set temporary directory
 #' td <- tempdir()  

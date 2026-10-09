@@ -47,4 +47,10 @@ test_that("basic", {
     ext.window = T,
     marker = "freq9"
   )
+  
+  expect_equal(nrow(realigned_est), nrow(alg.tests))
+  
+  expect_equal(class(realigned_est)[1], "extended_selection_table")
+  
+  
 })

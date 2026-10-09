@@ -17,34 +17,84 @@ spcc(
 )
 }
 \arguments{
-\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
+\item{X}{The output of \code{\link[=set_reference_sounds]{set_reference_sounds()}}, an object of class
+\code{data.frame}, \code{selection_table}, or \code{extended_selection_table} (the
+last 2 classes are created by \code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the
+\strong{warbleR} package) with the test sound files' annotations. Must
+contain the following columns: 1) \code{sound.files}: name of the \code{.wav}
+files, 2) \code{selec}: unique selection identifier (within a sound
+file), 3) \code{start}: start time and 4) \code{end}: end time of selections,
+5) \code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances, and 8) \code{reference}:
+identity of sounds to be used as reference for each test sound
+(row). See \code{\link[=set_reference_sounds]{set_reference_sounds()}} for more details on the
+structure of \code{X}.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{cor.method}{Character string indicating the correlation coefficient to be applied ("pearson", "spearman", or "kendall", see \code{\link[stats]{cor}}).}
+\item{cor.method}{Character string indicating the correlation
+coefficient to be applied (\code{"pearson"}, \code{"spearman"}, or
+\code{"kendall"}, see \code{\link[stats:cor]{stats::cor()}}).}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time window
+duration (in ms). Default \code{11.6} ms, which is equivalent to 512
+\code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is supplied. Can
+be set globally for the current R session via the \code{"hop.size"}
+option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see \code{\link[base]{options}}).}
+\item{wl}{A vector with a single even integer number specifying the
+window length of the spectrogram. Default \code{NULL}. If supplied,
+\code{hop.size} is ignored. Odd integers will be rounded up to the
+nearest even number. Can be set globally for the current R session
+via the \code{"wl"} option (see \code{\link[=options]{options()}}).}
 
-\item{ovlp}{Numeric vector of length 1 specifying \% of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
-slow down the function but produce more accurate results. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
+\item{ovlp}{Numeric vector of length 1 specifying \% of overlap
+between two consecutive windows, as in \code{\link[seewave:spectro]{seewave::spectro()}}.
+Default \code{90}. High values of \code{ovlp} slow down the function but
+produce more accurate results. Can be set globally for the
+current R session via the \code{"ovlp"} option (see \code{\link[=options]{options()}}).}
 
-\item{wn}{A character vector of length 1 specifying the window name as in \code{\link[seewave]{ftwindow}}.}
+\item{wn}{Character vector of length 1 specifying the window name,
+as in \code{\link[seewave:ftwindow]{seewave::ftwindow()}}.}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 }
 \value{
-Object 'X' with an additional column, 'cross.correlation', containing the computed spectrogram cross-correlation coefficients.
+Object \code{X} with an additional column, \code{cross.correlation},
+containing the computed spectrogram cross-correlation coefficients.
 }
 \description{
-\code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
+\code{spcc()} measures spectrographic cross-correlation as a measure of
+sound distortion in sounds referenced in an extended selection
+table.
 }
 \details{
-Spectrographic cross-correlation measures frequency distortion of sounds as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little sound distortion has occurred). Cross-correlation is measured of sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{cross_correlation}} function.
+Spectrographic cross-correlation measures frequency distortion of
+sounds as a similarity metric. Values close to 1 mean very similar
+spectrograms (i.e. little sound distortion has occurred).
+Cross-correlation is measured on sounds in which a reference
+playback has been re-recorded at increasing distances. The
+\code{sound.id} column must be used to tell the function to only compare
+sounds belonging to the same category (e.g. song-types). The
+function compares each sound to the corresponding reference sound
+within the supplied frequency range (e.g. bandpass) of the
+reference sound (\code{bottom.freq} and \code{top.freq} columns in \code{X}). Two
+methods for computing cross-correlation are provided (see the
+\code{method} argument). The function is a wrapper on
+\code{\link[warbleR:cross_correlation]{warbleR::cross_correlation()}}.
 }
 \examples{
 {
@@ -64,19 +114,20 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
 }
 \seealso{
-\code{\link{blur_ratio}}, \code{\link{manual_realign}}, \code{\link[warbleR]{cross_correlation}}
+\code{\link[=blur_ratio]{blur_ratio()}} and \code{\link[=manual_realign]{manual_realign()}}; and
+\code{\link[warbleR:cross_correlation]{warbleR::cross_correlation()}}, which this function wraps.
 
-Other quantify degradation:
-\code{\link[=blur_ratio]{blur_ratio()}},
-\code{\link[=detection_distance]{detection_distance()}},
-\code{\link[=envelope_correlation]{envelope_correlation()}},
-\code{\link[=plot_blur_ratio]{plot_blur_ratio()}},
-\code{\link[=plot_degradation]{plot_degradation()}},
-\code{\link[=set_reference_sounds]{set_reference_sounds()}},
-\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}},
-\code{\link[=spectrum_blur_ratio]{spectrum_blur_ratio()}},
-\code{\link[=spectrum_correlation]{spectrum_correlation()}},
-\code{\link[=tail_to_signal_ratio]{tail_to_signal_ratio()}}
+Other quantify degradation: 
+\code{\link{blur_ratio}()},
+\code{\link{detection_distance}()},
+\code{\link{envelope_correlation}()},
+\code{\link{plot_blur_ratio}()},
+\code{\link{plot_degradation}()},
+\code{\link{set_reference_sounds}()},
+\code{\link{signal_to_noise_ratio}()},
+\code{\link{spectrum_blur_ratio}()},
+\code{\link{spectrum_correlation}()},
+\code{\link{tail_to_signal_ratio}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

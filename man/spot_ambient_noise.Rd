@@ -15,29 +15,71 @@ spot_ambient_noise(
 )
 }
 \arguments{
-\item{X}{Object of class 'data.frame', or 'selection_table' (a class are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations ('extended_selection_table' are not supported). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances/transects. 'selec' column values in 'X' cannot be duplicated within a sound file ('sound.files' column) as this combination is used to refer to specific rows.}
+\item{X}{Object of class \code{data.frame} or \code{selection_table} (a class
+created by \code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR}
+package) with the test sound files' annotations
+(\code{extended_selection_table} is not supported). Must contain the
+following columns: 1) \code{sound.files}: name of the \code{.wav} files, 2)
+\code{selec}: unique selection identifier (within a sound file), 3)
+\code{start}: start time and 4) \code{end}: end time of selections, 5)
+\code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, and 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances/transects. \code{selec} column
+values in \code{X} cannot be duplicated within a sound file
+(\code{sound.files} column), as this combination is used to refer to
+specific rows.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 
-\item{length}{Numeric. Length (in s) of the segments to be used as ambient noise. Must be supplied. Default is \code{NULL}.}
+\item{length}{Numeric. Length (in s) of the segments to be used as
+ambient noise. Must be supplied. Default \code{NULL}.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive segments. Default is 0. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of
+overlap between two consecutive segments. Default \code{0}. Can be set
+globally for the current R session via the \code{"ovlp"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{fun}{Function to be applied to select the segment to be used as ambient noise. It must be a function that takes a numeric vector (peak sound pressure level values for each candidate segment) and a single value with the index of the value to keep. Default is \code{function(x) which.min(abs(x - mean(x)))}.}
+\item{fun}{Function to be applied to select the segment to be used
+as ambient noise. It must be a function that takes a numeric
+vector (peak sound pressure level values for each candidate
+segment) and returns a single value with the index of the value
+to keep. Default \code{function(x) which.min(abs(x - mean(x)))}.}
 }
 \value{
-An object similar to 'X' with one additional row for each sound file, containing the selected 'ambient' reference.
+An object similar to \code{X} with one additional row for each sound
+file, containing the selected \code{"ambient"} reference.
 }
 \description{
-\code{spot_ambient_noise} finds a segment of ambient noise to be used as reference by other functions.
+\code{spot_ambient_noise()} finds a segment of ambient noise to be used
+as reference by other functions.
 }
 \details{
-This function finds a segment of ambient noise to be used as reference by other functions. The function first finds candidate segments that do not overlap with annotated sounds in 'X'. Then, it calculates the peak sound pressure level (SPL) of each candidate segment and applies the function supplied by the argument 'fun' to select a single segment. By default 'fun' searches for the segment with the closest value to the mean peak SPL across all candidate segments. Ambient noise annotations are added as a new row in 'X'. Ambient noise annotations are used by the functions \code{\link{signal_to_noise_ratio}} and \code{\link{noise_profile}} to determine background noise levels. Note that this function does not work with annotations in 'extended_selection_table' format.
+This function finds a segment of ambient noise to be used as
+reference by other functions. The function first finds candidate
+segments that do not overlap with annotated sounds in \code{X}. Then, it
+calculates the peak sound pressure level (SPL) of each candidate
+segment and applies the function supplied by the \code{fun} argument to
+select a single segment. By default, \code{fun} searches for the segment
+with the closest value to the mean peak SPL across all candidate
+segments. Ambient noise annotations are added as a new row in \code{X}.
+Ambient noise annotations are used by \code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}} and
+\code{\link[=noise_profile]{noise_profile()}} to determine background noise levels. Note that
+this function does not work with annotations in
+\code{extended_selection_table} format.
 }
 \examples{
 {
@@ -70,11 +112,12 @@ spot_ambient_noise(X = test_sounds_df, path = td, length = 0.12, ovlp = 20, fun 
 Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.
 }
 \seealso{
-\code{\link{signal_to_noise_ratio}}, \code{\link{noise_profile}}
+\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}} and \code{\link[=noise_profile]{noise_profile()}}, which use
+the ambient noise annotations added by this function.
 
-Other prepare acoustic data:
-\code{\link[=master_sound_file]{master_sound_file()}},
-\code{\link[=synth_sounds]{synth_sounds()}}
+Other prepare acoustic data: 
+\code{\link{master_sound_file}()},
+\code{\link{synth_sounds}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -1,14 +1,42 @@
 #' Measure spectrographic cross-correlation as a measure of sound distortion
 #'
-#' \code{spcc} measures spectrographic cross-correlation as a measure of sound distortion in sounds referenced in an extended selection table.
+#' @description
+#' `spcc()` measures spectrographic cross-correlation as a measure of
+#' sound distortion in sounds referenced in an extended selection
+#' table.
+#'
 #' @inheritParams template_params
-#' @param ovlp Numeric vector of length 1 specifying \% of overlap between two
-#' consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 90. High values of ovlp
-#' slow down the function but produce more accurate results. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @return Object 'X' with an additional column, 'cross.correlation', containing the computed spectrogram cross-correlation coefficients.
+#' @param ovlp Numeric vector of length 1 specifying % of overlap
+#'   between two consecutive windows, as in [seewave::spectro()].
+#'   Default `90`. High values of `ovlp` slow down the function but
+#'   produce more accurate results. Can be set globally for the
+#'   current R session via the `"ovlp"` option (see [options()]).
+#'
+#' @details
+#' Spectrographic cross-correlation measures frequency distortion of
+#' sounds as a similarity metric. Values close to 1 mean very similar
+#' spectrograms (i.e. little sound distortion has occurred).
+#' Cross-correlation is measured on sounds in which a reference
+#' playback has been re-recorded at increasing distances. The
+#' `sound.id` column must be used to tell the function to only compare
+#' sounds belonging to the same category (e.g. song-types). The
+#' function compares each sound to the corresponding reference sound
+#' within the supplied frequency range (e.g. bandpass) of the
+#' reference sound (`bottom.freq` and `top.freq` columns in `X`). Two
+#' methods for computing cross-correlation are provided (see the
+#' `method` argument). The function is a wrapper on
+#' [warbleR::cross_correlation()].
+#'
+#' @return
+#' Object `X` with an additional column, `cross.correlation`,
+#' containing the computed spectrogram cross-correlation coefficients.
+#'
+#' @seealso [blur_ratio()] and [manual_realign()]; and
+#'   [warbleR::cross_correlation()], which this function wraps.
+#'
 #' @export
 #' @name spcc
-#' @details Spectrographic cross-correlation measures frequency distortion of sounds as a similarity metric. Values close to 1 means very similar spectrograms (i.e. little sound distortion has occurred). Cross-correlation is measured of sounds in which a reference playback has been re-recorded at increasing distances. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing cross-correlation are provided (see 'method' argument). The function is a wrapper on warbleR's \code{\link[warbleR]{cross_correlation}} function.
+#' @family quantify degradation
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
@@ -21,8 +49,6 @@
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @family quantify degradation
-#' @seealso \code{\link{blur_ratio}}, \code{\link{manual_realign}}, \code{\link[warbleR]{cross_correlation}}
 #' @references
 #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #' Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
@@ -103,7 +129,7 @@ spcc <-
     # run spcc
     xcorrs <-
       cross_correlation(X = X,
-                                 cor.method = "pearson",
+                                 cor.method = cor.method,
                                  path = path)$max.xcorr.matrix
     
     # put results back into X

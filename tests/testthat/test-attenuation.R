@@ -8,7 +8,10 @@ test_that("basic", {
     expect_equal(ncol(att), 6)
 
     expect_equal(att$habitat.attenuation, 1.96)
-    
+
     expect_false(anyNA(att))
-    
+
+    # column name must be spelled correctly ("atmospheric", not "atmopheric")
+    expect_true("atmospheric.attenuation" %in% names(att))
+
 })

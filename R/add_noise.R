@@ -1,21 +1,73 @@
-#' Add synthetic noise
+#' Add synthetic noise to annotations
 #'
-#' \code{add_noise} adds synthetic noise to annotations in extended selection tables
+#' @description
+#' `add_noise()` adds synthetic noise to sounds referenced in an extended
+#' selection table to decrease the signal-to-noise ratio. This can be
+#' useful, for instance, for evaluating the effect of background noise on
+#' signal structure. Note that the implementation is slow.
+#'
 #' @inheritParams template_params
-#' @param X Object of class 'extended_selection_table' (created by the function \code{\link[warbleR]{selection_table}} from the warbleR package), generated 'by element' (see 'https://marce10.github.io/warbleR/articles/b_annotation_data_format.html#by-element-vs-by-song-extended-selection-tables'), with the test sound files' annotations (which in baRulho is typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass. If the "sound.id" column is supplied noise is only added to those sounds with a 'sound.id' different from "ambient", "start_marker" or "end_marker".
-#' @param mar numeric vector of length 1. Specifies the margins adjacent to
-#'   the start point of the annotation over which to measure ambient noise.
-#' @param target.snr numeric vector of length 1. Specifies the desired signal-to-noise ratio. Must be lower that the current signal-to-noise ratio. Annotations showing a signal-to-noise ratio higher than 'target.snr' will remain unchanged. Must be supplied.
-#' @param precision  numeric vector of length 1. Specifies the precision of the adjusted signal-to-noise ratio (in dB).
-#' @param max.iterations Numeric vector of length 1. Specifies the maximum number of iterations that the internal signal-to-noise adjusting routine will run before stopping. Note that in most cases the default maximum number of iterations (1000) is not reached.
-#' @param kind Character vector of length 1 indicating the kind of noise, “white”, “pink”, “power”, "brown", or “red”. Noise is synthesized with a modified version of the function \code{\link[tuneR]{noise}}. Default is "pink" which is similar to background noise in natural environments.
-#' @param alpha Numeric vector of length 1. The power for the power law noise (defaults are 1 for pink and 1.5 for red noise). Only used when \code{kind = "power"}.
-#' @param seed Numeric vector of length 1. Seed for random number generation. Default is 123. If NULL, the seed is not set.
-#' @param ... Additional arguments to be passed internally to \code{\link{signal_to_noise_ratio}}. Note that "custom" noise reference (argument 'noise.ref' in \code{\link{signal_to_noise_ratio}}) is currently not supported.
-#' @return Object 'X' in which the wave objects have been modified to match the target signal-to-noise ratio. It also includes an additional column, 'adjusted.snr', with the new signal-to-noise ratio values.
+#' @param X Object of class `extended_selection_table` (created by
+#'   [warbleR::selection_table()] from the **warbleR** package), generated
+#'   ["by element"](https://marce10.github.io/warbleR/articles/b_annotation_data_format.html#by-element-vs-by-song-extended-selection-tables),
+#'   with the test sound files' annotations (which in **baRulho** is
+#'   typically the output of [align_test_files()]). Must contain the
+#'   following columns: 1) `sound.files`: name of the `.wav` files, 2)
+#'   `selec`: unique selection identifier (within a sound file), 3)
+#'   `start`: start time and 4) `end`: end time of selections, 5)
+#'   `bottom.freq`: low frequency for bandpass, and 6) `top.freq`: high
+#'   frequency for bandpass. If the `sound.id` column is supplied, noise
+#'   is only added to those sounds with a `sound.id` different from
+#'   `"ambient"`, `"start_marker"`, or `"end_marker"`.
+#' @param mar Numeric vector of length 1. Specifies the margins adjacent
+#'   to the start point of the annotation over which to measure ambient
+#'   noise.
+#' @param target.snr Numeric vector of length 1. Specifies the desired
+#'   signal-to-noise ratio. Must be lower than the current
+#'   signal-to-noise ratio. Annotations showing a signal-to-noise ratio
+#'   higher than `target.snr` will remain unchanged. Must be supplied.
+#' @param precision Numeric vector of length 1. Specifies the precision
+#'   of the adjusted signal-to-noise ratio (in dB).
+#' @param max.iterations Numeric vector of length 1. Specifies the
+#'   maximum number of iterations that the internal signal-to-noise
+#'   adjusting routine will run before stopping. Note that in most
+#'   cases the default maximum number of iterations (1000) is not
+#'   reached.
+#' @param kind Character vector of length 1 indicating the kind of
+#'   noise: `"white"`, `"pink"`, `"power"`, `"brown"`, or `"red"`. Noise
+#'   is synthesized with a modified version of [tuneR::noise()].
+#'   Default `"pink"`, which is similar to background noise in natural
+#'   environments.
+#' @param alpha Numeric vector of length 1. The power for the power law
+#'   noise (defaults are 1 for pink and 1.5 for red noise). Only used
+#'   when `kind = "power"`.
+#' @param seed Numeric vector of length 1. Seed for random number
+#'   generation. Default `123`. If `NULL`, the seed is not set.
+#' @param ... Additional arguments to be passed internally to
+#'   [signal_to_noise_ratio()]. Note that the `"custom"` noise reference
+#'   (argument `noise.ref` in [signal_to_noise_ratio()]) is currently
+#'   not supported.
+#'
+#' @details
+#' The function adds synthetic noise to sounds referenced in an extended
+#' selection table (class created by [warbleR::selection_table()] from
+#' the **warbleR** package) by iteratively amplifying the synthesized
+#' noise and mixing it into each sound's waveform until the measured
+#' signal-to-noise ratio reaches `target.snr` (within `precision` dB) or
+#' `max.iterations` is exceeded. Annotations whose signal-to-noise ratio
+#' is already at or below `target.snr` are left unmodified, and a
+#' warning lists how many of these were skipped.
+#'
+#' @return
+#' Object `X` in which the wave objects have been modified to match the
+#' target signal-to-noise ratio. It also includes an additional column,
+#' `adjusted.snr`, with the new signal-to-noise ratio values.
+#'
+#' @seealso [signal_to_noise_ratio()], which this function calls
+#'   internally to measure the current signal-to-noise ratio.
+#'
 #' @export
 #' @name add_noise
-#' @details The function adds synthetic noise to sounds referenced in an extended selection table (class created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) to decrease the signal-to-noise ratio. This can be useful, for instance, for evaluating the effect of background noise on signal structure. Note that the implementation is slow.
 #' @examples \dontrun{
 #' # load example data
 #' data("test_sounds_est")
@@ -28,8 +80,7 @@
 #' }
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @family miscellaneous
-#' @seealso \code{\link{signal_to_noise_ratio}}
-#' @references 
+#' @references
 #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #' Timmer. J and M. König (1995): On generating power law noise. Astron. Astrophys. 300, 707-710.
 

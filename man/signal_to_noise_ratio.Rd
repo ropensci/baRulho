@@ -20,53 +20,125 @@ signal_to_noise_ratio(
 )
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument). If the "sound.id" column is supplied then SNR is only computed for those rows with a sound.id different from "ambient", "start_marker" or "end_marker".}
+\item{X}{Object of class \code{data.frame}, \code{selection_table}, or
+\code{extended_selection_table} (the last 2 classes are created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package) with
+the test sound files' annotations (typically the output of
+\code{\link[=align_test_files]{align_test_files()}}). Must contain the following columns: 1)
+\code{sound.files}: name of the \code{.wav} files, 2) \code{selec}: unique
+selection identifier (within a sound file), 3) \code{start}: start
+time and 4) \code{end}: end time of selections, 5) \code{bottom.freq}: low
+frequency for bandpass, 6) \code{top.freq}: high frequency for
+bandpass, and 7) \code{sound.id}: ID of sounds used to identify
+counterparts across distances (only needed for \code{"custom"} noise
+reference, see the \code{noise.ref} argument). If the \code{sound.id} column
+is supplied, then SNR is only computed for those rows with a
+\code{sound.id} different from \code{"ambient"}, \code{"start_marker"}, or
+\code{"end_marker"}.}
 
-\item{mar}{numeric vector of length 1. Specifies the margins adjacent to
-the start point of the annotation over which to measure ambient noise.}
+\item{mar}{Numeric vector of length 1. Specifies the margins
+adjacent to the start point of the annotation over which to
+measure ambient noise.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{eq.dur}{Logical. Controls whether the ambient noise segment that is measured has the same duration
-to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.}
+\item{eq.dur}{Logical. Controls whether the ambient noise segment
+that is measured has the same duration as that of the sound (if
+\code{TRUE}; default \code{FALSE}). If \code{TRUE}, then the \code{mar} and
+\code{noise.ref} arguments are ignored.}
 
-\item{noise.ref}{Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Two options are available:
+\item{noise.ref}{Character vector of length 1 determining which
+noise segment must be used for measuring ambient noise. Two
+options are available:
 \itemize{
-\item \code{adjacent}: measure ambient noise right before test sounds (using argument 'mar' to define duration of ambient noise segments).
-\item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column). Those segments will be used to apply the same ambient noise reference to all sounds in a sound file. Therefore, at least one 'ambient' selection for each sound file must be provided. If several 'ambient' selections by sound file are supplied, then the root mean square of the amplitude envelope will be averaged across those selections.
+\item \strong{\code{adjacent}}: measure ambient noise right before test sounds
+(using argument \code{mar} to define duration of ambient noise
+segments).
+\item \strong{\code{custom}}: measure ambient noise segments referenced in the
+selection table (labeled as \code{"ambient"} in the \code{sound.id}
+column). Those segments will be used to apply the same ambient
+noise reference to all sounds in a sound file. Therefore, at
+least one \code{"ambient"} selection for each sound file must be
+provided. If several \code{"ambient"} selections by sound file are
+supplied, then the root mean square of the amplitude envelope
+will be averaged across those selections.
 }}
 
-\item{snr.formula}{Integer vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
-, N = background noise):
+\item{snr.formula}{Integer vector of length 1. Selects the formula
+to be used to calculate the signal-to-noise ratio (S = signal, N =
+background noise):
 \itemize{
-\item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
- (\code{20 * log10(rms(env(S))/rms(env(N)))}) as described by Darden (2008).
-\item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
+\item \strong{\code{1}}: ratio of S amplitude envelope root mean square to N
+amplitude envelope root mean square
+(\code{20 * log10(rms(env(S))/rms(env(N)))}) as described by Darden
+(2008).
+\item \strong{\code{2}}: ratio of the difference between S amplitude envelope
+root mean square and N amplitude envelope root mean square to N
+amplitude envelope root mean square
+(\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}), as
+described by Dabelsteen et al. (1993).
 }}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Alternatively, when set to 'freq.range' (default), the function will use the 'bottom.freq' and 'top.freq' for each sound as the bandpass range.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper
+limits of a frequency bandpass filter (in kHz). Alternatively, when
+set to \code{"freq.range"} (default), the function will use the
+\code{bottom.freq} and \code{top.freq} for each sound as the bandpass range.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time
+window duration (in ms). Default \code{1} ms, which is equivalent to
+~45 \code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is
+supplied. Can be set globally for the current R session via the
+\code{"hop.size"} option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
-is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.}
+\item{wl}{Numeric vector of length 1 specifying the window length
+of the spectrogram. Default \code{NULL}. Ignored if \code{bp = NULL}. If
+supplied, \code{hop.size} is ignored. Note that lower values will
+increase time resolution, which is more important for amplitude
+ratio calculations.}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of
+overlap between two consecutive windows, as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Default \code{0}. Only used for bandpass
+filtering. Can be set globally for the current R session via the
+\code{"ovlp"} option (see \code{\link[=options]{options()}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 }
 \value{
-Object 'X' with an additional column, 'signal.to.noise.ratio',
-with the signal-to-noise ratio values (in dB).
+Object \code{X} with an additional column, \code{signal.to.noise.ratio}, with
+the signal-to-noise ratio values (in dB).
 }
 \description{
-\code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.
+\code{signal_to_noise_ratio()} measures attenuation as the signal-to-noise
+ratio of sounds referenced in an extended selection table.
 }
 \details{
-Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise immediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}. SNR can be ~0 when both tail and signal have very low amplitude.
+Signal-to-noise ratio (SNR) measures sound amplitude level in
+relation to ambient noise. Noise is measured on the background noise
+immediately before the test sound. A general margin in which
+ambient noise will be measured must be specified. Alternatively, a
+selection of ambient noise can be used as reference (see the
+\code{noise.ref} argument). When margins overlap with another sound
+nearby, SNR will be inaccurate, so margin length should be carefully
+considered. Any SNR less than or equal to one suggests background
+noise is equal to or overpowering the sound. The function will
+measure signal-to-noise ratio within the supplied frequency range
+(e.g. bandpass) of the reference signal (\code{bottom.freq} and
+\code{top.freq} columns in \code{X}) by default (that is, when
+\code{bp = "freq.range"}). SNR can be ~0 when both tail and signal have
+very low amplitude.
 }
 \examples{
 {
@@ -84,22 +156,23 @@ Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambien
 \references{
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 Holland J, Dabelsteen T, Pedersen SB, Paris AL (2001) Potential ranging cues contained within the energetic pauses of transmitted wren song. Bioacoustics 12(1):3-20.
-Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.
+Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox \emph{Vulpes velox}. The Journal of the Acoustical Society of America, 124(2), 758-766.
 }
 \seealso{
-\code{\link{excess_attenuation}}
+\code{\link[=excess_attenuation]{excess_attenuation()}}, for a related degradation metric
+that accounts for distance.
 
-Other quantify degradation:
-\code{\link[=blur_ratio]{blur_ratio()}},
-\code{\link[=detection_distance]{detection_distance()}},
-\code{\link[=envelope_correlation]{envelope_correlation()}},
-\code{\link[=plot_blur_ratio]{plot_blur_ratio()}},
-\code{\link[=plot_degradation]{plot_degradation()}},
-\code{\link[=set_reference_sounds]{set_reference_sounds()}},
-\code{\link[=spcc]{spcc()}},
-\code{\link[=spectrum_blur_ratio]{spectrum_blur_ratio()}},
-\code{\link[=spectrum_correlation]{spectrum_correlation()}},
-\code{\link[=tail_to_signal_ratio]{tail_to_signal_ratio()}}
+Other quantify degradation: 
+\code{\link{blur_ratio}()},
+\code{\link{detection_distance}()},
+\code{\link{envelope_correlation}()},
+\code{\link{plot_blur_ratio}()},
+\code{\link{plot_degradation}()},
+\code{\link{set_reference_sounds}()},
+\code{\link{spcc}()},
+\code{\link{spectrum_blur_ratio}()},
+\code{\link{spectrum_correlation}()},
+\code{\link{tail_to_signal_ratio}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

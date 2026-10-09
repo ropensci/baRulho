@@ -1,31 +1,111 @@
 #' Save multipanel plots with reference and test sounds
 #'
-#' \code{plot_degradation} creates multipanel plots (as image files) with reference and test sounds by distance and transect.
+#' @description
+#' `plot_degradation()` creates multipanel plots (as image files) with
+#' reference and test sounds by distance and transect.
+#'
 #' @inheritParams template_params
-#' @param nrow Numeric vector of length 1 with the number of rows per image file. Default is 4. This would be dynamically adjusted if more rows than needed are set.
-#' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope and power spectrum calculations (used internally by \code{\link[seewave]{env}}). Default is 200.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.
-#' @param palette A color palette function to be used to assign colors in the
-#'   plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}.
-#' @param flim A numeric vector of length 2 indicating the highest and lowest frequency limits (kHz) of the spectrogram, as in \code{\link[seewave]{spectro}}. Default is \code{NULL}. Alternatively, a character vector similar to \code{c("-1", "1")} in which the first number is the value to be added to the minimum bottom frequency in 'X' and the second the value to be added to the maximum top frequency in 'X'. This is computed independently for each sound id so the frequency limit better fits the frequency range of the annotated signals. This is useful when test sounds show marked differences in their frequency ranges.
-#' @param envelope Logical to control if envelopes are plotted. Default is \code{TRUE}.
-#' @param spectrum Logical to control if power spectra are plotted. Default is \code{TRUE}.
-#' @param heights Numeric vector of length 2 to control the relative heights of spectrogram (first number) and amplitude envelope (second number) when \code{envelope = TRUE}. Default is c(4, 1).
-#' @param widths Numeric vector of length 2 to control the relative widths of spectrogram (first number) and power spectrum (second number) when \code{spectrum = TRUE}. Default is c(5, 1).
-#' @param margins Numeric vector of length 2 to control the relative time of the test sound (first number) and adjacent margins (i.e. adjacent background noise, second number) to be included in the spectrogram \code{spectrum = TRUE}. Default is c(2, 1) which means that each margin next to the sound is half the duration of the sound. Note that all spectrograms will have the same time length so margins will be calculated to ensure all spectrograms match the duration of the spectrogram in the longest sound. As such, this argument controls the margin on the longest sound.
-#' @param row.height Numeric vector of length 1 controlling the height (in inches) of sound panels in the output image file. Default is 2.
-#' @param col.width Numeric vector of length 1 controlling the width (in inches) of sound panels in the output image file. Default is 2.
-#' @param cols Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).
-#' @param res Numeric argument of length 1. Controls image resolution. Default is 120 (faster) although 300 - 400 is recommended for publication/presentation quality.
-#' @param ... Additional arguments to be passed to the internal spectrogram
-#' creating function for customizing graphical output. The function is a modified
-#' version of \code{\link[seewave]{spectro}}, so it takes the same arguments.
-#' @return One ore more image files with a multipanel figure of spectrograms of test sound by distance, sound id and transect. It also returns the file path of the images invisibly.
+#' @param nrow Numeric vector of length 1 with the number of rows per
+#'   image file. Default `4`. This will be dynamically adjusted if more
+#'   rows than needed are set.
+#' @param env.smooth Numeric vector of length 1 determining the length
+#'   of the sliding window (in amplitude samples) used for a sum
+#'   smooth for amplitude envelope and power spectrum calculations
+#'   (used internally by [seewave::env()]). Default `200`.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Only used when plotting. Default `70`.
+#'   Applied to both spectra and spectrograms on image files. Can be
+#'   set globally for the current R session via the `"ovlp"` option
+#'   (see [options()]).
+#' @param collevels Numeric vector indicating a set of levels used to
+#'   partition the amplitude range of the spectrogram (in dB), as in
+#'   [seewave::spectro()]. Default `seq(-120, 0, 5)`.
+#' @param palette A color palette function to be used to assign colors
+#'   in the plot, as in [seewave::spectro()]. Default
+#'   [viridis::viridis()].
+#' @param flim Numeric vector of length 2 indicating the highest and
+#'   lowest frequency limits (kHz) of the spectrogram, as in
+#'   [seewave::spectro()]. Default `NULL`. Alternatively, a character
+#'   vector similar to `c("-1", "1")`, in which the first number is the
+#'   value to be added to the minimum bottom frequency in `X` and the
+#'   second the value to be added to the maximum top frequency in `X`.
+#'   This is computed independently for each sound ID, so the
+#'   frequency limit better fits the frequency range of the annotated
+#'   signals. This is useful when test sounds show marked differences
+#'   in their frequency ranges.
+#' @param envelope Logical to control if envelopes are plotted. Default
+#'   `TRUE`.
+#' @param spectrum Logical to control if power spectra are plotted.
+#'   Default `TRUE`.
+#' @param heights Numeric vector of length 2 to control the relative
+#'   heights of the spectrogram (first number) and amplitude envelope
+#'   (second number) when `envelope = TRUE`. Default `c(4, 1)`.
+#' @param widths Numeric vector of length 2 to control the relative
+#'   widths of the spectrogram (first number) and power spectrum
+#'   (second number) when `spectrum = TRUE`. Default `c(5, 1)`.
+#' @param margins Numeric vector of length 2 to control the relative
+#'   time of the test sound (first number) and adjacent margins (i.e.
+#'   adjacent background noise, second number) to be included in the
+#'   spectrogram when `spectrum = TRUE`. Default `c(2, 1)`, which means
+#'   that each margin next to the sound is half the duration of the
+#'   sound. Note that all spectrograms will have the same time length,
+#'   so margins will be calculated to ensure all spectrograms match the
+#'   duration of the spectrogram of the longest sound. As such, this
+#'   argument controls the margin on the longest sound.
+#' @param row.height Numeric vector of length 1 controlling the height
+#'   (in inches) of sound panels in the output image file. Default
+#'   `2`.
+#' @param col.width Numeric vector of length 1 controlling the width
+#'   (in inches) of sound panels in the output image file. Default
+#'   `2`.
+#' @param cols Character vector of length 4 containing the colors to
+#'   be used for the background of column and row title panels
+#'   (element 1), the color of amplitude envelopes (element 2), the
+#'   color of power spectra (element 3), and the background color of
+#'   envelopes and spectra (element 4).
+#' @param res Numeric argument of length 1. Controls image resolution.
+#'   Default `120` (faster), although 300-400 is recommended for
+#'   publication/presentation quality.
+#' @param ... Additional arguments to be passed to the internal
+#'   spectrogram-creating function for customizing graphical output.
+#'   The function is a modified version of [seewave::spectro()], so it
+#'   takes the same arguments.
+#'
+#' @details
+#' The function aims to simplify the visual inspection of sound
+#' degradation by producing multipanel figures (saved in `dest.path`)
+#' containing visualizations of each test sound and its reference.
+#' Sounds are sorted by distance (columns) and transect (if more than
+#' 1). Visualizations include spectrograms, amplitude envelopes, and
+#' power spectra (the last 2 are optional). Each row includes all the
+#' copies of a sound ID for a given transect (the row label includes
+#' the sound ID in the first line and transect in the second line),
+#' also including its reference if it comes from another transect.
+#' Ambient noise annotations (`sound.id` `"ambient"`) are excluded.
+#' Amplitude envelopes and power spectra are computed using
+#' [warbleR::envelope()] and [seewave::spec()] respectively. These two
+#' visualizations show the power distribution in time and frequency
+#' between the minimum and maximum power values for each sound.
+#' Therefore, scales are not necessarily comparable across panels. If
+#' a transect ID is not supplied in `X` (i.e. no `transect` column),
+#' the function assumes that all sounds are from the same transect.
+#' Only a single copy of a test sound (`sound.id` label) is allowed per
+#' transect/distance combination. The function uses
+#' [seewave::spectro()] internally to create the spectrograms.
+#'
+#' @return
+#' One or more image files with a multipanel figure of spectrograms of
+#' test sounds by distance, sound ID, and transect. It also returns the
+#' file path of the images invisibly.
+#'
+#' @seealso [blur_ratio()] and [plot_aligned_sounds()]; also
+#'   [plot_blur_ratio()], for the analogous multipanel plot of blur
+#'   ratio estimations.
+#'
 #' @export
 #' @name plot_degradation
-#' @details The function aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded. Amplitude envelopes and power spectra are computed using the functions  \code{\link[warbleR]{envelope}} (warbleR package) and \code{\link[seewave]{spec}} (seewave package) respectively. This two visualizations show the power distribution in time and frequency between the minimum and maximum power values for each sound. Therefore scales are not necessarily comparable across panels. If transect id is not supplied in 'X' (i.e. no 'transect' column) the function assumes that all sounds are from the same transect. Only a single copy of a test sound ("sound.id" label) is allowed per transect/distance combination. The function uses internally \code{\link[seewave]{spectro}} to create the spectrograms.  
+#' @family quantify degradation
 #' @examples \donttest{
 #'   # load example data
 #'   data("test_sounds_est")
@@ -65,8 +145,6 @@
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @family quantify degradation
-#' @seealso \code{\link{blur_ratio}}, \code{\link{plot_aligned_sounds}}, \code{\link{plot_degradation}}
 #' @references {
 #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #' }
@@ -97,7 +175,7 @@ plot_degradation <-
            ...) {
     # check arguments
     check_results <- .check_arguments(
-      fun = "<function_name>",
+      fun = "plot_degradation",
       args = list(
         X = X,
         pb = pb,

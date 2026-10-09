@@ -16,30 +16,62 @@ align_test_files(
 )
 }
 \arguments{
-\item{X}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column that will be used to label re-recorded sounds according to their counterpart in the master sound file.}
+\item{X}{Object of class \code{data.frame}, \code{selection_table}, or
+\code{extended_selection_table} (the last 2 classes are created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package) with the
+master sound file annotations. This should be the same data used
+for finding the position of markers in \code{\link[=find_markers]{find_markers()}}. It should
+also contain a \code{sound.id} column that will be used to label
+re-recorded sounds according to their counterpart in the master
+sound file.}
 
-\item{Y}{object of class 'data.frame' with the output of \code{\link{find_markers}}. This object contains the position of markers in the re-recorded sound files. If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used.}
+\item{Y}{Object of class \code{data.frame} with the output of
+\code{\link[=find_markers]{find_markers()}}. This object contains the position of markers in
+the re-recorded sound files. If more than one marker is supplied
+for a sound file, only the one with the highest correlation score
+(\code{scores} column in \code{Y}) is used.}
 
-\item{path}{Character string containing the directory path where test (re-recorded) sound files are found.}
+\item{path}{Character string containing the directory path where
+test (re-recorded) sound files are found.}
 
-\item{by.song}{Logical argument to indicate if the extended selection table should be created by song (see 'by.song' \code{\link[warbleR]{selection_table}} argument). Default is \code{TRUE}.}
+\item{by.song}{Logical argument to indicate if the extended selection
+table should be created by song (see the \code{by.song} argument of
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}}). Default \code{TRUE}.}
 
-\item{marker}{Character string to define whether a "start" or "end" marker would be used for aligning re-recorded sound files. Default is \code{NULL}. DEPRECATED.}
+\item{marker}{Character string to define whether a \code{"start"} or
+\code{"end"} marker would be used for aligning re-recorded sound files.
+Default \code{NULL}. Deprecated.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{...}{Additional arguments to be passed to \code{\link[warbleR]{selection_table}} for customizing extended selection table.}
+\item{...}{Additional arguments to be passed to
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} for customizing the extended selection
+table.}
 }
 \value{
-An object of the same class than 'X' with the aligned sounds from test (re-recorded) sound files.
+An object of the same class as \code{X} with the aligned sounds from the
+test (re-recorded) sound files.
 }
 \description{
-\code{align_test_files} aligns test (re-recorded) sound files.
+\code{align_test_files()} aligns test (re-recorded) sound files. It uses the
+position of acoustic markers found by \code{\link[=find_markers]{find_markers()}} to infer the
+position of all other sounds referenced in a master sound file,
+producing an aligned selection table for the re-recorded files.
 }
 \details{
-The function aligns sounds found in re-recorded sound files (referenced in 'Y') according to a master sound file (referenced in 'X'). If more than one marker is supplied for a sound file only the one with the highest correlation score ('scores' column in 'X') is used. The function outputs an 'extended selection table' by default.
+The function aligns sounds found in re-recorded sound files
+(referenced in \code{Y}) according to a master sound file (referenced in
+\code{X}). If more than one marker is supplied for a sound file only the
+one with the highest correlation score (\code{scores} column in \code{Y}) is
+used. The function outputs an \verb{extended selection table} by default.
 }
 \examples{
 {
@@ -73,13 +105,16 @@ The function aligns sounds found in re-recorded sound files (referenced in 'Y') 
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 }
 \seealso{
-\code{\link{manual_realign}}; \code{\link{find_markers}}; \code{\link{plot_aligned_sounds}}
+\code{\link[=manual_realign]{manual_realign()}} and \code{\link[=auto_realign]{auto_realign()}}, for fixing small
+remaining misalignments; \code{\link[=find_markers]{find_markers()}}, for locating markers in
+the first place; and \code{\link[=plot_aligned_sounds]{plot_aligned_sounds()}}, for visually checking
+the result.
 
-Other test sound alignment:
-\code{\link[=auto_realign]{auto_realign()}},
-\code{\link[=find_markers]{find_markers()}},
-\code{\link[=manual_realign]{manual_realign()}},
-\code{\link[=plot_aligned_sounds]{plot_aligned_sounds()}}
+Other test sound alignment: 
+\code{\link{auto_realign}()},
+\code{\link{find_markers}()},
+\code{\link{manual_realign}()},
+\code{\link{plot_aligned_sounds}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

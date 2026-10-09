@@ -31,64 +31,166 @@ plot_degradation(
 )
 }
 \arguments{
-\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
+\item{X}{The output of \code{\link[=set_reference_sounds]{set_reference_sounds()}}, an object of class
+\code{data.frame}, \code{selection_table}, or \code{extended_selection_table} (the
+last 2 classes are created by \code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the
+\strong{warbleR} package) with the test sound files' annotations. Must
+contain the following columns: 1) \code{sound.files}: name of the \code{.wav}
+files, 2) \code{selec}: unique selection identifier (within a sound
+file), 3) \code{start}: start time and 4) \code{end}: end time of selections,
+5) \code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances, and 8) \code{reference}:
+identity of sounds to be used as reference for each test sound
+(row). See \code{\link[=set_reference_sounds]{set_reference_sounds()}} for more details on the
+structure of \code{X}.}
 
-\item{nrow}{Numeric vector of length 1 with the number of rows per image file. Default is 4. This would be dynamically adjusted if more rows than needed are set.}
+\item{nrow}{Numeric vector of length 1 with the number of rows per
+image file. Default \code{4}. This will be dynamically adjusted if more
+rows than needed are set.}
 
-\item{env.smooth}{Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope and power spectrum calculations (used internally by \code{\link[seewave]{env}}). Default is 200.}
+\item{env.smooth}{Numeric vector of length 1 determining the length
+of the sliding window (in amplitude samples) used for a sum
+smooth for amplitude envelope and power spectrum calculations
+(used internally by \code{\link[seewave:env]{seewave::env()}}). Default \code{200}.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time window
+duration (in ms). Default \code{11.6} ms, which is equivalent to 512
+\code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is supplied. Can
+be set globally for the current R session via the \code{"hop.size"}
+option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see \code{\link[base]{options}}).}
+\item{wl}{A vector with a single even integer number specifying the
+window length of the spectrogram. Default \code{NULL}. If supplied,
+\code{hop.size} is ignored. Odd integers will be rounded up to the
+nearest even number. Can be set globally for the current R session
+via the \code{"wl"} option (see \code{\link[=options]{options()}}).}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two
-consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of
+overlap between two consecutive windows, as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Only used when plotting. Default \code{70}.
+Applied to both spectra and spectrograms on image files. Can be
+set globally for the current R session via the \code{"ovlp"} option
+(see \code{\link[=options]{options()}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 
-\item{dest.path}{Character string containing the directory path where the image files will be saved. If not supplied the current working directory will be used instead. Can be set globally for the current R session via the "dest.path" option (see \code{\link[base]{options}}).}
+\item{dest.path}{Character string containing the directory path
+where the image files will be saved. If not supplied the current
+working directory will be used instead. Can be set globally for
+the current R session via the \code{"dest.path"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{collevels}{Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.}
+\item{collevels}{Numeric vector indicating a set of levels used to
+partition the amplitude range of the spectrogram (in dB), as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Default \code{seq(-120, 0, 5)}.}
 
-\item{palette}{A color palette function to be used to assign colors in the
-plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}.}
+\item{palette}{A color palette function to be used to assign colors
+in the plot, as in \code{\link[seewave:spectro]{seewave::spectro()}}. Default
+\code{\link[viridis:reexports]{viridis::viridis()}}.}
 
-\item{flim}{A numeric vector of length 2 indicating the highest and lowest frequency limits (kHz) of the spectrogram, as in \code{\link[seewave]{spectro}}. Default is \code{NULL}. Alternatively, a character vector similar to \code{c("-1", "1")} in which the first number is the value to be added to the minimum bottom frequency in 'X' and the second the value to be added to the maximum top frequency in 'X'. This is computed independently for each sound id so the frequency limit better fits the frequency range of the annotated signals. This is useful when test sounds show marked differences in their frequency ranges.}
+\item{flim}{Numeric vector of length 2 indicating the highest and
+lowest frequency limits (kHz) of the spectrogram, as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Default \code{NULL}. Alternatively, a character
+vector similar to \code{c("-1", "1")}, in which the first number is the
+value to be added to the minimum bottom frequency in \code{X} and the
+second the value to be added to the maximum top frequency in \code{X}.
+This is computed independently for each sound ID, so the
+frequency limit better fits the frequency range of the annotated
+signals. This is useful when test sounds show marked differences
+in their frequency ranges.}
 
-\item{envelope}{Logical to control if envelopes are plotted. Default is \code{TRUE}.}
+\item{envelope}{Logical to control if envelopes are plotted. Default
+\code{TRUE}.}
 
-\item{spectrum}{Logical to control if power spectra are plotted. Default is \code{TRUE}.}
+\item{spectrum}{Logical to control if power spectra are plotted.
+Default \code{TRUE}.}
 
-\item{heights}{Numeric vector of length 2 to control the relative heights of spectrogram (first number) and amplitude envelope (second number) when \code{envelope = TRUE}. Default is c(4, 1).}
+\item{heights}{Numeric vector of length 2 to control the relative
+heights of the spectrogram (first number) and amplitude envelope
+(second number) when \code{envelope = TRUE}. Default \code{c(4, 1)}.}
 
-\item{widths}{Numeric vector of length 2 to control the relative widths of spectrogram (first number) and power spectrum (second number) when \code{spectrum = TRUE}. Default is c(5, 1).}
+\item{widths}{Numeric vector of length 2 to control the relative
+widths of the spectrogram (first number) and power spectrum
+(second number) when \code{spectrum = TRUE}. Default \code{c(5, 1)}.}
 
-\item{margins}{Numeric vector of length 2 to control the relative time of the test sound (first number) and adjacent margins (i.e. adjacent background noise, second number) to be included in the spectrogram \code{spectrum = TRUE}. Default is c(2, 1) which means that each margin next to the sound is half the duration of the sound. Note that all spectrograms will have the same time length so margins will be calculated to ensure all spectrograms match the duration of the spectrogram in the longest sound. As such, this argument controls the margin on the longest sound.}
+\item{margins}{Numeric vector of length 2 to control the relative
+time of the test sound (first number) and adjacent margins (i.e.
+adjacent background noise, second number) to be included in the
+spectrogram when \code{spectrum = TRUE}. Default \code{c(2, 1)}, which means
+that each margin next to the sound is half the duration of the
+sound. Note that all spectrograms will have the same time length,
+so margins will be calculated to ensure all spectrograms match the
+duration of the spectrogram of the longest sound. As such, this
+argument controls the margin on the longest sound.}
 
-\item{row.height}{Numeric vector of length 1 controlling the height (in inches) of sound panels in the output image file. Default is 2.}
+\item{row.height}{Numeric vector of length 1 controlling the height
+(in inches) of sound panels in the output image file. Default
+\code{2}.}
 
-\item{col.width}{Numeric vector of length 1 controlling the width (in inches) of sound panels in the output image file. Default is 2.}
+\item{col.width}{Numeric vector of length 1 controlling the width
+(in inches) of sound panels in the output image file. Default
+\code{2}.}
 
-\item{cols}{Character vector of length 4 containing the colors to be used for the background of column and row title panels (element 1), the color of amplitude envelopes (element 2), the color of power spectra (element 3), and the background color of envelopes and spectra (element 4).}
+\item{cols}{Character vector of length 4 containing the colors to
+be used for the background of column and row title panels
+(element 1), the color of amplitude envelopes (element 2), the
+color of power spectra (element 3), and the background color of
+envelopes and spectra (element 4).}
 
-\item{res}{Numeric argument of length 1. Controls image resolution. Default is 120 (faster) although 300 - 400 is recommended for publication/presentation quality.}
+\item{res}{Numeric argument of length 1. Controls image resolution.
+Default \code{120} (faster), although 300-400 is recommended for
+publication/presentation quality.}
 
-\item{...}{Additional arguments to be passed to the internal spectrogram
-creating function for customizing graphical output. The function is a modified
-version of \code{\link[seewave]{spectro}}, so it takes the same arguments.}
+\item{...}{Additional arguments to be passed to the internal
+spectrogram-creating function for customizing graphical output.
+The function is a modified version of \code{\link[seewave:spectro]{seewave::spectro()}}, so it
+takes the same arguments.}
 }
 \value{
-One ore more image files with a multipanel figure of spectrograms of test sound by distance, sound id and transect. It also returns the file path of the images invisibly.
+One or more image files with a multipanel figure of spectrograms of
+test sounds by distance, sound ID, and transect. It also returns the
+file path of the images invisibly.
 }
 \description{
-\code{plot_degradation} creates multipanel plots (as image files) with reference and test sounds by distance and transect.
+\code{plot_degradation()} creates multipanel plots (as image files) with
+reference and test sounds by distance and transect.
 }
 \details{
-The function aims to simplify the visual inspection of sound degradation by producing multipanel figures (saved in 'dest.path') containing visualizations of each test sound and its reference. Sounds are sorted by distance (columns) and transect (if more than 1). Visualizations include spectrograms, amplitude envelopes and power spectra (the last 2 are optional). Each row includes all the copies of a sound id for a given transect (the row label includes the sound id in the first line and transect in the second line), also including its reference if it comes from another transect. Ambient noise annotations (sound.id 'ambient') are excluded. Amplitude envelopes and power spectra are computed using the functions  \code{\link[warbleR]{envelope}} (warbleR package) and \code{\link[seewave]{spec}} (seewave package) respectively. This two visualizations show the power distribution in time and frequency between the minimum and maximum power values for each sound. Therefore scales are not necessarily comparable across panels. If transect id is not supplied in 'X' (i.e. no 'transect' column) the function assumes that all sounds are from the same transect. Only a single copy of a test sound ("sound.id" label) is allowed per transect/distance combination. The function uses internally \code{\link[seewave]{spectro}} to create the spectrograms.
+The function aims to simplify the visual inspection of sound
+degradation by producing multipanel figures (saved in \code{dest.path})
+containing visualizations of each test sound and its reference.
+Sounds are sorted by distance (columns) and transect (if more than
+1). Visualizations include spectrograms, amplitude envelopes, and
+power spectra (the last 2 are optional). Each row includes all the
+copies of a sound ID for a given transect (the row label includes
+the sound ID in the first line and transect in the second line),
+also including its reference if it comes from another transect.
+Ambient noise annotations (\code{sound.id} \code{"ambient"}) are excluded.
+Amplitude envelopes and power spectra are computed using
+\code{\link[warbleR:envelope]{warbleR::envelope()}} and \code{\link[seewave:spec]{seewave::spec()}} respectively. These two
+visualizations show the power distribution in time and frequency
+between the minimum and maximum power values for each sound.
+Therefore, scales are not necessarily comparable across panels. If
+a transect ID is not supplied in \code{X} (i.e. no \code{transect} column),
+the function assumes that all sounds are from the same transect.
+Only a single copy of a test sound (\code{sound.id} label) is allowed per
+transect/distance combination. The function uses
+\code{\link[seewave:spectro]{seewave::spectro()}} internally to create the spectrograms.
 }
 \examples{
 \donttest{
@@ -136,19 +238,21 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 }
 }
 \seealso{
-\code{\link{blur_ratio}}, \code{\link{plot_aligned_sounds}}, \code{\link{plot_degradation}}
+\code{\link[=blur_ratio]{blur_ratio()}} and \code{\link[=plot_aligned_sounds]{plot_aligned_sounds()}}; also
+\code{\link[=plot_blur_ratio]{plot_blur_ratio()}}, for the analogous multipanel plot of blur
+ratio estimations.
 
-Other quantify degradation:
-\code{\link[=blur_ratio]{blur_ratio()}},
-\code{\link[=detection_distance]{detection_distance()}},
-\code{\link[=envelope_correlation]{envelope_correlation()}},
-\code{\link[=plot_blur_ratio]{plot_blur_ratio()}},
-\code{\link[=set_reference_sounds]{set_reference_sounds()}},
-\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}},
-\code{\link[=spcc]{spcc()}},
-\code{\link[=spectrum_blur_ratio]{spectrum_blur_ratio()}},
-\code{\link[=spectrum_correlation]{spectrum_correlation()}},
-\code{\link[=tail_to_signal_ratio]{tail_to_signal_ratio()}}
+Other quantify degradation: 
+\code{\link{blur_ratio}()},
+\code{\link{detection_distance}()},
+\code{\link{envelope_correlation}()},
+\code{\link{plot_blur_ratio}()},
+\code{\link{set_reference_sounds}()},
+\code{\link{signal_to_noise_ratio}()},
+\code{\link{spcc}()},
+\code{\link{spectrum_blur_ratio}()},
+\code{\link{spectrum_correlation}()},
+\code{\link{tail_to_signal_ratio}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

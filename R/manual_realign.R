@@ -1,34 +1,115 @@
 #' Plot spectrograms to check test sound files alignment
 #'
-#' \code{manual_realign} plots spectrograms to visually inspect alignment precision on test sound files.
+#' @description
+#' `manual_realign()` plots spectrograms to visually inspect, and
+#' interactively adjust, alignment precision on test sound files.
+#'
 #' @inheritParams template_params
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations (typically the output of \code{\link{align_test_files}}) to be aligned. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a given distance.
-#' @param Y object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @param collevels A numeric vector of length 3. Specifies levels to partition the amplitude range of the spectrogram (in dB). The more levels the higher the resolution of the spectrogram. Default is seq(-120, 0, 1).
-#' @param palette Color palette function for spectrogram. Default is  \code{\link[viridis]{viridis}}. See \code{\link[seewave]{spectro}} for more palettes. Palettes as \code{\link[monitoR:specCols]{gray.2}} may work better when \code{fast.spec = TRUE} (an argument that can be passed to the internal spectrogram function using "...").
-#' @param duration A numeric vector of length 1. Specifies the overall duration of the clip that will be plotted. Notice that only the initial part of the test files are plotted as this is enough to tell the precision of the alignment.
-#' @param mar numeric vector of length 1. Specifies the minimum margins adjacent (before and after) to the start of the marker used for checking alignments (see 'marker' argument). Default is 0.2.
-#' @param step.lengths Numeric vector of length 2 indicating the time length (in ms) of short (min(step.lengths)) and long steps (max(step.lengths)) for manually aligning spectrograms. Default is \code{c(5, 30)}.
-#' @param flim A numeric vector of length 2 indicating the highest and lowest frequency limits (kHz) of the spectrogram, as in \code{\link[seewave]{spectro}}. Default is \code{NULL} which will plot spectrograms in the full frequency range (0 - nyquist frequency).
-#' @param label.col Character string controlling the color of lines and sound ID labels.
-#' @param ext.window Logical. If \code{TRUE} then and external graphic window is used.Dimensions can be set using the 'width' and 'height' arguments. Default is \code{TRUE}.
-#' @param width Numeric vector of length 1. Single value (in inches) indicating the width of the output image files. Default is 10.
-#' @param height Numeric vector of length 1. Single value (in inches) indicating the height of the output image files. Default is 5.
-#' @param srt Numeric argument of length 1. The rotation (in degrees) of the sound id labels. Default is 0.
-#' @param cex Numeric argument of length 1controlling the size of sound id text labels. Default is 1.
-#' @param fast.spec Logical. If \code{TRUE} then image function is used internally to create spectrograms, which substantially increases performance (much faster), although some options become unavailable, as collevels (amplitude scale). Default is \code{FALSE}.
-#' @param marker Character string with the name of the marker to be used as the main reference for checking/adjusting time alignments. Default is 'start_marker'. Note that this can take any of the sound IDs in 'Y$sound.id'.
-#' @param grid Numeric vector of length 1 controlling the spacing between vertical lines on the spectrogram. Default is 0.2 s. Use 0 to remove grid.
-#' @param ... Additional arguments to be passed to the internal spectrogram
-#' creating function for customizing graphical output. The function is a modified
-#' version of \code{\link[seewave]{spectro}}, so it takes the same arguments.
-#' @return Creates a multipanel graph with spectrograms of master and test sound files in which users can interactively adjust their alignment in time. Return an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
+#' @param X Object of class `data.frame`, `selection_table`, or
+#'   `extended_selection_table` (the last 2 classes are created by
+#'   [warbleR::selection_table()] from the **warbleR** package) with
+#'   the test sound files' annotations (typically the output of
+#'   [align_test_files()]) to be aligned. Must contain the following
+#'   columns: 1) `sound.files`: name of the `.wav` files, 2) `selec`:
+#'   unique selection identifier (within a sound file), 3) `start`:
+#'   start time and 4) `end`: end time of selections, 5)
+#'   `bottom.freq`: low frequency for bandpass, 6) `top.freq`: high
+#'   frequency for bandpass, and 7) `sound.id`: ID of sounds used to
+#'   identify counterparts across distances. Each sound must have a
+#'   unique ID within a given distance.
+#' @param Y Object of class `data.frame`, `selection_table`, or
+#'   `extended_selection_table` (the last 2 classes are created by
+#'   [warbleR::selection_table()] from the **warbleR** package) with
+#'   the master sound file annotations. This should be the same data
+#'   used for finding the position of markers in [find_markers()]. It
+#'   should also contain a `sound.id` column.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Default `0`. Can be set globally for the
+#'   current R session via the `"ovlp"` option (see [options()]).
+#' @param collevels Numeric vector of length 3. Specifies levels to
+#'   partition the amplitude range of the spectrogram (in dB). The more
+#'   levels, the higher the resolution of the spectrogram. Default
+#'   `seq(-120, 0, 1)`.
+#' @param palette Color palette function for the spectrogram. Default
+#'   [viridis::viridis()]. See [seewave::spectro()] for more palettes.
+#'   Palettes such as `monitoR::gray.2` may work better when
+#'   `fast.spec = TRUE` (an argument that can be passed to the internal
+#'   spectrogram function using `...`).
+#' @param duration Numeric vector of length 1. Specifies the overall
+#'   duration of the clip that will be plotted. Notice that only the
+#'   initial part of the test files is plotted, as this is usually
+#'   enough to tell the precision of the alignment.
+#' @param mar Numeric vector of length 1. Specifies the minimum margins
+#'   adjacent (before and after) to the start of the marker used for
+#'   checking alignments (see the `marker` argument). Default `0.2`.
+#' @param step.lengths Numeric vector of length 2 indicating the time
+#'   length (in ms) of short (`min(step.lengths)`) and long
+#'   (`max(step.lengths)`) steps for manually aligning spectrograms.
+#'   Default `c(5, 30)`.
+#' @param flim Numeric vector of length 2 indicating the highest and
+#'   lowest frequency limits (kHz) of the spectrogram, as in
+#'   [seewave::spectro()]. Default `NULL`, which will plot spectrograms
+#'   in the full frequency range (0 - nyquist frequency).
+#' @param label.col Character string controlling the color of lines
+#'   and sound ID labels.
+#' @param ext.window Logical. If `TRUE`, an external graphic window is
+#'   used. Dimensions can be set using the `width` and `height`
+#'   arguments. Default `TRUE`.
+#' @param width Numeric vector of length 1. Single value (in inches)
+#'   indicating the width of the output image files. Default `10`.
+#' @param height Numeric vector of length 1. Single value (in inches)
+#'   indicating the height of the output image files. Default `5`.
+#' @param srt Numeric argument of length 1. The rotation (in degrees)
+#'   of the sound ID labels. Default `0`.
+#' @param cex Numeric argument of length 1 controlling the size of
+#'   sound ID text labels. Default `1`.
+#' @param fast.spec Logical. If `TRUE`, the `image` function is used
+#'   internally to create spectrograms, which substantially increases
+#'   performance (much faster), although some options become
+#'   unavailable, such as `collevels` (amplitude scale). Default
+#'   `FALSE`.
+#' @param marker Character string with the name of the marker to be
+#'   used as the main reference for checking/adjusting time alignments.
+#'   Default `"start_marker"`. Note that this can take any of the sound
+#'   IDs in `Y$sound.id`.
+#' @param grid Numeric vector of length 1 controlling the spacing
+#'   between vertical lines on the spectrogram. Default `0.2` s. Use
+#'   `0` to remove the grid.
+#' @param ... Additional arguments to be passed to the internal
+#'   spectrogram-creating function for customizing graphical output.
+#'   The function is a modified version of [seewave::spectro()], so it
+#'   takes the same arguments.
+#'
+#' @details
+#' This function allows the interactive adjustment of the alignment of
+#' test sound files produced by [align_test_files()]. The function
+#' generates a multipanel graph with the spectrogram of the master
+#' sound file on top of that from test sound files, highlighting the
+#' position of corresponding test sounds on both in order to simplify
+#' assessing and adjusting their alignment. Spectrograms include the
+#' first few seconds of the sound files (controlled by `duration`),
+#' which is usually enough to tell the precision of the alignment. The
+#' lower spectrogram shows a series of "buttons" that users can click
+#' on to control if the test sound file spectrogram (lower panel) needs
+#' to be moved to the left (`"<"`) or right (`">"`). Users can also
+#' reset the spectrogram to its original position (`"reset"`), move on
+#' to the next sound file in `X` (test sound file annotations), or stop
+#' the process (stop button).
+#'
+#' @return
+#' Creates a multipanel graph with spectrograms of master and test
+#' sound files in which users can interactively adjust their alignment
+#' in time. Returns an object similar to the input object `X`, in
+#' which the start and end of the sounds have been adjusted.
+#'
+#' @seealso [auto_realign()], for automatic (non-interactive)
+#'   realignment; [find_markers()] and [align_test_files()], used
+#'   upstream to produce the input for this function.
+#'
 #' @export
 #' @name manual_realign
-#' @details This function allows the interactive adjustment of the alignment of test sound files produced by \code{\link{align_test_files}}. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assessing and adjusting their alignment. Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The lower spectrogram shows a series of 'buttons' that users can click on to control if the test sound file spectrogram (low panel) needs to be moved to the left ("<") or right (">"). Users can also reset the spectrogram to its original position ('reset'), move on to the next sound file in 'X' (test sound file annotations) or stop the process (stop button). The function returns an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
 #' @family test sound alignment
-#' @seealso \code{\link{auto_realign}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
 #' @examples
 #' {
 #'   # load example data

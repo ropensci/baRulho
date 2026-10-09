@@ -25,50 +25,116 @@ detection_distance(
 )
 }
 \arguments{
-\item{X}{The output of \code{\link{set_reference_sounds}} which is an object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5) "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances and 8) "reference": identity of sounds to be used as reference for each test sound (row). See \code{\link{set_reference_sounds}} for more details on the structure of 'X'.}
+\item{X}{The output of \code{\link[=set_reference_sounds]{set_reference_sounds()}}, an object of class
+\code{data.frame}, \code{selection_table}, or \code{extended_selection_table} (the
+last 2 classes are created by \code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the
+\strong{warbleR} package) with the test sound files' annotations. Must
+contain the following columns: 1) \code{sound.files}: name of the \code{.wav}
+files, 2) \code{selec}: unique selection identifier (within a sound
+file), 3) \code{start}: start time and 4) \code{end}: end time of selections,
+5) \code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances, and 8) \code{reference}:
+identity of sounds to be used as reference for each test sound
+(row). See \code{\link[=set_reference_sounds]{set_reference_sounds()}} for more details on the
+structure of \code{X}.}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time window
+duration (in ms). Default \code{11.6} ms, which is equivalent to 512
+\code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is supplied. Can
+be set globally for the current R session via the \code{"hop.size"}
+option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see \code{\link[base]{options}}).}
+\item{wl}{A vector with a single even integer number specifying the
+window length of the spectrogram. Default \code{NULL}. If supplied,
+\code{hop.size} is ignored. Odd integers will be rounded up to the
+nearest even number. Can be set globally for the current R session
+via the \code{"wl"} option (see \code{\link[=options]{options()}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 
-\item{spl}{A numeric vector of length 1 specifying the sound pressure level of sounds. If not supplied then it will be measured from the sounds themselves.}
+\item{spl}{Numeric vector of length 1 specifying the sound pressure
+level of sounds. If not supplied, it will be measured from the
+sounds themselves.}
 
-\item{spl.cutoff}{A numeric vector of length 1 specifying the sound pressure level cutoff to define if the sound is no longer detected. Ideally it should be estimated based on the sound detection threshold of the species.}
+\item{spl.cutoff}{Numeric vector of length 1 specifying the sound
+pressure level cutoff to define if the sound is no longer
+detected. Ideally it should be estimated based on the sound
+detection threshold of the species.}
 
-\item{temp}{Numeric vector of length 1 with frequency (in Celsius). Default is 20.}
+\item{temp}{Numeric vector of length 1 with temperature (in
+Celsius). Default \code{20}.}
 
-\item{rh}{Numeric vector of length 1 with relative humidity (in percentage). Default is 60.}
+\item{rh}{Numeric vector of length 1 with relative humidity (in
+percentage). Default \code{60}.}
 
-\item{pa}{Numeric vector of length 1 with ambient pressure in Pa (standard: 101325, default). Used for Atmospheric attenuation.}
+\item{pa}{Numeric vector of length 1 with ambient pressure in Pa
+(standard: \code{101325}, default). Used for atmospheric attenuation.}
 
-\item{hab.att.coef}{Attenuation coefficient of the habitat (in dB/kHz/m).}
+\item{hab.att.coef}{Attenuation coefficient of the habitat (in
+dB/kHz/m).}
 
-\item{max.distance}{Numeric vector of length 1 with the maximum distance (in m) at which detection would be evaluated. Note that the function calculates the expected sound pressure level values along a vector of distances to find the distance at which the expected sound pressure level equates 'spl.cutoff'. Default is 1000 m.}
+\item{max.distance}{Numeric vector of length 1 with the maximum
+distance (in m) at which detection would be evaluated. Note that
+the function calculates the expected sound pressure level values
+along a vector of distances to find the distance at which the
+expected sound pressure level equates \code{spl.cutoff}. Default
+\code{1000} m.}
 
-\item{resolution}{Numeric vector of length 1 with the distance resolution (in m) for estimated detection distance. Higher resolutions take longer to estimate. Default is 0.1 m.}
+\item{resolution}{Numeric vector of length 1 with the distance
+resolution (in m) for estimated detection distance. Higher
+resolutions take longer to estimate. Default \code{0.1} m.}
 
-\item{subtract.bgn}{Logical argument to control if SPL from background noise is excluded from the measured signal SPL. Default is \code{FALSE}.}
+\item{subtract.bgn}{Logical argument to control if SPL from
+background noise is excluded from the measured signal SPL. Default
+\code{FALSE}.}
 
-\item{envelope}{Character string vector with the method to calculate amplitude envelopes (in which SPL is measured, only used if 'spl' is not supplied), as in \code{\link[seewave]{env}}. Must be either 'abs' (absolute envelope, default) or 'hil' (Hilbert transformation).}
+\item{envelope}{Character string vector with the method to calculate
+amplitude envelopes (in which SPL is measured, only used if \code{spl}
+is not supplied), as in \code{\link[seewave:env]{seewave::env()}}. Must be either \code{"abs"}
+(absolute envelope, default) or \code{"hil"} (Hilbert transformation).}
 
-\item{mar}{numeric vector of length 1. Specifies the margins adjacent to
-the start and end points of selection over which to measure background noise. This is required to subtract background noise sound pressure level (so only needed when 'subtract.bgn = TRUE').}
+\item{mar}{Numeric vector of length 1. Specifies the margins
+adjacent to the start and end points of selection over which to
+measure background noise. This is required to subtract background
+noise sound pressure level (so only needed when
+\code{subtract.bgn = TRUE}).}
 }
 \value{
-Object 'X' with an additional column, 'detection.distance',
+Object \code{X} with an additional column, \code{detection.distance},
 containing the computed detection distances (in m).
 }
 \description{
-\code{detection_distance} detection distance of sounds.
+\code{detection_distance()} estimates the detection distance of sounds
+referenced in an extended selection table.
 }
 \details{
-The function computes the maximum distance at which a sound would be detected, which is calculated as the distance in which the sound pressure level (SPL) goes below the specified SPL cutoff ('spl.cutoff')). This is returned as an additional column 'detection.distance' (in m). The function uses internally \code{\link{attenuation}} to estimate SPL at increasing values until it reaches the defined cutoff. The peak frequency (calculated on the power spectrum of the reference sound) of the reference sound for each sound ID is used as the carrier frequency for distance estimation. The sound recorded at the lowest distance is used as reference. \strong{This function assumes that all recordings have been made at the same recording volume}.
+The function computes the maximum distance at which a sound would be
+detected, which is calculated as the distance at which the sound
+pressure level (SPL) goes below the specified SPL cutoff
+(\code{spl.cutoff}). This is returned as an additional column,
+\code{detection.distance} (in m). The function uses \code{\link[=attenuation]{attenuation()}}
+internally to estimate SPL at increasing distances until it reaches
+the defined cutoff. The peak frequency (calculated on the power
+spectrum of the reference sound) of the reference sound for each
+sound ID is used as the carrier frequency for distance estimation.
+The sound recorded at the lowest distance is used as reference.
+\strong{This function assumes that all recordings have been made at the
+same recording volume.}
 }
 \examples{
 \dontrun{
@@ -88,19 +154,20 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 Clark, C.W., Marler, P. & Beeman K. (1987). Quantitative analysis of animal vocal phonology: an application to Swamp Sparrow song. Ethology. 76:101-115.
 }
 \seealso{
-\code{\link{attenuation}}
+\code{\link[=attenuation]{attenuation()}}, used internally to estimate SPL at
+increasing distances.
 
-Other quantify degradation:
-\code{\link[=blur_ratio]{blur_ratio()}},
-\code{\link[=envelope_correlation]{envelope_correlation()}},
-\code{\link[=plot_blur_ratio]{plot_blur_ratio()}},
-\code{\link[=plot_degradation]{plot_degradation()}},
-\code{\link[=set_reference_sounds]{set_reference_sounds()}},
-\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}},
-\code{\link[=spcc]{spcc()}},
-\code{\link[=spectrum_blur_ratio]{spectrum_blur_ratio()}},
-\code{\link[=spectrum_correlation]{spectrum_correlation()}},
-\code{\link[=tail_to_signal_ratio]{tail_to_signal_ratio()}}
+Other quantify degradation: 
+\code{\link{blur_ratio}()},
+\code{\link{envelope_correlation}()},
+\code{\link{plot_blur_ratio}()},
+\code{\link{plot_degradation}()},
+\code{\link{set_reference_sounds}()},
+\code{\link{signal_to_noise_ratio}()},
+\code{\link{spcc}()},
+\code{\link{spectrum_blur_ratio}()},
+\code{\link{spectrum_correlation}()},
+\code{\link{tail_to_signal_ratio}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

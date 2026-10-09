@@ -1,15 +1,47 @@
 #' Measure amplitude envelope correlation
 #'
-#' \code{envelope_correlation} measures amplitude envelope correlation of sounds referenced in an extended selection table.
+#' @description
+#' `envelope_correlation()` measures amplitude envelope correlation of
+#' sounds referenced in an extended selection table. Amplitude envelope
+#' correlation measures the similarity of two sounds in the time domain.
+#'
 #' @inheritParams template_params
-#' @param env.smooth Numeric vector of length 1 to determine the length of the sliding window used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Can be set globally for the current R session via the "env.smooth" option (see \code{\link[base]{options}}).
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @return Object 'X' with an additional column, 'envelope.correlation', containing the computed envelope correlation coefficients.
+#' @param env.smooth Numeric vector of length 1 to determine the length
+#'   of the sliding window used for a sum smooth for amplitude envelope
+#'   calculation (used internally by [seewave::env()]). Can be set
+#'   globally for the current R session via the `"env.smooth"` option
+#'   (see [options()]).
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Default `70`. Can be set globally for the
+#'   current R session via the `"ovlp"` option (see [options()]).
+#'
+#' @details
+#' The function measures the envelope correlation coefficients of
+#' sounds in which a reference playback has been re-recorded at
+#' increasing distances. Values close to 1 mean very similar amplitude
+#' envelopes (i.e. little degradation has occurred). If envelopes have
+#' different lengths (which means sounds have different lengths),
+#' cross-correlation is used and the maximum correlation coefficient is
+#' returned. Cross-correlation is achieved by sliding the shortest
+#' sound along the largest one and computing the correlation at each
+#' step. The `sound.id` column must be used to indicate that the
+#' function should only compare sounds belonging to the same category
+#' (e.g. song-types). The function compares each sound to the
+#' corresponding reference sound within the supplied frequency range
+#' (e.g. bandpass) of the reference sound (`bottom.freq` and `top.freq`
+#' columns in `X`). Two methods for computing envelope correlation are
+#' provided (see the `method` argument). Use [blur_ratio()] to create
+#' envelope graphs.
+#'
+#' @return
+#' Object `X` with an additional column, `envelope.correlation`,
+#' containing the computed envelope correlation coefficients.
+#'
+#' @seealso [blur_ratio()] and [spectrum_blur_ratio()].
+#'
 #' @export
 #' @name envelope_correlation
-#' @details Amplitude envelope correlation measures the similarity of two sounds in the time domain. The function measures the envelope correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values close to 1 means very similar amplitude envelopes (i.e. little degradation has occurred). If envelopes have different lengths (which means sounds have different lengths) cross-correlation is used and the maximum correlation coefficient is returned. Cross-correlation is achieved by sliding the shortest sound along the largest one and computing the correlation at each step. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). Two methods for computing envelope correlation are provided (see 'method' argument). Use \code{\link{blur_ratio}} to create envelopes graphs.
-#' @seealso \code{\link{blur_ratio}}, \code{\link{spectrum_blur_ratio}}
 #' @family quantify degradation
 #' @examples {
 #'   # load example data

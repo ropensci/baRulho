@@ -22,49 +22,103 @@ noise_profile(
 )
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (needed for "custom" noise reference, see "noise.ref" argument). Default is \code{NULL}.}
+\item{X}{Object of class \code{data.frame}, \code{selection_table}, or
+\code{extended_selection_table} (the last 2 classes are created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package) with
+the test sound files' annotations. Must contain the following
+columns: 1) \code{sound.files}: name of the \code{.wav} files, 2) \code{selec}:
+unique selection identifier (within a sound file), 3) \code{start}:
+start time and 4) \code{end}: end time of selections, 5)
+\code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, and 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances (needed for \code{"custom"}
+noise reference, see the \code{noise.ref} argument). Default \code{NULL}.}
 
-\item{files}{Character vector with names of wave files to be analyzed. Files must be found in 'path' supplied (or in the working directory if 'path' is not supplied). Default is \code{NULL}.}
+\item{files}{Character vector with names of wave files to be
+analyzed. Files must be found in the supplied \code{path} (or in the
+working directory if \code{path} is not supplied). Default \code{NULL}.}
 
-\item{mar}{numeric vector of length 1. Specifies the margins adjacent to
-the start and end points of selection over which to measure ambient noise. Required if 'X' is supplied and ignored if not supplied. Default is \code{NULL}.}
+\item{mar}{Numeric vector of length 1. Specifies the margins
+adjacent to the start and end points of a selection over which to
+measure ambient noise. Required if \code{X} is supplied, and ignored
+if \code{X} is not supplied. Default \code{NULL}.}
 
-\item{noise.ref}{Character vector of length 1 to determined which noise segment must be used for measuring ambient noise. Ignored if 'X' is not supplied. Two options are available:
+\item{noise.ref}{Character vector of length 1 determining which
+noise segment must be used for measuring ambient noise. Ignored
+if \code{X} is not supplied. Two options are available:
 \itemize{
-\item \code{adjacent}: measure ambient noise right before the sound (using argument 'mar' to define duration of ambient noise segments).
-\item \code{custom}: measure ambient noise segments referenced in the selection table (labeled as 'ambient' in the 'sound.id' column).
+\item \strong{\code{adjacent}}: measure ambient noise right before the sound
+(using the \code{mar} argument to define duration of ambient noise
+segments).
+\item \strong{\code{custom}}: measure ambient noise segments referenced in the
+selection table (labeled as \code{"ambient"} in the \code{sound.id}
+column).
 }}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 
-\item{bp}{Numeric vector of length 2 giving the lower and upper limits of a frequency bandpass filter (in kHz). Default is \code{NULL}.}
+\item{bp}{Numeric vector of length 2 giving the lower and upper
+limits of a frequency bandpass filter (in kHz). Default \code{NULL}.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time
+window duration (in ms). Default \code{1} ms, which is equivalent to
+~45 \code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is
+supplied. Can be set globally for the current R session via the
+\code{"hop.size"} option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{A numeric vector of length 1 specifying the window length of the spectrogram, default
-is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored.
-Note that lower values will increase time resolution, which is more important for amplitude ratio calculations.}
+\item{wl}{Numeric vector of length 1 specifying the window length
+of the spectrogram. Default \code{NULL}. Ignored if \code{bp = NULL}. If
+supplied, \code{hop.size} is ignored. Note that lower values will
+increase time resolution, which is more important for amplitude
+ratio calculations.}
 
-\item{PSD}{Logical to control whether the Probability Mass Function (the probability distribution of frequencies). See \code{\link[seewave]{meanspec}}. Default is \code{FALSE}.}
+\item{PSD}{Logical to control whether the Probability Mass Function
+(the probability distribution of frequencies) is returned. See
+\code{\link[seewave:meanspec]{seewave::meanspec()}}. Default \code{FALSE}.}
 
-\item{norm}{Logical to control whether amplitude values are normalized (divided by the maximum) so the highest value is 1. See \code{\link[seewave]{meanspec}}. Default is \code{TRUE}.}
+\item{norm}{Logical to control whether amplitude values are
+normalized (divided by the maximum) so the highest value is 1.
+See \code{\link[seewave:meanspec]{seewave::meanspec()}}. Default \code{TRUE}.}
 
-\item{dB}{A character string of length 1 specifying the type dB to return: "max0" for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for common dB weights. See \code{\link[seewave]{meanspec}}. Default is \code{"A"}.}
+\item{dB}{Character string of length 1 specifying the type of dB to
+return: \code{"max0"} for a maximum dB value at 0, \code{"A"}, \code{"B"}, \code{"C"},
+\code{"D"}, and \code{"ITU"} for common dB weights. See
+\code{\link[seewave:meanspec]{seewave::meanspec()}}. Default \code{"A"}.}
 
-\item{averaged}{Logical to control if frequency spectra are averaged within a sound file. Default is \code{TRUE}.}
+\item{averaged}{Logical to control if frequency spectra are
+averaged within a sound file. Default \code{TRUE}.}
 }
 \value{
-A data frame containing the frequency spectra for each sound file or wave object (if 'X' is supplied and is of class 'extended.selection.table').
+A \code{data.frame} containing the frequency spectra for each sound file
+or wave object (if \code{X} is supplied and is of class
+\code{extended_selection_table}).
 }
 \description{
-\code{noise_profile} Measure full spectrum sound pressure levels (i.e. noise profiles) in sound files or extended selection tables.
+\code{noise_profile()} measures full spectrum sound pressure levels (i.e.
+noise profiles) in sound files or extended selection tables.
 }
 \details{
-The function estimates full spectrum sound pressure levels (i.e. noise profiles) of ambient noise. This can be done on data frames/(extended) selection tables (using the segments containing no target sound or the 'ambient' sound id) or over complete sound files in the working directory (or path supplied). The function uses \code{\link[seewave]{meanspec}} internally to calculate frequency spectra.
+The function estimates full spectrum sound pressure levels (i.e.
+noise profiles) of ambient noise. This can be done on data
+frames/(extended) selection tables (using the segments containing no
+target sound or the \code{"ambient"} sound ID) or over complete sound
+files in the working directory (or supplied \code{path}). The function
+uses \code{\link[seewave:meanspec]{seewave::meanspec()}} internally to calculate frequency
+spectra.
 }
 \examples{
 {
@@ -86,9 +140,9 @@ Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Ri
 \seealso{
 \code{\link{excess_attenuation}}
 
-Other miscellaneous:
-\code{\link[=add_noise]{add_noise()}},
-\code{\link[=attenuation]{attenuation()}}
+Other miscellaneous: 
+\code{\link{add_noise}()},
+\code{\link{attenuation}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

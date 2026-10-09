@@ -1,15 +1,49 @@
 #' Measure frequency spectrum correlation
 #'
-#' \code{spectrum_correlation} measures frequency spectrum correlation of sounds referenced in an extended selection table.
+#' @description
+#' `spectrum_correlation()` measures frequency spectrum correlation of
+#' sounds referenced in an extended selection table. Spectral
+#' correlation measures the similarity of two sounds in the frequency
+#' domain.
+#'
 #' @inheritParams template_params
-#' @param spec.smooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @param n.bins Numeric vector of length 1 specifying the number of frequency bins to use for representing power spectra. Default is 100. If null the raw power spectrum is used (note that this can result in high RAM memory usage for large data sets). Power spectrum values are interpolated using \code{\link[stats]{approx}}.
-#' @return Object 'X' with an additional column,  'spectrum.correlation', containing the computed frequency spectrum correlation coefficients.
+#' @param spec.smooth Numeric vector of length 1 determining the
+#'   length of the sliding window used for a sum smooth for power
+#'   spectrum calculation (in kHz). Default `5`.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Default `70`. Can be set globally for the
+#'   current R session via the `"ovlp"` option (see [options()]).
+#' @param n.bins Numeric vector of length 1 specifying the number of
+#'   frequency bins to use for representing power spectra. Default
+#'   `100`. If `NULL`, the raw power spectrum is used (note that this
+#'   can result in high RAM memory usage for large data sets). Power
+#'   spectrum values are interpolated using [stats::approx()].
+#'
+#' @details
+#' The function measures the spectral correlation coefficients of
+#' sounds in which a reference playback has been re-recorded at
+#' increasing distances. Values range from 1 (identical frequency
+#' spectrum, i.e. no degradation) to 0. The `sound.id` column must be
+#' used to tell the function to only compare sounds belonging to the
+#' same category (e.g. song-types). The function will then compare
+#' each sound to the corresponding reference sound. Two methods for
+#' computing spectral correlation are provided (see the `method`
+#' argument). The function uses [seewave::meanspec()] internally to
+#' compute power spectra. Use [spectrum_blur_ratio()] to extract raw
+#' spectra values. `NA` is returned if at least one of the power
+#' spectra cannot be computed.
+#'
+#' @return
+#' Object `X` with an additional column, `spectrum.correlation`,
+#' containing the computed frequency spectrum correlation
+#' coefficients.
+#'
+#' @seealso [envelope_correlation()] and [spectrum_blur_ratio()].
+#'
 #' @export
 #' @name spectrum_correlation
-#' @details spectral correlation measures the similarity of two sounds in the frequency domain. The function measures the spectral correlation coefficients of sounds in which a reference playback has been re-recorded at increasing distances. Values range from 1 (identical frequency spectrum, i.e. no degradation) to 0. The 'sound.id' column must be used to indicate the function to only compare sounds belonging to the same category (e.g. song-types). The function will then compare each sound to the corresponding reference sound. Two methods for computing spectral correlation are provided (see 'method' argument). The function uses \code{\link[seewave]{meanspec}} internally to compute power spectra. Use \code{\link{spectrum_blur_ratio}} to extract raw spectra values. NA is returned if at least one the power spectra cannot be computed.
+#' @family quantify degradation
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
@@ -27,8 +61,6 @@
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @family quantify degradation
-#' @seealso \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
 #' @references
 #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #' Apol, C.A., Sturdy, C.B. & Proppe, D.S. (2017). Seasonal variability in habitat structure may have shaped acoustic signals and repertoires in the black-capped and boreal chickadees. Evol Ecol. 32:57-74.

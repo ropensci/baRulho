@@ -888,7 +888,7 @@
         
         # white envelope polygon
         # add 0s at star and end so polygon doesnt twist
-        sgn.pmf[c(1, nrow(sgn.pmf))] <- 0
+        sgn.pmf[c(1, length(sgn.pmf))] <- 0
         
         # add polygon with envelope shape
         polygon(
@@ -998,7 +998,7 @@
         
         # white envelope polygon
         # add 0s at star and end so polygon doesnt twist
-        rfrnc.pmf[c(1, nrow(rfrnc.pmf))] <- 0
+        rfrnc.pmf[c(1, length(rfrnc.pmf))] <- 0
         
         # add polygon with spectrum shape
         polygon(
@@ -1236,7 +1236,7 @@
     stps <- length(lg.env) - shrt.lgth
     
     # calculate correlations at each step
-    cors <- vapply(seq_along(stps), function(x) {
+    cors <- vapply(seq_len(stps), function(x) {
       cor(lg.env[x:(x + shrt.lgth)], shrt.env, method = cor.method)
     }, FUN.VALUE = numeric(1))
     
@@ -1797,12 +1797,12 @@
   dur_label <- if (length(durations) > 1) {
     paste0("dur:", X$duration)
   } else {
-    NULL
+    rep("", nrow(X))
   }
   freq_label <- if (length(frequencies) > 1) {
     paste0("freq:", X$frequency)
   } else {
-    NULL
+    rep("", nrow(X))
   }
   freq_dur_label <- paste(dur_label, freq_label, sep = ";")
   
@@ -1821,10 +1821,12 @@
   
   # add sound id column (a unique identifier for each sound)
   X$replicate <- 1
-  
-  for (i in 2:nrow(X)) {
-    X$replicate[i] <-
-      sum(X$treatment[1:i] == X$treatment[i])
+
+  if (nrow(X) > 1) {
+    for (i in 2:nrow(X)) {
+      X$replicate[i] <-
+        sum(X$treatment[1:i] == X$treatment[i])
+    }
   }
   
   X$sound.id <-
@@ -2285,18 +2287,19 @@
           warbleR::envelope(x = spc[, 2], ssmooth = env.smooth)
         
         # reduce number of points so polygon printing runs faster
-        if (nrow(spc) > 50)
+        if (nrow(spc) > 50) {
           spc_list <-
-          stats::approx(
-            x = spc[, 1],
-            y = spc[, 2],
-            n = 50,
-            method = "linear"
-          )
-        
-        # make it a matrix
-        spc <- cbind(spc_list[[1]], spc_list[[2]])
-        
+            stats::approx(
+              x = spc[, 1],
+              y = spc[, 2],
+              n = 50,
+              method = "linear"
+            )
+
+          # make it a matrix
+          spc <- cbind(spc_list[[1]], spc_list[[2]])
+        }
+
         # filter to flim
         spc <- spc[spc[, 1] > fl[1] & spc[, 1] < fl[2],]
         
@@ -2350,7 +2353,7 @@
       }
       
       # plot frequency ticks
-      if (page_layout[i, 1] <= min(page_layout[seq_along(nrow * ncol * (sum(c(
+      if (page_layout[i, 1] <= min(page_layout[seq_len(nrow * ncol * (sum(c(
         envelope, spectrum)) + 1)), 1]) |
         is.na(prev_sgnl) & curr_dist > distances[1]) {
         at_freq <-
@@ -2386,17 +2389,18 @@
         
         
         # reduce number of points so polygon printing runs faster
-        if (nrow(envlp) > 50)
+        if (nrow(envlp) > 50) {
           envlp_list <-
-          stats::approx(
-            x = envlp[, 1],
-            y = envlp[, 2],
-            n = 50,
-            method = "linear"
-          )
-        
-        # make it a matrix
-        envlp <- cbind(envlp_list[[1]], envlp_list[[2]])
+            stats::approx(
+              x = envlp[, 1],
+              y = envlp[, 2],
+              n = 50,
+              method = "linear"
+            )
+
+          # make it a matrix
+          envlp <- cbind(envlp_list[[1]], envlp_list[[2]])
+        }
         
         # set graphic parameters
         par(mar = c(0, 0, 0, 0),
@@ -5328,10 +5332,10 @@
       
     }
     
-    if (fun == "manual_realign"){
+    if (fun %in% c("manual_realign", "auto_realign")){
       columns <- c("sound.files", "selec", "start", "end", "sound.id")
-      
-      
+
+
     checkmate::assert_names(
       x = names(args$Y),
       type = "unique",

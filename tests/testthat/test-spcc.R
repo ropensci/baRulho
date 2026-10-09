@@ -24,7 +24,7 @@ test_that("using data frame", {
   # set temporary directory
   td <- tempdir()
   
-  for (i in unique(test_sounds_est$sound.files)[-1])
+  for (i in unique(test_sounds_est$sound.files))
     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
   
   options(sound.files.path = td, pb = FALSE)
@@ -43,5 +43,24 @@ test_that("using data frame", {
   expect_equal(ncol(xc), 11)
   
   expect_equal(class(xc)[1], "data.frame")
-  
+
+})
+
+test_that("cor.method argument actually changes the result", {
+  data("test_sounds_est")
+
+  X <-
+    test_sounds_est[test_sounds_est$sound.files != "master.wav",]
+
+  X <- set_reference_sounds(X, pb = FALSE)
+
+  xc_pearson <- spcc(X = X, cor.method = "pearson", pb = FALSE)
+
+  xc_spearman <- spcc(X = X, cor.method = "spearman", pb = FALSE)
+
+  # if cor.method were ignored (hardcoded to pearson) these would be identical
+  expect_false(isTRUE(all.equal(
+    xc_pearson$cross.correlation, xc_spearman$cross.correlation
+  )))
+
 })

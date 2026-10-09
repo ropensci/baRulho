@@ -15,28 +15,87 @@ find_markers(
 )
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the sounds in the master sound file. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time, 4) "end": end time of selections and 5) "sound.id": unique identifier for each of the annotated sounds in 'X'. Columns for 'top.freq', 'bottom.freq' and 'channel' are optional. The acoustic start and end markers (added by \code{\link{master_sound_file}}) should be labeled as "start_marker" and "end_marker" respectively. Required.}
+\item{X}{Object of class \code{data.frame}, \code{selection_table}, or
+\code{extended_selection_table} (the last 2 classes are created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package) with
+the reference to the sounds in the master sound file. Must
+contain the following columns: 1) \code{sound.files}: name of the
+\code{.wav} files, 2) \code{selec}: unique selection identifier (within a
+sound file), 3) \code{start}: start time, 4) \code{end}: end time of
+selections, and 5) \code{sound.id}: unique identifier for each of the
+annotated sounds in \code{X}. Columns for \code{top.freq}, \code{bottom.freq},
+and \code{channel} are optional. The acoustic start and end markers
+(added by \code{\link[=master_sound_file]{master_sound_file()}}) should be labeled as
+\code{"start_marker"} and \code{"end_marker"} respectively. Required.}
 
-\item{markers}{Character vector with the name of the annotations (as in the column 'sound.id') to be used as templates for cross-correlation. Default is \code{c("start_marker", "end_marker")}. Using more than one marker is recommended as the time difference between their position can be used to evaluate the precision of the detection (see 'Value' section).}
+\item{markers}{Character vector with the name of the annotations (as
+in the column \code{sound.id}) to be used as templates for
+cross-correlation. Default \code{c("start_marker", "end_marker")}.
+Using more than one marker is recommended, as the time difference
+between their position can be used to evaluate the precision of
+the detection (see the Value section).}
 
-\item{test.files}{Character vector of length 1 with the name(s) of the test (re-recorded) file(s) in which to search for the marker(s). If not supplied all sound files in 'path' are used instead.}
+\item{test.files}{Character vector of length 1 with the name(s) of
+the test (re-recorded) file(s) in which to search for the
+marker(s). If not supplied, all sound files in \code{path} are used
+instead.}
 
-\item{path}{Character string containing the directory path where test (re-recorded) sound files are found.}
+\item{path}{Character string containing the directory path where
+test (re-recorded) sound files are found.}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{...}{Additional arguments to be passed to \code{\link[ohun]{template_correlator}} for setting cross-correlation parameters (e.g. 'wl', 'ovlp', etc).}
+\item{...}{Additional arguments to be passed to
+\code{\link[ohun:template_correlator]{ohun::template_correlator()}} for setting cross-correlation
+parameters (e.g. \code{wl}, \code{ovlp}, etc).}
 }
 \value{
-A data frame with test file names, marker id, maximum cross-correlation score for each marker and the start and end where it was detected. If two or more markers are used the function computes an additional column, 'time.mismatch', that compares the time difference between the two markers in the test-files against that in the master sound file. In a perfect detection the value must be 0.
+A \code{data.frame} with test file names, marker ID, maximum
+cross-correlation score for each marker, and the start and end where
+it was detected. If two or more markers are used, the function
+computes an additional column, \code{time.mismatch}, that compares the
+time difference between the two markers in the test files against
+that in the master sound file. In a perfect detection, the value must
+be 0.
 }
 \description{
-\code{find_markers} find acoustic markers on test (re-recorded) sound files using spectrographic cross-correlation.
+\code{find_markers()} finds acoustic markers on test (re-recorded) sound
+files using spectrographic cross-correlation.
 }
 \details{
-The function takes a master sound file's reference data ('X') and finds the position of acoustics markers ('markers' argument, included as selections in 'X') in the re-recorded sound files. This is used to align signals found in re-recorded sound files according to a master sound file referenced in 'X'. The position of the markers is determined as the highest spectrogram cross-correlation value for each marker using the functions \code{\link[ohun]{template_correlator}} and \code{\link[ohun]{template_detector}}. \strong{Make sure the master sound file (that referred to in 'X') is found in the same folder than the re-recorded sound files}. Take a look at the package vignette for information on how to incorporate this function into a sound degradation analysis workflow. In cases in which markers are not correctly detected editing test sound files to remove audio segments with no target sounds (before the start marker and after the end marker) can improve performance. Using a low 'hop.size' or window length 'wl' (used internally by \code{\link[ohun]{template_correlator}}) can help to improve precision. Other spectrogram types (argument 'type' in \code{\link[ohun]{template_correlator}}) can sometimes show better performance when markers are highly degraded. If frequency range columns are included ('bottom.freq' and 'top.freq', in kHz) cross-correlation will be run on those frequency ranges. All templates must have the same sampling rate and both templates and 'files' (in which to find templates) must also have the same sampling rate.
+The function takes a master sound file's reference data (\code{X}) and
+finds the position of acoustic markers (\code{markers} argument, included
+as selections in \code{X}) in the re-recorded sound files. This is used
+to align signals found in re-recorded sound files according to a
+master sound file referenced in \code{X}. The position of the markers is
+determined as the highest spectrogram cross-correlation value for
+each marker using the functions \code{\link[ohun:template_correlator]{ohun::template_correlator()}} and
+\code{\link[ohun:template_detector]{ohun::template_detector()}}. \strong{Make sure the master sound file
+(referred to in \code{X}) is found in the same folder as the re-recorded
+sound files.} Take a look at the package vignette for information
+on how to incorporate this function into a sound degradation
+analysis workflow.
+
+In cases in which markers are not correctly detected, editing test
+sound files to remove audio segments with no target sounds (before
+the start marker and after the end marker) can improve performance.
+Using a low \code{hop.size} or window length \code{wl} (used internally by
+\code{\link[ohun:template_correlator]{ohun::template_correlator()}}) can help to improve precision. Other
+spectrogram types (argument \code{type} in \code{\link[ohun:template_correlator]{ohun::template_correlator()}})
+can sometimes show better performance when markers are highly
+degraded. If frequency range columns are included (\code{bottom.freq} and
+\code{top.freq}, in kHz), cross-correlation will be run on those frequency
+ranges. All templates must have the same sampling rate, and both
+templates and \code{files} (in which to find templates) must also have
+the same sampling rate.
 }
 \examples{
 {
@@ -68,13 +127,16 @@ The function takes a master sound file's reference data ('X') and finds the posi
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 }
 \seealso{
-\code{\link{manual_realign}}; \code{\link{auto_realign}}; \code{\link{align_test_files}}; \code{\link{master_sound_file}}
+\code{\link[=manual_realign]{manual_realign()}}, \code{\link[=auto_realign]{auto_realign()}}, and
+\code{\link[=align_test_files]{align_test_files()}}, which align the re-recorded sounds once
+markers have been found; \code{\link[=master_sound_file]{master_sound_file()}}, which creates the
+markers in the first place.
 
-Other test sound alignment:
-\code{\link[=align_test_files]{align_test_files()}},
-\code{\link[=auto_realign]{auto_realign()}},
-\code{\link[=manual_realign]{manual_realign()}},
-\code{\link[=plot_aligned_sounds]{plot_aligned_sounds()}}
+Other test sound alignment: 
+\code{\link{align_test_files}()},
+\code{\link{auto_realign}()},
+\code{\link{manual_realign}()},
+\code{\link{plot_aligned_sounds}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

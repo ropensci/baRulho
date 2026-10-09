@@ -1,25 +1,86 @@
-#' Plot blur ratio 
+#' Plot blur ratio
 #'
-#' \code{plot_blur_ratio} plots time and frequency blur ratio in sounds referenced in an extended selection table.
+#' @description
+#' `plot_blur_ratio()` plots time and frequency blur ratio in sounds
+#' referenced in an extended selection table.
+#'
 #' @inheritParams template_params
-#' @param type Character vector of length 1 indicating the type of blur ratio to plot. The two options are 'envelope' (for regular blur ratio as in \code{\link{blur_ratio}}, default) and 'spectrum' (for spectrum blur ratio as in \code{\link{spectrum_blur_ratio}}).
-#' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200.
-#' @param spec.smooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5. Can be set globally for the current R session via the "spec.smooth" option (see \code{\link[base]{options}}).
-#' @param res Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.
-#' @param flim A numeric vector of length 2 indicating the highest and lowest frequency limits (kHz) of the spectrograms, as in \code{\link[seewave]{spectro}}. Default is \code{NULL}. Alternatively, a character vector similar to \code{c("-1", "1")} in which the first number is the value to be added to the minimum bottom frequency in 'X' and the second the value to be added to the maximum top frequency in 'X'. This is computed independently for each sound id so the frequency limit better fits the frequency range of the annotated signals. This is useful when test sounds show marked differences in their frequency ranges.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Only used when plotting. Default is 70. Applied to both spectra and spectrograms on image files. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @param palette A color palette function to be used to assign colors in the
-#'   plot, as in \code{\link[seewave]{spectro}}. Default is \code{\link[viridis]{viridis}}.
-#' @param collevels	Numeric vector indicating a set of levels which are used to partition the amplitude range of the spectrogram (in dB) as in \code{\link[seewave]{spectro}}. Default is \code{seq(-120, 0, 5)}.
-#' @param colors Character vector of length 4 containing the colors to be used for the color to identify the reference sound  (element 1),  the color to identify the test sound (element 2) and the color of blurred region (element 3).
-#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples (or frequency bins if \code{spectrum = TRUE}) to use for representing power distributions. Default is 100 for \code{type = "envelope"} and 500 for \code{type = "spectrum"}. If null the raw power distribution is used (note that this can result in high RAM memory usage for large data sets).
-#' @return It returns 1 image file (in 'jpeg' format) for each blur ratio estimation, showing spectrograms of both sounds and the overlaid amplitude envelopes (or power spectra if \code{spectrum = TRUE}) as probability mass functions (PMF). Spectrograms are shown within the frequency range of the reference sound. It also returns the file path of the images invisibly.
+#' @param type Character vector of length 1 indicating the type of
+#'   blur ratio to plot. The two options are `"envelope"` (for regular
+#'   blur ratio as in [blur_ratio()], default) and `"spectrum"` (for
+#'   spectrum blur ratio as in [spectrum_blur_ratio()]).
+#' @param env.smooth Numeric vector of length 1 determining the length
+#'   of the sliding window (in amplitude samples) used for a sum
+#'   smooth for amplitude envelope calculation (used internally by
+#'   [seewave::env()]). Default `200`.
+#' @param spec.smooth Numeric vector of length 1 determining the
+#'   length of the sliding window used for a sum smooth for power
+#'   spectrum calculation (in kHz). Default `5`. Can be set globally
+#'   for the current R session via the `"spec.smooth"` option (see
+#'   [options()]).
+#' @param res Numeric argument of length 1. Controls image resolution.
+#'   Default `150` (faster), although 300-400 is recommended for
+#'   publication/presentation quality.
+#' @param flim Numeric vector of length 2 indicating the highest and
+#'   lowest frequency limits (kHz) of the spectrograms, as in
+#'   [seewave::spectro()]. Default `NULL`. Alternatively, a character
+#'   vector similar to `c("-1", "1")`, in which the first number is the
+#'   value to be added to the minimum bottom frequency in `X` and the
+#'   second the value to be added to the maximum top frequency in `X`.
+#'   This is computed independently for each sound ID, so the
+#'   frequency limit better fits the frequency range of the annotated
+#'   signals. This is useful when test sounds show marked differences
+#'   in their frequency ranges.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Only used when plotting. Default `70`.
+#'   Applied to both spectra and spectrograms on image files. Can be
+#'   set globally for the current R session via the `"ovlp"` option
+#'   (see [options()]).
+#' @param palette A color palette function to be used to assign colors
+#'   in the plot, as in [seewave::spectro()]. Default
+#'   [viridis::viridis()].
+#' @param collevels Numeric vector indicating a set of levels used to
+#'   partition the amplitude range of the spectrogram (in dB), as in
+#'   [seewave::spectro()]. Default `seq(-120, 0, 5)`.
+#' @param colors Character vector of length 4 containing the colors to
+#'   be used for the color to identify the reference sound (element
+#'   1), the color to identify the test sound (element 2), and the
+#'   color of the blurred region (element 3).
+#' @param n.samples Numeric vector of length 1 specifying the number
+#'   of amplitude samples (or frequency bins if `spectrum = TRUE`) to
+#'   use for representing power distributions. Default `100` for
+#'   `type = "envelope"` and `500` for `type = "spectrum"`. If `NULL`,
+#'   the raw power distribution is used (note that this can result in
+#'   high RAM memory usage for large data sets).
+#'
+#' @details
+#' The function generates image files (in `jpeg` format) for each
+#' possible blur ratio estimation in `X`. The image files show the
+#' spectrograms of both sounds and the overlaid power distribution
+#' (either amplitude envelopes or power spectrum, see the `type`
+#' argument) as probability mass functions (PMF). The output graphs
+#' highlight the mismatch between the compared distributions, which
+#' represents the estimated blur ratio returned by either
+#' [blur_ratio()] or [spectrum_blur_ratio()]. Spectrograms are shown
+#' within the frequency range of the reference sound, and also show
+#' dotted lines with the time (`type = "envelope"`) or frequency range
+#' (`type = "spectrum"`) in which energy distributions were computed.
+#'
+#' @return
+#' One image file (in `jpeg` format) for each blur ratio estimation,
+#' showing spectrograms of both sounds and the overlaid amplitude
+#' envelopes (or power spectra if `spectrum = TRUE`) as probability
+#' mass functions (PMF). Spectrograms are shown within the frequency
+#' range of the reference sound. It also returns the file path of the
+#' images invisibly.
+#'
+#' @seealso [envelope_correlation()], [spectrum_blur_ratio()], and
+#'   [blur_ratio()], which this function visualizes.
+#'
 #' @export
 #' @name plot_blur_ratio
-#' @details The function generates image files (in 'jpeg' format) for each possible blur ratio estimation in 'X'. The image files show the spectrograms of both sounds and the overlaid power distribution (either amplitude envelopes or power spectrum, see argument 'type') as probability mass functions (PMF). The output graphs highlight the mismatch between the compared distribution which represent the estimated blur ratio returned by either \code{\link{blur_ratio}} or \code{\link{spectrum_blur_ratio}}. Spectrograms are shown within the frequency range of the reference sound and also show dotted lines with the time (type = "envelope") or frequency range (type = "spectrum") in which energy distributions where computed.
 #' @family quantify degradation
-#' @seealso \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}, \code{\link{blur_ratio}}
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
@@ -169,7 +230,7 @@ plot_blur_ratio <-
     file_paths <-
       warbleR:::.pblapply(
         pbar = pb,
-        X = which(!is.na(X$.sgnl.temp)),
+        X = which(!is.na(X$reference)),
         cl = cl,
         message = "producing images", 
         current = 2,

@@ -45,11 +45,11 @@ test_that("using data frame", {
   # set temporary directory
   td <- tempdir()
 
-  for (i in unique(test_sounds_est$sound.files)[-1])
+  for (i in unique(test_sounds_est$sound.files))
     writeWave(object = attr(test_sounds_est, "wave.objects")[[i]], file.path(td, i))
   
   
-  files <- file.path(td, unique(test_sounds_est$sound.files)[-1])
+  files <- file.path(td, unique(test_sounds_est$sound.files))
   stopifnot(file.exists(files))
   # options(sound.files.path = td, pb = FALSE)
   

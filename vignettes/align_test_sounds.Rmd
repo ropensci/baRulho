@@ -89,7 +89,9 @@ This vignette deals with two things: how to create synthetic sounds for playback
 
 -**Sound ID**: ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a distance.
 
--**Ambient noise**: energy from background sounds in the recording, excluding sounds of interest.  
+-**Transect**: a set of re-recordings made along a single line or path away from the sound source, at increasing distances. Sounds are compared to their reference within the same transect whenever possible.
+
+-**Ambient noise**: energy from background sounds in the recording, excluding sounds of interest.
 
 -**Test sound**: sounds re-recorded far from the source to test for propagation/degradation (also refer to as 're-recorded' sounds).
 
@@ -218,7 +220,7 @@ names(attributes(synth_est2)$wave.objects)
 # Create master sound file for playback
 
 The function `master_sound_file()` creates a master sound file (as you probably guessed) for playback experiments. The function takes wave objects from an data frame or (extended) selection table containing the model sounds and concatenates them in a single sound file (with some silence in between sounds which length can be modified). `master_sound_file()` adds acoustic markers at the start and end of the playback that can be used to time-sync re-recorded sounds, which streamlines quantification of acoustic degradation. 
-The following example shows how to create a master sound file using the synthetic sounds generated above. For the synthetic sounds we need to add a little space between the top and bottom frequency because `sim_songs()` make those values exactly the same for pure tones: 
+The following example shows how to create a master sound file using the synthetic sounds generated above. For the synthetic sounds we need to add a little space between the top and bottom frequency because `synth_sounds()` make those values exactly the same for pure tones:
 
 ```{r master sound file, eval = TRUE, echo = TRUE, fig.show='hide'}
 
@@ -372,7 +374,7 @@ unique(test_sounds_est$sound.files)
 
 &nbsp;
 
-Their names are self-explanatory: a master sound file ("master.wav") and its annotations, a reference sound file ("reference_1m.wav") and two test files ("test_10m.wav" and "test_20m.wav") re-recorded at 10 and 20 m respectively.
+Their names are self-explanatory: a master sound file ("master.wav") and its annotations, and 5 test (re-recorded) sound files, named after the transect ("open" or "closed") and distance (1, 10 or 30 m) at which they were recorded (e.g. "10m_closed.wav", "1m_open.wav").
 
 Now we will save those files in a temporary working directory (those objects are extended selection tables in the R environment) to resemble the usual case in which the acoustic data is found in sound files.
 
@@ -446,7 +448,6 @@ aligned_tests <-
     X = master_annotations,
     Y = markers_position,
     by.song = TRUE,
-    remove.markers = FALSE,
     path = tempdir()
   )
 ```
@@ -530,7 +531,7 @@ Spectrograms include the first few seconds of the sound files (controlled by 'du
 
 When alignments are done manually (or when broadcasting devices add some short delays as the case of some bluetooth transmitters) there could be some small misalignment between the inferred versus the actual start time of re-recorded sounds. This is problematic for quantifying degradation in [baRulho](https://docs.ropensci.org/baRulho//) (and other sound analysis software) as precise alignment of sound is crucial for the accuracy of downstream measures of sound degradation. 
 
-Misalignment can be fixed with the function `auto_realign()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `manual_realign()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation. 
+Misalignment can be fixed with the function `auto_realign()`. This function uses spectrogram cross-correlation to sync the position in time of sounds with regard to a reference sound. `auto_realign()` takes the sound recorded at the closest distance to the source as the reference sound. The function calls [warbleR](https://cran.r-project.org/package=warbleR)'s `cross_correlation()` (just as we did above) internally to align sounds using cross-correlation.
 We can simulate a aligned data set in which test sound are slightly off their position: 
 
 ```{r, eval = TRUE}
@@ -613,7 +614,7 @@ Please report any bugs [here](https://github.com/ropensci/baRulho/issues).
 
 The package [baRulho](https://docs.ropensci.org/baRulho//) should be cited as follows:
 
-Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0.
+`r citation("baRulho")$textVersion`
 
 ---
 
@@ -621,8 +622,8 @@ Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic s
 
 1. Araya-Salas, M. (2017). *Rraven: connecting R and Raven bioacoustic software*. R package version 1.0.0.
 
-1.  Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal) acoustic signals in R*. R package version 1.0.0
-  
+1.  `r citation("baRulho")$textVersion`
+
 1. Araya-Salas M, Smith-Vidaurre G. (2017) *warbleR: An R package to streamline analysis of animal acoustic signals*. Methods Ecol Evol 8:184–191.
 
 1. Dabelsteen, T., Larsen, O. N., & Pedersen, S. B. (1993). *Habitat-induced degradation of sound signals: Quantifying the effects of communication sounds and bird location on blur ratio, excess attenuation, and signal-to-noise ratio in blackbird song*. The Journal of the Acoustical Society of America, 93(4), 2206.

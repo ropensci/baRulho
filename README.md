@@ -2,14 +2,17 @@ baRulho: quantifying degradation of (animal) sounds
 ================
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+
 <!-- badges: start -->
 
 [![Status at rOpenSci Software Peer
 Review](https://badges.ropensci.org/609_status.svg)](https://github.com/ropensci/software-review/issues/609)[![lifecycle](https://img.shields.io/badge/lifecycle-maturing-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-[![Dependencies](https://tinyverse.netlify.com/badge/baRulho)](https://cran.r-project.org/package=baRulho)
+[![Dependencies](https://tinyverse.netlify.app/badge/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Project Status: Active The project has reached a stable, usable state
 and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![License: GPL
+v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
@@ -40,7 +43,7 @@ These experiments aim to answer research questions such as:
 A common sequence of steps to experimentally test hypotheses related to
 sound propagation is depicted in the following diagram:
 
-<img src="man/figures/analysis_workflow.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/analysis_workflow.png" alt="" width="100%" style="display: block; margin: auto;" />
 
 *Diagram depicting a typical workflow for a experiment working on signal
 propagation and degradation. Nodes with black font indicate steps that
@@ -99,7 +102,7 @@ this way:
 install.packages("baRulho", repos = "https://ropensci.r-universe.dev")
 ```
 
-    ## Installing package into '/home/marce/R/x86_64-pc-linux-gnu-library/4.3'
+    ## Installing package into '/usr/local/lib/R/site-library'
     ## (as 'lib' is unspecified)
 
 To install the latest developmental version from
@@ -121,8 +124,6 @@ library(baRulho)
 
 Further system requirements due to the dependency
 [seewave](https://cran.r-project.org/package=seewave) may be needed.
-Take a look a [this link](https://rug.mnhn.fr/seewave/inst.html) for
-instruction on how to install/troubleshoot these external dependencies.
 
 ## Other packages
 

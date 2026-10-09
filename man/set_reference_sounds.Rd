@@ -13,29 +13,98 @@ set_reference_sounds(
 )
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations . Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass, 7) "sound.id": ID of sounds used to identify counterparts across distances (and transects if more than 1) and 8) "distance": distance (numeric) at which each test sound was re-recorded. A 'transect' column labeling those sounds recorded in the same transect is required if 'method = 2'. 'X' can only have 1 copy for any given sound id in a distance or a transect-distance combination (if column 'transect' is supplied). In addition, 'selec' column values in 'X' cannot be duplicated within a sound file ('sound.files' column) as this combination is used to refer to specific rows in the output 'reference' column.}
+\item{X}{Object of class \code{data.frame}, \code{selection_table}, or
+\code{extended_selection_table} (the last 2 classes are created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package) with
+the test sound files' annotations. Must contain the following
+columns: 1) \code{sound.files}: name of the \code{.wav} files, 2) \code{selec}:
+unique selection identifier (within a sound file), 3) \code{start}:
+start time and 4) \code{end}: end time of selections, 5)
+\code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances (and transects, if more
+than 1), and 8) \code{distance}: distance (numeric) at which each test
+sound was re-recorded. A \code{transect} column labeling those sounds
+recorded in the same transect is required if \code{method = 2}. \code{X}
+can only have 1 copy for any given sound ID in a distance or a
+transect-distance combination (if the \code{transect} column is
+supplied). In addition, \code{selec} column values in \code{X} cannot be
+duplicated within a sound file (\code{sound.files} column), as this
+combination is used to refer to specific rows in the output
+\code{reference} column.}
 
-\item{method}{Integer vector of length 1 to indicate the 'experimental design' for measuring degradation. Two methods are available:
+\item{method}{Integer vector of length 1 to indicate the
+"experimental design" for measuring degradation. Two methods are
+available:
 \itemize{
-\item \code{1}: compare sounds (by 'sound.id') with their counterpart that was recorded at the closest distance to source (e.g. compare sounds recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This is the default method. The function will try to use references from the same transect. However, if there is another test sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect.
-\item \code{2}: compare all sounds with their counterpart recorded at the distance immediately before within a transect (e.g. a sound recorded at 10m compared with the same sound recorded at 5m, then sound recorded at 15m compared with same sound recorded at 10m and so on). 'transect' column in 'X' is required.
+\item \strong{\code{1}}: compare sounds (by \code{sound.id}) with their counterpart
+that was recorded at the closest distance to the source (e.g.
+compare sounds recorded at 5m, 10m, and 15m with their
+counterpart recorded at 1m). This is the default method. The
+function will try to use references from the same transect.
+However, if there is another test sound from the same
+\code{sound.id} at a shorter distance in other transects, it will be
+used as reference instead. This behavior aims to account for
+the fact that in this type of experiment, reference sounds are
+typically recorded at 1 m and at a single transect.
+\item \strong{\code{2}}: compare all sounds with their counterpart recorded at
+the distance immediately before within a transect (e.g. a sound
+recorded at 10m compared with the same sound recorded at 5m,
+then the sound recorded at 15m compared with the same sound
+recorded at 10m, and so on). The \code{transect} column in \code{X} is
+required.
 }
-Can be set globally for the current R session via the "method" option (see \code{\link[base]{options}}).}
 
-\item{cores}{Numeric vector of length 1. Controls whether parallel computing is applied by specifying the number of cores to be used. Default is 1 (i.e. no parallel computing). Can be set globally for the current R session via the "mc.cores" option (see \code{\link[base]{options}}).}
+Can be set globally for the current R session via the \code{"method"}
+option (see \code{\link[=options]{options()}}).}
 
-\item{pb}{Logical argument to control if progress bar is shown. Default is \code{TRUE}.  Can be set globally for the current R session via the "pb" option (see \code{\link[base]{options}}).}
+\item{cores}{Numeric vector of length 1. Controls whether parallel
+computing is applied by specifying the number of cores to be used.
+Default \code{1} (i.e. no parallel computing). Can be set globally for
+the current R session via the \code{"mc.cores"} option (see
+\code{\link[=options]{options()}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{pb}{Logical argument to control if progress bar is shown.
+Default \code{TRUE}. Can be set globally for the current R session via
+the \code{"pb"} option (see \code{\link[=options]{options()}}).}
+
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 }
 \value{
-An object similar to 'X' with one additional column, 'reference', with the ID of the sounds to be used as reference by degradation-quantifying functions in downstream analyses. The ID is created as \code{paste(X$sound.files, X$selec, sep = "-")}.
+An object similar to \code{X} with one additional column, \code{reference},
+with the ID of the sounds to be used as reference by
+degradation-quantifying functions in downstream analyses. The ID is
+created as \code{paste(X$sound.files, X$selec, sep = "-")}.
 }
 \description{
-\code{set_reference_sounds} set rows to be used as reference for each test sound.
+\code{set_reference_sounds()} sets rows to be used as reference for each
+test sound.
 }
 \details{
-This function adds a 'reference' column defining which sounds will be used by other functions as reference. Two methods are available (see 'methods' argument description). For method 1 the function will attempt to use re-recorded sounds from the shortest distance in the same transect as reference. However, if there is another re-recorded sound from the same 'sound.id' at a shorter distance in other transects, it will be used as reference instead. This behavior aims to account for the fact that in this type of experiments reference sounds are typically recorded at 1 m and at single transect. Note that if users want to define their own reference sound this can be set manually. If so, NAs must be used to indicate rows to be ignored. References must be indicated as a the combination of the 'sound.files' and 'selec' column. For instance, '10m.wav-1' indicates that the row in which the 'selec' column is '1' and the sound file is '10m.wav' should be used as reference. The function also checks that the information 'X' is in the right format so it wont produce errors in downstream analysis (see 'X' argument description for details on format). The function will ignore rows in which the column 'sound.id' is equals to 'ambient', 'start_marker' or 'end_marker'.
+This function adds a \code{reference} column defining which sounds will
+be used by other functions as reference. Two methods are available
+(see the \code{method} argument description). For method 1, the function
+will attempt to use re-recorded sounds from the shortest distance in
+the same transect as reference. However, if there is another
+re-recorded sound from the same \code{sound.id} at a shorter distance in
+other transects, it will be used as reference instead. This behavior
+aims to account for the fact that in this type of experiment,
+reference sounds are typically recorded at 1 m and at a single
+transect. Note that if users want to define their own reference
+sound, this can be set manually: \code{NA}s must be used to indicate rows
+to be ignored, and references must be indicated as the combination
+of the \code{sound.files} and \code{selec} column. For instance, \code{"10m.wav-1"}
+indicates that the row in which the \code{selec} column is \code{1} and the
+sound file is \code{"10m.wav"} should be used as reference. The function
+also checks that the information in \code{X} is in the right format so
+it won't produce errors in downstream analysis (see the \code{X}
+argument description for details on format). The function will
+ignore rows in which the \code{sound.id} column equals \code{"ambient"},
+\code{"start_marker"}, or \code{"end_marker"}.
 }
 \examples{
 {
@@ -56,19 +125,20 @@ Y <- set_reference_sounds(X = X, method = 2)
 Araya-Salas, M., & Smith-Vidaurre, G. (2017). warbleR: An R package to streamline analysis of animal acoustic signals. Methods in Ecology and Evolution, 8(2), 184-191.
 }
 \seealso{
-\code{\link[warbleR]{check_sound_files}}, \code{\link[warbleR]{check_sels}}
+\code{\link[warbleR:check_sound_files]{warbleR::check_sound_files()}} and \code{\link[warbleR:check_sels]{warbleR::check_sels()}},
+used internally to validate \code{X}.
 
-Other quantify degradation:
-\code{\link[=blur_ratio]{blur_ratio()}},
-\code{\link[=detection_distance]{detection_distance()}},
-\code{\link[=envelope_correlation]{envelope_correlation()}},
-\code{\link[=plot_blur_ratio]{plot_blur_ratio()}},
-\code{\link[=plot_degradation]{plot_degradation()}},
-\code{\link[=signal_to_noise_ratio]{signal_to_noise_ratio()}},
-\code{\link[=spcc]{spcc()}},
-\code{\link[=spectrum_blur_ratio]{spectrum_blur_ratio()}},
-\code{\link[=spectrum_correlation]{spectrum_correlation()}},
-\code{\link[=tail_to_signal_ratio]{tail_to_signal_ratio()}}
+Other quantify degradation: 
+\code{\link{blur_ratio}()},
+\code{\link{detection_distance}()},
+\code{\link{envelope_correlation}()},
+\code{\link{plot_blur_ratio}()},
+\code{\link{plot_degradation}()},
+\code{\link{signal_to_noise_ratio}()},
+\code{\link{spcc}()},
+\code{\link{spectrum_blur_ratio}()},
+\code{\link{spectrum_correlation}()},
+\code{\link{tail_to_signal_ratio}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

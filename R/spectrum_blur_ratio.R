@@ -1,19 +1,62 @@
 #' Measure blur ratio in the frequency domain
 #'
-#' \code{spectrum_blur_ratio} measures blur ratio of frequency spectra from sounds referenced in an extended selection table.
+#' @description
+#' `spectrum_blur_ratio()` measures blur ratio of frequency spectra
+#' from sounds referenced in an extended selection table. It is
+#' analogous to [blur_ratio()], but operates in the frequency domain
+#' rather than the time domain.
+#'
 #' @inheritParams template_params
-#' @param spec.smooth Numeric vector of length 1 determining the length of the sliding window used for a sum smooth for power spectrum calculation (in kHz). Default is 5.
-#' @param spectra Logical to control if power spectra are returned (as attributes). Default is \code{FALSE}.
-#' @param res Numeric argument of length 1. Controls image resolution. Default is 150 (faster) although 300 - 400 is recommended for publication/presentation quality.
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
-#' is NULL. If supplied, 'hop.size' is ignored. Applied to both spectra and spectrograms on image files.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Applied to both spectra and spectrograms on image files. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @return Object 'X' with an additional column, 'spectrum.blur.ratio', containing the computed spectrum blur ratio values. If \code{spectra = TRUE} the output would include power spectra for all sounds as attributes ('attributes(X)$spectra').
-#' @param n.bins Numeric vector of length 1 specifying the number of frequency bins to use for representing power spectra. Default is 100. If null the raw power spectrum is used (note that this can result in high RAM memory usage for large data sets). Power spectrum values are interpolated using \code{\link[stats]{approx}}.
+#' @param spec.smooth Numeric vector of length 1 determining the
+#'   length of the sliding window used for a sum smooth for power
+#'   spectrum calculation (in kHz). Default `5`.
+#' @param spectra Logical to control if power spectra are returned (as
+#'   attributes). Default `FALSE`.
+#' @param res Numeric argument of length 1. Controls image resolution.
+#'   Default `150` (faster), although 300-400 is recommended for
+#'   publication/presentation quality.
+#' @param wl Numeric vector of length 1 specifying the window length
+#'   of the spectrogram. Default `NULL`. If supplied, `hop.size` is
+#'   ignored. Applied to both spectra and spectrograms on image files.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Default `70`. Applied to both spectra and
+#'   spectrograms on image files. Can be set globally for the current
+#'   R session via the `"ovlp"` option (see [options()]).
+#' @param n.bins Numeric vector of length 1 specifying the number of
+#'   frequency bins to use for representing power spectra. Default
+#'   `100`. If `NULL`, the raw power spectrum is used (note that this
+#'   can result in high RAM memory usage for large data sets). Power
+#'   spectrum values are interpolated using [stats::approx()].
+#'
+#' @details
+#' Spectral blur ratio measures the degradation of sound as a function
+#' of the change in sound power in the frequency domain, analogous to
+#' the blur ratio proposed by Dabelsteen et al. (1993) for the time
+#' domain (and implemented in [blur_ratio()]). Low values indicate low
+#' degradation of sounds. The function measures the blur ratio of
+#' spectra from sounds in which a reference playback has been
+#' re-recorded at different distances. Spectral blur ratio is measured
+#' as the mismatch between power spectra (expressed as probability
+#' density functions) of the reference sound and the re-recorded
+#' sound. The function compares each sound type to the corresponding
+#' reference sound. The `sound.id` column must be used to tell the
+#' function to only compare sounds belonging to the same category (e.g.
+#' song-types). Two methods for setting the experimental design are
+#' provided. All wave objects in the extended selection table must have
+#' the same sampling rate, so the length of spectra is comparable. The
+#' function uses [seewave::spec()] internally to compute power spectra.
+#' `NA` is returned if at least one of the power spectra cannot be
+#' computed.
+#'
+#' @return
+#' Object `X` with an additional column, `spectrum.blur.ratio`,
+#' containing the computed spectrum blur ratio values. If
+#' `spectra = TRUE`, the output would also include power spectra for
+#' all sounds as attributes (`attributes(X)$spectra`).
+#'
 #' @export
 #' @name spectrum_blur_ratio
-#' @details Spectral blur ratio measures the degradation of sound as a function of the change in sound power in the frequency domain, analogous to the blur ratio proposed by Dabelsteen et al (1993) for the time domain (and implemented in \code{\link{blur_ratio}}). Low values indicate low degradation of sounds. The function measures the blur ratio of spectra from sounds in which a reference playback has been re-recorded at different distances. Spectral blur ratio is measured as the mismatch between power spectra (expressed as probability density functions) of the reference sound and the re-recorded sound. The function compares each sound type to the corresponding reference sound. The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of spectra is comparable. The function uses \code{\link[seewave]{spec}} internally to compute power spectra. NA is returned if at least one the power spectra cannot be computed.
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
@@ -53,7 +96,7 @@
 #'   }
 #' }
 #'
-#' @seealso \code{\link{blur_ratio}}
+#' @seealso [blur_ratio()], the analogous metric in the time domain.
 #' @family quantify degradation
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
 #' @references
@@ -152,7 +195,7 @@ spectrum_blur_ratio <-
     
     # get blur ratio
     # calculate all spectra apply function
-    X$spectrum.blur.ratio <- spectrum_blu_ratio_list <- 
+    spectrum_blu_ratio_list <-
     warbleR:::.pblapply(
         X = seq_len(nrow(X)),
         pbar = pb,

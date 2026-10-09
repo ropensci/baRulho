@@ -1,29 +1,86 @@
 #' Measure attenuation as signal-to-noise ratio
 #'
-#' \code{signal_to_noise_ratio} measures attenuation as signal-to-noise ratio of sounds referenced in an extended selection table.
+#' @description
+#' `signal_to_noise_ratio()` measures attenuation as the signal-to-noise
+#' ratio of sounds referenced in an extended selection table.
+#'
 #' @inheritParams template_params
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations (typically the output of \code{\link{align_test_files}}). Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances (only needed for "custom" noise reference, see "noise.ref" argument). If the "sound.id" column is supplied then SNR is only computed for those rows with a sound.id different from "ambient", "start_marker" or "end_marker". 
-#' @param mar numeric vector of length 1. Specifies the margins adjacent to
-#'   the start point of the annotation over which to measure ambient noise.
-#' @param eq.dur Logical. Controls whether the ambient noise segment that is measured has the same duration
-#' to that of the sound (if \code{TRUE}. Default is \code{FALSE}). If \code{TRUE} then 'mar' and 'noise.ref' arguments are ignored.
-#' @param snr.formula Integer vector of length 1. Selects the formula to be used to calculate the signal-to-noise ratio (S = signal
-#' , N = background noise):
-#' \itemize{
-#' \item \code{1}: ratio of S amplitude envelope root mean square to N amplitude envelope root mean square
-#'  (\code{20 * log10(rms(env(S))/rms(env(N)))}) as described by Darden (2008).
-#' \item \code{2}: ratio of the difference between S amplitude envelope root mean square and N amplitude envelope root mean square to N amplitude envelope root mean square (\code{20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))}, as described by Dabelsteen et al (1993).
-#' }
-#' @param hop.size A numeric vector of length 1 specifying the time window duration (in ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).
-#' @param wl A numeric vector of length 1 specifying the window length of the spectrogram, default
-#' is NULL. Ignored if \code{bp = NULL}. If supplied, 'hop.size' is ignored. Note that lower values will increase time resolution, which is more important for amplitude ratios calculations.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Only used for bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @return Object 'X' with an additional column, 'signal.to.noise.ratio',
-#' with the signal-to-noise ratio values (in dB).
+#' @param X Object of class `data.frame`, `selection_table`, or
+#'   `extended_selection_table` (the last 2 classes are created by
+#'   [warbleR::selection_table()] from the **warbleR** package) with
+#'   the test sound files' annotations (typically the output of
+#'   [align_test_files()]). Must contain the following columns: 1)
+#'   `sound.files`: name of the `.wav` files, 2) `selec`: unique
+#'   selection identifier (within a sound file), 3) `start`: start
+#'   time and 4) `end`: end time of selections, 5) `bottom.freq`: low
+#'   frequency for bandpass, 6) `top.freq`: high frequency for
+#'   bandpass, and 7) `sound.id`: ID of sounds used to identify
+#'   counterparts across distances (only needed for `"custom"` noise
+#'   reference, see the `noise.ref` argument). If the `sound.id` column
+#'   is supplied, then SNR is only computed for those rows with a
+#'   `sound.id` different from `"ambient"`, `"start_marker"`, or
+#'   `"end_marker"`.
+#' @param mar Numeric vector of length 1. Specifies the margins
+#'   adjacent to the start point of the annotation over which to
+#'   measure ambient noise.
+#' @param eq.dur Logical. Controls whether the ambient noise segment
+#'   that is measured has the same duration as that of the sound (if
+#'   `TRUE`; default `FALSE`). If `TRUE`, then the `mar` and
+#'   `noise.ref` arguments are ignored.
+#' @param snr.formula Integer vector of length 1. Selects the formula
+#'   to be used to calculate the signal-to-noise ratio (S = signal, N =
+#'   background noise):
+#'   - **`1`**: ratio of S amplitude envelope root mean square to N
+#'     amplitude envelope root mean square
+#'     (`20 * log10(rms(env(S))/rms(env(N)))`) as described by Darden
+#'     (2008).
+#'   - **`2`**: ratio of the difference between S amplitude envelope
+#'     root mean square and N amplitude envelope root mean square to N
+#'     amplitude envelope root mean square
+#'     (`20 * log10((rms(env(S)) - rms(env(N)))/rms(env(N)))`), as
+#'     described by Dabelsteen et al. (1993).
+#' @param hop.size Numeric vector of length 1 specifying the time
+#'   window duration (in ms). Default `1` ms, which is equivalent to
+#'   ~45 `wl` for a 44.1 kHz sampling rate. Ignored if `wl` is
+#'   supplied. Can be set globally for the current R session via the
+#'   `"hop.size"` option (see [options()]).
+#' @param wl Numeric vector of length 1 specifying the window length
+#'   of the spectrogram. Default `NULL`. Ignored if `bp = NULL`. If
+#'   supplied, `hop.size` is ignored. Note that lower values will
+#'   increase time resolution, which is more important for amplitude
+#'   ratio calculations.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Default `0`. Only used for bandpass
+#'   filtering. Can be set globally for the current R session via the
+#'   `"ovlp"` option (see [options()]).
+#'
+#' @details
+#' Signal-to-noise ratio (SNR) measures sound amplitude level in
+#' relation to ambient noise. Noise is measured on the background noise
+#' immediately before the test sound. A general margin in which
+#' ambient noise will be measured must be specified. Alternatively, a
+#' selection of ambient noise can be used as reference (see the
+#' `noise.ref` argument). When margins overlap with another sound
+#' nearby, SNR will be inaccurate, so margin length should be carefully
+#' considered. Any SNR less than or equal to one suggests background
+#' noise is equal to or overpowering the sound. The function will
+#' measure signal-to-noise ratio within the supplied frequency range
+#' (e.g. bandpass) of the reference signal (`bottom.freq` and
+#' `top.freq` columns in `X`) by default (that is, when
+#' `bp = "freq.range"`). SNR can be ~0 when both tail and signal have
+#' very low amplitude.
+#'
+#' @return
+#' Object `X` with an additional column, `signal.to.noise.ratio`, with
+#' the signal-to-noise ratio values (in dB).
+#'
+#' @seealso [excess_attenuation()], for a related degradation metric
+#'   that accounts for distance.
+#'
 #' @export
 #' @name signal_to_noise_ratio
-#' @details Signal-to-noise ratio (SNR) measures sound amplitude level in relation to ambient noise. Noise is measured on the background noise immediately before the test sound. A general margin in which ambient noise will be measured must be specified. Alternatively, a selection of ambient noise can be used as reference (see 'noise.ref' argument). When margins overlap with another sound nearby, SNR will be inaccurate, so margin length should be carefully considered. Any SNR less than or equal to one suggests background noise is equal to or overpowering the sound. The function will measure signal-to-noise ratio within the supplied frequency range (e.g. bandpass) of the reference signal ('bottom.freq' and 'top.freq' columns in 'X') by default (that is, when \code{bp = 'freq.range'}. SNR can be ~0 when both tail and signal have very low amplitude.
+#' @family quantify degradation
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")
@@ -36,9 +93,7 @@
 #' }
 #'
 #' @author Marcelo Araya-Salas (\email{marcelo.araya@@ucr.ac.cr})
-#' @family quantify degradation
-#' @seealso \code{\link{excess_attenuation}}
-#' @references 
+#' @references
 #' Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 #' Holland J, Dabelsteen T, Pedersen SB, Paris AL (2001) Potential ranging cues contained within the energetic pauses of transmitted wren song. Bioacoustics 12(1):3-20.
 #' Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound transmission at ground level in a short-grass prairie habitat and its implications for long-range communication in the swift fox *Vulpes velox*. The Journal of the Acoustical Society of America, 124(2), 758-766.

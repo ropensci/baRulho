@@ -28,5 +28,16 @@ test_that("basic", {
   expect_true(mean(unaligned_test_sounds_est$start) > mean(rts$start))
 
   expect_equal(class(rts)[1], "extended_selection_table")
-  
+
+})
+
+test_that("errors informatively when Y is missing required columns", {
+  data("test_sounds_est")
+  data("master_est")
+
+  bad_master <- master_est
+  bad_master$sound.id <- NULL
+
+  expect_error(auto_realign(X = test_sounds_est, Y = bad_master))
+
 })

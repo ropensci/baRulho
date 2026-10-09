@@ -1,18 +1,38 @@
 #' Estimate attenuation of sound pressure level
 #'
-#' \code{attenuation} estimates atmospheric attenuation and atmospheric absorption.
+#' @description
+#' `attenuation()` estimates atmospheric attenuation and atmospheric
+#' absorption, calculating the geometric, atmospheric, and habitat
+#' attenuation, as well as the overall expected attenuation (the sum of
+#' the other three), based on temperature, relative humidity, atmospheric
+#' pressure, and sound frequency.
+#'
 #' @param frequency Numeric vector of length 1 with frequency (in Hertz).
-#' @param dist0 Numeric vector of length 1 with distance (m) for the reference SPL.
-#' @param dist Numeric vector of length 1 with distance (m) over which a sound propagates.
-#' @param temp Numeric vector of length 1 with frequency (in Celsius). Default is 20.
-#' @param rh Numeric vector of length 1 with relative humidity (in percentage). Default is 60.
-#' @param pa Numeric vector of length 1 with atmospheric (barometric) pressure in Pa (standard: 101325, default). Used for atmospheric attenuation.
-#' @param hab.att.coef Attenuation coefficient of the habitat (in dB/kHz/m).
-#' @return Returns the geometric, atmospheric and habitat attenuation (in dB) as well as the combined attenuation.
+#' @param dist0 Numeric vector of length 1 with distance (m) for the
+#'   reference SPL.
+#' @param dist Numeric vector of length 1 with distance (m) over which a
+#'   sound propagates.
+#' @param temp Numeric vector of length 1 with temperature (in Celsius).
+#'   Default `20`.
+#' @param rh Numeric vector of length 1 with relative humidity (in
+#'   percentage). Default `60`.
+#' @param pa Numeric vector of length 1 with atmospheric (barometric)
+#'   pressure in Pa (standard: `101325`, default). Used for atmospheric
+#'   attenuation.
+#' @param hab.att.coef Attenuation coefficient of the habitat (in
+#'   dB/kHz/m).
+#'
+#' @details
+#' Attenuation values are given in dB. The function is modified from
+#' <http://www.sengpielaudio.com> and
+#' <https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB>.
+#'
+#' @return
+#' A `data.frame` with the geometric, atmospheric, and habitat
+#' attenuation (in dB), as well as the combined attenuation.
+#'
 #' @export
 #' @name attenuation
-#' @details Calculate the geometric, atmospheric and habitat attenuation and the overall expected attenuation (the sum of the other three) based on temperature, relative humidity, atmospheric pressure and sound frequency. Attenuation values are given in dB. The function is modified from http://www.sengpielaudio.com
-## and https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB.
 #' @examples {
 #'   # measure attenuation
 #'   attenuation(frequency = 2000, dist = 50, dist0 = 1)
@@ -89,7 +109,7 @@ attenuation <-
         frequency = frequency,
         dist = dist,
         geometric.attenuation = geom_att,
-        atmopheric.attenuation = atm_att,
+        atmospheric.attenuation = atm_att,
         habitat.attenuation = hab_att,
         combined.attenuation = total_att
       )

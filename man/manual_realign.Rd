@@ -30,60 +30,143 @@ manual_realign(
 )
 }
 \arguments{
-\item{X}{Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the test sound files' annotations (typically the output of \code{\link{align_test_files}}) to be aligned. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass, 6) "top.freq": high frequency for bandpass and 7) "sound.id": ID of sounds used to identify counterparts across distances. Each sound must have a unique ID within a given distance.}
+\item{X}{Object of class \code{data.frame}, \code{selection_table}, or
+\code{extended_selection_table} (the last 2 classes are created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package) with
+the test sound files' annotations (typically the output of
+\code{\link[=align_test_files]{align_test_files()}}) to be aligned. Must contain the following
+columns: 1) \code{sound.files}: name of the \code{.wav} files, 2) \code{selec}:
+unique selection identifier (within a sound file), 3) \code{start}:
+start time and 4) \code{end}: end time of selections, 5)
+\code{bottom.freq}: low frequency for bandpass, 6) \code{top.freq}: high
+frequency for bandpass, and 7) \code{sound.id}: ID of sounds used to
+identify counterparts across distances. Each sound must have a
+unique ID within a given distance.}
 
-\item{Y}{object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the master sound file annotations. This should be the same data than that was used for finding the position of markers in \code{\link{find_markers}}. It should also contain a 'sound.id' column.}
+\item{Y}{Object of class \code{data.frame}, \code{selection_table}, or
+\code{extended_selection_table} (the last 2 classes are created by
+\code{\link[warbleR:selection_table]{warbleR::selection_table()}} from the \strong{warbleR} package) with
+the master sound file annotations. This should be the same data
+used for finding the position of markers in \code{\link[=find_markers]{find_markers()}}. It
+should also contain a \code{sound.id} column.}
 
-\item{hop.size}{A numeric vector of length 1 specifying the time window duration (in ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz sampling rate. Ignored if 'wl' is supplied. Can be set globally for the current R session via the "hop.size" option (see \code{\link[base]{options}}).}
+\item{hop.size}{Numeric vector of length 1 specifying the time window
+duration (in ms). Default \code{11.6} ms, which is equivalent to 512
+\code{wl} for a 44.1 kHz sampling rate. Ignored if \code{wl} is supplied. Can
+be set globally for the current R session via the \code{"hop.size"}
+option (see \code{\link[=options]{options()}}).}
 
-\item{wl}{a vector with a single even integer number specifying the window length of the spectrogram, default is \code{NULL}. If supplied, 'hop.size' is ignored. Odd integers will be rounded up to the nearest even number. Can be set globally for the current R session via the "wl" option (see \code{\link[base]{options}}).}
+\item{wl}{A vector with a single even integer number specifying the
+window length of the spectrogram. Default \code{NULL}. If supplied,
+\code{hop.size} is ignored. Odd integers will be rounded up to the
+nearest even number. Can be set globally for the current R session
+via the \code{"wl"} option (see \code{\link[=options]{options()}}).}
 
-\item{ovlp}{Numeric vector of length 1 specifying the percentage of overlap between two consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 0. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).}
+\item{ovlp}{Numeric vector of length 1 specifying the percentage of
+overlap between two consecutive windows, as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Default \code{0}. Can be set globally for the
+current R session via the \code{"ovlp"} option (see \code{\link[=options]{options()}}).}
 
-\item{path}{Character string containing the directory path where the sound files are found. Only needed when 'X' is not an extended selection table. If not supplied the current working directory is used. Can be set globally for the current R session via the "sound.files.path" option (see \code{\link[base]{options}}).}
+\item{path}{Character string containing the directory path where the
+sound files are found. Only needed when \code{X} is not an extended
+selection table. If not supplied the current working directory is
+used. Can be set globally for the current R session via the
+\code{"sound.files.path"} option (see \code{\link[=options]{options()}}).}
 
-\item{collevels}{A numeric vector of length 3. Specifies levels to partition the amplitude range of the spectrogram (in dB). The more levels the higher the resolution of the spectrogram. Default is seq(-120, 0, 1).}
+\item{collevels}{Numeric vector of length 3. Specifies levels to
+partition the amplitude range of the spectrogram (in dB). The more
+levels, the higher the resolution of the spectrogram. Default
+\code{seq(-120, 0, 1)}.}
 
-\item{palette}{Color palette function for spectrogram. Default is  \code{\link[viridis]{viridis}}. See \code{\link[seewave]{spectro}} for more palettes. Palettes as \code{\link[monitoR:specCols]{gray.2}} may work better when \code{fast.spec = TRUE} (an argument that can be passed to the internal spectrogram function using "...").}
+\item{palette}{Color palette function for the spectrogram. Default
+\code{\link[viridis:reexports]{viridis::viridis()}}. See \code{\link[seewave:spectro]{seewave::spectro()}} for more palettes.
+Palettes such as \code{monitoR::gray.2} may work better when
+\code{fast.spec = TRUE} (an argument that can be passed to the internal
+spectrogram function using \code{...}).}
 
-\item{duration}{A numeric vector of length 1. Specifies the overall duration of the clip that will be plotted. Notice that only the initial part of the test files are plotted as this is enough to tell the precision of the alignment.}
+\item{duration}{Numeric vector of length 1. Specifies the overall
+duration of the clip that will be plotted. Notice that only the
+initial part of the test files is plotted, as this is usually
+enough to tell the precision of the alignment.}
 
-\item{mar}{numeric vector of length 1. Specifies the minimum margins adjacent (before and after) to the start of the marker used for checking alignments (see 'marker' argument). Default is 0.2.}
+\item{mar}{Numeric vector of length 1. Specifies the minimum margins
+adjacent (before and after) to the start of the marker used for
+checking alignments (see the \code{marker} argument). Default \code{0.2}.}
 
-\item{step.lengths}{Numeric vector of length 2 indicating the time length (in ms) of short (min(step.lengths)) and long steps (max(step.lengths)) for manually aligning spectrograms. Default is \code{c(5, 30)}.}
+\item{step.lengths}{Numeric vector of length 2 indicating the time
+length (in ms) of short (\code{min(step.lengths)}) and long
+(\code{max(step.lengths)}) steps for manually aligning spectrograms.
+Default \code{c(5, 30)}.}
 
-\item{flim}{A numeric vector of length 2 indicating the highest and lowest frequency limits (kHz) of the spectrogram, as in \code{\link[seewave]{spectro}}. Default is \code{NULL} which will plot spectrograms in the full frequency range (0 - nyquist frequency).}
+\item{flim}{Numeric vector of length 2 indicating the highest and
+lowest frequency limits (kHz) of the spectrogram, as in
+\code{\link[seewave:spectro]{seewave::spectro()}}. Default \code{NULL}, which will plot spectrograms
+in the full frequency range (0 - nyquist frequency).}
 
-\item{label.col}{Character string controlling the color of lines and sound ID labels.}
+\item{label.col}{Character string controlling the color of lines
+and sound ID labels.}
 
-\item{ext.window}{Logical. If \code{TRUE} then and external graphic window is used.Dimensions can be set using the 'width' and 'height' arguments. Default is \code{TRUE}.}
+\item{ext.window}{Logical. If \code{TRUE}, an external graphic window is
+used. Dimensions can be set using the \code{width} and \code{height}
+arguments. Default \code{TRUE}.}
 
-\item{width}{Numeric vector of length 1. Single value (in inches) indicating the width of the output image files. Default is 10.}
+\item{width}{Numeric vector of length 1. Single value (in inches)
+indicating the width of the output image files. Default \code{10}.}
 
-\item{height}{Numeric vector of length 1. Single value (in inches) indicating the height of the output image files. Default is 5.}
+\item{height}{Numeric vector of length 1. Single value (in inches)
+indicating the height of the output image files. Default \code{5}.}
 
-\item{srt}{Numeric argument of length 1. The rotation (in degrees) of the sound id labels. Default is 0.}
+\item{srt}{Numeric argument of length 1. The rotation (in degrees)
+of the sound ID labels. Default \code{0}.}
 
-\item{cex}{Numeric argument of length 1controlling the size of sound id text labels. Default is 1.}
+\item{cex}{Numeric argument of length 1 controlling the size of
+sound ID text labels. Default \code{1}.}
 
-\item{fast.spec}{Logical. If \code{TRUE} then image function is used internally to create spectrograms, which substantially increases performance (much faster), although some options become unavailable, as collevels (amplitude scale). Default is \code{FALSE}.}
+\item{fast.spec}{Logical. If \code{TRUE}, the \code{image} function is used
+internally to create spectrograms, which substantially increases
+performance (much faster), although some options become
+unavailable, such as \code{collevels} (amplitude scale). Default
+\code{FALSE}.}
 
-\item{marker}{Character string with the name of the marker to be used as the main reference for checking/adjusting time alignments. Default is 'start_marker'. Note that this can take any of the sound IDs in 'Y$sound.id'.}
+\item{marker}{Character string with the name of the marker to be
+used as the main reference for checking/adjusting time alignments.
+Default \code{"start_marker"}. Note that this can take any of the sound
+IDs in \code{Y$sound.id}.}
 
-\item{grid}{Numeric vector of length 1 controlling the spacing between vertical lines on the spectrogram. Default is 0.2 s. Use 0 to remove grid.}
+\item{grid}{Numeric vector of length 1 controlling the spacing
+between vertical lines on the spectrogram. Default \code{0.2} s. Use
+\code{0} to remove the grid.}
 
-\item{...}{Additional arguments to be passed to the internal spectrogram
-creating function for customizing graphical output. The function is a modified
-version of \code{\link[seewave]{spectro}}, so it takes the same arguments.}
+\item{...}{Additional arguments to be passed to the internal
+spectrogram-creating function for customizing graphical output.
+The function is a modified version of \code{\link[seewave:spectro]{seewave::spectro()}}, so it
+takes the same arguments.}
 }
 \value{
-Creates a multipanel graph with spectrograms of master and test sound files in which users can interactively adjust their alignment in time. Return an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
+Creates a multipanel graph with spectrograms of master and test
+sound files in which users can interactively adjust their alignment
+in time. Returns an object similar to the input object \code{X}, in
+which the start and end of the sounds have been adjusted.
 }
 \description{
-\code{manual_realign} plots spectrograms to visually inspect alignment precision on test sound files.
+\code{manual_realign()} plots spectrograms to visually inspect, and
+interactively adjust, alignment precision on test sound files.
 }
 \details{
-This function allows the interactive adjustment of the alignment of test sound files produced by \code{\link{align_test_files}}. The function generates a multipanel graph with the spectrogram of the master sound file in top of that from test sound files, highlighting the position of correspondent test sounds on both in order to simplify assessing and adjusting their alignment. Spectrograms include the first few seconds of the sound files (controlled by 'duration') which is usually enough to tell the precision of the alignment. The lower spectrogram shows a series of 'buttons' that users can click on to control if the test sound file spectrogram (low panel) needs to be moved to the left ("<") or right (">"). Users can also reset the spectrogram to its original position ('reset'), move on to the next sound file in 'X' (test sound file annotations) or stop the process (stop button). The function returns an object similar to the input object 'X' in which the start and end of the sounds have been adjusted.
+This function allows the interactive adjustment of the alignment of
+test sound files produced by \code{\link[=align_test_files]{align_test_files()}}. The function
+generates a multipanel graph with the spectrogram of the master
+sound file on top of that from test sound files, highlighting the
+position of corresponding test sounds on both in order to simplify
+assessing and adjusting their alignment. Spectrograms include the
+first few seconds of the sound files (controlled by \code{duration}),
+which is usually enough to tell the precision of the alignment. The
+lower spectrogram shows a series of "buttons" that users can click
+on to control if the test sound file spectrogram (lower panel) needs
+to be moved to the left (\code{"<"}) or right (\code{">"}). Users can also
+reset the spectrogram to its original position (\code{"reset"}), move on
+to the next sound file in \code{X} (test sound file annotations), or stop
+the process (stop button).
 }
 \examples{
 {
@@ -124,13 +207,15 @@ This function allows the interactive adjustment of the alignment of test sound f
 Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., Garcia-Rodriguez, A., & Rico-Guevara, A. (2025). Quantifying degradation in animal acoustic signals with the R package baRulho. Methods in Ecology and Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 }
 \seealso{
-\code{\link{auto_realign}}; \code{\link{find_markers}}; \code{\link{align_test_files}}
+\code{\link[=auto_realign]{auto_realign()}}, for automatic (non-interactive)
+realignment; \code{\link[=find_markers]{find_markers()}} and \code{\link[=align_test_files]{align_test_files()}}, used
+upstream to produce the input for this function.
 
-Other test sound alignment:
-\code{\link[=align_test_files]{align_test_files()}},
-\code{\link[=auto_realign]{auto_realign()}},
-\code{\link[=find_markers]{find_markers()}},
-\code{\link[=plot_aligned_sounds]{plot_aligned_sounds()}}
+Other test sound alignment: 
+\code{\link{align_test_files}()},
+\code{\link{auto_realign}()},
+\code{\link{find_markers}()},
+\code{\link{plot_aligned_sounds}()}
 }
 \author{
 Marcelo Araya-Salas (\email{marcelo.araya@ucr.ac.cr})

@@ -1,18 +1,59 @@
 #' Measure blur ratio in the time domain
 #'
-#' \code{blur_ratio} measures blur ratio in sounds referenced in an extended selection table.
+#' @description
+#' `blur_ratio()` measures blur ratio of sounds referenced in an extended
+#' selection table, as described by Dabelsteen et al. (1993). Low values
+#' indicate low degradation of sounds.
+#'
 #' @inheritParams template_params
-#' @param env.smooth Numeric vector of length 1 determining the length of the sliding window (in amplitude samples) used for a sum smooth for amplitude envelope calculation (used internally by \code{\link[seewave]{env}}). Default is 200. Can be set globally for the current R session via the "env.smooth" option (see \code{\link[base]{options}}).
-#' @param envelopes Logical to control if envelopes are returned (as attributes, 'attributes(X)$envelopes'). Default is \code{FALSE}.
-#' @param ovlp Numeric vector of length 1 specifying the percentage of overlap between two
-#'   consecutive windows, as in \code{\link[seewave]{spectro}}. Default is 70. Used for applying bandpass filtering. Can be set globally for the current R session via the "ovlp" option (see \code{\link[base]{options}}).
-#' @param n.samples Numeric vector of length 1 specifying the number of amplitude samples to use for representing amplitude envelopes. Default is 100. If null the raw amplitude envelope is used (note that this can result in high RAM memory usage for large data sets). Amplitude envelope values are interpolated using \code{\link[stats]{approx}}.
-#' @return Object 'X' with an additional column,  'blur.ratio', containing the computed blur ratio values. If \code{envelopes = TRUE} the output would include amplitude envelopes for all sounds as attributes ('attributes(X)$envelopes').
+#' @param env.smooth Numeric vector of length 1 determining the length
+#'   of the sliding window (in amplitude samples) used for a sum smooth
+#'   for amplitude envelope calculation (used internally by
+#'   [seewave::env()]). Default `200`. Can be set globally for the
+#'   current R session via the `"env.smooth"` option (see [options()]).
+#' @param envelopes Logical to control if envelopes are returned (as
+#'   attributes, `attributes(X)$envelopes`). Default `FALSE`.
+#' @param ovlp Numeric vector of length 1 specifying the percentage of
+#'   overlap between two consecutive windows, as in
+#'   [seewave::spectro()]. Default `70`. Used for applying bandpass
+#'   filtering. Can be set globally for the current R session via the
+#'   `"ovlp"` option (see [options()]).
+#' @param n.samples Numeric vector of length 1 specifying the number of
+#'   amplitude samples to use for representing amplitude envelopes.
+#'   Default `100`. If `NULL` the raw amplitude envelope is used (note
+#'   that this can result in high RAM memory usage for large data
+#'   sets). Amplitude envelope values are interpolated using
+#'   [stats::approx()].
+#'
+#' @details
+#' The function measures the blur ratio on sounds in which a reference
+#' playback has been re-recorded at different distances. Blur ratio is
+#' measured as the mismatch between amplitude envelopes (expressed as
+#' probability mass functions) of the reference sound and the
+#' re-recorded sound. By converting envelopes to probability mass
+#' functions, the effect of energy attenuation is removed, focusing the
+#' analysis on the modification of the envelope shape. The function
+#' compares each sound to the corresponding reference sound within the
+#' supplied frequency range (e.g. bandpass) of the reference sound
+#' (`bottom.freq` and `top.freq` columns in `X`). The `sound.id` column
+#' must be used to tell the function to only compare sounds belonging to
+#' the same category (e.g. song-types). Two methods for setting the
+#' experimental design are provided. All wave objects in the extended
+#' selection table must have the same sampling rate so the length of
+#' envelopes is comparable.
+#'
+#' @return
+#' Object `X` with an additional column, `blur.ratio`, containing the
+#' computed blur ratio values. If `envelopes = TRUE` the output would
+#' also include amplitude envelopes for all sounds as attributes
+#' (`attributes(X)$envelopes`).
+#'
+#' @seealso [envelope_correlation()] and [spectrum_blur_ratio()], which
+#'   measure degradation in the frequency domain.
+#'
 #' @export
 #' @name blur_ratio
-#' @details Blur ratio measures the degradation of sound as a change in sound power in the time domain as described by Dabelsteen et al (1993). Low values indicate low degradation of sounds. The function measures the blur ratio on sounds in which a reference playback has been re-recorded at different distances. Blur ratio is measured as the mismatch between amplitude envelopes (expressed as probability mass functions) of the reference sound and the re-recorded sound. By converting envelopes to probability mass functions the effect of energy attenuation is removed, focusing the analysis on the modification of the envelope shape. The function compares each sound to the corresponding reference sound within the supplied frequency range (e.g. bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns in 'X'). The 'sound.id' column must be used to tell the function to only compare sounds belonging to the same category (e.g. song-types). Two methods for setting the experimental design are provided. All wave objects in the extended selection table must have the same sampling rate so the length of envelopes is comparable.
 #' @family quantify degradation
-#' @seealso \code{\link{envelope_correlation}}, \code{\link{spectrum_blur_ratio}}
 #' @examples {
 #'   # load example data
 #'   data("test_sounds_est")

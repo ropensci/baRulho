@@ -1,21 +1,74 @@
 #' Create a master sound file
 #'
-#' \code{master_sound_file} creates a master sound file to be used in playback experiments related to sound degradation.
+#' @description
+#' `master_sound_file()` creates a master sound file to be used in
+#' playback experiments related to sound degradation.
+#'
 #' @inheritParams template_params
-#' @param X Object of class 'data.frame', 'selection_table' or 'extended_selection_table' (the last 2 classes are created by the function \code{\link[warbleR]{selection_table}} from the warbleR package) with the reference to the model sounds. Must contain the following columns: 1) "sound.files": name of the .wav files, 2) "selec": unique selection identifier (within a sound file), 3) "start": start time and 4) "end": end time of selections, 5)  "bottom.freq": low frequency for bandpass and 6) "top.freq": high frequency for bandpass. An optional 'sound.id' column can be included to use a custom label for each sound in the output. This column must contain a unique id for each sound (labels cannot repeated). If not supplied the function will make it by combining the sound file and selection columns.
-#' @param file.name Character string indicating the name of the sound file.
-#' @param dest.path Character string containing the directory path where the sound file will be saved.
-#' If \code{NULL} (default) then the current working directory will be used instead.
-#' @param overwrite Logical argument to determine if the function will overwrite any existing sound file with the same file name. Default is the current working directory.
-#' @param delay Numeric vector of length 1 to control the duration (in s) of a silence gap at the beginning (and at the end) of the sound file. This can be useful to allow some time at the start of the playback experiment. Default is 1.
-#' @param gap.duration Numeric vector of length 1 to control the duration (in s) of silence gaps to be placed in between sounds. Default is 1 s.
-#' @param amp.marker Numeric vector of length 1 to use as a constant to amplify markers amplitude. This is useful to increase the amplitude of markers in relation to those of sounds, so it is picked up at further distances. Default is 2.
-#' @param flim Numeric vector of length 2 to control the (approximate) frequency range in which the markers would be found. If \code{NULL} markers would span across the entire frequency range. Default is c(0, 4).
-#' @param cex Numeric vector of length 1 indicating the font size for the start and end markers. Default is 14.
-#' @return A .wav file in 'path' as well as a data frame in the R environment with the annotations (i.e. time position) of sounds in the master sound file and an additional column 'sound.id' that provides a unique id for each sound in the sound file. This is useful for identifying/labeling sounds in test (re-recorded) sound files for downstream analyses.
+#' @param X Object of class `data.frame`, `selection_table`, or
+#'   `extended_selection_table` (the last 2 classes are created by
+#'   [warbleR::selection_table()] from the **warbleR** package) with
+#'   the reference to the model sounds. Must contain the following
+#'   columns: 1) `sound.files`: name of the `.wav` files, 2) `selec`:
+#'   unique selection identifier (within a sound file), 3) `start`:
+#'   start time, and 4) `end`: end time of selections, 5)
+#'   `bottom.freq`: low frequency for bandpass, and 6) `top.freq`: high
+#'   frequency for bandpass. An optional `sound.id` column can be
+#'   included to use a custom label for each sound in the output. This
+#'   column must contain a unique ID for each sound (labels cannot
+#'   repeat). If not supplied, the function will make it by combining
+#'   the sound file and selection columns.
+#' @param file.name Character string indicating the name of the sound
+#'   file.
+#' @param dest.path Character string containing the directory path
+#'   where the sound file will be saved. Default is the current
+#'   working directory.
+#' @param overwrite Logical argument to determine if the function will
+#'   overwrite any existing sound file with the same file name. Default
+#'   `FALSE`.
+#' @param delay Numeric vector of length 1 to control the duration (in
+#'   s) of a silence gap at the beginning (and at the end) of the sound
+#'   file. This can be useful to allow some time at the start of the
+#'   playback experiment. Default `1`.
+#' @param gap.duration Numeric vector of length 1 to control the
+#'   duration (in s) of silence gaps to be placed in between sounds.
+#'   Default `1` s.
+#' @param amp.marker Numeric vector of length 1 to use as a constant to
+#'   amplify markers' amplitude. This is useful to increase the
+#'   amplitude of markers in relation to that of sounds, so it is
+#'   picked up at further distances. Default `2`.
+#' @param flim Numeric vector of length 2 to control the (approximate)
+#'   frequency range in which the markers would be found. If `NULL`,
+#'   markers would span across the entire frequency range. Default
+#'   `c(0, 4)`.
+#' @param cex Numeric vector of length 1 indicating the font size for
+#'   the start and end markers. Default `14`.
+#'
+#' @details
+#' The function is intended to simplify the creation of master sound
+#' files for playback experiments in sound degradation studies. The
+#' function clips sounds from sound files (or wave objects from
+#' extended selection tables) and concatenates them into a single
+#' sound file. All clips are peak normalized and rescaled to the
+#' maximal possible dynamic range. The function also adds acoustic
+#' markers at the start and end of the playback that can be used to
+#' time-sync test (re-recorded) sounds, facilitating the streamlining
+#' of degradation quantification. There is no predefined limit to the
+#' duration of the output master sound file, although the creation of
+#' long files could be constrained by computer memory. As a reference,
+#' master sound files of up to 10 min have been created on a 16GB RAM
+#' laptop computer.
+#'
+#' @return
+#' A `.wav` file in `path`, as well as a `data.frame` in the R
+#' environment with the annotations (i.e. time position) of sounds in
+#' the master sound file and an additional column, `sound.id`, that
+#' provides a unique ID for each sound in the sound file. This is
+#' useful for identifying/labeling sounds in test (re-recorded) sound
+#' files for downstream analyses.
+#'
 #' @export
 #' @name master_sound_file
-#' @details The function is intended to simplify the creation of master sound files for playback experiments in sound degradation studies. The function clips sounds from sound files (or wave objects from extended selection tables) and concatenates them in a single sound file. All clips are peak normalized and rescaled to the maximal possible dynamic range. The function also adds acoustic markers at the start and end of the playback that can be used to time-sync test (re-recorded) sounds to facilitate the streamlining of degradation quantification. There is no predefined limit to the duration of the output master sound file, although the creation of long files could be constrained by computer memory. As a reference, master sound files of up to 10 min have been created in a 16GB RAM laptop computer.
 #' @examples {
 #'   # load example data from warbleR
 #'   data(list = c(
@@ -234,7 +287,7 @@ if (!grepl("\\.wav$", file.name, ignore.case = TRUE)) {
 # create selection table
 sel.tab <- data.frame(
   sound.files = file.name,
-  selec = seq_along(nrow(X) + 2),
+  selec = seq_len(nrow(X) + 2),
   start = c(delay, X$pb.start, X$pb.end[nrow(X)] + gap.duration),
   end = c(
     delay + dur_strt_mrkr,

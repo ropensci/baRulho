@@ -18,6 +18,8 @@ version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cran.r-project.org/package=baRulho)
+[![Monthly
+Downloads](https://cranlogs.r-pkg.org/badges/last-month/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Codecov test
 coverage](https://codecov.io/gh/ropensci/baRulho/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/baRulho?branch=master)
 [![R-CMD-check](https://github.com/ropensci/baRulho/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/baRulho/actions/workflows/R-CMD-check.yaml)

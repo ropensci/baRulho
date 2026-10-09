@@ -265,7 +265,7 @@ test_sounds_est <-
 degrad_imgs <- plot_degradation(test_sounds_est, dest.path = tempdir())
 ```
 
-     [30mThe image files have been saved in the directory path '/tmp/Rtmpu9KUkV' [39m
+     [30mThe image files have been saved in the directory path '/tmp/RtmpyVneVG' [39m
 
 These are the paths to some of the image files:
 
@@ -274,8 +274,8 @@ These are the paths to some of the image files:
 degrad_imgs
 ```
 
-    [1] "/tmp/Rtmpu9KUkV/plot_degradation_p1.jpeg"
-    [2] "/tmp/Rtmpu9KUkV/plot_degradation_p2.jpeg"
+    [1] "/tmp/RtmpyVneVG/plot_degradation_p1.jpeg"
+    [2] "/tmp/RtmpyVneVG/plot_degradation_p2.jpeg"
 
 … and this is one of the images: ![](plot_degradation_p1.jpeg)
 
@@ -364,7 +364,7 @@ amplitude envelopes (as probability mass functions (PMF)).
 blur_imgs <- plot_blur_ratio(X = test_sounds_est, dest.path = tempdir())
 ```
 
-     [30mThe image files have been saved in the directory path '/tmp/Rtmpu9KUkV' [39m
+     [30mThe image files have been saved in the directory path '/tmp/RtmpyVneVG' [39m
 
 These are the paths to some of the image files:
 
@@ -373,12 +373,12 @@ These are the paths to some of the image files:
 head(blur_imgs)
 ```
 
-    [1] "/tmp/Rtmpu9KUkV/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-    [2] "/tmp/Rtmpu9KUkV/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-    [3] "/tmp/Rtmpu9KUkV/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-    [4] "/tmp/Rtmpu9KUkV/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-    [5] "/tmp/Rtmpu9KUkV/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-    [6] "/tmp/Rtmpu9KUkV/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"
+    [1] "/tmp/RtmpyVneVG/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+    [2] "/tmp/RtmpyVneVG/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+    [3] "/tmp/RtmpyVneVG/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+    [4] "/tmp/RtmpyVneVG/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+    [5] "/tmp/RtmpyVneVG/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+    [6] "/tmp/RtmpyVneVG/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"
 
 Output image files (in the working directory) look like this one:
 

@@ -245,5 +245,5 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
   # plot (look into temporary working directory `tempdir()`)
   plot_aligned_sounds(X = test_sounds_est, dest.path = tempdir(), duration = 3, ovlp = 0)
 }
-#> The image files have been saved in the directory path '/tmp/RtmpLKxQlp'
+#> The image files have been saved in the directory path '/tmp/RtmpPrTsml'
 ```

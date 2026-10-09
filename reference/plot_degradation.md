@@ -297,7 +297,7 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
   plot_degradation(
     X = Y, nrow = 3, ovlp = 95
   )
-#> The image files have been saved in the directory path '/tmp/RtmpLKxQlp'
+#> The image files have been saved in the directory path '/tmp/RtmpPrTsml'
 
   # using other color palettes
   plot_degradation(
@@ -305,21 +305,21 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
     cols = viridis::magma(4, alpha = 0.3),
     palette = viridis::magma
   )
-#> The image files have been saved in the directory path '/tmp/RtmpLKxQlp'
+#> The image files have been saved in the directory path '/tmp/RtmpPrTsml'
 
   # missing some data, 2 rows
   plot_degradation(
     X = Y[-3, ], nrow = 2, ovlp = 95,
     cols = viridis::mako(4, alpha = 0.4), palette = viridis::mako, wl = 200
   )
-#> The image files have been saved in the directory path '/tmp/RtmpLKxQlp'
+#> The image files have been saved in the directory path '/tmp/RtmpPrTsml'
 
   # changing marging and high overlap
   plot_degradation(X = Y, margins = c(5, 1), nrow = 6, ovlp = 95)
-#> The image files have been saved in the directory path '/tmp/RtmpLKxQlp'
+#> The image files have been saved in the directory path '/tmp/RtmpPrTsml'
 
   # more rows than needed (will adjust it automatically)
   plot_degradation(X = Y, nrow = 10, ovlp = 90)
-#> The image files have been saved in the directory path '/tmp/RtmpLKxQlp'
+#> The image files have been saved in the directory path '/tmp/RtmpPrTsml'
 # }
 ```

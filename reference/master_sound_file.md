@@ -171,5 +171,5 @@ if (FALSE) { # \dontrun{
 #> 
 
 
-#> The file example_master.wav has been saved in the directory path '/tmp/RtmpLKxQlp'
+#> The file example_master.wav has been saved in the directory path '/tmp/RtmpPrTsml'
 ```

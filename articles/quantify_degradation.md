@@ -123,25 +123,10 @@ each test sound manually,
 [`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
 must always be run before any degradation measuring function**.
 
-There are two possible experimental designs when defining reference
-sounds (which is controlled by the argument ‘method’ in
-[`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)):
-
-- 1: compare sounds (by ‘sound.id’) with their counterpart that was
-  recorded at the closest distance to source (e.g. compare a sound
-  recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This
-  is the default method. For this design users can have a single example
-  for the shortest distance to be used as reference (for instance at 1m
-  as is the case in most studies) The function will try to use
-  references from the same transect. However, if there is another test
-  sound from the same ‘sound.id’ at a shorter distance in other
-  transects, it will be used as reference instead. This behavior aims to
-  account for the fact that in this type of experiments reference sounds
-  are typically recorded at 1 m and at single transect.
-- 2: compare all sounds with their counterpart recorded at the distance
-  immediately before within a transect (e.g. a sound recorded at 10m
-  compared with the same sound recorded at 5m, then sound recorded at
-  15m compared with same sound recorded at 10m and so on).
+The two possible experimental designs for defining reference sounds
+(methods 1 and 2) are described above in the key considerations box; the
+design used is controlled by the ‘method’ argument in
+[`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md).
 
 Also note that some selections are labeled as “ambient” in the
 ‘sound.id’. These selections refer to ambient (background) noise.
@@ -149,8 +134,8 @@ Ambient noise can be used by some functions
 (e.g. `signal_to_noise_ratio`) to used the same noise sample for all
 test sounds in a sound file.
 
-In this example data there are 4 recordings at increasing distances: 1m,
-5m, 10m and 15m:
+In this example data there are 5 recordings across 2 transects (‘open’
+and ‘closed’) at increasing distances of 1, 10 and 30 m:
 
 ``` r
 
@@ -161,8 +146,8 @@ unique(test_sounds_est$sound.files)
     [1] "10m_closed.wav" "30m_closed.wav" "10m_open.wav"   "1m_open.wav"   
     [5] "30m_open.wav"  
 
-The data contains selections for 5 sounds as well as 1 ambient noise
-selections at each distance/recording:
+The data contains selections for 4 sounds as well as 1 ambient noise
+selection at each distance/recording:
 
 ``` r
 
@@ -247,7 +232,7 @@ test_sounds_est
 The function adds the column ‘reference’ which is then used by
 downstream functions plotting or measuring degradation. Hence it is used
 before running any of the degradation functions (including plotting
-functions). References are indicated as a the combination of the
+functions). References are indicated as the combination of the
 ‘sound.files’ and ‘selec’ column. For instance, ‘10m.wav-1’ indicates
 that the row in which the ‘selec’ column is ‘1’ and the sound file is
 ‘10m.wav’ should be used as reference. Note that `NAs` are returned for
@@ -280,7 +265,7 @@ test_sounds_est <-
 degrad_imgs <- plot_degradation(test_sounds_est, dest.path = tempdir())
 ```
 
-     [30mThe image files have been saved in the directory path '/tmp/RtmpxCvuKo' [39m
+     [30mThe image files have been saved in the directory path '/tmp/Rtmp5Ts5Eb' [39m
 
 These are the paths to some of the image files:
 
@@ -289,8 +274,8 @@ These are the paths to some of the image files:
 degrad_imgs
 ```
 
-    [1] "/tmp/RtmpxCvuKo/plot_degradation_p1.jpeg"
-    [2] "/tmp/RtmpxCvuKo/plot_degradation_p2.jpeg"
+    [1] "/tmp/Rtmp5Ts5Eb/plot_degradation_p1.jpeg"
+    [2] "/tmp/Rtmp5Ts5Eb/plot_degradation_p2.jpeg"
 
 … and this is one of the images: ![](plot_degradation_p1.jpeg)
 
@@ -379,7 +364,7 @@ amplitude envelopes (as probability mass functions (PMF)).
 blur_imgs <- plot_blur_ratio(X = test_sounds_est, dest.path = tempdir())
 ```
 
-     [30mThe image files have been saved in the directory path '/tmp/RtmpxCvuKo' [39m
+     [30mThe image files have been saved in the directory path '/tmp/Rtmp5Ts5Eb' [39m
 
 These are the paths to some of the image files:
 
@@ -388,12 +373,12 @@ These are the paths to some of the image files:
 head(blur_imgs)
 ```
 
-    [1] "/tmp/RtmpxCvuKo/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-    [2] "/tmp/RtmpxCvuKo/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-    [3] "/tmp/RtmpxCvuKo/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-    [4] "/tmp/RtmpxCvuKo/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-    [5] "/tmp/RtmpxCvuKo/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-    [6] "/tmp/RtmpxCvuKo/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"
+    [1] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+    [2] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+    [3] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+    [4] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+    [5] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+    [6] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"
 
 Output image files (in the working directory) look like this one:
 
@@ -566,9 +551,10 @@ ea <- excess_attenuation(test_sounds_est)
 ```
 
 The output, similar to those of other functions, is an extended
-selection table with the input data, but also including two new columns
-(‘reference’ and ‘excess.attenuation’) with the reference sound and the
-excess attenuation:
+selection table with the input data, but also including a new column
+(‘excess.attenuation’) with the excess attenuation values (the
+‘reference’ column was already added earlier by
+[`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)):
 
 ``` r
 
@@ -632,9 +618,10 @@ ec <- envelope_correlation(test_sounds_est)
 ```
 
 The output is also similar to those of other functions; an extended
-selection table similar to input data, but also includes two new columns
-(‘reference’ and ‘envelope.correlation’) with the reference sound and
-the amplitude envelope correlation coefficients:
+selection table similar to input data, but also includes a new column
+(‘envelope.correlation’) with the amplitude envelope correlation
+coefficients (the ‘reference’ column was already added earlier by
+[`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)):
 
 ``` r
 
@@ -849,26 +836,26 @@ tsr
 | 10m_open.wav | 1 | 0.050000 | 0.200000 | 1.333333 | 2.666667 | ambient | open | 10 | NA | NA |
 | 1m_open.wav | 1 | 0.050000 | 0.200000 | 1.333333 | 2.666667 | ambient | open | 1 | NA | NA |
 | 30m_open.wav | 1 | 0.050000 | 0.200000 | 1.333333 | 2.666667 | ambient | open | 30 | NA | NA |
-| 10m_closed.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | closed | 10 | 1m_open.wav-4 | -17.601030 |
-| 30m_closed.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | closed | 30 | 1m_open.wav-4 | -6.897373 |
-| 10m_open.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | open | 10 | 1m_open.wav-4 | -13.619545 |
-| 1m_open.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | open | 1 | NA | -25.749053 |
-| 30m_open.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | open | 30 | 1m_open.wav-4 | -9.288438 |
-| 10m_closed.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | closed | 10 | 1m_open.wav-3 | -23.773865 |
-| 30m_closed.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | closed | 30 | 1m_open.wav-3 | -7.546368 |
-| 10m_open.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | open | 10 | 1m_open.wav-3 | -24.588476 |
-| 1m_open.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | open | 1 | NA | -31.022133 |
-| 30m_open.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | open | 30 | 1m_open.wav-3 | -19.867073 |
-| 10m_closed.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | closed | 10 | 1m_open.wav-5 | -26.099051 |
-| 30m_closed.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | closed | 30 | 1m_open.wav-5 | -2.503217 |
-| 10m_open.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | open | 10 | 1m_open.wav-5 | -25.610614 |
-| 1m_open.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | open | 1 | NA | -26.171361 |
-| 30m_open.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | open | 30 | 1m_open.wav-5 | -16.857756 |
-| 10m_closed.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | closed | 10 | 1m_open.wav-2 | -21.246920 |
-| 30m_closed.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | closed | 30 | 1m_open.wav-2 | -4.364514 |
-| 10m_open.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | open | 10 | 1m_open.wav-2 | -27.069954 |
-| 1m_open.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | open | 1 | NA | -37.578924 |
-| 30m_open.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | open | 30 | 1m_open.wav-2 | -23.934725 |
+| 10m_closed.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | closed | 10 | 1m_open.wav-4 | -15.288061 |
+| 30m_closed.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | closed | 30 | 1m_open.wav-4 | -5.990982 |
+| 10m_open.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | open | 10 | 1m_open.wav-4 | -11.829786 |
+| 1m_open.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | open | 1 | NA | -22.365343 |
+| 30m_open.wav | 4 | 1.800045 | 2.000068 | 0.422000 | 1.223000 | freq1 | open | 30 | 1m_open.wav-4 | -8.067835 |
+| 10m_closed.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | closed | 10 | 1m_open.wav-3 | -20.649716 |
+| 30m_closed.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | closed | 30 | 1m_open.wav-3 | -6.554692 |
+| 10m_open.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | open | 10 | 1m_open.wav-3 | -21.357278 |
+| 1m_open.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | open | 1 | NA | -26.945483 |
+| 30m_open.wav | 3 | 1.550023 | 1.750045 | 3.208000 | 4.069000 | freq4 | open | 30 | 1m_open.wav-3 | -17.256320 |
+| 10m_closed.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | closed | 10 | 1m_open.wav-5 | -22.669348 |
+| 30m_closed.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | closed | 30 | 1m_open.wav-5 | -2.174267 |
+| 10m_open.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | open | 10 | 1m_open.wav-5 | -22.245096 |
+| 1m_open.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | open | 1 | NA | -22.732155 |
+| 30m_open.wav | 5 | 2.050068 | 2.250091 | 6.905000 | 7.917000 | freq7 | open | 30 | 1m_open.wav-5 | -14.642461 |
+| 10m_closed.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | closed | 10 | 1m_open.wav-2 | -18.454840 |
+| 30m_closed.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | closed | 30 | 1m_open.wav-2 | -3.790968 |
+| 10m_open.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | open | 10 | 1m_open.wav-2 | -23.512663 |
+| 1m_open.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | open | 1 | NA | -32.640639 |
+| 30m_open.wav | 2 | 1.300000 | 1.500023 | 7.875000 | 8.805000 | freq9 | open | 30 | 1m_open.wav-2 | -20.789438 |
 
 Tail-to-signal ratio values are typically negative as signals tend to
 have higher power than that in the reverberating tail.
@@ -1077,8 +1064,10 @@ Please report any bugs
 The package [baRulho](https://docs.ropensci.org/baRulho//) should be
 cited as follows:
 
-Araya-Salas, M. (2020), *baRulho: quantifying degradation of (animal)
-acoustic signals in R*. R package version 1.0.0.
+Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M., García-Rodríguez,
+A., & Rico-Guevara, A. (2025). Quantifying degradation in animal
+acoustic signals with the R package baRulho. Methods in Ecology and
+Evolution, 00, 1–12. <https://doi.org/10.1111/2041-210X.14481>
 
 ------------------------------------------------------------------------
 
@@ -1087,8 +1076,11 @@ acoustic signals in R*. R package version 1.0.0.
 1.  Araya-Salas, M. (2017). *Rraven: connecting R and Raven bioacoustic
     software*. R package version 1.0.0.
 
-2.  Araya-Salas, M. (2020), *baRulho: quantifying degradation of
-    (animal) acoustic signals in R*. R package version 1.0.0
+2.  Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M.,
+    García-Rodríguez, A., & Rico-Guevara, A. (2025). Quantifying
+    degradation in animal acoustic signals with the R package baRulho.
+    Methods in Ecology and Evolution, 00, 1–12.
+    <https://doi.org/10.1111/2041-210X.14481>
 
 3.  Araya-Salas M, Smith-Vidaurre G. (2017) *warbleR: An R package to
     streamline analysis of animal acoustic signals*. Methods Ecol Evol
@@ -1119,7 +1111,7 @@ Click to see
 
     R version 4.6.1 (2026-06-24)
     Platform: x86_64-pc-linux-gnu
-    Running under: Ubuntu 24.04.4 LTS
+    Running under: Ubuntu 24.04.5 LTS
 
     Matrix products: default
     BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -1138,26 +1130,25 @@ Click to see
     [1] stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-     [1] ggplot2_4.0.3      viridis_0.6.5      viridisLite_0.4.3  baRulho_2.1.7     
-     [5] ohun_1.0.4         warbleR_1.1.37     NatureSounds_1.0.5 seewave_2.2.4     
-     [9] tuneR_1.4.7        knitr_1.51        
+     [1] ggplot2_4.0.3      viridis_0.6.5      viridisLite_0.4.3  baRulho_2.2.0     
+     [5] ohun_1.0.4         warbleR_1.1.38     NatureSounds_1.0.5 seewave_2.2.4     
+     [9] tuneR_1.4.7        knitr_1.52        
 
     loaded via a namespace (and not attached):
-     [1] gtable_0.3.6       rjson_0.2.23       xfun_0.60          bslib_0.11.0      
-     [5] vctrs_0.7.3        tools_4.6.1        bitops_1.0-9       curl_7.1.0        
-     [9] parallel_4.6.1     proxy_0.4-29       pkgconfig_2.0.3    KernSmooth_2.23-26
-    [13] checkmate_2.3.4    RColorBrewer_1.1-3 S7_0.2.2           desc_1.4.3        
-    [17] lifecycle_1.0.5    stringr_1.6.0      compiler_4.6.1     farver_2.1.2      
-    [21] textshaping_1.0.5  brio_1.1.5         htmltools_0.5.9    class_7.3-23      
-    [25] sass_0.4.10        RCurl_1.98-1.19    yaml_2.3.12        pkgdown_2.2.1     
-    [29] jquerylib_0.1.4    MASS_7.3-65        classInt_0.4-11    cachem_1.1.0      
-    [33] Deriv_4.2.0        digest_0.6.39      stringi_1.8.7      sf_1.1-1          
-    [37] labeling_0.4.3     fastmap_1.2.0      grid_4.6.1         cli_3.6.6         
-    [41] magrittr_2.0.5     e1071_1.7-17       withr_3.0.3        scales_1.4.0      
-    [45] backports_1.5.1    rmarkdown_2.31     httr_1.4.8         Sim.DiffProc_5.0  
-    [49] signal_1.8-1       igraph_2.3.3       otel_0.2.0         gridExtra_2.3.1   
-    [53] ragg_1.5.2         png_0.1-9          kableExtra_1.4.1   pbapply_1.7-4     
-    [57] evaluate_1.0.5     dtw_1.23-3         fftw_1.0-9         testthat_3.3.2    
-    [61] rlang_1.3.0        Rcpp_1.1.2         glue_1.8.1         DBI_1.3.0         
-    [65] xml2_1.6.0         svglite_2.2.2      rstudioapi_0.19.0  jsonlite_2.0.0    
-    [69] R6_2.6.1           systemfonts_1.3.2  fs_2.1.0           units_1.0-1       
+     [1] gtable_0.3.6       xfun_0.61          bslib_0.12.0       vctrs_0.7.3       
+     [5] tools_4.6.1        curl_8.0.0         parallel_4.6.1     proxy_0.4-29      
+     [9] pkgconfig_2.0.3    KernSmooth_2.23-26 checkmate_2.3.4    RColorBrewer_1.1-3
+    [13] S7_0.2.2           desc_1.4.3         lifecycle_1.0.5    compiler_4.6.1    
+    [17] farver_2.1.2       stringr_1.6.0      textshaping_1.0.5  htmltools_0.5.9   
+    [21] class_7.3-23       sass_0.4.10        yaml_2.3.12        pkgdown_2.2.1     
+    [25] jquerylib_0.1.4    MASS_7.3-65        classInt_0.4-11    cachem_1.1.0      
+    [29] Deriv_4.3.5        digest_0.6.39      stringi_1.8.9      sf_1.1-3          
+    [33] labeling_0.4.3     fastmap_1.2.0      grid_4.6.1         cli_3.6.6         
+    [37] magrittr_2.0.5     e1071_1.7-17       withr_3.0.3        scales_1.4.0      
+    [41] backports_1.5.1    rmarkdown_2.32     httr_1.4.9         Sim.DiffProc_5.0  
+    [45] signal_1.8-1       igraph_2.3.4       otel_0.2.0         gridExtra_2.3.1   
+    [49] ragg_1.5.2         png_0.1-9          kableExtra_1.4.1   pbapply_1.7-5     
+    [53] evaluate_1.0.5     dtw_1.23-3         fftw_1.0-9         rlang_1.3.0       
+    [57] Rcpp_1.1.2         glue_1.8.1         DBI_1.3.0          xml2_1.6.0        
+    [61] svglite_2.2.2      rstudioapi_0.19.0  jsonlite_2.0.0     R6_2.6.1          
+    [65] systemfonts_1.3.2  fs_2.1.0           units_1.0-1       

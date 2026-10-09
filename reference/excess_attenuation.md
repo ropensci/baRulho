@@ -1,7 +1,9 @@
 # Measure excess attenuation
 
-`excess_attenuation` measures excess attenuation in sounds referenced in
-an extended selection table.
+`excess_attenuation()` measures excess attenuation in sounds referenced
+in an extended selection table. Excess attenuation is the amplitude loss
+of a sound in excess of that due to spherical spreading (observed
+attenuation - expected attenuation).
 
 ## Usage
 
@@ -23,118 +25,112 @@ excess_attenuation(
 - X:
 
   The output of
-  [`set_reference_sounds`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
-  which is an object of class 'data.frame', 'selection_table' or
-  'extended_selection_table' (the last 2 classes are created by the
-  function
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  from the warbleR package) with the test sound files' annotations .
-  Must contain the following columns: 1) "sound.files": name of the .wav
-  files, 2) "selec": unique selection identifier (within a sound
-  file), 3) "start": start time and 4) "end": end time of selections, 5)
-  "bottom.freq": low frequency for bandpass, 6) "top.freq": high
-  frequency for bandpass, 7) "sound.id": ID of sounds used to identify
-  counterparts across distances and 8) "reference": identity of sounds
+  [`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md),
+  an object of class `data.frame`, `selection_table`, or
+  `extended_selection_table` (the last 2 classes are created by
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+  from the **warbleR** package) with the test sound files' annotations.
+  Must contain the following columns: 1) `sound.files`: name of the
+  `.wav` files, 2) `selec`: unique selection identifier (within a sound
+  file), 3) `start`: start time and 4) `end`: end time of selections, 5)
+  `bottom.freq`: low frequency for bandpass, 6) `top.freq`: high
+  frequency for bandpass, 7) `sound.id`: ID of sounds used to identify
+  counterparts across distances, and 8) `reference`: identity of sounds
   to be used as reference for each test sound (row). See
-  [`set_reference_sounds`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
-  for more details on the structure of 'X'.
+  [`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
+  for more details on the structure of `X`.
 
 - cores:
 
   Numeric vector of length 1. Controls whether parallel computing is
-  applied by specifying the number of cores to be used. Default is 1
+  applied by specifying the number of cores to be used. Default `1`
   (i.e. no parallel computing). Can be set globally for the current R
-  session via the "mc.cores" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  session via the `"mc.cores"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - pb:
 
-  Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option (see [`options`](https://rdrr.io/r/base/options.html)).
+  Logical argument to control if progress bar is shown. Default `TRUE`.
+  Can be set globally for the current R session via the `"pb"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - hop.size:
 
-  A numeric vector of length 1 specifying the time window duration (in
-  ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz
-  sampling rate. Ignored if 'wl' is supplied. Can be set globally for
-  the current R session via the "hop.size" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  Numeric vector of length 1 specifying the time window duration (in
+  ms). Default `1` ms, which is equivalent to ~45 `wl` for a 44.1 kHz
+  sampling rate. Ignored if `wl` is supplied. Can be set globally for
+  the current R session via the `"hop.size"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - wl:
 
-  A numeric vector of length 1 specifying the window length of the
-  spectrogram, default is `NULL`. If supplied, 'hop.size' is ignored.
-  Note that lower values will increase time resolution, which is more
+  Numeric vector of length 1 specifying the window length of the
+  spectrogram. Default `NULL`. If supplied, `hop.size` is ignored. Note
+  that lower values will increase time resolution, which is more
   important for amplitude calculations.
 
 - ovlp:
 
   Numeric vector of length 1 specifying the percentage of overlap
   between two consecutive windows, as in
-  [`spectro`](https://rdrr.io/pkg/seewave/man/spectro.html). Default
-  is 50. Only used for bandpass filtering. Can be set globally for the
-  current R session via the "ovlp" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  [`seewave::spectro()`](https://rdrr.io/pkg/seewave/man/spectro.html).
+  Default `50`. Only used for bandpass filtering. Can be set globally
+  for the current R session via the `"ovlp"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - bp:
 
   Numeric vector of length 2 giving the lower and upper limits of a
   frequency bandpass filter (in kHz). Alternatively, when set to
-  'freq.range' (default), the function will use the 'bottom.freq' and
-  'top.freq' for each sound as the bandpass range.
+  `"freq.range"` (default), the function will use the `bottom.freq` and
+  `top.freq` for each sound as the bandpass range.
 
 - path:
 
   Character string containing the directory path where the sound files
-  are found. Only needed when 'X' is not an extended selection table. If
+  are found. Only needed when `X` is not an extended selection table. If
   not supplied the current working directory is used. Can be set
-  globally for the current R session via the "sound.files.path" option
-  (see [`options`](https://rdrr.io/r/base/options.html)).
+  globally for the current R session via the `"sound.files.path"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 ## Value
 
-Object 'X' with an additional column, 'excess.attenuation', containing
+Object `X` with an additional column, `excess.attenuation`, containing
 the computed excess attenuation values (in dB).
 
 ## Details
 
-Excess attenuation is the amplitude loss of a sound in excess due to
-spherical spreading (observed attenuation - expected attenuation). With
-every doubling of distance, sounds attenuate with a 6 dB loss of
+With every doubling of distance, sounds attenuate with a 6 dB loss of
 amplitude (Morton, 1975; Marten & Marler, 1977). Any additional loss of
 amplitude results in energy loss in excess of that expected to occur
-with distance via spherical spreading. So it represents power loss due
-to additional factors like vegetation or atmospheric conditions (Wiley &
-Richards, 1978). It accounts for attenuation from additional factors
-such as:
+with distance via spherical spreading, representing power loss due to
+additional factors such as:
 
-- `Ground absorption`: sound energy can be absorbed by the ground,
+- **Ground absorption**: sound energy can be absorbed by the ground,
   especially in environments like forests with soft or uneven terrain.
 
-- `Vegetation and obstacles`: trees, shrubs, and other obstacles can
+- **Vegetation and obstacles**: trees, shrubs, and other obstacles can
   absorb or scatter sound energy, reducing the sound level more than
   geometric spreading alone would predict.
 
-- `Air absorption`: as sound travels through air, it loses energy due to
-  air molecules absorbing the sound waves, and this effect becomes more
-  pronounced over longer distances.
+- **Air absorption**: as sound travels through air, it loses energy due
+  to air molecules absorbing the sound waves, and this effect becomes
+  more pronounced over longer distances.
 
-- `Wind and temperature gradients`: These environmental factors can
+- **Wind and temperature gradients**: these environmental factors can
   cause sound waves to bend or refract.
 
 Excess attenuation is computed as
-`-20 * log10(rms("test signal") / rms("reference signal"))) - (20 * log10(1 / "distance")`
-in which 'rms(..)' represents the root mean square of an amplitude
+`(20 * log10(rms("reference signal") / rms("test signal"))) - (-20 * log10("reference distance" / "test distance"))`,
+in which `rms(...)` represents the root mean square of an amplitude
 envelope. Low values indicate little additional attenuation. The goal of
 the function is to measure the excess attenuation on sounds in which a
 reference playback has been re-recorded at increasing distances. The
-'sound.id' column must be used to indicate which sounds belonging to the
+`sound.id` column must be used to indicate which sounds belong to the
 same category (e.g. song-types). The function will then compare each
-sound type to the corresponding reference sound. Two approaches for
-computing excess attenuation are provided (see 'type' argument). NAs
-will be returned if one of the envelopes is completely flat (e.g. no
-variation in amplitude).
+sound type to the corresponding reference sound. `NA`s will be returned
+if one of the envelopes is completely flat (e.g. no variation in
+amplitude).
 
 ## References
 
@@ -154,8 +150,8 @@ at dawn?. Acta ethologica, 4(2), 65-72.
 
 Darden, SK, Pedersen SB, Larsen ON, & Dabelsteen T. (2008). Sound
 transmission at ground level in a short-grass prairie habitat and its
-implications for long-range communication in the swift fox \*Vulpes
-velox\*. The Journal of the Acoustical Society of America, 124(2),
+implications for long-range communication in the swift fox *Vulpes
+velox*. The Journal of the Acoustical Society of America, 124(2),
 758-766.
 
 Marten K, & Marler P. (1977). Sound transmission and its significance
@@ -171,8 +167,9 @@ animal vocalizations. Behavioral Ecology and Sociobiology, 3(1), 69-94.
 
 ## See also
 
-[`spcc`](https://marce10.github.io/baRulho/reference/spcc.md);
-[`envelope_correlation`](https://marce10.github.io/baRulho/reference/envelope_correlation.md)
+[`spcc()`](https://marce10.github.io/baRulho/reference/spcc.md) and
+[`envelope_correlation()`](https://marce10.github.io/baRulho/reference/envelope_correlation.md),
+for other degradation metrics in the time/frequency domain.
 
 ## Author
 

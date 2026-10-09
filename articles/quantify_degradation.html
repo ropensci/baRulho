@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">baRulho</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -61,7 +61,7 @@
                         <h4 data-toc-skip class="author"><a href="https://marce10.github.io/" class="external-link">Marcelo
 Araya-Salas, PhD</a></h4>
             
-            <h4 data-toc-skip class="date">2026-07-21</h4>
+            <h4 data-toc-skip class="date">2026-10-09</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/ropensci/baRulho/blob/master/vignettes/quantify_degradation.Rmd" class="external-link"><code>vignettes/quantify_degradation.Rmd</code></a></small>
       <div class="d-none name"><code>quantify_degradation.Rmd</code></div>
@@ -937,40 +937,24 @@ reference sounds for each test (re-recorded) sound. The function
 <strong>unless you define the reference sound for each test sound
 manually, <code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code> must always be run before
 any degradation measuring function</strong>.</p>
-<p>There are two possible experimental designs when defining reference
-sounds (which is controlled by the argument ‘method’ in
-<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code>):</p>
-<ul>
-<li>1: compare sounds (by ‘sound.id’) with their counterpart that was
-recorded at the closest distance to source (e.g. compare a sound
-recorded at 5m, 10m and 15m with its counterpart recorded at 1m). This
-is the default method. For this design users can have a single example
-for the shortest distance to be used as reference (for instance at 1m as
-is the case in most studies) The function will try to use references
-from the same transect. However, if there is another test sound from the
-same ‘sound.id’ at a shorter distance in other transects, it will be
-used as reference instead. This behavior aims to account for the fact
-that in this type of experiments reference sounds are typically recorded
-at 1 m and at single transect.</li>
-<li>2: compare all sounds with their counterpart recorded at the
-distance immediately before within a transect (e.g. a sound recorded at
-10m compared with the same sound recorded at 5m, then sound recorded at
-15m compared with same sound recorded at 10m and so on).</li>
-</ul>
+<p>The two possible experimental designs for defining reference sounds
+(methods 1 and 2) are described above in the key considerations box; the
+design used is controlled by the ‘method’ argument in
+<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code>.</p>
 <p>Also note that some selections are labeled as “ambient” in the
 ‘sound.id’. These selections refer to ambient (background) noise.
 Ambient noise can be used by some functions
 (e.g. <code>signal_to_noise_ratio</code>) to used the same noise sample
 for all test sounds in a sound file.</p>
-<p>In this example data there are 4 recordings at increasing distances:
-1m, 5m, 10m and 15m:</p>
+<p>In this example data there are 5 recordings across 2 transects
+(‘open’ and ‘closed’) at increasing distances of 1, 10 and 30 m:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># count selection per recordings</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">sound.files</span><span class="op">)</span></span></code></pre></div>
 <pre><code>[1] "10m_closed.wav" "30m_closed.wav" "10m_open.wav"   "1m_open.wav"   
 [5] "30m_open.wav"  </code></pre>
-<p>The data contains selections for 5 sounds as well as 1 ambient noise
-selections at each distance/recording:</p>
+<p>The data contains selections for 4 sounds as well as 1 ambient noise
+selection at each distance/recording:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">$</span><span class="va">sound.id</span>, <span class="va">test_sounds_est</span><span class="op">$</span><span class="va">distance</span><span class="op">)</span></span></code></pre></div>
 <div style="border: 1px solid #ddd; padding: 5px; overflow-x: scroll; width:100%; ">
@@ -1933,7 +1917,7 @@ open
 <p>The function adds the column ‘reference’ which is then used by
 downstream functions plotting or measuring degradation. Hence it is used
 before running any of the degradation functions (including plotting
-functions). References are indicated as a the combination of the
+functions). References are indicated as the combination of the
 ‘sound.files’ and ‘selec’ column. For instance, ‘10m.wav-1’ indicates
 that the row in which the ‘selec’ column is ‘1’ and the sound file is
 ‘10m.wav’ should be used as reference. Note that <code>NAs</code> are
@@ -1962,12 +1946,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpxCvuKo' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/Rtmp5Ts5Eb' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/tmp/RtmpxCvuKo/plot_degradation_p1.jpeg"
-[2] "/tmp/RtmpxCvuKo/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/tmp/Rtmp5Ts5Eb/plot_degradation_p1.jpeg"
+[2] "/tmp/Rtmp5Ts5Eb/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2930,16 +2914,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/tmp/RtmpxCvuKo' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/Rtmp5Ts5Eb' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/tmp/RtmpxCvuKo/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/tmp/RtmpxCvuKo/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/tmp/RtmpxCvuKo/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/tmp/RtmpxCvuKo/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/tmp/RtmpxCvuKo/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/tmp/RtmpxCvuKo/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -3963,9 +3947,10 @@ of the reference sound (‘bottom.freq’ and ‘top.freq’ columns in
 <code class="sourceCode R"><span><span class="co"># run  envelope correlation</span></span>
 <span><span class="va">ea</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/excess_attenuation.html">excess_attenuation</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">)</span></span></code></pre></div>
 <p>The output, similar to those of other functions, is an extended
-selection table with the input data, but also including two new columns
-(‘reference’ and ‘excess.attenuation’) with the reference sound and the
-excess attenuation:</p>
+selection table with the input data, but also including a new column
+(‘excess.attenuation’) with the excess attenuation values (the
+‘reference’ column was already added earlier by
+<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code>):</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span><span class="va">ea</span></span></code></pre></div>
@@ -4907,9 +4892,10 @@ category.</p>
 <code class="sourceCode R"><span><span class="co"># run  envelope correlation</span></span>
 <span><span class="va">ec</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/envelope_correlation.html">envelope_correlation</a></span><span class="op">(</span><span class="va">test_sounds_est</span><span class="op">)</span></span></code></pre></div>
 <p>The output is also similar to those of other functions; an extended
-selection table similar to input data, but also includes two new columns
-(‘reference’ and ‘envelope.correlation’) with the reference sound and
-the amplitude envelope correlation coefficients:</p>
+selection table similar to input data, but also includes a new column
+(‘envelope.correlation’) with the amplitude envelope correlation
+coefficients (the ‘reference’ column was already added earlier by
+<code><a href="../reference/set_reference_sounds.html">set_reference_sounds()</a></code>):</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># print output</span></span>
 <span><span class="va">ec</span></span></code></pre></div>
@@ -7995,7 +7981,7 @@ closed
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--17.601030
+-15.288061
 </td>
 </tr>
 <tr>
@@ -8030,7 +8016,7 @@ closed
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--6.897373
+-5.990982
 </td>
 </tr>
 <tr>
@@ -8065,7 +8051,7 @@ open
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--13.619545
+-11.829786
 </td>
 </tr>
 <tr>
@@ -8100,7 +8086,7 @@ open
 NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--25.749053
+-22.365343
 </td>
 </tr>
 <tr>
@@ -8135,7 +8121,7 @@ open
 1m_open.wav-4
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--9.288438
+-8.067835
 </td>
 </tr>
 <tr>
@@ -8170,7 +8156,7 @@ closed
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--23.773865
+-20.649716
 </td>
 </tr>
 <tr>
@@ -8205,7 +8191,7 @@ closed
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--7.546368
+-6.554692
 </td>
 </tr>
 <tr>
@@ -8240,7 +8226,7 @@ open
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--24.588476
+-21.357278
 </td>
 </tr>
 <tr>
@@ -8275,7 +8261,7 @@ open
 NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--31.022133
+-26.945483
 </td>
 </tr>
 <tr>
@@ -8310,7 +8296,7 @@ open
 1m_open.wav-3
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--19.867073
+-17.256320
 </td>
 </tr>
 <tr>
@@ -8345,7 +8331,7 @@ closed
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--26.099051
+-22.669348
 </td>
 </tr>
 <tr>
@@ -8380,7 +8366,7 @@ closed
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--2.503217
+-2.174267
 </td>
 </tr>
 <tr>
@@ -8415,7 +8401,7 @@ open
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--25.610614
+-22.245096
 </td>
 </tr>
 <tr>
@@ -8450,7 +8436,7 @@ open
 NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--26.171361
+-22.732155
 </td>
 </tr>
 <tr>
@@ -8485,7 +8471,7 @@ open
 1m_open.wav-5
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--16.857756
+-14.642461
 </td>
 </tr>
 <tr>
@@ -8520,7 +8506,7 @@ closed
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--21.246920
+-18.454840
 </td>
 </tr>
 <tr>
@@ -8555,7 +8541,7 @@ closed
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--4.364514
+-3.790968
 </td>
 </tr>
 <tr>
@@ -8590,7 +8576,7 @@ open
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--27.069954
+-23.512663
 </td>
 </tr>
 <tr>
@@ -8625,7 +8611,7 @@ open
 NA
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--37.578924
+-32.640639
 </td>
 </tr>
 <tr>
@@ -8660,7 +8646,7 @@ open
 1m_open.wav-2
 </td>
 <td style="text-align:center;font-weight: bold;background-color: rgba(204, 235, 255, 1) !important;">
--23.934725
+-20.789438
 </td>
 </tr>
 </tbody>
@@ -9936,8 +9922,10 @@ supplied).</p>
 <p>Please report any bugs <a href="https://github.com/ropensci/baRulho/issues" class="external-link">here</a>.</p>
 <p>The package <a href="https://docs.ropensci.org/baRulho//" class="external-link">baRulho</a>
 should be cited as follows:</p>
-<p>Araya-Salas, M. (2020), <em>baRulho: quantifying degradation of
-(animal) acoustic signals in R</em>. R package version 1.0.0.</p>
+<p>Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M.,
+García-Rodríguez, A., &amp; Rico-Guevara, A. (2025). Quantifying
+degradation in animal acoustic signals with the R package baRulho.
+Methods in Ecology and Evolution, 00, 1–12. <a href="https://doi.org/10.1111/2041-210X.14481" class="external-link uri">https://doi.org/10.1111/2041-210X.14481</a></p>
 <hr>
 </div>
 </div>
@@ -9948,8 +9936,10 @@ should be cited as follows:</p>
 <ol style="list-style-type: decimal">
 <li><p>Araya-Salas, M. (2017). <em>Rraven: connecting R and Raven
 bioacoustic software</em>. R package version 1.0.0.</p></li>
-<li><p>Araya-Salas, M. (2020), <em>baRulho: quantifying degradation of
-(animal) acoustic signals in R</em>. R package version 1.0.0</p></li>
+<li><p>Araya-Salas, M., Grabarczyk, E. E., Quiroz-Oliva, M.,
+García-Rodríguez, A., &amp; Rico-Guevara, A. (2025). Quantifying
+degradation in animal acoustic signals with the R package baRulho.
+Methods in Ecology and Evolution, 00, 1–12. <a href="https://doi.org/10.1111/2041-210X.14481" class="external-link uri">https://doi.org/10.1111/2041-210X.14481</a></p></li>
 <li><p>Araya-Salas M, Smith-Vidaurre G. (2017) <em>warbleR: An R package
 to streamline analysis of animal acoustic signals</em>. Methods Ecol
 Evol 8:184–191.</p></li>
@@ -9974,7 +9964,7 @@ divergence by sensory drive in Amazonian birds</em>. Evolution, 64(10),
 Click to see
 </summary><pre><code>R version 4.6.1 (2026-06-24)
 Platform: x86_64-pc-linux-gnu
-Running under: Ubuntu 24.04.4 LTS
+Running under: Ubuntu 24.04.5 LTS
 
 Matrix products: default
 BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -9993,29 +9983,28 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] ggplot2_4.0.3      viridis_0.6.5      viridisLite_0.4.3  baRulho_2.1.7     
- [5] ohun_1.0.4         warbleR_1.1.37     NatureSounds_1.0.5 seewave_2.2.4     
- [9] tuneR_1.4.7        knitr_1.51        
+ [1] ggplot2_4.0.3      viridis_0.6.5      viridisLite_0.4.3  baRulho_2.2.0     
+ [5] ohun_1.0.4         warbleR_1.1.38     NatureSounds_1.0.5 seewave_2.2.4     
+ [9] tuneR_1.4.7        knitr_1.52        
 
 loaded via a namespace (and not attached):
- [1] gtable_0.3.6       rjson_0.2.23       xfun_0.60          bslib_0.11.0      
- [5] vctrs_0.7.3        tools_4.6.1        bitops_1.0-9       curl_7.1.0        
- [9] parallel_4.6.1     proxy_0.4-29       pkgconfig_2.0.3    KernSmooth_2.23-26
-[13] checkmate_2.3.4    RColorBrewer_1.1-3 S7_0.2.2           desc_1.4.3        
-[17] lifecycle_1.0.5    stringr_1.6.0      compiler_4.6.1     farver_2.1.2      
-[21] textshaping_1.0.5  brio_1.1.5         htmltools_0.5.9    class_7.3-23      
-[25] sass_0.4.10        RCurl_1.98-1.19    yaml_2.3.12        pkgdown_2.2.1     
-[29] jquerylib_0.1.4    MASS_7.3-65        classInt_0.4-11    cachem_1.1.0      
-[33] Deriv_4.2.0        digest_0.6.39      stringi_1.8.7      sf_1.1-1          
-[37] labeling_0.4.3     fastmap_1.2.0      grid_4.6.1         cli_3.6.6         
-[41] magrittr_2.0.5     e1071_1.7-17       withr_3.0.3        scales_1.4.0      
-[45] backports_1.5.1    rmarkdown_2.31     httr_1.4.8         Sim.DiffProc_5.0  
-[49] signal_1.8-1       igraph_2.3.3       otel_0.2.0         gridExtra_2.3.1   
-[53] ragg_1.5.2         png_0.1-9          kableExtra_1.4.1   pbapply_1.7-4     
-[57] evaluate_1.0.5     dtw_1.23-3         fftw_1.0-9         testthat_3.3.2    
-[61] rlang_1.3.0        Rcpp_1.1.2         glue_1.8.1         DBI_1.3.0         
-[65] xml2_1.6.0         svglite_2.2.2      rstudioapi_0.19.0  jsonlite_2.0.0    
-[69] R6_2.6.1           systemfonts_1.3.2  fs_2.1.0           units_1.0-1       </code></pre>
+ [1] gtable_0.3.6       xfun_0.61          bslib_0.12.0       vctrs_0.7.3       
+ [5] tools_4.6.1        curl_8.0.0         parallel_4.6.1     proxy_0.4-29      
+ [9] pkgconfig_2.0.3    KernSmooth_2.23-26 checkmate_2.3.4    RColorBrewer_1.1-3
+[13] S7_0.2.2           desc_1.4.3         lifecycle_1.0.5    compiler_4.6.1    
+[17] farver_2.1.2       stringr_1.6.0      textshaping_1.0.5  htmltools_0.5.9   
+[21] class_7.3-23       sass_0.4.10        yaml_2.3.12        pkgdown_2.2.1     
+[25] jquerylib_0.1.4    MASS_7.3-65        classInt_0.4-11    cachem_1.1.0      
+[29] Deriv_4.3.5        digest_0.6.39      stringi_1.8.9      sf_1.1-3          
+[33] labeling_0.4.3     fastmap_1.2.0      grid_4.6.1         cli_3.6.6         
+[37] magrittr_2.0.5     e1071_1.7-17       withr_3.0.3        scales_1.4.0      
+[41] backports_1.5.1    rmarkdown_2.32     httr_1.4.9         Sim.DiffProc_5.0  
+[45] signal_1.8-1       igraph_2.3.4       otel_0.2.0         gridExtra_2.3.1   
+[49] ragg_1.5.2         png_0.1-9          kableExtra_1.4.1   pbapply_1.7-5     
+[53] evaluate_1.0.5     dtw_1.23-3         fftw_1.0-9         rlang_1.3.0       
+[57] Rcpp_1.1.2         glue_1.8.1         DBI_1.3.0          xml2_1.6.0        
+[61] svglite_2.2.2      rstudioapi_0.19.0  jsonlite_2.0.0     R6_2.6.1          
+[65] systemfonts_1.3.2  fs_2.1.0           units_1.0-1       </code></pre>
 </details>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

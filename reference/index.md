@@ -16,7 +16,7 @@ Aligning test sounds to determine their time position
 - [`align_test_files()`](https://marce10.github.io/baRulho/reference/align_test_files.md)
   : Align test sound files
 - [`auto_realign()`](https://marce10.github.io/baRulho/reference/auto_realign.md)
-  : Fix small misalignments in the time position test sounds
+  : Fix small misalignments in the time position of test sounds
 - [`find_markers()`](https://marce10.github.io/baRulho/reference/find_markers.md)
   : Find acoustic markers on test sound files
 - [`manual_realign()`](https://marce10.github.io/baRulho/reference/manual_realign.md)
@@ -68,7 +68,7 @@ Datasets included in baRulho
 - [`attenuation()`](https://marce10.github.io/baRulho/reference/attenuation.md)
   : Estimate attenuation of sound pressure level
 - [`add_noise()`](https://marce10.github.io/baRulho/reference/add_noise.md)
-  : Add synthetic noise
+  : Add synthetic noise to annotations
 - [`noise_profile()`](https://marce10.github.io/baRulho/reference/noise_profile.md)
   : Measure full spectrum sound noise profiles
 - [`spot_ambient_noise()`](https://marce10.github.io/baRulho/reference/spot_ambient_noise.md)

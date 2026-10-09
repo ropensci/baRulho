@@ -1,7 +1,9 @@
-# Add synthetic noise
+# Add synthetic noise to annotations
 
-`add_noise` adds synthetic noise to annotations in extended selection
-tables
+`add_noise()` adds synthetic noise to sounds referenced in an extended
+selection table to decrease the signal-to-noise ratio. This can be
+useful, for instance, for evaluating the effect of background noise on
+signal structure. Note that the implementation is slow.
 
 ## Usage
 
@@ -25,51 +27,51 @@ add_noise(
 
 - X:
 
-  Object of class 'extended_selection_table' (created by the function
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  from the warbleR package), generated 'by element' (see
-  'https://marce10.github.io/warbleR/articles/b_annotation_data_format.html#by-element-vs-by-song-extended-selection-tables'),
-  with the test sound files' annotations (which in baRulho is typically
-  the output of
-  [`align_test_files`](https://marce10.github.io/baRulho/reference/align_test_files.md)).
-  Must contain the following columns: 1) "sound.files": name of the .wav
-  files, 2) "selec": unique selection identifier (within a sound
-  file), 3) "start": start time and 4) "end": end time of selections, 5)
-  "bottom.freq": low frequency for bandpass, 6) "top.freq": high
-  frequency for bandpass. If the "sound.id" column is supplied noise is
-  only added to those sounds with a 'sound.id' different from "ambient",
-  "start_marker" or "end_marker".
+  Object of class `extended_selection_table` (created by
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+  from the **warbleR** package), generated ["by
+  element"](https://marce10.github.io/warbleR/articles/b_annotation_data_format.html#by-element-vs-by-song-extended-selection-tables),
+  with the test sound files' annotations (which in **baRulho** is
+  typically the output of
+  [`align_test_files()`](https://marce10.github.io/baRulho/reference/align_test_files.md)).
+  Must contain the following columns: 1) `sound.files`: name of the
+  `.wav` files, 2) `selec`: unique selection identifier (within a sound
+  file), 3) `start`: start time and 4) `end`: end time of selections, 5)
+  `bottom.freq`: low frequency for bandpass, and 6) `top.freq`: high
+  frequency for bandpass. If the `sound.id` column is supplied, noise is
+  only added to those sounds with a `sound.id` different from
+  `"ambient"`, `"start_marker"`, or `"end_marker"`.
 
 - mar:
 
-  numeric vector of length 1. Specifies the margins adjacent to the
+  Numeric vector of length 1. Specifies the margins adjacent to the
   start point of the annotation over which to measure ambient noise.
 
 - target.snr:
 
-  numeric vector of length 1. Specifies the desired signal-to-noise
-  ratio. Must be lower that the current signal-to-noise ratio.
-  Annotations showing a signal-to-noise ratio higher than 'target.snr'
+  Numeric vector of length 1. Specifies the desired signal-to-noise
+  ratio. Must be lower than the current signal-to-noise ratio.
+  Annotations showing a signal-to-noise ratio higher than `target.snr`
   will remain unchanged. Must be supplied.
 
 - precision:
 
-  numeric vector of length 1. Specifies the precision of the adjusted
+  Numeric vector of length 1. Specifies the precision of the adjusted
   signal-to-noise ratio (in dB).
 
 - cores:
 
   Numeric vector of length 1. Controls whether parallel computing is
-  applied by specifying the number of cores to be used. Default is 1
+  applied by specifying the number of cores to be used. Default `1`
   (i.e. no parallel computing). Can be set globally for the current R
-  session via the "mc.cores" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  session via the `"mc.cores"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - pb:
 
-  Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option (see [`options`](https://rdrr.io/r/base/options.html)).
+  Logical argument to control if progress bar is shown. Default `TRUE`.
+  Can be set globally for the current R session via the `"pb"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - max.iterations:
 
@@ -80,11 +82,12 @@ add_noise(
 
 - kind:
 
-  Character vector of length 1 indicating the kind of noise, “white”,
-  “pink”, “power”, "brown", or “red”. Noise is synthesized with a
-  modified version of the function
-  [`noise`](https://rdrr.io/pkg/tuneR/man/Waveforms.html). Default is
-  "pink" which is similar to background noise in natural environments.
+  Character vector of length 1 indicating the kind of noise: `"white"`,
+  `"pink"`, `"power"`, `"brown"`, or `"red"`. Noise is synthesized with
+  a modified version of
+  [`tuneR::noise()`](https://rdrr.io/pkg/tuneR/man/Waveforms.html).
+  Default `"pink"`, which is similar to background noise in natural
+  environments.
 
 - alpha:
 
@@ -95,30 +98,33 @@ add_noise(
 - seed:
 
   Numeric vector of length 1. Seed for random number generation. Default
-  is 123. If NULL, the seed is not set.
+  `123`. If `NULL`, the seed is not set.
 
 - ...:
 
   Additional arguments to be passed internally to
-  [`signal_to_noise_ratio`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md).
-  Note that "custom" noise reference (argument 'noise.ref' in
-  [`signal_to_noise_ratio`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md))
+  [`signal_to_noise_ratio()`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md).
+  Note that the `"custom"` noise reference (argument `noise.ref` in
+  [`signal_to_noise_ratio()`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md))
   is currently not supported.
 
 ## Value
 
-Object 'X' in which the wave objects have been modified to match the
+Object `X` in which the wave objects have been modified to match the
 target signal-to-noise ratio. It also includes an additional column,
-'adjusted.snr', with the new signal-to-noise ratio values.
+`adjusted.snr`, with the new signal-to-noise ratio values.
 
 ## Details
 
 The function adds synthetic noise to sounds referenced in an extended
-selection table (class created by the function
-[`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-from the warbleR package) to decrease the signal-to-noise ratio. This
-can be useful, for instance, for evaluating the effect of background
-noise on signal structure. Note that the implementation is slow.
+selection table (class created by
+[`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+from the **warbleR** package) by iteratively amplifying the synthesized
+noise and mixing it into each sound's waveform until the measured
+signal-to-noise ratio reaches `target.snr` (within `precision` dB) or
+`max.iterations` is exceeded. Annotations whose signal-to-noise ratio is
+already at or below `target.snr` are left unmodified, and a warning
+lists how many of these were skipped.
 
 ## References
 
@@ -131,7 +137,9 @@ and M. König (1995): On generating power law noise. Astron. Astrophys.
 
 ## See also
 
-[`signal_to_noise_ratio`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md)
+[`signal_to_noise_ratio()`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md),
+which this function calls internally to measure the current
+signal-to-noise ratio.
 
 Other miscellaneous:
 [`attenuation()`](https://marce10.github.io/baRulho/reference/attenuation.md),

@@ -1,7 +1,9 @@
 # Measure blur ratio in the frequency domain
 
-`spectrum_blur_ratio` measures blur ratio of frequency spectra from
-sounds referenced in an extended selection table.
+`spectrum_blur_ratio()` measures blur ratio of frequency spectra from
+sounds referenced in an extended selection table. It is analogous to
+[`blur_ratio()`](https://marce10.github.io/baRulho/reference/blur_ratio.md),
+but operates in the frequency domain rather than the time domain.
 
 ## Usage
 
@@ -26,120 +28,119 @@ spectrum_blur_ratio(
 - X:
 
   The output of
-  [`set_reference_sounds`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
-  which is an object of class 'data.frame', 'selection_table' or
-  'extended_selection_table' (the last 2 classes are created by the
-  function
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  from the warbleR package) with the test sound files' annotations .
-  Must contain the following columns: 1) "sound.files": name of the .wav
-  files, 2) "selec": unique selection identifier (within a sound
-  file), 3) "start": start time and 4) "end": end time of selections, 5)
-  "bottom.freq": low frequency for bandpass, 6) "top.freq": high
-  frequency for bandpass, 7) "sound.id": ID of sounds used to identify
-  counterparts across distances and 8) "reference": identity of sounds
+  [`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md),
+  an object of class `data.frame`, `selection_table`, or
+  `extended_selection_table` (the last 2 classes are created by
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+  from the **warbleR** package) with the test sound files' annotations.
+  Must contain the following columns: 1) `sound.files`: name of the
+  `.wav` files, 2) `selec`: unique selection identifier (within a sound
+  file), 3) `start`: start time and 4) `end`: end time of selections, 5)
+  `bottom.freq`: low frequency for bandpass, 6) `top.freq`: high
+  frequency for bandpass, 7) `sound.id`: ID of sounds used to identify
+  counterparts across distances, and 8) `reference`: identity of sounds
   to be used as reference for each test sound (row). See
-  [`set_reference_sounds`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
-  for more details on the structure of 'X'.
+  [`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
+  for more details on the structure of `X`.
 
 - cores:
 
   Numeric vector of length 1. Controls whether parallel computing is
-  applied by specifying the number of cores to be used. Default is 1
+  applied by specifying the number of cores to be used. Default `1`
   (i.e. no parallel computing). Can be set globally for the current R
-  session via the "mc.cores" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  session via the `"mc.cores"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - pb:
 
-  Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option (see [`options`](https://rdrr.io/r/base/options.html)).
+  Logical argument to control if progress bar is shown. Default `TRUE`.
+  Can be set globally for the current R session via the `"pb"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - spec.smooth:
 
   Numeric vector of length 1 determining the length of the sliding
   window used for a sum smooth for power spectrum calculation (in kHz).
-  Default is 5.
+  Default `5`.
 
 - spectra:
 
   Logical to control if power spectra are returned (as attributes).
-  Default is `FALSE`.
+  Default `FALSE`.
 
 - res:
 
-  Numeric argument of length 1. Controls image resolution. Default is
-  150 (faster) although 300 - 400 is recommended for
-  publication/presentation quality.
+  Numeric argument of length 1. Controls image resolution. Default `150`
+  (faster), although 300-400 is recommended for publication/presentation
+  quality.
 
 - hop.size:
 
-  A numeric vector of length 1 specifying the time window duration (in
-  ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz
-  sampling rate. Ignored if 'wl' is supplied. Can be set globally for
-  the current R session via the "hop.size" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  Numeric vector of length 1 specifying the time window duration (in
+  ms). Default `11.6` ms, which is equivalent to 512 `wl` for a 44.1 kHz
+  sampling rate. Ignored if `wl` is supplied. Can be set globally for
+  the current R session via the `"hop.size"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - wl:
 
-  A numeric vector of length 1 specifying the window length of the
-  spectrogram, default is NULL. If supplied, 'hop.size' is ignored.
+  Numeric vector of length 1 specifying the window length of the
+  spectrogram. Default `NULL`. If supplied, `hop.size` is ignored.
   Applied to both spectra and spectrograms on image files.
 
 - ovlp:
 
   Numeric vector of length 1 specifying the percentage of overlap
   between two consecutive windows, as in
-  [`spectro`](https://rdrr.io/pkg/seewave/man/spectro.html). Default
-  is 70. Applied to both spectra and spectrograms on image files. Can be
-  set globally for the current R session via the "ovlp" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  [`seewave::spectro()`](https://rdrr.io/pkg/seewave/man/spectro.html).
+  Default `70`. Applied to both spectra and spectrograms on image files.
+  Can be set globally for the current R session via the `"ovlp"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - path:
 
   Character string containing the directory path where the sound files
-  are found. Only needed when 'X' is not an extended selection table. If
+  are found. Only needed when `X` is not an extended selection table. If
   not supplied the current working directory is used. Can be set
-  globally for the current R session via the "sound.files.path" option
-  (see [`options`](https://rdrr.io/r/base/options.html)).
+  globally for the current R session via the `"sound.files.path"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - n.bins:
 
   Numeric vector of length 1 specifying the number of frequency bins to
-  use for representing power spectra. Default is 100. If null the raw
+  use for representing power spectra. Default `100`. If `NULL`, the raw
   power spectrum is used (note that this can result in high RAM memory
   usage for large data sets). Power spectrum values are interpolated
-  using [`approx`](https://rdrr.io/r/stats/approxfun.html).
+  using [`stats::approx()`](https://rdrr.io/r/stats/approxfun.html).
 
 ## Value
 
-Object 'X' with an additional column, 'spectrum.blur.ratio', containing
-the computed spectrum blur ratio values. If `spectra = TRUE` the output
-would include power spectra for all sounds as attributes
-('attributes(X)\$spectra').
+Object `X` with an additional column, `spectrum.blur.ratio`, containing
+the computed spectrum blur ratio values. If `spectra = TRUE`, the output
+would also include power spectra for all sounds as attributes
+(`attributes(X)$spectra`).
 
 ## Details
 
 Spectral blur ratio measures the degradation of sound as a function of
 the change in sound power in the frequency domain, analogous to the blur
-ratio proposed by Dabelsteen et al (1993) for the time domain (and
+ratio proposed by Dabelsteen et al. (1993) for the time domain (and
 implemented in
-[`blur_ratio`](https://marce10.github.io/baRulho/reference/blur_ratio.md)).
+[`blur_ratio()`](https://marce10.github.io/baRulho/reference/blur_ratio.md)).
 Low values indicate low degradation of sounds. The function measures the
 blur ratio of spectra from sounds in which a reference playback has been
 re-recorded at different distances. Spectral blur ratio is measured as
 the mismatch between power spectra (expressed as probability density
 functions) of the reference sound and the re-recorded sound. The
 function compares each sound type to the corresponding reference sound.
-The 'sound.id' column must be used to tell the function to only compare
+The `sound.id` column must be used to tell the function to only compare
 sounds belonging to the same category (e.g. song-types). Two methods for
 setting the experimental design are provided. All wave objects in the
-extended selection table must have the same sampling rate so the length
+extended selection table must have the same sampling rate, so the length
 of spectra is comparable. The function uses
-[`spec`](https://rdrr.io/pkg/seewave/man/spec.html) internally to
-compute power spectra. NA is returned if at least one the power spectra
-cannot be computed.
+[`seewave::spec()`](https://rdrr.io/pkg/seewave/man/spec.html)
+internally to compute power spectra. `NA` is returned if at least one of
+the power spectra cannot be computed.
 
 ## References
 
@@ -155,7 +156,8 @@ https://doi.org/10.1111/2041-210X.14481
 
 ## See also
 
-[`blur_ratio`](https://marce10.github.io/baRulho/reference/blur_ratio.md)
+[`blur_ratio()`](https://marce10.github.io/baRulho/reference/blur_ratio.md),
+the analogous metric in the time domain.
 
 Other quantify degradation:
 [`blur_ratio()`](https://marce10.github.io/baRulho/reference/blur_ratio.md),

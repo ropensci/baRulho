@@ -1,6 +1,10 @@
 # Align test sound files
 
-`align_test_files` aligns test (re-recorded) sound files.
+`align_test_files()` aligns test (re-recorded) sound files. It uses the
+position of acoustic markers found by
+[`find_markers()`](https://marce10.github.io/baRulho/reference/find_markers.md)
+to infer the position of all other sounds referenced in a master sound
+file, producing an aligned selection table for the re-recorded files.
 
 ## Usage
 
@@ -21,25 +25,24 @@ align_test_files(
 
 - X:
 
-  object of class 'data.frame', 'selection_table' or
-  'extended_selection_table' (the last 2 classes are created by the
-  function
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  from the warbleR package) with the master sound file annotations. This
-  should be the same data than that was used for finding the position of
-  markers in
-  [`find_markers`](https://marce10.github.io/baRulho/reference/find_markers.md).
-  It should also contain a 'sound.id' column that will be used to label
+  Object of class `data.frame`, `selection_table`, or
+  `extended_selection_table` (the last 2 classes are created by
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+  from the **warbleR** package) with the master sound file annotations.
+  This should be the same data used for finding the position of markers
+  in
+  [`find_markers()`](https://marce10.github.io/baRulho/reference/find_markers.md).
+  It should also contain a `sound.id` column that will be used to label
   re-recorded sounds according to their counterpart in the master sound
   file.
 
 - Y:
 
-  object of class 'data.frame' with the output of
-  [`find_markers`](https://marce10.github.io/baRulho/reference/find_markers.md).
+  Object of class `data.frame` with the output of
+  [`find_markers()`](https://marce10.github.io/baRulho/reference/find_markers.md).
   This object contains the position of markers in the re-recorded sound
-  files. If more than one marker is supplied for a sound file only the
-  one with the highest correlation score ('scores' column in 'X') is
+  files. If more than one marker is supplied for a sound file, only the
+  one with the highest correlation score (`scores` column in `Y`) is
   used.
 
 - path:
@@ -50,48 +53,48 @@ align_test_files(
 - by.song:
 
   Logical argument to indicate if the extended selection table should be
-  created by song (see 'by.song'
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  argument). Default is `TRUE`.
+  created by song (see the `by.song` argument of
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)).
+  Default `TRUE`.
 
 - marker:
 
-  Character string to define whether a "start" or "end" marker would be
-  used for aligning re-recorded sound files. Default is `NULL`.
-  DEPRECATED.
+  Character string to define whether a `"start"` or `"end"` marker would
+  be used for aligning re-recorded sound files. Default `NULL`.
+  Deprecated.
 
 - cores:
 
   Numeric vector of length 1. Controls whether parallel computing is
-  applied by specifying the number of cores to be used. Default is 1
+  applied by specifying the number of cores to be used. Default `1`
   (i.e. no parallel computing). Can be set globally for the current R
-  session via the "mc.cores" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  session via the `"mc.cores"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - pb:
 
-  Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option (see [`options`](https://rdrr.io/r/base/options.html)).
+  Logical argument to control if progress bar is shown. Default `TRUE`.
+  Can be set globally for the current R session via the `"pb"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - ...:
 
   Additional arguments to be passed to
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  for customizing extended selection table.
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+  for customizing the extended selection table.
 
 ## Value
 
-An object of the same class than 'X' with the aligned sounds from test
+An object of the same class as `X` with the aligned sounds from the test
 (re-recorded) sound files.
 
 ## Details
 
 The function aligns sounds found in re-recorded sound files (referenced
-in 'Y') according to a master sound file (referenced in 'X'). If more
+in `Y`) according to a master sound file (referenced in `X`). If more
 than one marker is supplied for a sound file only the one with the
-highest correlation score ('scores' column in 'X') is used. The function
-outputs an 'extended selection table' by default.
+highest correlation score (`scores` column in `Y`) is used. The function
+outputs an `extended selection table` by default.
 
 ## References
 
@@ -102,9 +105,14 @@ Evolution, 00, 1-12. https://doi.org/10.1111/2041-210X.14481
 
 ## See also
 
-[`manual_realign`](https://marce10.github.io/baRulho/reference/manual_realign.md);
-[`find_markers`](https://marce10.github.io/baRulho/reference/find_markers.md);
-[`plot_aligned_sounds`](https://marce10.github.io/baRulho/reference/plot_aligned_sounds.md)
+[`manual_realign()`](https://marce10.github.io/baRulho/reference/manual_realign.md)
+and
+[`auto_realign()`](https://marce10.github.io/baRulho/reference/auto_realign.md),
+for fixing small remaining misalignments;
+[`find_markers()`](https://marce10.github.io/baRulho/reference/find_markers.md),
+for locating markers in the first place; and
+[`plot_aligned_sounds()`](https://marce10.github.io/baRulho/reference/plot_aligned_sounds.md),
+for visually checking the result.
 
 Other test sound alignment:
 [`auto_realign()`](https://marce10.github.io/baRulho/reference/auto_realign.md),

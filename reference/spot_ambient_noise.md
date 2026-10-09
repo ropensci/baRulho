@@ -1,6 +1,6 @@
 # Find a segment of ambient noise to be used as reference
 
-`spot_ambient_noise` finds a segment of ambient noise to be used as
+`spot_ambient_noise()` finds a segment of ambient noise to be used as
 reference by other functions.
 
 ## Usage
@@ -21,83 +21,81 @@ spot_ambient_noise(
 
 - X:
 
-  Object of class 'data.frame', or 'selection_table' (a class are
-  created by the function
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  from the warbleR package) with the test sound files' annotations
-  ('extended_selection_table' are not supported). Must contain the
-  following columns: 1) "sound.files": name of the .wav files, 2)
-  "selec": unique selection identifier (within a sound file), 3)
-  "start": start time and 4) "end": end time of selections, 5)
-  "bottom.freq": low frequency for bandpass, 6) "top.freq": high
-  frequency for bandpass, 7) "sound.id": ID of sounds used to identify
-  counterparts across distances/transects. 'selec' column values in 'X'
-  cannot be duplicated within a sound file ('sound.files' column) as
-  this combination is used to refer to specific rows.
+  Object of class `data.frame` or `selection_table` (a class created by
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+  from the **warbleR** package) with the test sound files' annotations
+  (`extended_selection_table` is not supported). Must contain the
+  following columns: 1) `sound.files`: name of the `.wav` files, 2)
+  `selec`: unique selection identifier (within a sound file), 3)
+  `start`: start time and 4) `end`: end time of selections, 5)
+  `bottom.freq`: low frequency for bandpass, 6) `top.freq`: high
+  frequency for bandpass, and 7) `sound.id`: ID of sounds used to
+  identify counterparts across distances/transects. `selec` column
+  values in `X` cannot be duplicated within a sound file (`sound.files`
+  column), as this combination is used to refer to specific rows.
 
 - cores:
 
   Numeric vector of length 1. Controls whether parallel computing is
-  applied by specifying the number of cores to be used. Default is 1
+  applied by specifying the number of cores to be used. Default `1`
   (i.e. no parallel computing). Can be set globally for the current R
-  session via the "mc.cores" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  session via the `"mc.cores"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - pb:
 
-  Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option (see [`options`](https://rdrr.io/r/base/options.html)).
+  Logical argument to control if progress bar is shown. Default `TRUE`.
+  Can be set globally for the current R session via the `"pb"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - path:
 
   Character string containing the directory path where the sound files
-  are found. Only needed when 'X' is not an extended selection table. If
+  are found. Only needed when `X` is not an extended selection table. If
   not supplied the current working directory is used. Can be set
-  globally for the current R session via the "sound.files.path" option
-  (see [`options`](https://rdrr.io/r/base/options.html)).
+  globally for the current R session via the `"sound.files.path"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - length:
 
   Numeric. Length (in s) of the segments to be used as ambient noise.
-  Must be supplied. Default is `NULL`.
+  Must be supplied. Default `NULL`.
 
 - ovlp:
 
   Numeric vector of length 1 specifying the percentage of overlap
-  between two consecutive segments. Default is 0. Can be set globally
-  for the current R session via the "ovlp" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  between two consecutive segments. Default `0`. Can be set globally for
+  the current R session via the `"ovlp"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - fun:
 
   Function to be applied to select the segment to be used as ambient
   noise. It must be a function that takes a numeric vector (peak sound
-  pressure level values for each candidate segment) and a single value
-  with the index of the value to keep. Default is
+  pressure level values for each candidate segment) and returns a single
+  value with the index of the value to keep. Default
   `function(x) which.min(abs(x - mean(x)))`.
 
 ## Value
 
-An object similar to 'X' with one additional row for each sound file,
-containing the selected 'ambient' reference.
+An object similar to `X` with one additional row for each sound file,
+containing the selected `"ambient"` reference.
 
 ## Details
 
 This function finds a segment of ambient noise to be used as reference
 by other functions. The function first finds candidate segments that do
-not overlap with annotated sounds in 'X'. Then, it calculates the peak
+not overlap with annotated sounds in `X`. Then, it calculates the peak
 sound pressure level (SPL) of each candidate segment and applies the
-function supplied by the argument 'fun' to select a single segment. By
-default 'fun' searches for the segment with the closest value to the
+function supplied by the `fun` argument to select a single segment. By
+default, `fun` searches for the segment with the closest value to the
 mean peak SPL across all candidate segments. Ambient noise annotations
-are added as a new row in 'X'. Ambient noise annotations are used by the
-functions
-[`signal_to_noise_ratio`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md)
+are added as a new row in `X`. Ambient noise annotations are used by
+[`signal_to_noise_ratio()`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md)
 and
-[`noise_profile`](https://marce10.github.io/baRulho/reference/noise_profile.md)
+[`noise_profile()`](https://marce10.github.io/baRulho/reference/noise_profile.md)
 to determine background noise levels. Note that this function does not
-work with annotations in 'extended_selection_table' format.
+work with annotations in `extended_selection_table` format.
 
 ## References
 
@@ -111,8 +109,10 @@ Evolution, 8(2), 184-191.
 
 ## See also
 
-[`signal_to_noise_ratio`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md),
-[`noise_profile`](https://marce10.github.io/baRulho/reference/noise_profile.md)
+[`signal_to_noise_ratio()`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md)
+and
+[`noise_profile()`](https://marce10.github.io/baRulho/reference/noise_profile.md),
+which use the ambient noise annotations added by this function.
 
 Other prepare acoustic data:
 [`master_sound_file()`](https://marce10.github.io/baRulho/reference/master_sound_file.md),

@@ -1,7 +1,10 @@
 # Estimate attenuation of sound pressure level
 
-`attenuation` estimates atmospheric attenuation and atmospheric
-absorption.
+`attenuation()` estimates atmospheric attenuation and atmospheric
+absorption, calculating the geometric, atmospheric, and habitat
+attenuation, as well as the overall expected attenuation (the sum of the
+other three), based on temperature, relative humidity, atmospheric
+pressure, and sound frequency.
 
 ## Usage
 
@@ -34,17 +37,18 @@ attenuation(
 
 - temp:
 
-  Numeric vector of length 1 with frequency (in Celsius). Default is 20.
+  Numeric vector of length 1 with temperature (in Celsius). Default
+  `20`.
 
 - rh:
 
   Numeric vector of length 1 with relative humidity (in percentage).
-  Default is 60.
+  Default `60`.
 
 - pa:
 
   Numeric vector of length 1 with atmospheric (barometric) pressure in
-  Pa (standard: 101325, default). Used for atmospheric attenuation.
+  Pa (standard: `101325`, default). Used for atmospheric attenuation.
 
 - hab.att.coef:
 
@@ -52,16 +56,14 @@ attenuation(
 
 ## Value
 
-Returns the geometric, atmospheric and habitat attenuation (in dB) as
-well as the combined attenuation.
+A `data.frame` with the geometric, atmospheric, and habitat attenuation
+(in dB), as well as the combined attenuation.
 
 ## Details
 
-Calculate the geometric, atmospheric and habitat attenuation and the
-overall expected attenuation (the sum of the other three) based on
-temperature, relative humidity, atmospheric pressure and sound
-frequency. Attenuation values are given in dB. The function is modified
-from http://www.sengpielaudio.com
+Attenuation values are given in dB. The function is modified from
+<http://www.sengpielaudio.com> and
+<https://scikit-maad.github.io/generated/maad.spl.attenuation_dB.html#maad.spl.attenuation_dB>.
 
 ## References
 
@@ -87,8 +89,8 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
   # measure attenuation
   attenuation(frequency = 2000, dist = 50, dist0 = 1)
 }
-#>   frequency dist geometric.attenuation atmopheric.attenuation
-#> 1      2000   50               33.9794              0.4547757
+#>   frequency dist geometric.attenuation atmospheric.attenuation
+#> 1      2000   50               33.9794               0.4547757
 #>   habitat.attenuation combined.attenuation
 #> 1                1.96             36.39418
 ```

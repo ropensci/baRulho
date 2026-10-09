@@ -1,6 +1,6 @@
 # Measure spectrographic cross-correlation as a measure of sound distortion
 
-`spcc` measures spectrographic cross-correlation as a measure of sound
+`spcc()` measures spectrographic cross-correlation as a measure of sound
 distortion in sounds referenced in an extended selection table.
 
 ## Usage
@@ -24,101 +24,99 @@ spcc(
 - X:
 
   The output of
-  [`set_reference_sounds`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
-  which is an object of class 'data.frame', 'selection_table' or
-  'extended_selection_table' (the last 2 classes are created by the
-  function
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  from the warbleR package) with the test sound files' annotations .
-  Must contain the following columns: 1) "sound.files": name of the .wav
-  files, 2) "selec": unique selection identifier (within a sound
-  file), 3) "start": start time and 4) "end": end time of selections, 5)
-  "bottom.freq": low frequency for bandpass, 6) "top.freq": high
-  frequency for bandpass, 7) "sound.id": ID of sounds used to identify
-  counterparts across distances and 8) "reference": identity of sounds
+  [`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md),
+  an object of class `data.frame`, `selection_table`, or
+  `extended_selection_table` (the last 2 classes are created by
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+  from the **warbleR** package) with the test sound files' annotations.
+  Must contain the following columns: 1) `sound.files`: name of the
+  `.wav` files, 2) `selec`: unique selection identifier (within a sound
+  file), 3) `start`: start time and 4) `end`: end time of selections, 5)
+  `bottom.freq`: low frequency for bandpass, 6) `top.freq`: high
+  frequency for bandpass, 7) `sound.id`: ID of sounds used to identify
+  counterparts across distances, and 8) `reference`: identity of sounds
   to be used as reference for each test sound (row). See
-  [`set_reference_sounds`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
-  for more details on the structure of 'X'.
+  [`set_reference_sounds()`](https://marce10.github.io/baRulho/reference/set_reference_sounds.md)
+  for more details on the structure of `X`.
 
 - cores:
 
   Numeric vector of length 1. Controls whether parallel computing is
-  applied by specifying the number of cores to be used. Default is 1
+  applied by specifying the number of cores to be used. Default `1`
   (i.e. no parallel computing). Can be set globally for the current R
-  session via the "mc.cores" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  session via the `"mc.cores"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - pb:
 
-  Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option (see [`options`](https://rdrr.io/r/base/options.html)).
+  Logical argument to control if progress bar is shown. Default `TRUE`.
+  Can be set globally for the current R session via the `"pb"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - cor.method:
 
   Character string indicating the correlation coefficient to be applied
-  ("pearson", "spearman", or "kendall", see
-  [`cor`](https://rdrr.io/r/stats/cor.html)).
+  (`"pearson"`, `"spearman"`, or `"kendall"`, see
+  [`stats::cor()`](https://rdrr.io/r/stats/cor.html)).
 
 - hop.size:
 
-  A numeric vector of length 1 specifying the time window duration (in
-  ms). Default is 11.6 ms, which is equivalent to 512 wl for a 44.1 kHz
-  sampling rate. Ignored if 'wl' is supplied. Can be set globally for
-  the current R session via the "hop.size" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  Numeric vector of length 1 specifying the time window duration (in
+  ms). Default `11.6` ms, which is equivalent to 512 `wl` for a 44.1 kHz
+  sampling rate. Ignored if `wl` is supplied. Can be set globally for
+  the current R session via the `"hop.size"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - wl:
 
-  a vector with a single even integer number specifying the window
-  length of the spectrogram, default is `NULL`. If supplied, 'hop.size'
-  is ignored. Odd integers will be rounded up to the nearest even
-  number. Can be set globally for the current R session via the "wl"
-  option (see [`options`](https://rdrr.io/r/base/options.html)).
+  A vector with a single even integer number specifying the window
+  length of the spectrogram. Default `NULL`. If supplied, `hop.size` is
+  ignored. Odd integers will be rounded up to the nearest even number.
+  Can be set globally for the current R session via the `"wl"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - ovlp:
 
   Numeric vector of length 1 specifying % of overlap between two
   consecutive windows, as in
-  [`spectro`](https://rdrr.io/pkg/seewave/man/spectro.html). Default
-  is 90. High values of ovlp slow down the function but produce more
-  accurate results. Can be set globally for the current R session via
-  the "ovlp" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  [`seewave::spectro()`](https://rdrr.io/pkg/seewave/man/spectro.html).
+  Default `90`. High values of `ovlp` slow down the function but produce
+  more accurate results. Can be set globally for the current R session
+  via the `"ovlp"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - wn:
 
-  A character vector of length 1 specifying the window name as in
-  [`ftwindow`](https://rdrr.io/pkg/seewave/man/ftwindow.html).
+  Character vector of length 1 specifying the window name, as in
+  [`seewave::ftwindow()`](https://rdrr.io/pkg/seewave/man/ftwindow.html).
 
 - path:
 
   Character string containing the directory path where the sound files
-  are found. Only needed when 'X' is not an extended selection table. If
+  are found. Only needed when `X` is not an extended selection table. If
   not supplied the current working directory is used. Can be set
-  globally for the current R session via the "sound.files.path" option
-  (see [`options`](https://rdrr.io/r/base/options.html)).
+  globally for the current R session via the `"sound.files.path"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 ## Value
 
-Object 'X' with an additional column, 'cross.correlation', containing
+Object `X` with an additional column, `cross.correlation`, containing
 the computed spectrogram cross-correlation coefficients.
 
 ## Details
 
 Spectrographic cross-correlation measures frequency distortion of sounds
-as a similarity metric. Values close to 1 means very similar
-spectrograms (i.e. little sound distortion has occurred).
-Cross-correlation is measured of sounds in which a reference playback
-has been re-recorded at increasing distances. The 'sound.id' column must
-be used to indicate the function to only compare sounds belonging to the
-same category (e.g. song-types). The function compares each sound to the
-corresponding reference sound within the supplied frequency range (e.g.
-bandpass) of the reference sound ('bottom.freq' and 'top.freq' columns
-in 'X'). Two methods for computing cross-correlation are provided (see
-'method' argument). The function is a wrapper on warbleR's
-[`cross_correlation`](https://marce10.github.io/warbleR/reference/cross_correlation.html)
-function.
+as a similarity metric. Values close to 1 mean very similar spectrograms
+(i.e. little sound distortion has occurred). Cross-correlation is
+measured on sounds in which a reference playback has been re-recorded at
+increasing distances. The `sound.id` column must be used to tell the
+function to only compare sounds belonging to the same category (e.g.
+song-types). The function compares each sound to the corresponding
+reference sound within the supplied frequency range (e.g. bandpass) of
+the reference sound (`bottom.freq` and `top.freq` columns in `X`). Two
+methods for computing cross-correlation are provided (see the `method`
+argument). The function is a wrapper on
+[`warbleR::cross_correlation()`](https://marce10.github.io/warbleR/reference/cross_correlation.html).
 
 ## References
 
@@ -132,9 +130,12 @@ vocal phonology: an application to Swamp Sparrow song. Ethology.
 
 ## See also
 
-[`blur_ratio`](https://marce10.github.io/baRulho/reference/blur_ratio.md),
-[`manual_realign`](https://marce10.github.io/baRulho/reference/manual_realign.md),
-[`cross_correlation`](https://marce10.github.io/warbleR/reference/cross_correlation.html)
+[`blur_ratio()`](https://marce10.github.io/baRulho/reference/blur_ratio.md)
+and
+[`manual_realign()`](https://marce10.github.io/baRulho/reference/manual_realign.md);
+and
+[`warbleR::cross_correlation()`](https://marce10.github.io/warbleR/reference/cross_correlation.html),
+which this function wraps.
 
 Other quantify degradation:
 [`blur_ratio()`](https://marce10.github.io/baRulho/reference/blur_ratio.md),

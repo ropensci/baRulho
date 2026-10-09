@@ -1,7 +1,7 @@
 # Measure full spectrum sound noise profiles
 
-`noise_profile` Measure full spectrum sound pressure levels (i.e. noise
-profiles) in sound files or extended selection tables.
+`noise_profile()` measures full spectrum sound pressure levels (i.e.
+noise profiles) in sound files or extended selection tables.
 
 ## Usage
 
@@ -28,128 +28,127 @@ noise_profile(
 
 - X:
 
-  Object of class 'data.frame', 'selection_table' or
-  'extended_selection_table' (the last 2 classes are created by the
-  function
-  [`selection_table`](https://marce10.github.io/warbleR/reference/selection_table.html)
-  from the warbleR package) with the test sound files' annotations .
-  Must contain the following columns: 1) "sound.files": name of the .wav
-  files, 2) "selec": unique selection identifier (within a sound
-  file), 3) "start": start time and 4) "end": end time of selections, 5)
-  "bottom.freq": low frequency for bandpass, 6) "top.freq": high
-  frequency for bandpass and 7) "sound.id": ID of sounds used to
-  identify counterparts across distances (needed for "custom" noise
-  reference, see "noise.ref" argument). Default is `NULL`.
+  Object of class `data.frame`, `selection_table`, or
+  `extended_selection_table` (the last 2 classes are created by
+  [`warbleR::selection_table()`](https://marce10.github.io/warbleR/reference/selection_table.html)
+  from the **warbleR** package) with the test sound files' annotations.
+  Must contain the following columns: 1) `sound.files`: name of the
+  `.wav` files, 2) `selec`: unique selection identifier (within a sound
+  file), 3) `start`: start time and 4) `end`: end time of selections, 5)
+  `bottom.freq`: low frequency for bandpass, 6) `top.freq`: high
+  frequency for bandpass, and 7) `sound.id`: ID of sounds used to
+  identify counterparts across distances (needed for `"custom"` noise
+  reference, see the `noise.ref` argument). Default `NULL`.
 
 - files:
 
   Character vector with names of wave files to be analyzed. Files must
-  be found in 'path' supplied (or in the working directory if 'path' is
-  not supplied). Default is `NULL`.
+  be found in the supplied `path` (or in the working directory if `path`
+  is not supplied). Default `NULL`.
 
 - mar:
 
-  numeric vector of length 1. Specifies the margins adjacent to the
-  start and end points of selection over which to measure ambient noise.
-  Required if 'X' is supplied and ignored if not supplied. Default is
-  `NULL`.
+  Numeric vector of length 1. Specifies the margins adjacent to the
+  start and end points of a selection over which to measure ambient
+  noise. Required if `X` is supplied, and ignored if `X` is not
+  supplied. Default `NULL`.
 
 - noise.ref:
 
-  Character vector of length 1 to determined which noise segment must be
-  used for measuring ambient noise. Ignored if 'X' is not supplied. Two
+  Character vector of length 1 determining which noise segment must be
+  used for measuring ambient noise. Ignored if `X` is not supplied. Two
   options are available:
 
-  - `adjacent`: measure ambient noise right before the sound (using
-    argument 'mar' to define duration of ambient noise segments).
+  - **`adjacent`**: measure ambient noise right before the sound (using
+    the `mar` argument to define duration of ambient noise segments).
 
-  - `custom`: measure ambient noise segments referenced in the selection
-    table (labeled as 'ambient' in the 'sound.id' column).
+  - **`custom`**: measure ambient noise segments referenced in the
+    selection table (labeled as `"ambient"` in the `sound.id` column).
 
 - cores:
 
   Numeric vector of length 1. Controls whether parallel computing is
-  applied by specifying the number of cores to be used. Default is 1
+  applied by specifying the number of cores to be used. Default `1`
   (i.e. no parallel computing). Can be set globally for the current R
-  session via the "mc.cores" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  session via the `"mc.cores"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - pb:
 
-  Logical argument to control if progress bar is shown. Default is
-  `TRUE`. Can be set globally for the current R session via the "pb"
-  option (see [`options`](https://rdrr.io/r/base/options.html)).
+  Logical argument to control if progress bar is shown. Default `TRUE`.
+  Can be set globally for the current R session via the `"pb"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - path:
 
   Character string containing the directory path where the sound files
-  are found. Only needed when 'X' is not an extended selection table. If
+  are found. Only needed when `X` is not an extended selection table. If
   not supplied the current working directory is used. Can be set
-  globally for the current R session via the "sound.files.path" option
-  (see [`options`](https://rdrr.io/r/base/options.html)).
+  globally for the current R session via the `"sound.files.path"` option
+  (see [`options()`](https://rdrr.io/r/base/options.html)).
 
 - bp:
 
   Numeric vector of length 2 giving the lower and upper limits of a
-  frequency bandpass filter (in kHz). Default is `NULL`.
+  frequency bandpass filter (in kHz). Default `NULL`.
 
 - hop.size:
 
-  A numeric vector of length 1 specifying the time window duration (in
-  ms). Default is 1 ms, which is equivalent to ~45 wl for a 44.1 kHz
-  sampling rate. Ignored if 'wl' is supplied. Can be set globally for
-  the current R session via the "hop.size" option (see
-  [`options`](https://rdrr.io/r/base/options.html)).
+  Numeric vector of length 1 specifying the time window duration (in
+  ms). Default `1` ms, which is equivalent to ~45 `wl` for a 44.1 kHz
+  sampling rate. Ignored if `wl` is supplied. Can be set globally for
+  the current R session via the `"hop.size"` option (see
+  [`options()`](https://rdrr.io/r/base/options.html)).
 
 - wl:
 
-  A numeric vector of length 1 specifying the window length of the
-  spectrogram, default is NULL. Ignored if `bp = NULL`. If supplied,
-  'hop.size' is ignored. Note that lower values will increase time
+  Numeric vector of length 1 specifying the window length of the
+  spectrogram. Default `NULL`. Ignored if `bp = NULL`. If supplied,
+  `hop.size` is ignored. Note that lower values will increase time
   resolution, which is more important for amplitude ratio calculations.
 
 - PSD:
 
   Logical to control whether the Probability Mass Function (the
-  probability distribution of frequencies). See
-  [`meanspec`](https://rdrr.io/pkg/seewave/man/meanspec.html). Default
-  is `FALSE`.
+  probability distribution of frequencies) is returned. See
+  [`seewave::meanspec()`](https://rdrr.io/pkg/seewave/man/meanspec.html).
+  Default `FALSE`.
 
 - norm:
 
   Logical to control whether amplitude values are normalized (divided by
   the maximum) so the highest value is 1. See
-  [`meanspec`](https://rdrr.io/pkg/seewave/man/meanspec.html). Default
-  is `TRUE`.
+  [`seewave::meanspec()`](https://rdrr.io/pkg/seewave/man/meanspec.html).
+  Default `TRUE`.
 
 - dB:
 
-  A character string of length 1 specifying the type dB to return:
-  "max0" for a maximum dB value at 0, "A", "B", "C", "D", and "ITU" for
-  common dB weights. See
-  [`meanspec`](https://rdrr.io/pkg/seewave/man/meanspec.html). Default
-  is `"A"`.
+  Character string of length 1 specifying the type of dB to return:
+  `"max0"` for a maximum dB value at 0, `"A"`, `"B"`, `"C"`, `"D"`, and
+  `"ITU"` for common dB weights. See
+  [`seewave::meanspec()`](https://rdrr.io/pkg/seewave/man/meanspec.html).
+  Default `"A"`.
 
 - averaged:
 
   Logical to control if frequency spectra are averaged within a sound
-  file. Default is `TRUE`.
+  file. Default `TRUE`.
 
 ## Value
 
-A data frame containing the frequency spectra for each sound file or
-wave object (if 'X' is supplied and is of class
-'extended.selection.table').
+A `data.frame` containing the frequency spectra for each sound file or
+wave object (if `X` is supplied and is of class
+`extended_selection_table`).
 
 ## Details
 
 The function estimates full spectrum sound pressure levels (i.e. noise
 profiles) of ambient noise. This can be done on data frames/(extended)
 selection tables (using the segments containing no target sound or the
-'ambient' sound id) or over complete sound files in the working
-directory (or path supplied). The function uses
-[`meanspec`](https://rdrr.io/pkg/seewave/man/meanspec.html) internally
-to calculate frequency spectra.
+`"ambient"` sound ID) or over complete sound files in the working
+directory (or supplied `path`). The function uses
+[`seewave::meanspec()`](https://rdrr.io/pkg/seewave/man/meanspec.html)
+internally to calculate frequency spectra.
 
 ## References
 

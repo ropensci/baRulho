@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">baRulho</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,7 +38,23 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.1.7" id="barulho-217">baRulho 2.1.7<a class="anchor" aria-label="anchor" href="#barulho-217"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.2.0" id="barulho-220">baRulho 2.2.0<a class="anchor" aria-label="anchor" href="#barulho-220"></a></h2>
+<div class="section level4">
+<h4 id="minor-improvements-2-2-0">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-2-2-0"></a></h4>
+<ul><li>Fix bug in <code><a href="../reference/spcc.html">spcc()</a></code> in which the <code>cor.method</code> argument was ignored (always computed Pearson correlation)</li>
+<li>Fix bug in <code><a href="../reference/tail_to_signal_ratio.html">tail_to_signal_ratio()</a></code> that used the wrong dB scale (natural log instead of <code>20 * log10()</code>, inconsistent with <code><a href="../reference/signal_to_noise_ratio.html">signal_to_noise_ratio()</a></code> and <code><a href="../reference/excess_attenuation.html">excess_attenuation()</a></code>)</li>
+<li>Fix bug in <code><a href="../reference/envelope_correlation.html">envelope_correlation()</a></code>’s internal sliding-window search that never actually slid across candidate alignments</li>
+<li>Fix bug in <code><a href="../reference/plot_degradation.html">plot_degradation()</a></code> and <code><a href="../reference/auto_realign.html">auto_realign()</a></code> in which an internal dispatch issue caused some of their own argument validation checks to be silently skipped</li>
+<li>Fix bug in <code><a href="../reference/synth_sounds.html">synth_sounds()</a></code> that crashed when called with a single frequency and a single duration</li>
+<li>Fix bug in <code><a href="../reference/detection_distance.html">detection_distance()</a></code> in which the <code>wl</code> argument was not reaching the internal peak-frequency calculation</li>
+<li>Fix misspelled output column <code>atmopheric.attenuation</code> in <code><a href="../reference/attenuation.html">attenuation()</a></code> (now <code>atmospheric.attenuation</code>)</li>
+<li>Fix several smaller documentation inconsistencies (incorrect argument defaults, mislocated columns, stale formulas)</li>
+<li>Reformat all exported function documentation using markdown roxygen for a more consistent and readable reference site</li>
+<li>Vignettes now pull their citation directly from <code>inst/CITATION</code> instead of hardcoded text, and no longer describe a stale version of the example data set</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="2.1.7" id="barulho-217">baRulho 2.1.7<a class="anchor" aria-label="anchor" href="#barulho-217"></a></h2><p class="text-muted">CRAN release: 2026-07-24</p>
 <div class="section level4">
 <h4 id="minor-improvements-2-1-7">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-2-1-7"></a></h4>
 <ul><li><p>Fix bug in <code><a href="../reference/manual_realign.html">manual_realign()</a></code> that ask for a ‘scores’ column in Y</p></li>

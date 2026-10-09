@@ -1,6 +1,51 @@
 # Changelog
 
+## baRulho 2.2.0
+
+#### MINOR IMPROVEMENTS
+
+- Fix bug in
+  [`spcc()`](https://marce10.github.io/baRulho/reference/spcc.md) in
+  which the `cor.method` argument was ignored (always computed Pearson
+  correlation)
+- Fix bug in
+  [`tail_to_signal_ratio()`](https://marce10.github.io/baRulho/reference/tail_to_signal_ratio.md)
+  that used the wrong dB scale (natural log instead of `20 * log10()`,
+  inconsistent with
+  [`signal_to_noise_ratio()`](https://marce10.github.io/baRulho/reference/signal_to_noise_ratio.md)
+  and
+  [`excess_attenuation()`](https://marce10.github.io/baRulho/reference/excess_attenuation.md))
+- Fix bug in
+  [`envelope_correlation()`](https://marce10.github.io/baRulho/reference/envelope_correlation.md)’s
+  internal sliding-window search that never actually slid across
+  candidate alignments
+- Fix bug in
+  [`plot_degradation()`](https://marce10.github.io/baRulho/reference/plot_degradation.md)
+  and
+  [`auto_realign()`](https://marce10.github.io/baRulho/reference/auto_realign.md)
+  in which an internal dispatch issue caused some of their own argument
+  validation checks to be silently skipped
+- Fix bug in
+  [`synth_sounds()`](https://marce10.github.io/baRulho/reference/synth_sounds.md)
+  that crashed when called with a single frequency and a single duration
+- Fix bug in
+  [`detection_distance()`](https://marce10.github.io/baRulho/reference/detection_distance.md)
+  in which the `wl` argument was not reaching the internal
+  peak-frequency calculation
+- Fix misspelled output column `atmopheric.attenuation` in
+  [`attenuation()`](https://marce10.github.io/baRulho/reference/attenuation.md)
+  (now `atmospheric.attenuation`)
+- Fix several smaller documentation inconsistencies (incorrect argument
+  defaults, mislocated columns, stale formulas)
+- Reformat all exported function documentation using markdown roxygen
+  for a more consistent and readable reference site
+- Vignettes now pull their citation directly from `inst/CITATION`
+  instead of hardcoded text, and no longer describe a stale version of
+  the example data set
+
 ## baRulho 2.1.7
+
+CRAN release: 2026-07-24
 
 #### MINOR IMPROVEMENTS
 

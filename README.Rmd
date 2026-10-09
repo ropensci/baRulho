@@ -20,12 +20,12 @@ editor_options:
 
 [baRulho](https://cran.r-project.org/package=baRulho) is intended to facilitate the implementation of (animal) sound propagation experiments, which typically aim to quantify changes in signal structure when transmitted in a given habitat by broadcasting and re-recording animal sounds at increasing distances. 
 
-These experiments aim to answer research questions such as: 
+These experiments aim to answer research questions such as:
 
-- How habitat structure has shaped the propagation properties of animal acoustic signals? 
-- Which acoustic features are shaped by selection for improving propagation? 
-- Which features are more degraded in different habitats? 
-- How far a acoustic signals can be detected? 
+- How has habitat structure shaped the propagation properties of animal acoustic signals?
+- Which acoustic features have been shaped by selection for improved propagation?
+- Which features degrade more in which habitats?
+- How far can acoustic signals be detected?
 
 A common sequence of steps to experimentally test hypotheses related to sound propagation is depicted in the following diagram:
 
@@ -39,22 +39,19 @@ _Diagram depicting a typical workflow for a experiment working on signal propaga
 
 &nbsp;
 
-[baRulho](https://docs.ropensci.org/baRulho//) offers functions for critical steps in this workflow (those in black, including 'checks') that required acoustic data manipulation and analysis.
+[baRulho](https://docs.ropensci.org/baRulho//) offers functions for the critical steps in this workflow (those in black, including "checks") that require acoustic data manipulation and analysis.
 
 The main features of the package are:
 
  - The use of loops to apply tasks through sounds referenced in a selection table (sensu [warbleR](https://cran.r-project.org/package=warbleR))
- - The production of image files with graphic representations of sound in time and/or frequency that let users verify acoustic analyses 
- - The use of annotation tables as the object format to input acoustic data and annotations and to output results 
+ - The production of image files with graphic representations of sound in time and/or frequency that let users verify acoustic analyses
+ - The use of annotation tables as the object format to input acoustic data and annotations and to output results
  - The use of parallelization to distribute tasks among several cores to improve computational efficiency
 
 
 [baRulho](https://docs.ropensci.org/baRulho//) builds upon functions and data formats from the [warbleR](https://cran.r-project.org/package=warbleR) and [seewave](https://cran.r-project.org/package=seewave) packages, so some experience with these packages is advised.
 
-Take a look at the vignettes for an overview of the main features of the packages:
-
-- [Align test sounds](https://docs.ropensci.org/baRulho//articles/align_test_sounds.html)
-- [Quantify degradation](https://docs.ropensci.org/baRulho//articles/quantify_degradation.html)
+This package has been [peer-reviewed by rOpenSci](https://github.com/ropensci/software-review/issues/609).
 
 ## Installing baRulho
 
@@ -69,9 +66,9 @@ Install/load the package from CRAN as follows:
 library(baRulho)
 ```
 
-It can also be install from [R-Universe](https://ropensci.org/blog/2021/06/22/setup-runiverse/) in this way:
+It can also be installed from [R-Universe](https://ropensci.org/blog/2021/06/22/setup-runiverse/) in this way:
 
-```{r}
+```{r, message = FALSE}
 install.packages("baRulho", repos = "https://ropensci.r-universe.dev")
 ```
 
@@ -92,7 +89,49 @@ remotes::install_github("ropensci/baRulho")
 library(baRulho)
 ```
 
-Further system requirements due to the dependency [seewave](https://cran.r-project.org/package=seewave) may be needed. 
+Further system requirements due to the dependency [seewave](https://cran.r-project.org/package=seewave) may be needed.
+
+## Quick example
+
+The package comes with example data from a sound propagation experiment, so you can measure degradation right away. The code below takes re-recordings of the same synthetic sounds made at increasing distances, sets the closest-distance recording as the reference for each sound, and measures [blur ratio](https://docs.ropensci.org/baRulho/reference/blur_ratio.html) -- the mismatch between the amplitude envelope of a re-recorded sound and that of its reference:
+
+```{r, eval = FALSE}
+library(baRulho)
+
+# load example data: re-recordings of synthetic sounds at increasing distances
+data("test_sounds_est")
+
+# set the closest-distance recording as reference for each sound
+test_sounds_est <- set_reference_sounds(X = test_sounds_est)
+
+# measure blur ratio (time-domain degradation) for every re-recorded sound
+blur_ratio(X = test_sounds_est)
+```
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+library(baRulho)
+
+data("test_sounds_est")
+
+test_sounds_est <- set_reference_sounds(X = test_sounds_est, pb = FALSE)
+
+br <- blur_ratio(X = test_sounds_est, pb = FALSE)
+
+df <- as.data.frame(br)[, c("sound.files", "sound.id", "distance", "blur.ratio")]
+
+df <- df[!is.na(df$blur.ratio), ]
+
+print(head(df, 8), row.names = FALSE)
+```
+
+Blur ratio increases with distance, as expected: sounds become more degraded the farther they travel. This is one of several degradation metrics in [baRulho](https://docs.ropensci.org/baRulho//) -- see [`spectrum_blur_ratio()`](https://docs.ropensci.org/baRulho/reference/spectrum_blur_ratio.html), [`excess_attenuation()`](https://docs.ropensci.org/baRulho/reference/excess_attenuation.html), [`signal_to_noise_ratio()`](https://docs.ropensci.org/baRulho/reference/signal_to_noise_ratio.html), [`envelope_correlation()`](https://docs.ropensci.org/baRulho/reference/envelope_correlation.html), [`tail_to_signal_ratio()`](https://docs.ropensci.org/baRulho/reference/tail_to_signal_ratio.html), and [`spcc()`](https://docs.ropensci.org/baRulho/reference/spcc.html) for others, each capturing a different aspect of how a sound changes as it propagates through a habitat. [`plot_degradation()`](https://docs.ropensci.org/baRulho/reference/plot_degradation.html) and [`plot_blur_ratio()`](https://docs.ropensci.org/baRulho/reference/plot_blur_ratio.html) let you inspect these changes visually.
+
+## Vignettes
+
+Take a look at the vignettes for a more detailed overview of the main features of the package, including how to align re-recorded test sounds before measuring degradation:
+
+- [Align test sounds](https://docs.ropensci.org/baRulho//articles/align_test_sounds.html)
+- [Quantify degradation](https://docs.ropensci.org/baRulho//articles/quantify_degradation.html)
 
 ## Other packages
 
@@ -103,7 +142,7 @@ The packages [seewave](https://cran.r-project.org/package=seewave) and  [tuneR](
 
 Please cite [baRulho](https://docs.ropensci.org/baRulho//) as follows:
 
-Araya-Salas M., E. Grabarczyk, M. Quiroz-Oliva, A. Garcia-Rodriguez, A. Rico-Guevara. (2023), *baRulho: an R package to quantify degradation in animal acoustic signals*. bioRxiv 2023.11.22.568305.
+> `r citation("baRulho")$textVersion`
 
 ## References
 

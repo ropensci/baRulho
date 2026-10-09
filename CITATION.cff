@@ -10,9 +10,6 @@ license: GPL-2.0-or-later
 title: 'baRulho: Quantifying (Animal) Sound Degradation'
 version: 2.2.0
 doi: 10.1111/2041-210X.14481
-identifiers:
-- type: doi
-  value: 10.32614/CRAN.package.baRulho
 abstract: Intended to facilitate acoustic analysis of (animal) sound propagation experiments,
   which typically aim to quantify changes in signal structure when transmitted in
   a given habitat by broadcasting and re-recording animal sounds at increasing distances.

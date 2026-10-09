@@ -17,10 +17,13 @@ v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/li
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
-Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)
+Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Codecov test
 coverage](https://codecov.io/gh/ropensci/baRulho/branch/master/graph/badge.svg)](https://app.codecov.io/gh/ropensci/baRulho?branch=master)
 [![R-CMD-check](https://github.com/ropensci/baRulho/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/ropensci/baRulho/actions/workflows/R-CMD-check.yaml)
+[![DOI](https://zenodo.org/badge/DOI/10.1111/2041-210X.14481.svg)](https://doi.org/10.1111/2041-210X.14481)
+[![GitHub last
+commit](https://img.shields.io/github/last-commit/ropensci/baRulho.svg)](https://github.com/ropensci/baRulho/commits/master)
 <!-- badges: end -->
 
 <img src="man/figures/baRulho_sticker.png" alt="baRulho logo" align="right" width = "25%" height="25%"/>

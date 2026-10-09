@@ -3530,10 +3530,7 @@
 
 # make markers for master sound files used by master_sound_file()
 .make_markers <- function(X, flim, sampling_rate, cex){
-  
-  # remove plots at the end
-  on.exit(try(dev.off(), silent = TRUE))
-  
+
   # check if ghost script is installed
   gsexe <- tools::find_gs_cmd()
   
@@ -3570,9 +3567,11 @@
   # remove image file
   on.exit(unlink(temp_file))
   
-  # save par settings
-  oldpar <- par(no.readonly = TRUE)
-  on.exit(par(
+  # save par settings (only if a device is already open, otherwise
+  # par() itself would open one that is never closed)
+  had_device <- !is.null(grDevices::dev.list())
+  oldpar <- if (had_device) par(no.readonly = TRUE) else NULL
+  on.exit(if (!is.null(oldpar)) par(
     mar =  oldpar$mar,
     mfcol =  oldpar$mfcol,
     mfrow =  oldpar$mfrow

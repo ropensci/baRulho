@@ -38,7 +38,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.2.0" id="barulho-220">baRulho 2.2.0<a class="anchor" aria-label="anchor" href="#barulho-220"></a></h2>
+<h2 class="pkg-version" data-toc-text="2.2.0" id="barulho-220">baRulho 2.2.0<a class="anchor" aria-label="anchor" href="#barulho-220"></a></h2><p class="text-muted">CRAN release: 2026-10-09</p>
 <div class="section level4">
 <h4 id="minor-improvements-2-2-0">MINOR IMPROVEMENTS<a class="anchor" aria-label="anchor" href="#minor-improvements-2-2-0"></a></h4>
 <ul><li>Fix bug in <code><a href="../reference/spcc.html">spcc()</a></code> in which the <code>cor.method</code> argument was ignored (always computed Pearson correlation)</li>
@@ -47,6 +47,7 @@
 <li>Fix bug in <code><a href="../reference/plot_degradation.html">plot_degradation()</a></code> and <code><a href="../reference/auto_realign.html">auto_realign()</a></code> in which an internal dispatch issue caused some of their own argument validation checks to be silently skipped</li>
 <li>Fix bug in <code><a href="../reference/synth_sounds.html">synth_sounds()</a></code> that crashed when called with a single frequency and a single duration</li>
 <li>Fix bug in <code><a href="../reference/detection_distance.html">detection_distance()</a></code> in which the <code>wl</code> argument was not reaching the internal peak-frequency calculation</li>
+<li>Fix bug in <code><a href="../reference/master_sound_file.html">master_sound_file()</a></code>’s marker creation that corrupted the graphics device stack, causing spurious “cannot shut down device 1 (the null device)” errors in <code>R CMD check</code> on some platforms</li>
 <li>Fix misspelled output column <code>atmopheric.attenuation</code> in <code><a href="../reference/attenuation.html">attenuation()</a></code> (now <code>atmospheric.attenuation</code>)</li>
 <li>Fix several smaller documentation inconsistencies (incorrect argument defaults, mislocated columns, stale formulas)</li>
 <li>Reformat all exported function documentation using markdown roxygen for a more consistent and readable reference site</li>

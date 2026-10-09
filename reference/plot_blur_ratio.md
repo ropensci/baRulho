@@ -252,5 +252,5 @@ Marcelo Araya-Salas (<marcelo.araya@ucr.ac.cr>)
   # create plots
   plot_blur_ratio(X = X, dest.path = tempdir())
 }
-#> The image files have been saved in the directory path '/tmp/Rtmp0XZ3jd'
+#> The image files have been saved in the directory path '/tmp/RtmpLKxQlp'
 ```

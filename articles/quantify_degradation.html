@@ -1946,12 +1946,12 @@ and power spectra (the last 2 are optional):</p>
 <span></span>
 <span><span class="co"># create plots</span></span>
 <span><span class="va">degrad_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_degradation.html">plot_degradation</a></span><span class="op">(</span><span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/tmp/Rtmp5Ts5Eb' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/Rtmpu9KUkV' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">degrad_imgs</span></span></code></pre></div>
-<pre><code>[1] "/tmp/Rtmp5Ts5Eb/plot_degradation_p1.jpeg"
-[2] "/tmp/Rtmp5Ts5Eb/plot_degradation_p2.jpeg"</code></pre>
+<pre><code>[1] "/tmp/Rtmpu9KUkV/plot_degradation_p1.jpeg"
+[2] "/tmp/Rtmpu9KUkV/plot_degradation_p2.jpeg"</code></pre>
 <p>… and this is one of the images:
 <img src="plot_degradation_p1.jpeg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -2914,16 +2914,16 @@ functions (PMF)).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># plot blur ratio</span></span>
 <span><span class="va">blur_imgs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/plot_blur_ratio.html">plot_blur_ratio</a></span><span class="op">(</span>X <span class="op">=</span> <span class="va">test_sounds_est</span>, dest.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code> [30mThe image files have been saved in the directory path '/tmp/Rtmp5Ts5Eb' [39m</code></pre>
+<pre><code> [30mThe image files have been saved in the directory path '/tmp/Rtmpu9KUkV' [39m</code></pre>
 <p>These are the paths to some of the image files:</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">blur_imgs</span><span class="op">)</span></span></code></pre></div>
-<pre><code>[1] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
-[2] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
-[3] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
-[4] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
-[5] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
-[6] "/tmp/Rtmp5Ts5Eb/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
+<pre><code>[1] "/tmp/Rtmpu9KUkV/blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg"
+[2] "/tmp/Rtmpu9KUkV/blur_ratio_freq1-1m_open.wav-4-30m_closed.wav-4.jpeg"
+[3] "/tmp/Rtmpu9KUkV/blur_ratio_freq1-1m_open.wav-4-10m_open.wav-4.jpeg"  
+[4] "/tmp/Rtmpu9KUkV/blur_ratio_freq1-1m_open.wav-4-30m_open.wav-4.jpeg"  
+[5] "/tmp/Rtmpu9KUkV/blur_ratio_freq4-1m_open.wav-3-10m_closed.wav-3.jpeg"
+[6] "/tmp/Rtmpu9KUkV/blur_ratio_freq4-1m_open.wav-3-30m_closed.wav-3.jpeg"</code></pre>
 <p>Output image files (in the working directory) look like this one:</p>
 <p><img src="blur_ratio_freq1-1m_open.wav-4-10m_closed.wav-4.jpeg" class="r-plt" alt="" width="80%" style="display: block; margin: auto;"></p>
 <p> </p>
@@ -9984,7 +9984,7 @@ attached base packages:
 
 other attached packages:
  [1] ggplot2_4.0.3      viridis_0.6.5      viridisLite_0.4.3  baRulho_2.2.0     
- [5] ohun_1.0.4         warbleR_1.1.38     NatureSounds_1.0.5 seewave_2.2.4     
+ [5] ohun_1.0.5         warbleR_1.1.38     NatureSounds_1.0.5 seewave_2.2.4     
  [9] tuneR_1.4.7        knitr_1.52        
 
 loaded via a namespace (and not attached):
@@ -9992,19 +9992,19 @@ loaded via a namespace (and not attached):
  [5] tools_4.6.1        curl_8.0.0         parallel_4.6.1     proxy_0.4-29      
  [9] pkgconfig_2.0.3    KernSmooth_2.23-26 checkmate_2.3.4    RColorBrewer_1.1-3
 [13] S7_0.2.2           desc_1.4.3         lifecycle_1.0.5    compiler_4.6.1    
-[17] farver_2.1.2       stringr_1.6.0      textshaping_1.0.5  htmltools_0.5.9   
-[21] class_7.3-23       sass_0.4.10        yaml_2.3.12        pkgdown_2.2.1     
-[25] jquerylib_0.1.4    MASS_7.3-65        classInt_0.4-11    cachem_1.1.0      
-[29] Deriv_4.3.5        digest_0.6.39      stringi_1.8.9      sf_1.1-3          
-[33] labeling_0.4.3     fastmap_1.2.0      grid_4.6.1         cli_3.6.6         
-[37] magrittr_2.0.5     e1071_1.7-17       withr_3.0.3        scales_1.4.0      
-[41] backports_1.5.1    rmarkdown_2.32     httr_1.4.9         Sim.DiffProc_5.0  
-[45] signal_1.8-1       igraph_2.3.4       otel_0.2.0         gridExtra_2.3.1   
-[49] ragg_1.5.2         png_0.1-9          kableExtra_1.4.1   pbapply_1.7-5     
-[53] evaluate_1.0.5     dtw_1.23-3         fftw_1.0-9         rlang_1.3.0       
-[57] Rcpp_1.1.2         glue_1.8.1         DBI_1.3.0          xml2_1.6.0        
-[61] svglite_2.2.2      rstudioapi_0.19.0  jsonlite_2.0.0     R6_2.6.1          
-[65] systemfonts_1.3.2  fs_2.1.0           units_1.0-1       </code></pre>
+[17] farver_2.1.2       stringr_1.6.0      textshaping_1.0.5  Rraven_1.0.16     
+[21] htmltools_0.5.9    class_7.3-23       sass_0.4.10        yaml_2.3.12       
+[25] pkgdown_2.2.1      jquerylib_0.1.4    MASS_7.3-65        classInt_0.4-11   
+[29] cachem_1.1.0       Deriv_4.3.5        digest_0.6.39      stringi_1.8.9     
+[33] sf_1.1-3           labeling_0.4.3     fastmap_1.2.0      grid_4.6.1        
+[37] cli_3.6.6          magrittr_2.0.5     e1071_1.7-17       withr_3.0.3       
+[41] scales_1.4.0       backports_1.5.1    rmarkdown_2.32     httr_1.4.9        
+[45] Sim.DiffProc_5.0   signal_1.8-1       igraph_2.3.4       otel_0.2.0        
+[49] gridExtra_2.3.1    ragg_1.5.2         png_0.1-9          kableExtra_1.4.1  
+[53] pbapply_1.7-5      evaluate_1.0.5     dtw_1.23-3         fftw_1.0-9        
+[57] rlang_1.3.0        Rcpp_1.1.2         glue_1.8.1         DBI_1.3.0         
+[61] xml2_1.6.0         svglite_2.2.2      rstudioapi_0.19.0  jsonlite_2.0.0    
+[65] R6_2.6.1           systemfonts_1.3.2  fs_2.1.0           units_1.0-1       </code></pre>
 </details>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

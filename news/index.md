@@ -2,6 +2,8 @@
 
 ## baRulho 2.2.0
 
+CRAN release: 2026-10-09
+
 #### MINOR IMPROVEMENTS
 
 - Fix bug in
@@ -32,6 +34,11 @@
   [`detection_distance()`](https://marce10.github.io/baRulho/reference/detection_distance.md)
   in which the `wl` argument was not reaching the internal
   peak-frequency calculation
+- Fix bug in
+  [`master_sound_file()`](https://marce10.github.io/baRulho/reference/master_sound_file.md)’s
+  marker creation that corrupted the graphics device stack, causing
+  spurious “cannot shut down device 1 (the null device)” errors in
+  `R CMD check` on some platforms
 - Fix misspelled output column `atmopheric.attenuation` in
   [`attenuation()`](https://marce10.github.io/baRulho/reference/attenuation.md)
   (now `atmospheric.attenuation`)

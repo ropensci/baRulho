@@ -283,7 +283,7 @@ synth_master_annotations <- baRulho::master_sound_file(
 )
 ```
 
-     [30mThe file synthetic_master.wav has been saved in the directory path '/tmp/Rtmprx5h4e' [39m
+     [30mThe file synthetic_master.wav has been saved in the directory path '/tmp/RtmpsWtF6L' [39m
 
  
 
@@ -364,7 +364,7 @@ master_annotations <- baRulho::master_sound_file(
 )
 ```
 
-     [30mThe file example_master.wav has been saved in the directory path '/tmp/Rtmprx5h4e' [39m
+     [30mThe file example_master.wav has been saved in the directory path '/tmp/RtmpsWtF6L' [39m
 
  
 
@@ -550,12 +550,12 @@ markers_position
 
 |  sound.files   | selec |   start   |   end    |  scores   |    marker    | time.mismatch |
 |:--------------:|:-----:|:---------:|:--------:|:---------:|:------------:|:-------------:|
-| 10m_closed.wav |   1   | 0.2575707 | 1.257571 | 0.6363941 | start_marker |   0.010475    |
-| 10m_closed.wav |   2   | 2.3181364 | 3.318136 | 0.8416042 |  end_marker  |      NA       |
-|  10m_open.wav  |   3   | 0.2575707 | 1.257571 | 0.7394769 | start_marker |   0.010475    |
-|  10m_open.wav  |   4   | 2.3181364 | 3.318136 | 0.8244886 |  end_marker  |      NA       |
-|  1m_open.wav   |   5   | 0.2575707 | 1.257571 | 0.8043774 | start_marker |   0.010475    |
-|  1m_open.wav   |   6   | 2.3181364 | 3.318136 | 0.8987528 |  end_marker  |      NA       |
+| 10m_closed.wav |   1   | 0.2563204 | 1.256320 | 0.6363941 | start_marker |   0.0004722   |
+| 10m_closed.wav |   2   | 2.3068833 | 3.306883 | 0.8416042 |  end_marker  |      NA       |
+|  10m_open.wav  |   3   | 0.2563204 | 1.256320 | 0.7394769 | start_marker |   0.0004722   |
+|  10m_open.wav  |   4   | 2.3068833 | 3.306883 | 0.8244886 |  end_marker  |      NA       |
+|  1m_open.wav   |   5   | 0.2563204 | 1.256320 | 0.8043774 | start_marker |   0.0004722   |
+|  1m_open.wav   |   6   | 2.3068833 | 3.306883 | 0.8987528 |  end_marker  |      NA       |
 
  
 
@@ -585,12 +585,12 @@ markers_position
 
 |  sound.files   | selec |   start   |   end    |  scores   |    marker    | time.mismatch |
 |:--------------:|:-----:|:---------:|:--------:|:---------:|:------------:|:-------------:|
-| 10m_closed.wav |   1   | 0.2520095 | 1.252009 | 0.6135088 | start_marker |   0.0019868   |
-| 10m_closed.wav |   2   | 2.3040871 | 3.304087 | 0.8675214 |  end_marker  |      NA       |
-|  10m_open.wav  |   3   | 0.2520095 | 1.252009 | 0.8155176 | start_marker |   0.0019868   |
-|  10m_open.wav  |   4   | 2.3040871 | 3.304087 | 0.8701115 |  end_marker  |      NA       |
-|  1m_open.wav   |   5   | 0.2520095 | 1.252009 | 0.9124979 | start_marker |   0.0019868   |
-|  1m_open.wav   |   6   | 2.3040871 | 3.304087 | 0.8941676 |  end_marker  |      NA       |
+| 10m_closed.wav |   1   | 0.2515902 | 1.251590 | 0.6135088 | start_marker |  -0.0014276   |
+| 10m_closed.wav |   2   | 2.3002533 | 3.300253 | 0.8675214 |  end_marker  |      NA       |
+|  10m_open.wav  |   3   | 0.2515902 | 1.251590 | 0.8155176 | start_marker |  -0.0014276   |
+|  10m_open.wav  |   4   | 2.3002533 | 3.300253 | 0.8701115 |  end_marker  |      NA       |
+|  1m_open.wav   |   5   | 0.2515902 | 1.251590 | 0.9124979 | start_marker |  -0.0014276   |
+|  1m_open.wav   |   6   | 2.3002533 | 3.300253 | 0.8941676 |  end_marker  |      NA       |
 
  
 
@@ -629,12 +629,12 @@ aligned_tests
 
 | sound.files | selec | start | end | bottom.freq | top.freq | sound.id | marker |
 |:--:|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-| 10m_closed.wav | 1 | 0.0539964 | 0.2039964 | 1.333333 | 2.666667 | ambient | end_marker |
-| 10m_closed.wav | 2 | 0.2539964 | 1.2539964 | 1.333333 | 2.666667 | start_marker | end_marker |
-| 10m_closed.wav | 3 | 1.3039964 | 1.5040190 | 7.875000 | 8.805000 | freq9 | end_marker |
-| 10m_closed.wav | 4 | 1.5540190 | 1.7540417 | 3.208000 | 4.069000 | freq4 | end_marker |
-| 10m_closed.wav | 5 | 1.8040417 | 2.0040644 | 0.422000 | 1.223000 | freq1 | end_marker |
-| 10m_closed.wav | 6 | 2.0540644 | 2.2540871 | 6.905000 | 7.917000 | freq7 | end_marker |
+| 10m_closed.wav | 1 | 0.0501626 | 0.2001626 | 1.333333 | 2.666667 | ambient | end_marker |
+| 10m_closed.wav | 2 | 0.2501626 | 1.2501626 | 1.333333 | 2.666667 | start_marker | end_marker |
+| 10m_closed.wav | 3 | 1.3001626 | 1.5001853 | 7.875000 | 8.805000 | freq9 | end_marker |
+| 10m_closed.wav | 4 | 1.5501853 | 1.7502080 | 3.208000 | 4.069000 | freq4 | end_marker |
+| 10m_closed.wav | 5 | 1.8002080 | 2.0002306 | 0.422000 | 1.223000 | freq1 | end_marker |
+| 10m_closed.wav | 6 | 2.0502306 | 2.2502533 | 6.905000 | 7.917000 | freq7 | end_marker |
 
 We can check the precision of the alignment by looking at the
 spectrograms. The function
@@ -654,16 +654,16 @@ aligned_imgs <- baRulho::plot_aligned_sounds(
 )
 ```
 
-     [30mThe image files have been saved in the directory path '/tmp/Rtmprx5h4e' [39m
+     [30mThe image files have been saved in the directory path '/tmp/RtmpsWtF6L' [39m
 
 ``` r
 
 aligned_imgs
 ```
 
-    [1] "/tmp/Rtmprx5h4e/plot_align_10m_closed.jpeg" "/tmp/Rtmprx5h4e/plot_align_10m_open.jpeg"  
-    [3] "/tmp/Rtmprx5h4e/plot_align_1m_open.jpeg"    "/tmp/Rtmprx5h4e/plot_align_30m_closed.jpeg"
-    [5] "/tmp/Rtmprx5h4e/plot_align_30m_open.jpeg"  
+    [1] "/tmp/RtmpsWtF6L/plot_align_10m_closed.jpeg" "/tmp/RtmpsWtF6L/plot_align_10m_open.jpeg"  
+    [3] "/tmp/RtmpsWtF6L/plot_align_1m_open.jpeg"    "/tmp/RtmpsWtF6L/plot_align_30m_closed.jpeg"
+    [5] "/tmp/RtmpsWtF6L/plot_align_30m_open.jpeg"  
 
 These are two of the files generated by the code above:
 
@@ -852,7 +852,7 @@ Click to see
     [1] stats     graphics  grDevices utils     datasets  methods   base     
 
     other attached packages:
-     [1] Rraven_1.0.16      baRulho_2.2.0      ohun_1.0.4         warbleR_1.1.38     NatureSounds_1.0.5
+     [1] Rraven_1.0.16      baRulho_2.2.0      ohun_1.0.5         warbleR_1.1.38     NatureSounds_1.0.5
      [6] seewave_2.2.4      tuneR_1.4.7        viridis_0.6.5      viridisLite_0.4.3  knitr_1.52        
 
     loaded via a namespace (and not attached):

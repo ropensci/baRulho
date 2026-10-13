@@ -15,7 +15,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![minimal R
 version](https://img.shields.io/badge/R%3E%3D-%3E=%203.2.1-6666ff.svg)](https://cran.r-project.org/)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Total
 Downloads](https://cranlogs.r-pkg.org/badges/grand-total/baRulho)](https://cran.r-project.org/package=baRulho)
 [![Monthly
@@ -38,12 +38,12 @@ sounds at increasing distances.
 
 These experiments aim to answer research questions such as:
 
-  - How has habitat structure shaped the propagation properties of
-    animal acoustic signals?
-  - Which acoustic features have been shaped by selection for improved
-    propagation?
-  - Which features degrade more in which habitats?
-  - How far can acoustic signals be detected?
+- How has habitat structure shaped the propagation properties of animal
+  acoustic signals?
+- Which acoustic features have been shaped by selection for improved
+  propagation?
+- Which features degrade more in which habitats?
+- How far can acoustic signals be detected?
 
 A common sequence of steps to experimentally test hypotheses related to
 sound propagation is depicted in the following diagram:
@@ -63,15 +63,15 @@ that require acoustic data manipulation and analysis.
 
 The main features of the package are:
 
-  - The use of loops to apply tasks through sounds referenced in a
-    selection table (sensu
-    [warbleR](https://cran.r-project.org/package=warbleR))
-  - The production of image files with graphic representations of sound
-    in time and/or frequency that let users verify acoustic analyses
-  - The use of annotation tables as the object format to input acoustic
-    data and annotations and to output results
-  - The use of parallelization to distribute tasks among several cores
-    to improve computational efficiency
+- The use of loops to apply tasks through sounds referenced in a
+  selection table (sensu
+  [warbleR](https://cran.r-project.org/package=warbleR))
+- The production of image files with graphic representations of sound in
+  time and/or frequency that let users verify acoustic analyses
+- The use of annotation tables as the object format to input acoustic
+  data and annotations and to output results
+- The use of parallelization to distribute tasks among several cores to
+  improve computational efficiency
 
 [baRulho](https://docs.ropensci.org/baRulho//) builds upon functions and
 data formats from the
@@ -178,10 +178,10 @@ Take a look at the vignettes for a more detailed overview of the main
 features of the package, including how to align re-recorded test sounds
 before measuring degradation:
 
-  - [Align test
-    sounds](https://docs.ropensci.org/baRulho//articles/align_test_sounds.html)
-  - [Quantify
-    degradation](https://docs.ropensci.org/baRulho//articles/quantify_degradation.html)
+- [Align test
+  sounds](https://docs.ropensci.org/baRulho//articles/align_test_sounds.html)
+- [Quantify
+  degradation](https://docs.ropensci.org/baRulho//articles/quantify_degradation.html)
 
 ## Other packages
 

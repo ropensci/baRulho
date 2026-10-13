@@ -20,7 +20,7 @@ Imports:
     rlang
 Depends: R (>= 3.2.1), warbleR (>= 1.1.32), ohun (>= 1.0.2)
 LazyData: TRUE
-URL: https://github.com/ropensci/baRulho, https://docs.ropensci.org/baRulho/
+URL: https://github.com/ropensci/baRulho, https://docs.ropensci.org/baRulho/, https://marce10.github.io/baRulho
 BugReports: https://github.com/ropensci/baRulho/issues
 Suggests:
     rmarkdown,
